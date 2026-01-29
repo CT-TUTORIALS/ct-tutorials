@@ -12,7 +12,7 @@ body {
     color: #333;
 }
 
-/* ===== HEADER AS BANNER ===== */
+/* ===== HEADER / BANNER ===== */
 header {
     background: url("images/banner.jpg") center/cover no-repeat;
     height: 320px;
@@ -23,7 +23,7 @@ header::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: rgba(0,0,0,0.4);
+    background: rgba(0,0,0,0.45);
 }
 
 .header-content {
@@ -72,8 +72,8 @@ ul {
 
 /* ===== RESOURCES ===== */
 .resource-link {
-    font-weight: bold;
     color: #00509e;
+    font-weight: bold;
     text-decoration: none;
 }
 
@@ -112,7 +112,7 @@ ul {
     background: white;
     padding: 25px;
     width: 90%;
-    max-width: 450px;
+    max-width: 460px;
     border-radius: 10px;
     position: relative;
 }
@@ -123,8 +123,8 @@ ul {
     right: 15px;
     font-size: 22px;
     cursor: pointer;
-    border: none;
     background: none;
+    border: none;
 }
 
 label {
@@ -140,11 +140,11 @@ input, select {
 
 .submit-btn {
     margin-top: 20px;
+    width: 100%;
+    padding: 12px;
     background: #003366;
     color: white;
     border: none;
-    padding: 12px;
-    width: 100%;
     font-size: 16px;
     cursor: pointer;
 }
@@ -177,7 +177,7 @@ footer {
     <h3>Tutorial Services</h3>
     <h4>One-on-One Sessions</h4>
     <ul>
-        <li>Introduction to Academic Writing (4 sessions) – N$ 100.00</li>
+        <li>Introduction to Academic Writing (4 sessions) – <strong>N$ 150.00</strong></li>
         <li>Topic-specific Sessions – N$ 40.00</li>
         <li>Hourly Rate – N$ 40.00</li>
     </ul>
@@ -233,14 +233,19 @@ footer {
             <input type="email" name="email" required>
         </label>
 
-        <label>Service
+        <label>Select Service
             <select name="service" required>
                 <option value="">Select a service</option>
-                <option>Academic Writing</option>
-                <option>Group Sessions</option>
-                <option>Assignment Support</option>
-                <option>Referencing Assistance</option>
-                <option>Public Speaking Support</option>
+                <option>Introduction to Academic Writing – N$150.00</option>
+                <option>Topic-specific Session – N$40.00</option>
+                <option>One-on-One Hourly Rate – N$40.00</option>
+                <option>Group Session (2–5 People) – N$200.00</option>
+                <option>Group Session (6–14 People) – N$450.00</option>
+                <option>Group Session (14+ People) – N$600.00</option>
+                <option>Draft Editing – N$15.00 per page</option>
+                <option>Document Proofreading – N$10.00 per page</option>
+                <option>Referencing Assistance – N$20.00</option>
+                <option>Public Speaking Support – N$35.00 per session</option>
             </select>
         </label>
 
@@ -252,12 +257,12 @@ footer {
             </a>
         </label>
 
-        <button type="submit" class="submit-btn">Submit</button>
+        <button type="submit" class="submit-btn">Submit Registration</button>
     </form>
 </div>
 
 <footer>
-    <p>&copy; 2026 C&T Tutorials</p>
+    <p>&copy; 2026 C&T Tutorials. All rights reserved.</p>
 </footer>
 
 <script>
@@ -270,4 +275,4 @@ function closeForm() {
 </script>
 
 </body>
-            </html>
+</html>
