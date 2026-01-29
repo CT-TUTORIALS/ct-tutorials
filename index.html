@@ -1,108 +1,206 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>C&T Tutorials</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C&T Tutorials</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        header {
+            background: #003366;
+            padding: 15px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        section {
+            padding: 40px 20px;
+            max-width: 900px;
+            margin: auto;
+        }
+
+        h2 {
+            color: #003366;
+        }
+
+        h3 {
+            color: #00509e;
+            margin-top: 25px;
+        }
+
+        h4 {
+            margin-top: 15px;
+        }
+
+        ul {
+            list-style-type: square;
+            margin-left: 20px;
+        }
+
+        .price {
+            font-weight: bold;
+        }
+
+        form {
+            max-width: 500px;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+        }
+
+        button {
+            background-color: #003366;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #00509e;
+        }
+
+        footer {
+            background: #003366;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            margin-top: 40px;
+        }
+
+        a.resource-link {
+            color: #00509e;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        a.resource-link:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
 
 <header>
-    <img src="logo.png" alt="C&T Tutorials Logo" style="height:50px;">
     <nav>
-        <a href="#home">Home</a>
-        <a href="#about">About</a>
         <a href="#services">Services</a>
-        <a href="#register">Register</a>
+        <a href="#resources">Resources</a>
+        <a href="#contact">Contact</a>
     </nav>
 </header>
 
-<main>
-
-<!-- HOME -->
-<section id="home">
-    <h1>Welcome to C&T Tutorials</h1>
-    <p>Your path to academic excellence starts here.</p>
-    <img src="banner.jpg" alt="C&T Tutorials Banner" style="max-width:100%; border-radius:10px;">
-</section>
-
-<!-- ABOUT -->
-<section id="about">
-    <h2>About C&T Tutorials</h2>
-    <p>
-        C&T Tutorials provides professional academic support services
-        designed to help students improve performance, confidence,
-        and academic writing skills.
-    </p>
-</section>
-
-<!-- SERVICES -->
+<!-- ========== SERVICES ========== -->
 <section id="services">
-    <h2>Our Services & Price List</h2>
+    <h2>Our Services</h2>
 
-    <div class="services-container">
+    <h3>Tutorial Services</h3>
 
-        <div class="service-card">
-            <div class="icon">📝</div>
-            <h3>Academic Writing Tutoring</h3>
-            <p>One-on-one writing support.</p>
-            <p class="price">$50 per hour</p>
-            <a href="student_notes.pdf" target="_blank">Student Notes</a>
-        </div>
+    <h4>One-on-One Sessions</h4>
+    <ul>
+        <li>Introduction to Academic Writing (4 sessions) – <span class="price">N$ 100.00</span></li>
+        <li>Topic-specific Sessions – <span class="price">N$ 40.00</span></li>
+        <li>Hourly Rate – <span class="price">N$ 40.00</span></li>
+    </ul>
 
-        <div class="service-card">
-            <div class="icon">➗</div>
-            <h3>Mathematics Tutoring</h3>
-            <p>Foundation & exam preparation.</p>
-            <p class="price">$40 per hour</p>
-            <a href="student_notes.pdf" target="_blank">Student Notes</a>
-        </div>
+    <h4>Group Sessions</h4>
+    <ul>
+        <li>2–5 People – <span class="price">N$ 200.00</span></li>
+        <li>6–14 People – <span class="price">N$ 450.00</span></li>
+        <li>More than 14 People – <span class="price">N$ 600.00</span></li>
+    </ul>
 
-        <div class="service-card">
-            <div class="icon">📄</div>
-            <h3>Essay & Assignment Review</h3>
-            <p>Detailed academic feedback.</p>
-            <p class="price">$30 per document</p>
-            <a href="student_disclosure_agreement.pdf" target="_blank">
-                Student Disclosure Agreement
-            </a>
-        </div>
+    <h3>Assignment Support Services</h3>
+    <ul>
+        <li>Draft Editing – <span class="price">N$ 15.00 per page</span></li>
+        <li>Document Proofreading – <span class="price">N$ 10.00 per page</span></li>
+    </ul>
 
-        <div class="service-card">
-            <div class="icon">📚</div>
-            <h3>Exam Preparation Support</h3>
-            <p>Focused exam readiness sessions.</p>
-            <p class="price">$45 per hour</p>
-            <a href="business_policies.pdf" target="_blank">
-                Business Policies
-            </a>
-        </div>
-
-    </div>
+    <h3>Other Services</h3>
+    <ul>
+        <li>Referencing Assistance – <span class="price">N$ 20.00</span></li>
+        <li>Public Speaking Support – <span class="price">N$ 35.00 per session</span></li>
+    </ul>
 </section>
 
-<!-- REGISTER -->
-<section id="register">
-    <h2>Register for Our Services</h2>
+<!-- ========== RESOURCES ========== -->
+<section id="resources">
+    <h2>Resources</h2>
+    <p>Download helpful academic materials:</p>
+
+    <ul>
+        <li>
+            <a class="resource-link" href="documents/Business Policies.pdf" target="_blank">
+                Business Policies (PDF)
+            </a>
+        </li>
+        <li>
+            <a class="resource-link" href="documents/Student form for offline application.pdf" target="_blank">
+                Student Form for Offline Application (PDF)
+            </a>
+        </li>
+        <li>
+            <a class="resource-link" href="documents/Student Notes.pdf" target="_blank">
+                Student Notes (PDF)
+            </a>
+        </li>
+    </ul>
+</section>
+
+<!-- ========== CONTACT ========== -->
+<section id="contact">
+    <h2>Contact Us</h2>
 
     <form action="https://formspree.io/f/mlgbjkwq" method="POST">
-        <input type="text" name="name" placeholder="Full Name" required>
-        <input type="email" name="email" placeholder="Email Address" required>
+        <label>
+            Full Name:
+            <input type="text" name="name" required>
+        </label>
+        <br><br>
 
-        <select name="service" required>
-            <option value="">Select a Service</option>
-            <option>Academic Writing Tutoring</option>
-            <option>Mathematics Tutoring</option>
-            <option>Essay & Assignment Review</option>
-            <option>Exam Preparation Support</option>
-        </select>
+        <label>
+            Email Address:
+            <input type="email" name="email" required>
+        </label>
+        <br><br>
 
-        <button type="submit">Submit Registration</button>
+        <label>
+            Message:
+            <textarea name="message" rows="5" required></textarea>
+        </label>
+        <br><br>
+
+        <!-- Anti-spam -->
+        <input type="text" name="_gotcha" style="display:none">
+
+        <button type="submit">Send Message</button>
     </form>
 </section>
-
-</main>
 
 <footer>
     <p>&copy; 2026 C&T Tutorials. All rights reserved.</p>
