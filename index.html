@@ -1,212 +1,207 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- GOOGLE SITE VERIFICATION -->
+<meta name="google-site-verification" content="jnT9sc4-0oLZ3I4HFv9V1sJq33pdjr47gIlcLAHX4KA" />
+<!-- SEO META -->
 <title>C&T Tutorials | Academic Writing & Student Support in Namibia</title>
-
-<meta name="description" content="C&T Tutorials provides academic writing support, proofreading, referencing guidance and student tutoring services in Namibia. Improve your academic performance with expert support.">
-
-<meta name="keywords" content="academic writing Namibia, tutoring Windhoek, proofreading services Namibia, referencing assistance, student support Namibia, C&T Tutorials">
-
-<meta name="author" content="C&T Tutorials">
-
-<meta name="robots" content="index, follow">
-
-<link rel="canonical" href="https://cttutorials.github.io/ct-tutorials/">
-
-<!-- Open Graph for sharing -->
-<meta property="og:title" content="C&T Tutorials | Academic Support Services">
-<meta property="og:description" content="Professional academic writing and tutoring services for students in Namibia.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://cttutorials.github.io/ct-tutorials/">
-<meta property="og:image" content="images/logo.jpg">
-
-<!-- Structured Data for Google -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "EducationalOrganization",
-  "name": "C&T Tutorials",
-  "url": "https://cttutorials.github.io/ct-tutorials/",
-  "logo": "https://cttutorials.github.io/ct-tutorials/images/logo.jpg",
-  "email": "ct0tutorials@gmail.com",
-  "telephone": "+264815621879",
-  "address": {
-    "@type": "PostalAddress",
-    "addressCountry": "Namibia"
-  },
-  "sameAs": []
-}
-</script>
-
-<style>
-/* ====== YOUR ORIGINAL CSS (UNCHANGED) ====== */
-body { margin:0; font-family:Arial,sans-serif; color:#333; }
-header { background:url("images/banner.jpg") center/cover no-repeat; height:320px; position:relative; }
-header::after { content:""; position:absolute; inset:0; background:rgba(0,0,0,0.45); }
-.header-content { position:relative; z-index:2; display:flex; justify-content:space-between; align-items:center; padding:20px 30px; }
-.logo { height:60px; }
-nav a { color:white; text-decoration:none; margin-left:20px; font-weight:bold; }
-nav a:hover { text-decoration:underline; }
-section { max-width:900px; margin:auto; padding:40px 20px; }
-h2 { color:#003366; }
-h3 { color:#00509e; margin-top:25px; }
-ul { margin-left:20px; }
-.resource-link { color:#00509e; font-weight:bold; text-decoration:none; }
-.resource-link:hover { text-decoration:underline; }
-.floating-btn { position:fixed; bottom:25px; right:25px; background:#003366; color:white; padding:15px 22px; border-radius:50px; border:none; font-size:16px; cursor:pointer; z-index:999; box-shadow:0 4px 6px rgba(0,0,0,0.3); }
-#modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:1000; justify-content:center; align-items:center; }
-#modal form { background:white; padding:25px; width:90%; max-width:460px; border-radius:10px; position:relative; }
-.close { position:absolute; top:10px; right:15px; font-size:22px; cursor:pointer; background:none; border:none; }
-label { display:block; margin-top:12px; }
-input, select { width:100%; padding:10px; margin-top:5px; }
-.submit-btn { margin-top:20px; width:100%; padding:12px; background:#003366; color:white; border:none; font-size:16px; cursor:pointer; }
-footer { background:#003366; color:white; text-align:center; padding:25px 20px; font-size:14px; }
-.footer-divider { border-top:1px solid rgba(255,255,255,0.3); margin:20px auto; width:80%; }
-.footer-disclaimer { font-size:12px; color:rgba(255,255,255,0.8); max-width:900px; margin:auto; line-height:1.6; }
-</style>
+<meta name="description" content="C&T Tutorials provides academic writing support, proofreading, editing, referencing assistance and student tutorials in Namibia.">
+<meta name="keywords" content="academic writing Namibia, proofreading Namibia, tutoring Windhoek, student support Namibia, C&T Tutorials">
 
 </head>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+/* HEADER */
+header {
+    background: url("images/banner.jpg") center/cover no-repeat;
+    height: 320px;
+    position: relative;
+}
+
+header::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+}
+
+.header-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
+}
+
+.logo { height: 60px; }
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+    font-weight: bold;
+}
+
+/* SECTIONS */
+section {
+    max-width: 900px;
+    margin: auto;
+    padding: 40px 20px;
+}
+
+h2 { color: #003366; }
+h3 { color: #00509e; }
+
+.resource-link {
+    color: #00509e;
+    font-weight: bold;
+}
+
+/* FLOAT BUTTON */
+.floating-btn {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background: #003366;
+    color: white;
+    padding: 15px 22px;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    z-index: 999;
+}
+
+/* MODAL */
+#modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+#modal form {
+    background: white;
+    padding: 25px;
+    width: 90%;
+    max-width: 460px;
+    border-radius: 10px;
+}
+
+label { display:block; margin-top:12px; }
+input, select { width:100%; padding:10px; }
+
+.submit-btn {
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px;
+    background: #003366;
+    color: white;
+    border: none;
+}
+
+/* FOOTER */
+footer {
+    background: #003366;
+    color: white;
+    text-align: center;
+    padding: 25px;
+    font-size: 14px;
+}
+.footer-disclaimer {
+    font-size: 12px;
+    margin-top: 15px;
+}
+</style>
 
 <body>
 
 <header>
-    <div class="header-content">
-        <img src="images/logo.jpg" alt="C&T Tutorials Namibia Academic Support Logo" class="logo">
-        <nav>
-            <a href="#about">About Us</a>
-            <a href="#services">Services</a>
-            <a href="#resources">Resources</a>
-            <a href="#contact">Contact</a>
-        </nav>
-    </div>
+<div class="header-content">
+<img src="images/logo.jpg" class="logo">
+<nav>
+<a href="#about">About</a>
+<a href="#services">Services</a>
+<a href="#resources">Resources</a>
+<a href="#contact">Contact</a>
+</nav>
+</div>
 </header>
 
 <section id="about">
-    <h1>Academic Support Services in Namibia</h1>
-    <h2>About C&amp;T Tutorials</h2>
-    <p>
-        C&amp;T Tutorials is an independent academic support service committed to enhancing
-        students’ academic performance through structured guidance in academic writing,
-        research, and communication skills.
-    </p>
-    <p>
-        Our services are designed to provide focused, student-centred support through
-        one-on-one tutorials, group sessions, and assignment-based assistance.
-    </p>
+<h2>About C&T Tutorials</h2>
+<p>C&T Tutorials provides structured academic support in writing, research and communication skills for students in Namibia.</p>
 </section>
 
 <section id="services">
-    <h2>Our Services</h2>
-
-    <h3>Tutorial Services</h3>
-    <ul>
-        <li>Introduction to Academic Writing (4 sessions) – <strong>N$ 150.00</strong></li>
-        <li>Topic-specific Sessions – N$ 40.00</li>
-        <li>Hourly Rate – N$ 40.00</li>
-    </ul>
-
-    <h3>Group Sessions</h3>
-    <ul>
-        <li>2–5 People – N$ 200.00</li>
-        <li>6–14 People – N$ 450.00</li>
-        <li>More than 14 People – N$ 600.00</li>
-    </ul>
-
-    <h3>Assignment Support Services</h3>
-    <ul>
-        <li>Draft Editing – N$ 15.00 per page</li>
-        <li>Document Proofreading – N$ 10.00 per page</li>
-    </ul>
-
-    <h3>Other Services</h3>
-    <ul>
-        <li>Referencing Assistance – N$ 20.00</li>
-        <li>Public Speaking Support – N$ 35.00 per session</li>
-    </ul>
+<h2>Our Services</h2>
+<ul>
+<li>Academic Writing Tutorials</li>
+<li>Editing & Proofreading</li>
+<li>Referencing Assistance</li>
+<li>Public Speaking Support</li>
+</ul>
 </section>
 
 <section id="resources">
-    <h2>Student Resources</h2>
-    <ul>
-        <li><a class="resource-link" href="documents/Business Policies.pdf" target="_blank">Business Policies</a></li>
-        <li><a class="resource-link" href="documents/Student form for offline application.pdf" target="_blank">Offline Application Form</a></li>
-    </ul>
+<h2>Resources</h2>
+<ul>
+<li><a class="resource-link" href="documents/Business Policies.pdf" target="_blank">Business Policies</a></li>
+<li><a class="resource-link" href="documents/Student form for offline application.pdf" target="_blank">Offline Application Form</a></li>
+</ul>
 </section>
 
 <section id="contact">
-    <h2>Contact C&amp;T Tutorials</h2>
-    <p>Email: <a href="mailto:ct0tutorials@gmail.com">ct0tutorials@gmail.com</a></p>
-    <p>Phone: +264 815 621 879 / +264 818 479 958</p>
+<h2>Contact</h2>
+<p>Email: ct0tutorials@gmail.com</p>
+<p>Phone: +264 815 621 879</p>
 </section>
 
 <button class="floating-btn" onclick="openForm()">Register Now</button>
 
 <div id="modal">
-    <form action="https://formspree.io/f/mlgbjkwq" method="POST" target="_blank">
-        <button type="button" class="close" onclick="closeForm()">×</button>
-        <h2>Service Registration</h2>
+<form action="https://formspree.io/f/mlgbjkwq" method="POST">
+<h2>Register</h2>
 
-        <label>Full Name
-            <input type="text" name="name" required>
-        </label>
+<label>Full Name<input type="text" name="name" required></label>
+<label>Email<input type="email" name="email" required></label>
+<label>Cellphone Number<input type="tel" name="cell_number" required></label>
 
-        <label>Email
-            <input type="email" name="email" required>
-        </label>
+<label>Select Service
+<select name="service">
+<option>Academic Writing</option>
+<option>Proofreading</option>
+<option>Referencing</option>
+</select>
+</label>
 
-        <label>Cellphone Number
-            <input type="tel" name="cell_number" required>
-        </label>
-
-        <label>Select Service
-            <select name="service" required>
-                <option value="">Select a service</option>
-                <option>Introduction to Academic Writing</option>
-                <option>Topic-specific Session</option>
-                <option>One-on-One Hourly Session</option>
-                <option>Group Session (2–5 People)</option>
-                <option>Group Session (6–14 People)</option>
-                <option>Group Session (More than 14 People)</option>
-                <option>Draft Editing</option>
-                <option>Document Proofreading</option>
-                <option>Referencing Assistance</option>
-                <option>Public Speaking Support</option>
-            </select>
-        </label>
-
-        <label>
-            <input type="checkbox" required>
-            I agree to the
-            <a href="documents/Disclosure Agreement.pdf" target="_blank">Disclosure Agreement</a>
-        </label>
-
-        <button type="submit" class="submit-btn">Submit Registration</button>
-    </form>
+<button class="submit-btn">Submit</button>
+</form>
 </div>
 
 <footer>
-    <p>&copy; 2026 C&amp;T Tutorials. All rights reserved.</p>
-
-    <div class="footer-divider"></div>
-
-    <div class="footer-disclaimer">
-        <strong>Disclaimer:</strong><br>
-        C&amp;T Tutorials operates independently and is not affiliated with any university or institution.
-    </div>
+<p>© 2026 C&T Tutorials</p>
+<div class="footer-disclaimer">
+Disclaimer: C&T Tutorials is independent and not affiliated with any university. Services are for academic support only.
+</div>
 </footer>
 
 <script>
-function openForm() {
-    document.getElementById("modal").style.display = "flex";
-}
-function closeForm() {
-    document.getElementById("modal").style.display = "none";
-}
+function openForm(){ document.getElementById("modal").style.display="flex"; }
+function closeForm(){ document.getElementById("modal").style.display="none"; }
 </script>
 
 </body>
-        </html>
+</html>
