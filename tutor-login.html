@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tutor Login - C&T Tutorials</title>
+<style>
+body{margin:0;font-family:Arial;color:#333;}
+header{background:#003366;padding:15px;text-align:center;color:white;}
+form{max-width:400px;margin:50px auto;padding:20px;border:1px solid #ccc;border-radius:8px;}
+input{width:100%;padding:10px;margin:10px 0;}
+button{width:100%;padding:10px;background:#003366;color:white;border:none;cursor:pointer;}
+</style>
+</head>
+<body>
+<header><h1>Tutor Login</h1></header>
+
+<form id="loginForm">
+<label>Email<input type="email" id="email" required></label>
+<label>Password<input type="password" id="password" required></label>
+<button type="submit">Login</button>
+</form>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+const firebaseConfig = {
+apiKey:"YOUR-API-KEY",
+authDomain:"YOUR-PROJECT.firebaseapp.com",
+projectId:"YOUR-PROJECT-ID",
+storageBucket:"YOUR-PROJECT.appspot.com",
+messagingSenderId:"XXXX",
+appId:"XXXX"
+};
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+
+document.getElementById("loginForm").addEventListener("submit", async e=>{
+e.preventDefault();
+const email=document.getElementById("email").value;
+const password=document.getElementById("password").value;
+try{
+await signInWithEmailAndPassword(auth,email,password);
+alert("Login successful!");
+window.location.href="tutors.html";
+}catch(err){alert("Login failed: "+err.message);}
+});
+</script>
+</body>
+</html>
