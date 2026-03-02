@@ -3,58 +3,132 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tutors' Corner - Apply / Offer Services</title>
+<title>Tutors' Corner | C&T Tutorials</title>
+
 <style>
-body{margin:0;font-family:Arial;color:#333;}
-header{background:#003366;color:white;padding:20px;text-align:center;}
-form{max-width:450px;margin:50px auto;padding:20px;border-radius:8px;border:1px solid #ccc;}
-input, select, textarea{width:100%;padding:10px;margin:10px 0;}
-button{width:100%;padding:12px;background:#003366;color:white;border:none;cursor:pointer;}
+body{
+    font-family: Arial, sans-serif;
+    background:#f4f6f9;
+    margin:0;
+}
+
+header{
+    background:#003366;
+    color:white;
+    padding:20px;
+    text-align:center;
+}
+
+.container{
+    max-width:600px;
+    margin:40px auto;
+    background:white;
+    padding:25px;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.2);
+}
+
+h2{
+    color:#003366;
+}
+
+label{
+    display:block;
+    margin-top:15px;
+}
+
+input{
+    width:100%;
+    padding:10px;
+    margin-top:5px;
+}
+
+button{
+    margin-top:20px;
+    width:100%;
+    padding:12px;
+    background:#003366;
+    color:white;
+    border:none;
+    font-size:16px;
+    cursor:pointer;
+}
+
+.back{
+    display:block;
+    margin-top:15px;
+    text-align:center;
+}
 </style>
 </head>
+
 <body>
 
-<header><h1>Tutors' Corner - Apply / Offer Services</h1></header>
+<header>
+<h1>Tutors' Corner</h1>
+<p>Apply to become a tutor at C&T Tutorials</p>
+</header>
+
+<div class="container">
+<h2>Tutor Application Form</h2>
 
 <form id="tutorForm">
-<label>Full Name<input type="text" id="tutorName" required></label>
-<label>Email<input type="email" id="tutorEmail" required></label>
-<label>Phone Number<input type="tel" id="tutorPhone" required></label>
-<label>Subject / Expertise<input type="text" id="tutorSubject" required></label>
-<label>Short Bio / Experience<textarea id="tutorBio" rows="4"></textarea></label>
-<label><input type="checkbox" id="tutorAgree" required> I agree to the <a href="documents/Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a></label>
+
+<label>Full Name
+<input type="text" id="tutorName" required>
+</label>
+
+<label>Email
+<input type="email" id="tutorEmail" required>
+</label>
+
+<label>Phone Number
+<input type="tel" id="tutorPhone" required>
+</label>
+
+<label>Subject You Offer
+<input type="text" id="tutorSubject" placeholder="e.g Academic Writing, English, Research Skills" required>
+</label>
+
 <button type="submit">Submit Application</button>
+
 </form>
 
+<a href="index.html" class="back">← Back to Home</a>
+</div>
+
+<!-- Firebase Script -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
-apiKey:"YOUR-API-KEY",
-authDomain:"YOUR-PROJECT.firebaseapp.com",
-projectId:"YOUR-PROJECT-ID",
-storageBucket:"YOUR-PROJECT.appspot.com",
-messagingSenderId:"XXXX",
-appId:"XXXX"
+  apiKey: "YOUR-API-KEY",
+  authDomain: "YOUR-PROJECT.firebaseapp.com",
+  projectId: "YOUR-PROJECT-ID",
+  storageBucket: "YOUR-PROJECT.appspot.com",
+  messagingSenderId: "XXXX",
+  appId: "XXXX"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-document.getElementById("tutorForm").addEventListener("submit", async e=>{
-e.preventDefault();
-await addDoc(collection(db,"tutors"),{
-name:document.getElementById("tutorName").value,
-email:document.getElementById("tutorEmail").value,
-phone:document.getElementById("tutorPhone").value,
-subject:document.getElementById("tutorSubject").value,
-bio:document.getElementById("tutorBio").value,
-approved:false,
-date:new Date().toLocaleString()
-});
-alert("Application submitted successfully! You will be notified once approved.");
-document.getElementById("tutorForm").reset();
+// Handle form submission
+document.getElementById("tutorForm").addEventListener("submit", async (e)=>{
+    e.preventDefault();
+
+    await addDoc(collection(db, "tutors"), {
+        name: document.getElementById("tutorName").value,
+        email: document.getElementById("tutorEmail").value,
+        phone: document.getElementById("tutorPhone").value,
+        subject: document.getElementById("tutorSubject").value,
+        approved: false
+    });
+
+    alert("Application submitted successfully! You will be contacted after approval.");
+
+    e.target.reset();
 });
 </script>
 
