@@ -151,12 +151,9 @@ one-on-one tutorials, group sessions, and assignment-based assistance.</p>
 </form>
 </div>
 
-<!-- ===== FOOTER (UNCHANGED) ===== -->
 <footer>
 <p>&copy; 2026 C&amp;T Tutorials. All rights reserved.</p>
-
 <div class="footer-divider"></div>
-
 <div class="footer-disclaimer">
 <strong>Disclaimer:</strong><br>
 C&amp;T Tutorials operates independently and is not affiliated with, endorsed by,
@@ -165,11 +162,18 @@ institution. All services are supplementary and intended to support independent 
 C&amp;T Tutorials does not complete assignments or assessments on behalf of students.
 Responsibility for submitted academic work remains with the student.
 </div>
-
 <div class="footer-links">
+<a href="tutors.html">Tutors' Corner</a>
 </div>
 </footer>
 
+<!-- Modal Open/Close Script (non-module, for the button to work) -->
+<script>
+function openForm(){ document.getElementById("modal").style.display="flex"; }
+function closeForm(){ document.getElementById("modal").style.display="none"; }
+</script>
+
+<!-- Firebase Module Script -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -190,7 +194,7 @@ const tutorSelect = document.getElementById("tutorSelect");
 const tutorLabel = document.getElementById("tutorLabel");
 const serviceSelect = document.getElementById("serviceSelect");
 
-// Load approved tutors
+// Load approved tutors from Firestore
 const snap = await getDocs(collection(db,"tutors"));
 snap.forEach(doc=>{
     const t = doc.data();
@@ -222,10 +226,6 @@ document.getElementById("bookingForm").addEventListener("submit", async e=>{
     document.getElementById("bookingForm").reset();
     tutorLabel.style.display="none";
 });
-
-// Modal functions
-function openForm(){ document.getElementById("modal").style.display="flex"; }
-function closeForm(){ document.getElementById("modal").style.display="none"; }
 </script>
 
 </body>
