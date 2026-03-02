@@ -3,133 +3,95 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tutors' Corner | C&T Tutorials</title>
+<title>Tutors' Corner - C&T Tutorials</title>
 
 <style>
 body{
-    font-family: Arial, sans-serif;
-    background:#f4f6f9;
-    margin:0;
+font-family:Arial;
+background:#f4f6f8;
+text-align:center;
+padding:40px;
 }
 
-header{
-    background:#003366;
-    color:white;
-    padding:20px;
-    text-align:center;
+form{
+background:white;
+padding:20px;
+border-radius:10px;
+max-width:400px;
+margin:auto;
 }
 
-.container{
-    max-width:600px;
-    margin:40px auto;
-    background:white;
-    padding:25px;
-    border-radius:10px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.2);
-}
-
-h2{
-    color:#003366;
-}
-
-label{
-    display:block;
-    margin-top:15px;
-}
-
-input{
-    width:100%;
-    padding:10px;
-    margin-top:5px;
+input, textarea{
+width:100%;
+padding:10px;
+margin:10px 0;
 }
 
 button{
-    margin-top:20px;
-    width:100%;
-    padding:12px;
-    background:#003366;
-    color:white;
-    border:none;
-    font-size:16px;
-    cursor:pointer;
-}
-
-.back{
-    display:block;
-    margin-top:15px;
-    text-align:center;
+padding:10px;
+background:#002147;
+color:white;
+border:none;
+cursor:pointer;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-<h1>Tutors' Corner</h1>
-<p>Apply to become a tutor at C&T Tutorials</p>
-</header>
-
-<div class="container">
-<h2>Tutor Application Form</h2>
+<h2>Tutors' Corner</h2>
+<p>Register to offer your tutoring services</p>
 
 <form id="tutorForm">
+<input type="text" id="name" placeholder="Full Name" required>
+<input type="email" id="email" placeholder="Email" required>
+<input type="password" id="password" placeholder="Password" required>
+<input type="text" id="subject" placeholder="Subject Specialization" required>
+<input type="text" id="phone" placeholder="Phone Number" required>
+<textarea id="bio" placeholder="Short Bio"></textarea>
 
-<label>Full Name
-<input type="text" id="tutorName" required>
-</label>
-
-<label>Email
-<input type="email" id="tutorEmail" required>
-</label>
-
-<label>Phone Number
-<input type="tel" id="tutorPhone" required>
-</label>
-
-<label>Subject You Offer
-<input type="text" id="tutorSubject" placeholder="e.g Academic Writing, English, Research Skills" required>
-</label>
-
-<button type="submit">Submit Application</button>
-
+<button type="submit">Create Tutor Account</button>
 </form>
 
-<a href="index.html" class="back">← Back to Home</a>
-</div>
-
-<!-- Firebase Script -->
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAJIoUss8lPbrVlFzkBcgf3l62tRQgQ9Ng",
-  authDomain: "ct-tutorials-web.firebaseapp.com",
-  projectId: "ct-tutorials-web",
-  storageBucket: "ct-tutorials-web.firebasestorage.app",
-  messagingSenderId: "369659340275",
-  appId: "1:369659340275:web:b081919e9dea8453241e86"
+apiKey: "AIzaSyAJIoUss8lPbrVlFzkBcgf3l62tRQgQ9Ng",
+authDomain: "ct-tutorials-web.firebaseapp.com",
+projectId: "ct-tutorials-web",
+storageBucket: "ct-tutorials-web.firebasestorage.app",
+messagingSenderId: "369659340275",
+appId: "1:369659340275:web:b081919e9dea8453241e86"
 };
 
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Handle form submission
-document.getElementById("tutorForm").addEventListener("submit", async (e)=>{
-    e.preventDefault();
+document.getElementById("tutorForm").addEventListener("submit", async(e)=>{
+e.preventDefault();
 
-    await addDoc(collection(db, "tutors"), {
-        name: document.getElementById("tutorName").value,
-        email: document.getElementById("tutorEmail").value,
-        phone: document.getElementById("tutorPhone").value,
-        subject: document.getElementById("tutorSubject").value,
-        approved: false
-    });
+const name = document.getElementById("name").value;
+const email = document.getElementById("email").value;
+const password = document.getElementById("password").value;
+const subject = document.getElementById("subject").value;
+const phone = document.getElementById("phone").value;
+const bio = document.getElementById("bio").value;
 
-    alert("Application submitted successfully! You will be contacted after approval.");
+const user = await createUserWithEmailAndPassword(auth,email,password);
 
-    e.target.reset();
+await setDoc(doc(db,"tutors",user.user.uid),{
+name,email,subject,phone,bio,createdAt:new Date()
 });
+
+alert("Tutor account created successfully!");
+document.getElementById("tutorForm").reset();
+});
+
 </script>
 
 </body>
