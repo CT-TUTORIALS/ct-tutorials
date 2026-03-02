@@ -169,26 +169,23 @@ Responsibility for submitted academic work remains with the student.
 
 <!-- Modal Open/Close Script (non-module, for the button to work) -->
 <script>
-function openForm(){ document.getElementById("modal").style.display="flex"; }
-function closeForm(){ document.getElementById("modal").style.display="none"; }
-</script>
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
-<!-- Firebase Module Script -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
+// Your web app's Firebase configuration
 const firebaseConfig = {
-apiKey:"YOUR-API-KEY",
-authDomain:"YOUR-PROJECT.firebaseapp.com",
-projectId:"YOUR-PROJECT-ID",
-storageBucket:"YOUR-PROJECT.appspot.com",
-messagingSenderId:"XXXX",
-appId:"XXXX"
+  apiKey: "AIzaSyAJIoUss8lPbrVlFzkBcgf3l62tRQgQ9Ng",
+  authDomain: "ct-tutorials-web.firebaseapp.com",
+  projectId: "ct-tutorials-web",
+  storageBucket: "ct-tutorials-web.firebasestorage.app",
+  messagingSenderId: "369659340275",
+  appId: "1:369659340275:web:b081919e9dea8453241e86"
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
 
 const tutorSelect = document.getElementById("tutorSelect");
 const tutorLabel = document.getElementById("tutorLabel");
