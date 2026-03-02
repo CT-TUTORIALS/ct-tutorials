@@ -3,146 +3,61 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>C&T Tutorials</title>
+<title>Tutors' Corner - C&T Tutorials</title>
 
 <style>
 body{
-font-family: Arial, sans-serif;
-margin:0;
-padding:0;
+font-family:Arial;
 background:#f4f6f8;
-}
-
-header{
-background:#002147;
-color:white;
-padding:15px;
 text-align:center;
-}
-
-.hero{
 padding:40px;
-text-align:center;
-background:#e9eef5;
+}
+
+form{
+background:white;
+padding:20px;
+border-radius:10px;
+max-width:400px;
+margin:auto;
+}
+
+input, textarea{
+width:100%;
+padding:10px;
+margin:10px 0;
 }
 
 button{
-padding:12px 20px;
+padding:10px;
 background:#002147;
 color:white;
 border:none;
 cursor:pointer;
-border-radius:6px;
-}
-
-footer{
-background:#002147;
-color:white;
-padding:20px;
-text-align:center;
-margin-top:40px;
-}
-
-/* Modal */
-.modal{
-display:none;
-position:fixed;
-z-index:1;
-left:0;
-top:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.5);
-}
-
-.modal-content{
-background:white;
-padding:20px;
-margin:10% auto;
-width:90%;
-max-width:500px;
-border-radius:10px;
-}
-
-/* Floating Buttons */
-.float-btn{
-position:fixed;
-right:20px;
-padding:15px;
-border-radius:50px;
-color:white;
-border:none;
-cursor:pointer;
-}
-
-#registerBtnFloat{
-bottom:20px;
-background:#002147;
-}
-
-#tutorCornerFloat{
-bottom:80px;
-background:#008080;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-<h1>C&T Tutorials</h1>
-</header>
+<h2>Tutors' Corner</h2>
+<p>Register to offer your tutoring services</p>
 
-<section class="hero">
-<h2>Welcome to C&T Tutorials</h2>
-<p>Your academic success partner.</p>
+<form id="tutorForm">
+<input type="text" id="name" placeholder="Full Name" required>
+<input type="email" id="email" placeholder="Email" required>
+<input type="password" id="password" placeholder="Password" required>
+<input type="text" id="subject" placeholder="Subject Specialization" required>
+<input type="text" id="phone" placeholder="Phone Number" required>
+<textarea id="bio" placeholder="Short Bio"></textarea>
 
-<button id="openModalBtn">Register Now</button>
-</section>
-
-<!-- BOOKING MODAL -->
-<div id="bookingModal" class="modal">
-<div class="modal-content">
-
-<h3>Book Tutorial Service</h3>
-
-<form id="bookingForm">
-
-<input type="text" id="name" placeholder="Full Name" required><br><br>
-<input type="email" id="email" placeholder="Email" required><br><br>
-
-<select id="service" required>
-<option value="">Select Service</option>
-<option value="online">Online Tutoring</option>
-<option value="physical">Face-to-Face Tutoring</option>
-</select><br><br>
-
-<!-- Tutor Selection (hidden first) -->
-<select id="tutorSelect" style="display:none;"></select><br><br>
-
-<textarea id="notes" placeholder="Additional Notes"></textarea><br><br>
-
-<button type="submit">Submit Booking</button>
+<button type="submit">Create Tutor Account</button>
 </form>
 
-</div>
-</div>
-
-<!-- FLOATING BUTTONS -->
-<button id="registerBtnFloat" class="float-btn">Register</button>
-<button id="tutorCornerFloat" class="float-btn" onclick="window.location.href='tutors.html'">
-Tutors' Corner
-</button>
-
-<footer>
-<p>© 2026 C&T Tutorials. All rights reserved.</p>
-</footer>
-
-<!-- FIREBASE + SCRIPT -->
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
 apiKey: "AIzaSyAJIoUss8lPbrVlFzkBcgf3l62tRQgQ9Ng",
@@ -154,53 +69,27 @@ appId: "1:369659340275:web:b081919e9dea8453241e86"
 };
 
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 const db = getFirestore(app);
 
-/* MODAL CONTROLS */
-const modal = document.getElementById("bookingModal");
-document.getElementById("openModalBtn").onclick = () => modal.style.display = "block";
-document.getElementById("registerBtnFloat").onclick = () => modal.style.display = "block";
-
-window.onclick = (e)=>{
-if(e.target==modal) modal.style.display="none";
-}
-
-/* LOAD TUTORS WHEN SERVICE SELECTED */
-document.getElementById("service").addEventListener("change", async ()=>{
-const tutorSelect = document.getElementById("tutorSelect");
-
-if(document.getElementById("service").value !== ""){
-tutorSelect.style.display="block";
-tutorSelect.innerHTML='<option>Select Tutor</option>';
-
-const snapshot = await getDocs(collection(db,"tutors"));
-snapshot.forEach(doc=>{
-const t = doc.data();
-const opt = document.createElement("option");
-opt.value = t.name;
-opt.textContent = t.name + " (" + t.subject + ")";
-tutorSelect.appendChild(opt);
-});
-}else{
-tutorSelect.style.display="none";
-}
-});
-
-/* SUBMIT BOOKING */
-document.getElementById("bookingForm").addEventListener("submit", async(e)=>{
+document.getElementById("tutorForm").addEventListener("submit", async(e)=>{
 e.preventDefault();
 
-await addDoc(collection(db,"bookings"),{
-name: document.getElementById("name").value,
-email: document.getElementById("email").value,
-service: document.getElementById("service").value,
-tutor: document.getElementById("tutorSelect").value,
-notes: document.getElementById("notes").value,
-createdAt: new Date()
+const name = document.getElementById("name").value;
+const email = document.getElementById("email").value;
+const password = document.getElementById("password").value;
+const subject = document.getElementById("subject").value;
+const phone = document.getElementById("phone").value;
+const bio = document.getElementById("bio").value;
+
+const user = await createUserWithEmailAndPassword(auth,email,password);
+
+await setDoc(doc(db,"tutors",user.user.uid),{
+name,email,subject,phone,bio,createdAt:new Date()
 });
 
-alert("Booking submitted successfully!");
-modal.style.display="none";
+alert("Tutor account created successfully!");
+document.getElementById("tutorForm").reset();
 });
 
 </script>
