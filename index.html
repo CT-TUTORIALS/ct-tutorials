@@ -120,6 +120,10 @@ ul {
     align-items: center;
 }
 
+#modal.active {
+    display: flex;
+}
+
 #modal form {
     background: white;
     padding: 25px;
@@ -341,14 +345,14 @@ appId: "1:369659340275:web:b081919e9dea8453241e86"
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Modal functions
+// Modal open/close
 const modal = document.getElementById("modal");
-function openForm(){ modal.style.display = "flex"; }
-function closeForm(){ modal.style.display = "none"; }
+function openForm(){ modal.classList.add("active"); }
+function closeForm(){ modal.classList.remove("active"); }
 
 document.getElementById("registerBtnFloat").addEventListener("click", openForm);
 
-// Load tutors when a service is selected
+// Load tutors dynamically
 const serviceSelect = document.getElementById("service");
 const tutorSelect = document.getElementById("tutorSelect");
 
