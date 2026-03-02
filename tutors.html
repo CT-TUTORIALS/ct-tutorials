@@ -3,35 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>C&T Tutorials - Tutors</title>
+<title>Tutors' Corner - Apply / Offer Services</title>
 <style>
 body{margin:0;font-family:Arial;color:#333;}
-header{background:#003366;padding:15px;text-align:center;color:white;}
-h2{color:#003366;}
-ul{list-style:none;padding:0;}
-li{margin:10px 0;}
-footer{background:#003366;color:white;text-align:center;padding:20px;}
+header{background:#003366;color:white;padding:20px;text-align:center;}
+form{max-width:450px;margin:50px auto;padding:20px;border-radius:8px;border:1px solid #ccc;}
+input, select, textarea{width:100%;padding:10px;margin:10px 0;}
+button{width:100%;padding:12px;background:#003366;color:white;border:none;cursor:pointer;}
 </style>
 </head>
 <body>
-<header>
-<h1>Our Tutors</h1>
-</header>
 
-<section>
-<h2>Approved Tutors</h2>
-<ul id="tutorList">
-<li>Loading tutors...</li>
-</ul>
-</section>
+<header><h1>Tutors' Corner - Apply / Offer Services</h1></header>
 
-<footer>
-<p>&copy; 2026 C&T Tutorials</p>
-</footer>
+<form id="tutorForm">
+<label>Full Name<input type="text" id="tutorName" required></label>
+<label>Email<input type="email" id="tutorEmail" required></label>
+<label>Phone Number<input type="tel" id="tutorPhone" required></label>
+<label>Subject / Expertise<input type="text" id="tutorSubject" required></label>
+<label>Short Bio / Experience<textarea id="tutorBio" rows="4"></textarea></label>
+<label><input type="checkbox" id="tutorAgree" required> I agree to the <a href="documents/Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a></label>
+<button type="submit">Submit Application</button>
+</form>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
 apiKey:"YOUR-API-KEY",
@@ -41,20 +38,25 @@ storageBucket:"YOUR-PROJECT.appspot.com",
 messagingSenderId:"XXXX",
 appId:"XXXX"
 };
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const tutorList=document.getElementById("tutorList");
-tutorList.innerHTML="";
 
-const snap=await getDocs(collection(db,"tutors"));
-snap.forEach(doc=>{
-const t=doc.data();
-if(t.approved){
-let li=document.createElement("li");
-li.textContent=`${t.name} (${t.subject})`;
-tutorList.appendChild(li);
-}
+document.getElementById("tutorForm").addEventListener("submit", async e=>{
+e.preventDefault();
+await addDoc(collection(db,"tutors"),{
+name:document.getElementById("tutorName").value,
+email:document.getElementById("tutorEmail").value,
+phone:document.getElementById("tutorPhone").value,
+subject:document.getElementById("tutorSubject").value,
+bio:document.getElementById("tutorBio").value,
+approved:false,
+date:new Date().toLocaleString()
+});
+alert("Application submitted successfully! You will be notified once approved.");
+document.getElementById("tutorForm").reset();
 });
 </script>
+
 </body>
 </html>
