@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book a Session | C&T Tutorials</title>
+<style>
+body { font-family: Arial; background:#f4f6f9; text-align:center; padding:40px; }
+input, select, button { padding:10px; margin:8px; width:300px; }
+button { background:#003366; color:white; border:none; cursor:pointer; }
+button:hover { background:#00509e; }
+</style>
+</head>
+<body>
+
+<h2>Book a Tutor</h2>
+
+<input id="studentName" placeholder="Your Name"><br>
+<input id="studentPhone" placeholder="Phone"><br>
+<input id="subject" placeholder="Subject"><br>
+<select id="tutorSelect">
+  <option>Select Tutor</option>
+</select><br>
+<button onclick="bookSession()">Submit Booking</button>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "YOUR-API-KEY",
+  authDomain: "YOUR-PROJECT.firebaseapp.com",
+  projectId: "YOUR-PROJECT-ID",
+  storageBucket: "YOUR-PROJECT.appspot.com",
+  messagingSenderId: "XXXX",
+  appId: "XXXX"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const select = document.getElementById("tutorSelect");
+
+const querySnapshot = await getDocs(collection(db, "tutors"));
+querySnapshot.forEach(doc => {
+    const t = doc.data();
+    if(t.approved === true){
+        const option = document.createElement("option");
+        option.value = t.name;
+        option.textContent = `${t.name} (${t.subject})`;
+        select.appendChild(option);
+    }
+});
+
+window.bookSession = async () => {
+    await addDoc(collection(db, "bookings"), {
+        studentName: document.getElementById("studentName").value,
+        studentPhone: document.getElementById("studentPhone").value,
+        subject: document.getElementById("subject").value,
+        tutor: select.value,
+        date: new Date().toLocaleString()
+    });
+    alert("Booking submitted successfully!");
+};
+</script>
+
+</body>
+</html>
