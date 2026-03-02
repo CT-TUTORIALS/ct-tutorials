@@ -3,61 +3,43 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tutors' Corner - C&T Tutorials</title>
-
+<title>Tutors Application - C&T Tutorials</title>
 <style>
-body{
-font-family:Arial;
-background:#f4f6f8;
-text-align:center;
-padding:40px;
-}
-
-form{
-background:white;
-padding:20px;
-border-radius:10px;
-max-width:400px;
-margin:auto;
-}
-
-input, textarea{
-width:100%;
-padding:10px;
-margin:10px 0;
-}
-
-button{
-padding:10px;
-background:#002147;
-color:white;
-border:none;
-cursor:pointer;
-}
+body { margin:0; font-family: Arial, sans-serif; background:#f4f4f4; }
+header { background:#003366; color:white; padding:15px; text-align:center; }
+h2 { color:#003366; margin-top:20px; text-align:center; }
+form { background:white; max-width:500px; margin:30px auto; padding:20px; border-radius:10px; }
+label { display:block; margin-top:12px; }
+input, select { width:100%; padding:10px; margin-top:5px; }
+.submit-btn { margin-top:20px; width:100%; padding:12px; background:#003366; color:white; border:none; font-size:16px; cursor:pointer; border-radius:5px; }
+footer { background:#003366; color:white; text-align:center; padding:25px 20px; font-size:14px; }
 </style>
 </head>
-
 <body>
 
-<h2>Tutors' Corner</h2>
-<p>Register to offer your tutoring services</p>
+<header>
+<h1>Tutors Application - C&T Tutorials</h1>
+</header>
+
+<h2>Apply to Offer Your Services</h2>
 
 <form id="tutorForm">
-<input type="text" id="name" placeholder="Full Name" required>
-<input type="email" id="email" placeholder="Email" required>
-<input type="password" id="password" placeholder="Password" required>
-<input type="text" id="subject" placeholder="Subject Specialization" required>
-<input type="text" id="phone" placeholder="Phone Number" required>
-<textarea id="bio" placeholder="Short Bio"></textarea>
-
-<button type="submit">Create Tutor Account</button>
+<label>Full Name<input type="text" id="name" required></label>
+<label>Email<input type="email" id="email" required></label>
+<label>Cellphone Number<input type="tel" id="cell_number" placeholder="+264 81 123 4567" required></label>
+<label>Subject Expertise<input type="text" id="subject" required></label>
+<label>Upload CV (optional)<input type="file" id="cv"></label>
+<label><input type="checkbox" required> I agree to the <a href="documents/Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a></label>
+<button type="submit" class="submit-btn">Submit Application</button>
 </form>
 
-<script type="module">
+<footer>
+<p>&copy; 2026 C&amp;T Tutorials. All rights reserved.</p>
+</footer>
 
+<script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
 apiKey: "AIzaSyAJIoUss8lPbrVlFzkBcgf3l62tRQgQ9Ng",
@@ -69,29 +51,31 @@ appId: "1:369659340275:web:b081919e9dea8453241e86"
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 const db = getFirestore(app);
 
-document.getElementById("tutorForm").addEventListener("submit", async(e)=>{
-e.preventDefault();
+const tutorForm = document.getElementById("tutorForm");
 
-const name = document.getElementById("name").value;
-const email = document.getElementById("email").value;
-const password = document.getElementById("password").value;
-const subject = document.getElementById("subject").value;
-const phone = document.getElementById("phone").value;
-const bio = document.getElementById("bio").value;
+tutorForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-const user = await createUserWithEmailAndPassword(auth,email,password);
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const cell_number = document.getElementById("cell_number").value;
+    const subject = document.getElementById("subject").value;
 
-await setDoc(doc(db,"tutors",user.user.uid),{
-name,email,subject,phone,bio,createdAt:new Date()
+    // Add tutor to Firestore with approved=false
+    await addDoc(collection(db,"tutors"),{
+        name,
+        email,
+        cell_number,
+        subject,
+        approved:false,
+        createdAt: new Date()
+    });
+
+    alert("Your application has been submitted! You will be notified once approved.");
+    tutorForm.reset();
 });
-
-alert("Tutor account created successfully!");
-document.getElementById("tutorForm").reset();
-});
-
 </script>
 
 </body>
