@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C&T Tutorials - Tutors</title>
+<style>
+body{margin:0;font-family:Arial;color:#333;}
+header{background:#003366;padding:15px;text-align:center;color:white;}
+h2{color:#003366;}
+ul{list-style:none;padding:0;}
+li{margin:10px 0;}
+footer{background:#003366;color:white;text-align:center;padding:20px;}
+</style>
+</head>
+<body>
+<header>
+<h1>Our Tutors</h1>
+</header>
+
+<section>
+<h2>Approved Tutors</h2>
+<ul id="tutorList">
+<li>Loading tutors...</li>
+</ul>
+</section>
+
+<footer>
+<p>&copy; 2026 C&T Tutorials</p>
+</footer>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+apiKey:"YOUR-API-KEY",
+authDomain:"YOUR-PROJECT.firebaseapp.com",
+projectId:"YOUR-PROJECT-ID",
+storageBucket:"YOUR-PROJECT.appspot.com",
+messagingSenderId:"XXXX",
+appId:"XXXX"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const tutorList=document.getElementById("tutorList");
+tutorList.innerHTML="";
+
+const snap=await getDocs(collection(db,"tutors"));
+snap.forEach(doc=>{
+const t=doc.data();
+if(t.approved){
+let li=document.createElement("li");
+li.textContent=`${t.name} (${t.subject})`;
+tutorList.appendChild(li);
+}
+});
+</script>
+</body>
+</html>
