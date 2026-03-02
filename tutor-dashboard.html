@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tutor Dashboard | C&T Tutorials</title>
+<style>
+body { font-family: Arial; background:#f4f6f9; padding:40px; text-align:center; }
+input, textarea, button { padding:10px; margin:8px; width:300px; }
+button { background:#003366; color:white; border:none; cursor:pointer; }
+button:hover { background:#00509e; }
+</style>
+</head>
+<body>
+
+<h2>Create Your Tutor Profile</h2>
+
+<input id="name" placeholder="Full Name"><br>
+<input id="subject" placeholder="Subject"><br>
+<textarea id="bio" placeholder="Short bio"></textarea><br>
+<button onclick="saveProfile()">Save Profile</button>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "YOUR-API-KEY",
+  authDomain: "YOUR-PROJECT.firebaseapp.com",
+  projectId: "YOUR-PROJECT-ID",
+  storageBucket: "YOUR-PROJECT.appspot.com",
+  messagingSenderId: "XXXX",
+  appId: "XXXX"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+window.saveProfile = async () => {
+    const user = auth.currentUser;
+    await setDoc(doc(db, "tutors", user.uid), {
+        name: document.getElementById("name").value,
+        subject: document.getElementById("subject").value,
+        bio: document.getElementById("bio").value,
+        approved: false
+    });
+    alert("Profile saved! Wait for admin approval.");
+};
+</script>
+
+</body>
+</html>
