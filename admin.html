@@ -1,129 +1,93 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Dashboard - C&T Tutorials</title>
-
+<title>Admin Dashboard</title>
 <style>
-body { margin: 0; font-family: Arial, sans-serif; background:#f4f4f4; }
-header { background:#003366; color:white; padding:15px; text-align:center; }
-h2 { color:#003366; margin-top:20px; }
-table { width: 90%; margin: 20px auto; border-collapse: collapse; background:white; }
-th, td { padding:10px; border:1px solid #ccc; text-align:left; }
-th { background:#00509e; color:white; }
-button { padding:6px 12px; border:none; border-radius:4px; cursor:pointer; }
-button.approve { background:green; color:white; }
-button.delete { background:red; color:white; }
-section { max-width: 1000px; margin:auto; padding-bottom:50px; }
-.logout-btn { position: fixed; top:15px; right:15px; padding:8px 15px; background:#ff3333; color:white; border:none; border-radius:5px; cursor:pointer; }
+body{font-family:Arial;margin:0;background:#f4f4f4;}
+header{background:#003366;color:white;padding:15px;text-align:center;}
+section{padding:20px;}
+button{padding:8px 12px;margin-top:5px;}
+.card{background:white;padding:15px;margin-bottom:10px;border-radius:6px;}
 </style>
 </head>
 <body>
 
 <header>
-<h1>Admin Dashboard - C&T Tutorials</h1>
-<button class="logout-btn" onclick="logout()">Logout</button>
+<h2>Admin Dashboard</h2>
+<button id="logoutBtn">Logout</button>
 </header>
 
-<section>
-<h2>Registered Tutors</h2>
-<table id="tutorsTable">
-<thead>
-<tr><th>Name</th><th>Email</th><th>Subject</th><th>Status</th><th>Action</th></tr>
-</thead>
-<tbody></tbody>
-</table>
+<section id="loginSection">
+<h3>Admin Login</h3>
+<input type="email" id="adminEmail" placeholder="Email"><br><br>
+<input type="password" id="adminPassword" placeholder="Password"><br><br>
+<button id="loginBtn">Login</button>
+</section>
 
-<h2>Student Bookings</h2>
-<table id="bookingsTable">
-<thead>
-<tr><th>Student Name</th><th>Email</th><th>Cell</th><th>Service</th><th>Tutor</th><th>Action</th></tr>
-</thead>
-<tbody></tbody>
-</table>
+<section id="dashboard" style="display:none;">
+<h3>Pending Tutor Applications</h3>
+<div id="tutorsList"></div>
 </section>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, getDocs, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-const firebaseConfig = {
-apiKey: "AIzaSyAJIoUss8lPbrVlFzkBcgf3l62tRQgQ9Ng",
-authDomain: "ct-tutorials-web.firebaseapp.com",
-projectId: "ct-tutorials-web",
-storageBucket: "ct-tutorials-web.firebasestorage.app",
-messagingSenderId: "369659340275",
-appId: "1:369659340275:web:b081919e9dea8453241e86"
-};
-
+const firebaseConfig = { YOUR_CONFIG_HERE };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
 
-const tutorsTableBody = document.querySelector("#tutorsTable tbody");
-const bookingsTableBody = document.querySelector("#bookingsTable tbody");
+const loginSection=document.getElementById("loginSection");
+const dashboard=document.getElementById("dashboard");
+
+document.getElementById("loginBtn").onclick=()=>{
+signInWithEmailAndPassword(auth,
+adminEmail.value,
+adminPassword.value
+);
+};
+
+onAuthStateChanged(auth,user=>{
+if(user){
+loginSection.style.display="none";
+dashboard.style.display="block";
+loadTutors();
+}else{
+loginSection.style.display="block";
+dashboard.style.display="none";
+}
+});
 
 async function loadTutors(){
-  tutorsTableBody.innerHTML="";
-  const snapshot = await getDocs(collection(db,"tutors"));
-  snapshot.forEach(docSnap=>{
-    const t = docSnap.data();
-    const tr = document.createElement("tr");
-    tr.innerHTML=`
-      <td>${t.name}</td>
-      <td>${t.email}</td>
-      <td>${t.subject}</td>
-      <td>${t.approved ? "Approved" : "Pending"}</td>
-      <td>
-        ${t.approved ? "" : `<button class="approve">Approve</button>`}
-        <button class="delete">Delete</button>
-      </td>
-    `;
-    // Approve button
-    tr.querySelector(".approve")?.addEventListener("click", async ()=>{
-      await updateDoc(doc(db,"tutors",docSnap.id),{approved:true});
-      loadTutors();
-    });
-    // Delete button
-    tr.querySelector(".delete")?.addEventListener("click", async ()=>{
-      if(confirm("Delete this tutor?")){
-        await deleteDoc(doc(db,"tutors",docSnap.id));
-        loadTutors();
-      }
-    });
-    tutorsTableBody.appendChild(tr);
-  });
+const querySnapshot=await getDocs(collection(db,"tutors"));
+const list=document.getElementById("tutorsList");
+list.innerHTML="";
+querySnapshot.forEach(docSnap=>{
+const data=docSnap.data();
+if(!data.approved){
+list.innerHTML+=`
+<div class="card">
+<strong>${data.name}</strong><br>
+${data.email}<br>
+${data.subject}<br>
+<a href="${data.cvURL}" target="_blank">View CV</a><br>
+<button onclick="approveTutor('${docSnap.id}','${data.email}','${data.name}')">Approve</button>
+</div>
+`;
+}
+});
 }
 
-async function loadBookings(){
-  bookingsTableBody.innerHTML="";
-  const snapshot = await getDocs(collection(db,"bookings"));
-  snapshot.forEach(docSnap=>{
-    const b = docSnap.data();
-    const tr = document.createElement("tr");
-    tr.innerHTML=`
-      <td>${b.studentName}</td>
-      <td>${b.email}</td>
-      <td>${b.cell_number}</td>
-      <td>${b.service}</td>
-      <td>${b.tutor}</td>
-      <td><button class="delete">Delete</button></td>
-    `;
-    tr.querySelector(".delete").addEventListener("click", async ()=>{
-      if(confirm("Delete this booking?")){
-        await deleteDoc(doc(db,"bookings",docSnap.id));
-        loadBookings();
-      }
-    });
-    bookingsTableBody.appendChild(tr);
-  });
-}
-
-// Simple logout (just reload page for now)
-function logout(){ location.reload(); }
-
+window.approveTutor=async(id,email,name)=>{
+await updateDoc(doc(db,"tutors",id),{approved:true});
+alert("Tutor Approved.");
 loadTutors();
-loadBookings();
+};
+
+logoutBtn.onclick=()=>signOut(auth);
 </script>
 
 </body>
