@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tutors Application - C&T Tutorials</title>
+
 <style>
 body { margin:0; font-family: Arial, sans-serif; background:#f4f4f4; }
 header { background:#003366; color:white; padding:15px; text-align:center; }
@@ -12,25 +13,51 @@ form { background:white; max-width:500px; margin:30px auto; padding:20px; border
 label { display:block; margin-top:12px; }
 input, select { width:100%; padding:10px; margin-top:5px; }
 .submit-btn { margin-top:20px; width:100%; padding:12px; background:#003366; color:white; border:none; font-size:16px; cursor:pointer; border-radius:5px; }
-footer { background:#003366; color:white; text-align:center; padding:25px 20px; font-size:14px; }
+.submit-btn:hover { background:#00509e; }
+footer { background:#003366; color:white; text-align:center; padding:25px 20px; font-size:14px; margin-top:40px; }
 </style>
 </head>
 <body>
 
 <header>
-<h1>Tutors Application - C&T Tutorials</h1>
+<h1>Tutors Application - C&amp;T Tutorials</h1>
 </header>
 
 <h2>Apply to Offer Your Services</h2>
 
 <form id="tutorForm">
-<label>Full Name<input type="text" id="name" required></label>
-<label>Email<input type="email" id="email" required></label>
-<label>Cellphone Number<input type="tel" id="cell_number" placeholder="+264 81 123 4567" required></label>
-<label>Subject Expertise<input type="text" id="subject" required></label>
-<label>Upload CV <input type="file" id="cv"></label>
-<label><input type="checkbox" required> I agree to the <a href="documents/Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a></label>
+
+<label>Full Name
+<input type="text" id="name" required>
+</label>
+
+<label>Email Address
+<input type="email" id="email" required>
+</label>
+
+<label>Cellphone Number
+<input type="tel" id="cell_number" placeholder="+264 81 123 4567" required>
+</label>
+
+<label>Subject Expertise
+<input type="text" id="subject" required>
+</label>
+
+<label>Upload CV (PDF only)
+<input type="file" id="cv" accept=".pdf">
+</label>
+
+<!-- ✅ UPDATED DISCLOSURE LINK -->
+<label>
+<input type="checkbox" required>
+I agree to the 
+<a href="tutor-disclosure.html" target="_blank">
+Tutor Disclosure Agreement
+</a>
+</label>
+
 <button type="submit" class="submit-btn">Submit Application</button>
+
 </form>
 
 <footer>
@@ -40,6 +67,7 @@ footer { background:#003366; color:white; text-align:center; padding:25px 20px; 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 
 const firebaseConfig = {
 apiKey: "AIzaSyAJIoUss8lPbrVlFzkBcgf3l62tRQgQ9Ng",
@@ -52,6 +80,7 @@ appId: "1:369659340275:web:b081919e9dea8453241e86"
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
 const tutorForm = document.getElementById("tutorForm");
 
@@ -62,18 +91,27 @@ tutorForm.addEventListener("submit", async (e) => {
     const email = document.getElementById("email").value;
     const cell_number = document.getElementById("cell_number").value;
     const subject = document.getElementById("subject").value;
+    const cvFile = document.getElementById("cv").files[0];
 
-    // Add tutor to Firestore with approved=false
+    let cvURL = "";
+
+    if(cvFile){
+        const storageRef = ref(storage, `tutor_cvs/${Date.now()}_${cvFile.name}`);
+        await uploadBytes(storageRef, cvFile);
+        cvURL = await getDownloadURL(storageRef);
+    }
+
     await addDoc(collection(db,"tutors"),{
         name,
         email,
         cell_number,
         subject,
         approved:false,
+        cvURL,
         createdAt: new Date()
     });
 
-    alert("Your application has been submitted! You will be notified once approved.");
+    alert("Your application has been submitted successfully. You will be notified once approved.");
     tutorForm.reset();
 });
 </script>
