@@ -5,137 +5,131 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tutor Application - C&T Tutorials</title>
 
+<!-- Firebase SDK -->
+<script type="module">
+  // Import Firebase
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAJIoUss8lPbrVlFzkBcgf3l62tRQgQ9Ng",
+    authDomain: "ct-tutorials-web.firebaseapp.com",
+    projectId: "ct-tutorials-web",
+    storageBucket: "ct-tutorials-web.firebasestorage.app",
+    messagingSenderId: "369659340275",
+    appId: "1:369659340275:web:b081919e9dea8453241e86"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  // Handle login form submission
+  window.loginTutor = function(event) {
+    event.preventDefault();
+    const email = document.getElementById("loginEmail").value;
+    const password = document.getElementById("loginPassword").value;
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        document.getElementById("loginForm").style.display = "none";
+        document.getElementById("tutorContent").style.display = "block";
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
+  };
+
+  // Check login state on page load
+  onAuthStateChanged(auth, (user) => {
+    if(user){
+      document.getElementById("loginForm").style.display = "none";
+      document.getElementById("tutorContent").style.display = "block";
+    } else {
+      document.getElementById("loginForm").style.display = "block";
+      document.getElementById("tutorContent").style.display = "none";
+    }
+  });
+</script>
+
 <style>
 body { 
     margin:0; 
     font-family: Arial, sans-serif; 
     background:#f4f4f4; 
 }
-
-/* ===== HEADER (Teal, Matches Tutors' Corner) ===== */
 header {
     background:#008080;
     height:100px;
-    position:relative;
     display:flex;
     justify-content:space-between;
     align-items:center;
     padding:0 30px;
 }
+header img.logo { height:60px; }
+nav a { color:white; text-decoration:none; margin-left:20px; font-weight:bold; }
+nav a:hover { text-decoration:underline; }
 
-header img.logo {
-    height:60px;
-}
+section { padding:40px 20px; text-align:center; }
+h2 { color:#006666; margin-bottom:20px; }
+p { max-width:650px; margin:0 auto 20px; font-size:18px; line-height:1.6; color:#333; }
 
-nav a {
-    color:white;
-    text-decoration:none;
-    margin-left:20px;
-    font-weight:bold;
-}
+input, button { padding:12px; margin:10px 0; width:250px; font-size:16px; }
+button { background:#008080; color:white; border:none; border-radius:6px; cursor:pointer; }
+button:hover { background:#006666; }
 
-nav a:hover {
-    text-decoration:underline;
-}
-
-/* ===== MAIN SECTION ===== */
-section{
-    padding:80px 20px;
-    text-align:center;
-}
-
-section h2{
-    color:#006666;
-    font-size:30px;
-    margin-bottom:20px;
-}
-
-section p{
-    max-width:650px;
-    margin:0 auto 30px auto;
-    font-size:18px;
-    color:#333;
-    line-height:1.6;
-}
-
-/* ===== APPLY BUTTON ===== */
-.apply-btn{
-    display:inline-block;
-    padding:18px 35px;
-    background:#008080;
-    color:white;
-    text-decoration:none;
-    font-size:18px;
-    border-radius:8px;
-    transition:0.3s ease;
-}
-
-.apply-btn:hover{
-    background:#006666;
-}
-
-/* ===== FOOTER (Matches Homepage) ===== */
 footer {
-    background:#008080;
-    color:white;
-    text-align:center;
-    padding:25px 20px;
+    background:#008080; 
+    color:white; 
+    text-align:center; 
+    padding:25px 20px; 
     font-size:14px;
 }
-
-.footer-divider {
-    border-top:1px solid rgba(255,255,255,0.3);
-    margin:20px auto;
-    width:80%;
-}
-
-.footer-disclaimer {
-    font-size:12px;
-    color:rgba(255,255,255,0.8);
-    max-width:900px;
-    margin:auto;
-    line-height:1.6;
-}
+.footer-divider { border-top:1px solid rgba(255,255,255,0.3); margin:20px auto; width:80%; }
+.footer-disclaimer { font-size:12px; color:rgba(255,255,255,0.8); max-width:900px; margin:auto; line-height:1.6; }
 </style>
 </head>
-
 <body>
 
 <header>
-    <img src="images/logo.jpg" alt="C&T Tutorials Logo" class="logo">
-    <nav>
-        <a href="index.html#about">About Us</a>
-        <a href="index.html#services">Services</a>
-        <a href="index.html#resources">Resources</a>
-        <a href="index.html#contact">Contact</a>
-    </nav>
+<img src="images/logo.jpg" alt="C&T Tutorials Logo" class="logo">
+<nav>
+  <a href="index.html#about">About Us</a>
+  <a href="index.html#services">Services</a>
+  <a href="index.html#resources">Resources</a>
+  <a href="index.html#contact">Contact</a>
+  <a href="#loginForm">Log In</a>
+</nav>
 </header>
 
 <section>
-<h2>Join Our Team of Professional Tutors</h2>
-<p>
-If you are passionate about education and committed to academic integrity,
-we invite you to apply to become a tutor at C&amp;T Tutorials.
-</p>
+<h2>Tutor Login</h2>
 
-<a href="https://forms.gle/EmkEGTJuKV2Re7RM8" 
-   target="_blank" 
-   class="apply-btn">
-   Apply as a Tutor
-</a>
+<!-- LOGIN FORM -->
+<form id="loginForm" onsubmit="loginTutor(event)">
+  <input type="email" id="loginEmail" placeholder="Email" required><br>
+  <input type="password" id="loginPassword" placeholder="Password" required><br>
+  <button type="submit">Log In</button>
+</form>
+
+<!-- PROTECTED CONTENT -->
+<div id="tutorContent" style="display:none;">
+  <h2>Welcome, Tutor!</h2>
+  <p>This content is only visible after login. Here you can manage your schedule, view bookings, and update your profile.</p>
+</div>
+
 </section>
 
 <footer>
-    <p>&copy; 2026 C&amp;T Tutorials. All rights reserved.</p>
-    <div class="footer-divider"></div>
-    <div class="footer-disclaimer">
-        <strong>Disclaimer:</strong><br>
-        C&amp;T Tutorials operates independently and is not affiliated with, endorsed by,
-        or formally connected to any university, college, examination body, or academic
-        institution. All services are supplementary and intended to support independent learning.
-        C&amp;T Tutorials does not complete assignments or assessments on behalf of students.
-        Responsibility for submitted academic work remains with the student.
-    </div>
+<p>&copy; 2026 C&amp;T Tutorials. All rights reserved.</p>
+<div class="footer-divider"></div>
+<div class="footer-disclaimer">
+  <strong>Disclaimer:</strong><br>
+  C&amp;T Tutorials operates independently and is not affiliated with, endorsed by,
+  or formally connected to any university, college, examination body, or academic
+  institution. All services are supplementary and intended to support independent learning.
+  C&amp;T Tutorials does not complete assignments or assessments on behalf of students.
+  Responsibility for submitted academic work remains with the student.
+</div>
 </footer>
 
 </body>
