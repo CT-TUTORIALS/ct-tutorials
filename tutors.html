@@ -1,47 +1,100 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tutor Application - C&T Tutorials</title>
+
 <style>
 body { 
     margin:0; 
-    font-family: Arial; 
+    font-family: Arial, sans-serif; 
     background:#f4f4f4; 
+}
+
+/* ===== HEADER (Matched to Tutors' Corner Color) ===== */
+header { 
+    background:#008080; 
+    color:white; 
+    padding:20px 0; 
+    text-align:center;
+    position:relative;
+}
+
+header h1{
+    margin:0;
+    font-size:26px;
+    letter-spacing:1px;
+}
+
+/* Back to Home Link */
+.home-link{
+    position:absolute;
+    left:20px;
+    top:50%;
+    transform:translateY(-50%);
+    color:white;
+    text-decoration:none;
+    font-size:15px;
+}
+
+.home-link:hover{
+    text-decoration:underline;
+}
+
+/* ===== MAIN SECTION ===== */
+section{
+    padding:80px 20px;
     text-align:center;
 }
-header { 
-    background:#003366; 
-    color:white; 
-    padding:20px; 
+
+section h2{
+    color:#006666;
+    font-size:30px;
+    margin-bottom:20px;
 }
-section{
-    padding:60px 20px;
+
+section p{
+    max-width:650px;
+    margin:0 auto 30px auto;
+    font-size:18px;
+    color:#333;
+    line-height:1.6;
 }
+
+/* ===== BUTTON ===== */
 .apply-btn{
     display:inline-block;
-    padding:18px 30px;
-    background:#003366;
+    padding:18px 35px;
+    background:#008080;
     color:white;
     text-decoration:none;
     font-size:18px;
     border-radius:8px;
+    transition:0.3s ease;
 }
+
 .apply-btn:hover{
-    background:#00509e;
+    background:#006666;
 }
+
+/* ===== FOOTER ===== */
 footer { 
-    background:#003366; 
+    background:#008080; 
     color:white; 
     text-align:center; 
-    padding:20px; 
-    margin-top:60px;
+    padding:25px 20px; 
+    margin-top:80px;
+    font-size:14px;
 }
 </style>
 </head>
+
 <body>
 
 <header>
-<h1>C&T Tutorials - Tutor Application</h1>
+<a href="index.html" class="home-link">← Back to Home</a>
+<h1>C&amp;T Tutorials</h1>
 </header>
 
 <section>
@@ -50,10 +103,8 @@ footer {
 
 <p>
 If you are passionate about education and committed to academic integrity,
-we invite you to apply to become a tutor at C&T Tutorials.
+we invite you to apply to become a tutor at C&amp;T Tutorials.
 </p>
-
-<br>
 
 <a href="https://forms.gle/EmkEGTJuKV2Re7RM8" 
    target="_blank" 
@@ -64,7 +115,7 @@ we invite you to apply to become a tutor at C&T Tutorials.
 </section>
 
 <footer>
-© 2026 C&T Tutorials. All rights reserved.
+© 2026 C&amp;T Tutorials. All rights reserved.
 </footer>
 
 </body>
