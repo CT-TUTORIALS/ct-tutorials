@@ -12,33 +12,29 @@ body {
     background:#f4f4f4; 
 }
 
-/* ===== HEADER (Matched to Tutors' Corner Color) ===== */
-header { 
-    background:#008080; 
-    color:white; 
-    padding:20px 0; 
-    text-align:center;
+/* ===== HEADER (Teal, Matches Tutors' Corner) ===== */
+header {
+    background:#008080;
+    height:100px;
     position:relative;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 30px;
 }
 
-header h1{
-    margin:0;
-    font-size:26px;
-    letter-spacing:1px;
+header img.logo {
+    height:60px;
 }
 
-/* Back to Home Link */
-.home-link{
-    position:absolute;
-    left:20px;
-    top:50%;
-    transform:translateY(-50%);
+nav a {
     color:white;
     text-decoration:none;
-    font-size:15px;
+    margin-left:20px;
+    font-weight:bold;
 }
 
-.home-link:hover{
+nav a:hover {
     text-decoration:underline;
 }
 
@@ -62,7 +58,7 @@ section p{
     line-height:1.6;
 }
 
-/* ===== BUTTON ===== */
+/* ===== APPLY BUTTON ===== */
 .apply-btn{
     display:inline-block;
     padding:18px 35px;
@@ -78,14 +74,27 @@ section p{
     background:#006666;
 }
 
-/* ===== FOOTER ===== */
-footer { 
-    background:#008080; 
-    color:white; 
-    text-align:center; 
-    padding:25px 20px; 
-    margin-top:80px;
+/* ===== FOOTER (Matches Homepage) ===== */
+footer {
+    background:#008080;
+    color:white;
+    text-align:center;
+    padding:25px 20px;
     font-size:14px;
+}
+
+.footer-divider {
+    border-top:1px solid rgba(255,255,255,0.3);
+    margin:20px auto;
+    width:80%;
+}
+
+.footer-disclaimer {
+    font-size:12px;
+    color:rgba(255,255,255,0.8);
+    max-width:900px;
+    margin:auto;
+    line-height:1.6;
 }
 </style>
 </head>
@@ -93,14 +102,17 @@ footer {
 <body>
 
 <header>
-<a href="index.html" class="home-link">← Back to Home</a>
-<h1>C&amp;T Tutorials</h1>
+    <img src="images/logo.jpg" alt="C&T Tutorials Logo" class="logo">
+    <nav>
+        <a href="index.html#about">About Us</a>
+        <a href="index.html#services">Services</a>
+        <a href="index.html#resources">Resources</a>
+        <a href="index.html#contact">Contact</a>
+    </nav>
 </header>
 
 <section>
-
 <h2>Join Our Team of Professional Tutors</h2>
-
 <p>
 If you are passionate about education and committed to academic integrity,
 we invite you to apply to become a tutor at C&amp;T Tutorials.
@@ -111,11 +123,19 @@ we invite you to apply to become a tutor at C&amp;T Tutorials.
    class="apply-btn">
    Apply as a Tutor
 </a>
-
 </section>
 
 <footer>
-© 2026 C&amp;T Tutorials. All rights reserved.
+    <p>&copy; 2026 C&amp;T Tutorials. All rights reserved.</p>
+    <div class="footer-divider"></div>
+    <div class="footer-disclaimer">
+        <strong>Disclaimer:</strong><br>
+        C&amp;T Tutorials operates independently and is not affiliated with, endorsed by,
+        or formally connected to any university, college, examination body, or academic
+        institution. All services are supplementary and intended to support independent learning.
+        C&amp;T Tutorials does not complete assignments or assessments on behalf of students.
+        Responsibility for submitted academic work remains with the student.
+    </div>
 </footer>
 
 </body>
