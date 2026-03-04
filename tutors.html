@@ -7,9 +7,8 @@
 
 <!-- Firebase SDK -->
 <script type="module">
-  // Import Firebase
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
+  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyAJIoUss8lPbrVlFzkBcgf3l62tRQgQ9Ng",
@@ -23,19 +22,37 @@
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
 
-  // Handle login form submission
+  // Show login form
+  window.showLoginForm = function() {
+    document.getElementById("loginForm").style.display = "block";
+  };
+
+  // Login
   window.loginTutor = function(event) {
     event.preventDefault();
     const email = document.getElementById("loginEmail").value;
     const password = document.getElementById("loginPassword").value;
+    const remember = document.getElementById("rememberMe").checked;
 
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+    // Set persistence
+    const persistence = remember ? browserLocalPersistence : browserSessionPersistence;
+    setPersistence(auth, persistence)
+      .then(() => signInWithEmailAndPassword(auth, email, password))
+      .then(() => {
         document.getElementById("loginForm").style.display = "none";
         document.getElementById("tutorContent").style.display = "block";
+        document.getElementById("logoutBtn").style.display = "inline-block";
       })
-      .catch((error) => {
-        alert(error.message);
+      .catch((error) => alert(error.message));
+  };
+
+  // Logout
+  window.logoutTutor = function() {
+    signOut(auth)
+      .then(() => {
+        document.getElementById("loginForm").style.display = "block";
+        document.getElementById("tutorContent").style.display = "none";
+        document.getElementById("logoutBtn").style.display = "none";
       });
   };
 
@@ -44,19 +61,13 @@
     if(user){
       document.getElementById("loginForm").style.display = "none";
       document.getElementById("tutorContent").style.display = "block";
-    } else {
-      document.getElementById("loginForm").style.display = "block";
-      document.getElementById("tutorContent").style.display = "none";
+      document.getElementById("logoutBtn").style.display = "inline-block";
     }
   });
 </script>
 
 <style>
-body { 
-    margin:0; 
-    font-family: Arial, sans-serif; 
-    background:#f4f4f4; 
-}
+body { margin:0; font-family: Arial, sans-serif; background:#f4f4f4; }
 header {
     background:#008080;
     height:100px;
@@ -66,55 +77,66 @@ header {
     padding:0 30px;
 }
 header img.logo { height:60px; }
-nav a { color:white; text-decoration:none; margin-left:20px; font-weight:bold; }
+nav a { color:white; text-decoration:none; margin-left:20px; font-weight:bold; cursor:pointer; }
 nav a:hover { text-decoration:underline; }
 
 section { padding:40px 20px; text-align:center; }
 h2 { color:#006666; margin-bottom:20px; }
-p { max-width:650px; margin:0 auto 20px; font-size:18px; line-height:1.6; color:#333; }
+p { max-width:650px; margin:0 auto 20px auto; font-size:18px; line-height:1.6; color:#333; }
 
 input, button { padding:12px; margin:10px 0; width:250px; font-size:16px; }
 button { background:#008080; color:white; border:none; border-radius:6px; cursor:pointer; }
 button:hover { background:#006666; }
 
-footer {
-    background:#008080; 
-    color:white; 
-    text-align:center; 
-    padding:25px 20px; 
-    font-size:14px;
-}
+footer { background:#008080; color:white; text-align:center; padding:25px 20px; font-size:14px; }
 .footer-divider { border-top:1px solid rgba(255,255,255,0.3); margin:20px auto; width:80%; }
 .footer-disclaimer { font-size:12px; color:rgba(255,255,255,0.8); max-width:900px; margin:auto; line-height:1.6; }
+
+#loginForm { display:none; margin-top:30px; }
+#tutorContent { display:none; margin-top:30px; }
+#logoutBtn { display:none; margin-top:15px; }
 </style>
 </head>
+
 <body>
 
 <header>
-<img src="images/logo.jpg" alt="C&T Tutorials Logo" class="logo">
-<nav>
-  <a href="index.html#about">About Us</a>
-  <a href="index.html#services">Services</a>
-  <a href="index.html#resources">Resources</a>
-  <a href="index.html#contact">Contact</a>
-  <a href="#loginForm">Log In</a>
-</nav>
+    <img src="images/logo.jpg" alt="C&T Tutorials Logo" class="logo">
+    <nav>
+        <a href="index.html#about">About Us</a>
+        <a href="index.html#services">Services</a>
+        <a href="index.html#resources">Resources</a>
+        <a href="index.html#contact">Contact</a>
+        <a onclick="showLoginForm()">Log In</a>
+    </nav>
 </header>
 
 <section>
-<h2>Tutor Login</h2>
+<h2>Join Our Team of Professional Tutors</h2>
+<p>If you are passionate about education and committed to academic integrity, we invite you to apply to become a tutor at C&amp;T Tutorials.</p>
+
+<a href="https://forms.gle/EmkEGTJuKV2Re7RM8" 
+   target="_blank" 
+   class="apply-btn">
+   Apply as a Tutor
+</a>
 
 <!-- LOGIN FORM -->
 <form id="loginForm" onsubmit="loginTutor(event)">
+  <h3>Tutor Log In</h3>
   <input type="email" id="loginEmail" placeholder="Email" required><br>
   <input type="password" id="loginPassword" placeholder="Password" required><br>
+  <label><input type="checkbox" id="rememberMe"> Remember Me</label><br>
   <button type="submit">Log In</button>
 </form>
 
+<!-- LOGOUT BUTTON -->
+<button id="logoutBtn" onclick="logoutTutor()">Log Out</button>
+
 <!-- PROTECTED CONTENT -->
-<div id="tutorContent" style="display:none;">
+<div id="tutorContent">
   <h2>Welcome, Tutor!</h2>
-  <p>This content is only visible after login. Here you can manage your schedule, view bookings, and update your profile.</p>
+  <p>This is your dashboard. After login you can manage your bookings, view students, and access resources.</p>
 </div>
 
 </section>
@@ -123,12 +145,12 @@ footer {
 <p>&copy; 2026 C&amp;T Tutorials. All rights reserved.</p>
 <div class="footer-divider"></div>
 <div class="footer-disclaimer">
-  <strong>Disclaimer:</strong><br>
-  C&amp;T Tutorials operates independently and is not affiliated with, endorsed by,
-  or formally connected to any university, college, examination body, or academic
-  institution. All services are supplementary and intended to support independent learning.
-  C&amp;T Tutorials does not complete assignments or assessments on behalf of students.
-  Responsibility for submitted academic work remains with the student.
+    <strong>Disclaimer:</strong><br>
+    C&amp;T Tutorials operates independently and is not affiliated with, endorsed by,
+    or formally connected to any university, college, examination body, or academic
+    institution. All services are supplementary and intended to support independent learning.
+    C&amp;T Tutorials does not complete assignments or assessments on behalf of students.
+    Responsibility for submitted academic work remains with the student.
 </div>
 </footer>
 
