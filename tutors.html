@@ -1,158 +1,218 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tutor Application - C&T Tutorials</title>
 
-<!-- Firebase SDK -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-auth.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyAJIoUss8lPbrVlFzkBcgf3l62tRQgQ9Ng",
-    authDomain: "ct-tutorials-web.firebaseapp.com",
-    projectId: "ct-tutorials-web",
-    storageBucket: "ct-tutorials-web.firebasestorage.app",
-    messagingSenderId: "369659340275",
-    appId: "1:369659340275:web:b081919e9dea8453241e86"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-
-  // Show login form
-  window.showLoginForm = function() {
-    document.getElementById("loginForm").style.display = "block";
-  };
-
-  // Login
-  window.loginTutor = function(event) {
-    event.preventDefault();
-    const email = document.getElementById("loginEmail").value;
-    const password = document.getElementById("loginPassword").value;
-    const remember = document.getElementById("rememberMe").checked;
-
-    // Set persistence
-    const persistence = remember ? browserLocalPersistence : browserSessionPersistence;
-    setPersistence(auth, persistence)
-      .then(() => signInWithEmailAndPassword(auth, email, password))
-      .then(() => {
-        document.getElementById("loginForm").style.display = "none";
-        document.getElementById("tutorContent").style.display = "block";
-        document.getElementById("logoutBtn").style.display = "inline-block";
-      })
-      .catch((error) => alert(error.message));
-  };
-
-  // Logout
-  window.logoutTutor = function() {
-    signOut(auth)
-      .then(() => {
-        document.getElementById("loginForm").style.display = "block";
-        document.getElementById("tutorContent").style.display = "none";
-        document.getElementById("logoutBtn").style.display = "none";
-      });
-  };
-
-  // Check login state on page load
-  onAuthStateChanged(auth, (user) => {
-    if(user){
-      document.getElementById("loginForm").style.display = "none";
-      document.getElementById("tutorContent").style.display = "block";
-      document.getElementById("logoutBtn").style.display = "inline-block";
-    }
-  });
-</script>
+<title>Tutors' Corner | C&T Tutorials</title>
 
 <style>
-body { margin:0; font-family: Arial, sans-serif; background:#f4f4f4; }
-header {
-    background:#008080;
-    height:100px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:0 30px;
+
+body{
+margin:0;
+font-family:Arial;
+background:#f4f4f4;
+text-align:center;
 }
-header img.logo { height:60px; }
-nav a { color:white; text-decoration:none; margin-left:20px; font-weight:bold; cursor:pointer; }
-nav a:hover { text-decoration:underline; }
 
-section { padding:40px 20px; text-align:center; }
-h2 { color:#006666; margin-bottom:20px; }
-p { max-width:650px; margin:0 auto 20px auto; font-size:18px; line-height:1.6; color:#333; }
+/* HEADER */
 
-input, button { padding:12px; margin:10px 0; width:250px; font-size:16px; }
-button { background:#008080; color:white; border:none; border-radius:6px; cursor:pointer; }
-button:hover { background:#006666; }
+header{
+background:#1e88e5;
+color:white;
+padding:20px;
+}
 
-footer { background:#008080; color:white; text-align:center; padding:25px 20px; font-size:14px; }
-.footer-divider { border-top:1px solid rgba(255,255,255,0.3); margin:20px auto; width:80%; }
-.footer-disclaimer { font-size:12px; color:rgba(255,255,255,0.8); max-width:900px; margin:auto; line-height:1.6; }
+nav a{
+color:white;
+text-decoration:none;
+margin:0 15px;
+font-weight:bold;
+}
 
-#loginForm { display:none; margin-top:30px; }
-#tutorContent { display:none; margin-top:30px; }
-#logoutBtn { display:none; margin-top:15px; }
+/* PAGE */
+
+section{
+padding:60px 20px;
+}
+
+.apply-btn{
+padding:18px 35px;
+background:#1e88e5;
+color:white;
+text-decoration:none;
+font-size:18px;
+border-radius:8px;
+}
+
+.apply-btn:hover{
+background:#1565c0;
+}
+
+/* LOGIN */
+
+.login-link{
+display:block;
+margin-top:30px;
+color:#1e88e5;
+font-weight:bold;
+cursor:pointer;
+}
+
+#loginSection{
+display:none;
+margin-top:40px;
+}
+
+input{
+padding:10px;
+margin:10px;
+width:250px;
+}
+
+/* DASHBOARD */
+
+#dashboard{
+display:none;
+background:white;
+padding:30px;
+border-radius:10px;
+margin-top:40px;
+width:70%;
+margin-left:auto;
+margin-right:auto;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+button{
+padding:10px 20px;
+background:#1e88e5;
+color:white;
+border:none;
+border-radius:5px;
+cursor:pointer;
+}
+
+button:hover{
+background:#1565c0;
+}
+
+/* FOOTER */
+
+footer{
+background:#1e88e5;
+color:white;
+padding:20px;
+margin-top:60px;
+}
+
 </style>
+
 </head>
 
 <body>
 
 <header>
-    <img src="images/logo.jpg" alt="C&T Tutorials Logo" class="logo">
-    <nav>
-        <a href="index.html#about">About Us</a>
-        <a href="index.html#services">Services</a>
-        <a href="index.html#resources">Resources</a>
-        <a href="index.html#contact">Contact</a>
-        <a onclick="showLoginForm()">Log In</a>
-    </nav>
+
+<h1>C&T Tutorials</h1>
+
+<nav>
+
+<a href="index.html">Home</a>
+<a href="#">Services</a>
+<a href="#">About</a>
+<a href="#">Contact</a>
+
+</nav>
+
 </header>
 
 <section>
-<h2>Join Our Team of Professional Tutors</h2>
-<p>If you are passionate about education and committed to academic integrity, we invite you to apply to become a tutor at C&amp;T Tutorials.</p>
 
-<a href="https://forms.gle/5zeYRjWHUcgKAc9AA" 
-   target="_blank" 
-   class="apply-btn">
-   Apply as a Tutor
+<h2>Tutors' Corner</h2>
+
+<p>
+Join our network of professional tutors and help students achieve academic excellence.
+</p>
+
+<br>
+
+<a href="YOUR_TUTOR_APPLICATION_FORM_LINK"
+target="_blank"
+class="apply-btn">
+Apply as a Tutor
 </a>
 
-<!-- LOGIN FORM -->
-<form id="loginForm" onsubmit="loginTutor(event)">
-  <h3>Tutor Log In</h3>
-  <input type="email" id="loginEmail" placeholder="Email" required><br>
-  <input type="password" id="loginPassword" placeholder="Password" required><br>
-  <label><input type="checkbox" id="rememberMe"> Remember Me</label><br>
-  <button type="submit">Log In</button>
-</form>
+<br><br>
 
-<!-- LOGOUT BUTTON -->
-<button id="logoutBtn" onclick="logoutTutor()">Log Out</button>
+<span class="login-link" onclick="showLogin()">
+Tutor Login
+</span>
 
-<!-- PROTECTED CONTENT -->
-<div id="tutorContent">
-  <h2>Welcome, Tutor!</h2>
-  <p>This is your dashboard. After login you can manage your bookings, view students, and access resources.</p>
+<!-- LOGIN -->
+
+<div id="loginSection">
+
+<h3>Tutor Login</h3>
+
+<input type="text" placeholder="Username"><br>
+<input type="password" placeholder="Password"><br>
+
+<button onclick="login()">Login</button>
+
+</div>
+
+<!-- DASHBOARD -->
+
+<div id="dashboard">
+
+<h2>Tutor Dashboard</h2>
+
+<p>Welcome to the C&T Tutorials tutor portal.</p>
+
+<h3>Available Features</h3>
+
+<ul style="text-align:left; display:inline-block">
+
+<li>View assigned students</li>
+<li>Download teaching materials</li>
+<li>Update availability</li>
+<li>Communicate with admin</li>
+
+</ul>
+
+<br><br>
+
+<button onclick="logout()">Log out</button>
+
 </div>
 
 </section>
 
 <footer>
-<p>&copy; 2026 C&amp;T Tutorials. All rights reserved.</p>
-<div class="footer-divider"></div>
-<div class="footer-disclaimer">
-    <strong>Disclaimer:</strong><br>
-    C&amp;T Tutorials operates independently and is not affiliated with, endorsed by,
-    or formally connected to any university, college, examination body, or academic
-    institution. All services are supplementary and intended to support independent learning.
-    C&amp;T Tutorials does not complete assignments or assessments on behalf of students.
-    Responsibility for submitted academic work remains with the student.
-</div>
+
+<p>© 2026 C&T Tutorials. All rights reserved.</p>
+
 </footer>
+
+<script>
+
+function showLogin(){
+document.getElementById("loginSection").style.display="block";
+}
+
+function login(){
+document.getElementById("loginSection").style.display="none";
+document.getElementById("dashboard").style.display="block";
+}
+
+function logout(){
+document.getElementById("dashboard").style.display="none";
+}
+
+</script>
 
 </body>
 </html>
