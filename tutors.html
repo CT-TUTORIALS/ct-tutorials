@@ -1,217 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Tutors' Corner | C&T Tutorials</title>
+<title>Tutors' Portal | C&T Tutorials</title>
 
 <style>
-
-body{
-margin:0;
-font-family:Arial;
-background:#f4f4f4;
-text-align:center;
-}
-
-/* HEADER */
-
-header{
-background:#1e88e5;
-color:white;
-padding:20px;
-}
-
-nav a{
-color:white;
-text-decoration:none;
-margin:0 15px;
-font-weight:bold;
-}
-
-/* PAGE */
-
-section{
-padding:60px 20px;
-}
-
-.apply-btn{
-padding:18px 35px;
-background:#1e88e5;
-color:white;
-text-decoration:none;
-font-size:18px;
-border-radius:8px;
-}
-
-.apply-btn:hover{
-background:#1565c0;
-}
-
-/* LOGIN */
-
-.login-link{
-display:block;
-margin-top:30px;
-color:#1e88e5;
-font-weight:bold;
-cursor:pointer;
-}
-
-#loginSection{
-display:none;
-margin-top:40px;
-}
-
-input{
-padding:10px;
-margin:10px;
-width:250px;
-}
-
-/* DASHBOARD */
-
-#dashboard{
-display:none;
-background:white;
-padding:30px;
-border-radius:10px;
-margin-top:40px;
-width:70%;
-margin-left:auto;
-margin-right:auto;
-box-shadow:0 0 10px rgba(0,0,0,0.1);
-}
-
-button{
-padding:10px 20px;
-background:#1e88e5;
-color:white;
-border:none;
-border-radius:5px;
-cursor:pointer;
-}
-
-button:hover{
-background:#1565c0;
-}
-
-/* FOOTER */
-
-footer{
-background:#1e88e5;
-color:white;
-padding:20px;
-margin-top:60px;
-}
-
+body{margin:0;font-family:Arial;background:#f4f4f4;text-align:center;}
+header{background:#1e88e5;color:white;padding:20px;}
+nav a{color:white;text-decoration:none;margin:0 15px;font-weight:bold;}
+section{padding:60px 20px;}
+.apply-btn{padding:18px 35px;background:#1e88e5;color:white;text-decoration:none;font-size:18px;border-radius:8px;}
+.apply-btn:hover{background:#1565c0;}
+.create-account-btn{padding:18px 35px;background:#008080;color:white;text-decoration:none;font-size:18px;border-radius:8px;margin-top:15px; display:inline-block;}
+.create-account-btn:hover{background:#006666;}
+.login-link{display:block;margin-top:30px;color:#1e88e5;font-weight:bold;cursor:pointer;}
+#loginSection{display:none;margin-top:40px;}
+input{padding:10px;margin:10px;width:250px;}
+#dashboard{display:none;background:white;padding:30px;border-radius:10px;margin-top:40px;width:70%;margin-left:auto;margin-right:auto;box-shadow:0 0 10px rgba(0,0,0,0.1);}
+button{padding:10px 20px;background:#1e88e5;color:white;border:none;border-radius:5px;cursor:pointer;}
+button:hover{background:#1565c0;}
+footer{background:#1e88e5;color:white;padding:20px;margin-top:60px;}
 </style>
-
 </head>
-
 <body>
 
 <header>
-
 <h1>C&T Tutorials</h1>
-
 <nav>
-
 <a href="index.html">Home</a>
 <a href="#">Services</a>
 <a href="#">About</a>
 <a href="#">Contact</a>
-
 </nav>
-
 </header>
 
 <section>
+<h2>Tutors' Portal</h2>
+<p>Join our network of professional tutors and help students achieve academic excellence.</p>
 
-<h2>Tutors' Corner</h2>
+<!-- Apply Button -->
+<a href="https://forms.gle/frX6R74bc8tY56A3A" target="_blank" class="apply-btn">Apply as a Tutor</a>
 
-<p>
-Join our network of professional tutors and help students achieve academic excellence.
-</p>
+<!-- Create Account Button -->
+<a href="tutor-register.html" class="create-account-btn">Create Account</a>
 
-<br>
-
-<a href="https://forms.gle/frX6R74bc8tY56A3A"
-target="_blank"
-class="apply-btn">
-Apply as a Tutor
-</a>
-
-<br><br>
-
-<span class="login-link" onclick="showLogin()">
-Tutor Login
-</span>
-
-<!-- LOGIN -->
-
+<!-- Tutor Login -->
+<span class="login-link" onclick="showLogin()">Tutor Login</span>
 <div id="loginSection">
-
 <h3>Tutor Login</h3>
-
-<input type="text" placeholder="Username"><br>
+<input type="text" placeholder="Email"><br>
 <input type="password" placeholder="Password"><br>
-
 <button onclick="login()">Login</button>
-
 </div>
 
-<!-- DASHBOARD -->
-
+<!-- Dashboard -->
 <div id="dashboard">
-
 <h2>Tutor Dashboard</h2>
-
 <p>Welcome to the C&T Tutorials tutor portal.</p>
-
 <h3>Available Features</h3>
-
 <ul style="text-align:left; display:inline-block">
-
 <li>View assigned students</li>
 <li>Download teaching materials</li>
 <li>Update availability</li>
 <li>Communicate with admin</li>
-
 </ul>
-
 <br><br>
-
 <button onclick="logout()">Log out</button>
-
 </div>
 
 </section>
 
 <footer>
-
 <p>© 2026 C&T Tutorials. All rights reserved.</p>
-
 </footer>
 
 <script>
-
-function showLogin(){
-document.getElementById("loginSection").style.display="block";
-}
+function showLogin(){ document.getElementById("loginSection").style.display="block"; }
 
 function login(){
-document.getElementById("loginSection").style.display="none";
-document.getElementById("dashboard").style.display="block";
+  const username = document.querySelector('#loginSection input[type=text]').value;
+  const password = document.querySelector('#loginSection input[type=password]').value;
+  const tutors = JSON.parse(localStorage.getItem('tutors')) || [];
+  const validTutor = tutors.find(t=>t.email===username && t.password===password);
+  if(validTutor){
+    document.getElementById("loginSection").style.display="none";
+    document.getElementById("dashboard").style.display="block";
+    alert(`Welcome, ${validTutor.name}`);
+  } else { alert('Invalid credentials!'); }
 }
 
-function logout(){
-document.getElementById("dashboard").style.display="none";
-}
-
+function logout(){ document.getElementById("dashboard").style.display="none"; }
 </script>
 
 </body>
