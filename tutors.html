@@ -9,8 +9,7 @@
 body{margin:0;font-family:Arial;background:#f4f4f4;text-align:center;}
 /* Header/Footer color matching Create Account button */
 header{background:#008080;color:white;padding:20px;}
-footer{background:#008080;color:white;padding:20px;margin-top:60px;}
-
+footer{background:#008080;color:white;padding:20px;margin-top:60px; font-size:14px; line-height:1.6;}
 nav a{color:white;text-decoration:none;margin:0 15px;font-weight:bold;}
 section{padding:60px 20px; max-width:900px; margin:auto; text-align:left; line-height:1.6;}
 .login-link, #loginSection, #dashboard {text-align:center;}
@@ -78,19 +77,19 @@ button:hover{background:#1565c0;}
 <h1>C&T Tutorials</h1>
 <nav>
 <a href="index.html">Home</a>
+<a href="tutor-register.html">Create Account</a>
+<a href="https://forms.gle/frX6R74bc8tY56A3A" target="_blank">Apply</a>
 <a href="#" onclick="toggleLogin()">Sign in</a>
 </nav>
 </header>
 
 <section>
+<h2>Welcome Tutors!</h2>
+<p>We’re excited to have you join our network of professional tutors. Here you can access your dashboard, manage students, and keep track of your teaching activities.</p>
+
 <h2>About C&T Tutorials</h2>
 <p>C&T Tutorials is an independent academic support service committed to enhancing students’ academic performance through structured guidance in academic writing, research, and communication skills.</p>
 <p>Our services are designed to provide focused, student-centred support through one-on-one tutorials, group sessions, and assignment-based assistance.</p>
-
-<div class="tutor-disclaimer" style="margin-top:25px; font-size:14px; color:#555;">
-<strong>Disclaimer for Tutors:</strong><br>
-All tutors participating with C&T Tutorials are responsible for their own teaching practices and interactions with students. C&T Tutorials provides a platform for academic support but is not liable for any disputes, misconduct, or academic outcomes resulting from tutoring sessions. Tutors must ensure professionalism, ethical conduct, and adherence to academic integrity standards at all times.
-</div>
 
 <!-- Login Section -->
 <div id="overlay" onclick="toggleLogin()"></div>
@@ -120,6 +119,10 @@ All tutors participating with C&T Tutorials are responsible for their own teachi
 
 <footer>
 <p>© 2026 C&T Tutorials. All rights reserved.</p>
+<div class="tutor-disclaimer">
+<strong>Disclaimer for Tutors:</strong><br>
+All tutors participating with C&T Tutorials are responsible for their own teaching practices and interactions with students. C&T Tutorials provides a platform for academic support but is not liable for any disputes, misconduct, or academic outcomes resulting from tutoring sessions. Tutors must ensure professionalism, ethical conduct, and adherence to academic integrity standards at all times.
+</div>
 </footer>
 
 <script>
@@ -129,9 +132,9 @@ function toggleLogin(){
   if(login.classList.contains("show")){
     login.style.opacity = 0;
     overlay.classList.remove("show");
-    setTimeout(()=>{ login.classList.remove("show"); }, 500); // fade out
+    setTimeout(()=>{ login.classList.remove("show"); }, 500);
   } else {
-    login.classList.add("show"); // fade in
+    login.classList.add("show");
     overlay.classList.add("show");
   }
 }
@@ -144,7 +147,7 @@ function login(){
   if(validTutor){
     toggleLogin();
     const dashboard = document.getElementById("dashboard");
-    dashboard.classList.add("show"); // slide-in animation
+    dashboard.classList.add("show");
     alert(`Welcome, ${validTutor.name}`);
   } else { alert('Invalid credentials!'); }
 }
