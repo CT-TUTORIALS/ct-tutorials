@@ -130,7 +130,6 @@ footer nav a:hover { text-decoration: underline; }
   <p>&copy; 2026 C&amp;T Tutorials. All rights reserved.</p>
   <div class="footer-divider"></div>
   <nav>
-    <a href="index.html">Home</a>
     <a href="tutors.html">Tutors' Portal</a>
     <a href="admins.html">Admins' Portal</a>
   </nav>
@@ -146,24 +145,14 @@ function closeForm() { document.getElementById("modal").style.display = "none"; 
 
 // Auto-submit to Google Form on modal form submission
 document.getElementById("registrationForm").addEventListener("submit", function(event) {
-  // Map fields to Google Form Entry IDs
-  const googleFormURL = "https://docs.google.com/forms/d/e/1FAIpQLSfAxJFVGxe3mveYYDRA/formResponse"; // Your Google Form "formResponse" URL
+  const googleFormURL = "https://docs.google.com/forms/d/e/1FAIpQLSfAxJFVGxe3mveYYDRA/formResponse"; 
   const formData = new FormData(event.target);
-
-  // Construct Google Form data mapping (replace entry.X with actual IDs from Google Form)
   const googleData = new URLSearchParams();
-  googleData.append("entry.1234567890", formData.get("name")); // Full Name
-  googleData.append("entry.2345678901", formData.get("email")); // Email
-  googleData.append("entry.3456789012", formData.get("cell_number")); // Cell Number
-  googleData.append("entry.4567890123", formData.get("service")); // Service
-
-  // Send to Google Form asynchronously
-  fetch(googleFormURL, {
-    method: "POST",
-    body: googleData,
-    mode: "no-cors"
-  });
-  // Allow Formspree to submit normally
+  googleData.append("entry.1234567890", formData.get("name")); 
+  googleData.append("entry.2345678901", formData.get("email")); 
+  googleData.append("entry.3456789012", formData.get("cell_number")); 
+  googleData.append("entry.4567890123", formData.get("service")); 
+  fetch(googleFormURL, { method: "POST", body: googleData, mode: "no-cors" });
 });
 </script>
 
