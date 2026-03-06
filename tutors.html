@@ -7,20 +7,69 @@
 
 <style>
 body{margin:0;font-family:Arial;background:#f4f4f4;text-align:center;}
-header{background:#1e88e5;color:white;padding:20px;}
+/* Header/Footer color matching Create Account button */
+header{background:#008080;color:white;padding:20px;}
+footer{background:#008080;color:white;padding:20px;margin-top:60px;}
+
 nav a{color:white;text-decoration:none;margin:0 15px;font-weight:bold;}
 section{padding:60px 20px;}
 .apply-btn{padding:18px 35px;background:#1e88e5;color:white;text-decoration:none;font-size:18px;border-radius:8px;}
 .apply-btn:hover{background:#1565c0;}
 .create-account-btn{padding:18px 35px;background:#008080;color:white;text-decoration:none;font-size:18px;border-radius:8px;margin-top:15px; display:inline-block;}
 .create-account-btn:hover{background:#006666;}
-.login-link{display:block;margin-top:30px;color:#1e88e5;font-weight:bold;cursor:pointer;}
-#loginSection{display:none;margin-top:40px;}
-input{padding:10px;margin:10px;width:250px;}
-#dashboard{display:none;background:white;padding:30px;border-radius:10px;margin-top:40px;width:70%;margin-left:auto;margin-right:auto;box-shadow:0 0 10px rgba(0,0,0,0.1);}
+
+/* Login Section as centered card */
+#loginSection{
+  display:none;
+  opacity:0;
+  transition: opacity 0.5s ease;
+  position: fixed;
+  top:50%;
+  left:50%;
+  transform: translate(-50%, -50%);
+  background:white;
+  padding:30px;
+  border-radius:10px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.2);
+  width:90%;
+  max-width:360px;
+  z-index:1000;
+}
+#loginSection.show{display:block; opacity:1;}
+
+input{padding:10px;margin:10px 0;width:100%; box-sizing:border-box;}
 button{padding:10px 20px;background:#1e88e5;color:white;border:none;border-radius:5px;cursor:pointer;}
 button:hover{background:#1565c0;}
-footer{background:#1e88e5;color:white;padding:20px;margin-top:60px;}
+
+/* Overlay when login is open */
+#overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background: rgba(0,0,0,0.5);
+  z-index: 900;
+}
+#overlay.show{display:block;}
+
+/* Dashboard slide animation */
+#dashboard{
+  display:none;
+  background:white;
+  padding:30px;
+  border-radius:10px;
+  margin:40px auto 0 auto;
+  width:70%;
+  max-width:800px;
+  box-shadow:0 0 10px rgba(0,0,0,0.1);
+  opacity:0;
+  transform: translateY(50px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+#dashboard.show{
+  display:block;
+  opacity:1;
+  transform: translateY(0);
+}
 </style>
 </head>
 <body>
@@ -28,10 +77,9 @@ footer{background:#1e88e5;color:white;padding:20px;margin-top:60px;}
 <header>
 <h1>C&T Tutorials</h1>
 <nav>
-<a href="index.html">Home</a>
-<a href="#">Services</a>
-<a href="#">About</a>
-<a href="#">Contact</a>
+<a href="https://forms.gle/frX6R74bc8tY56A3A" target="_blank">Apply</a>
+<a href="tutor-register.html">Create Account</a>
+<a href="#" onclick="toggleLogin()">Sign in</a>
 </nav>
 </header>
 
@@ -45,12 +93,12 @@ footer{background:#1e88e5;color:white;padding:20px;margin-top:60px;}
 <!-- Create Account Button -->
 <a href="tutor-register.html" class="create-account-btn">Create Account</a>
 
-<!-- Tutor Login -->
-<span class="login-link" onclick="showLogin()">Tutor Login</span>
+<!-- Login Section -->
+<div id="overlay" onclick="toggleLogin()"></div>
 <div id="loginSection">
 <h3>Tutor Login</h3>
-<input type="text" placeholder="Email"><br>
-<input type="password" placeholder="Password"><br>
+<input type="text" placeholder="Email">
+<input type="password" placeholder="Password">
 <button onclick="login()">Login</button>
 </div>
 
@@ -76,7 +124,18 @@ footer{background:#1e88e5;color:white;padding:20px;margin-top:60px;}
 </footer>
 
 <script>
-function showLogin(){ document.getElementById("loginSection").style.display="block"; }
+function toggleLogin(){ 
+  const login = document.getElementById("loginSection");
+  const overlay = document.getElementById("overlay");
+  if(login.classList.contains("show")){
+    login.style.opacity = 0;
+    overlay.classList.remove("show");
+    setTimeout(()=>{ login.classList.remove("show"); }, 500); // fade out
+  } else {
+    login.classList.add("show"); // fade in
+    overlay.classList.add("show");
+  }
+}
 
 function login(){
   const username = document.querySelector('#loginSection input[type=text]').value;
@@ -84,13 +143,18 @@ function login(){
   const tutors = JSON.parse(localStorage.getItem('tutors')) || [];
   const validTutor = tutors.find(t=>t.email===username && t.password===password);
   if(validTutor){
-    document.getElementById("loginSection").style.display="none";
-    document.getElementById("dashboard").style.display="block";
+    toggleLogin();
+    const dashboard = document.getElementById("dashboard");
+    dashboard.classList.add("show"); // slide-in animation
     alert(`Welcome, ${validTutor.name}`);
   } else { alert('Invalid credentials!'); }
 }
 
-function logout(){ document.getElementById("dashboard").style.display="none"; }
+function logout(){ 
+  const dashboard = document.getElementById("dashboard");
+  dashboard.classList.remove("show");
+  setTimeout(()=>{ dashboard.style.display="none"; dashboard.style.opacity=0; dashboard.style.transform="translateY(50px)"; }, 500);
+}
 </script>
 
 </body>
