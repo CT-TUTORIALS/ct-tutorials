@@ -35,10 +35,10 @@ body {
     margin:0;
     font-size:16px;
     line-height:1.6;
-    text-align: left; /* Make everything align left by default */
+    text-align: left; /* Make everything align left */
 }
 h2, h3, h4, p, ul, li, label, input, select, button {
-    text-align: left; /* Ensure all elements are left-aligned */
+    text-align: left;
 }
 h2 { font-size:28px; margin-bottom:20px; color:#003366; font-weight:bold; }
 h3 { font-size:22px; margin-top:25px; color:#00509e; font-weight:bold; }
@@ -50,12 +50,7 @@ a { font-size:16px; color:#00509e; text-decoration:none; }
 a:hover { text-decoration: underline; }
 
 /* --- Sections --- */
-section {
-    max-width:900px;
-    margin: auto;
-    padding:40px 20px;
-    text-align:left; /* Section content aligns left */
-}
+section { max-width:900px; margin:auto; padding:40px 20px; text-align:left; }
 
 /* --- Floating Buttons --- */
 .floating-btn {
@@ -83,7 +78,7 @@ section {
 footer {
     background:#003366;
     color:white;
-    text-align:left; /* Footer content aligned left */
+    text-align:left;
     padding:25px 20px;
     font-size:14px;
 }
@@ -169,47 +164,8 @@ footer a { color:white; margin:0 10px; text-decoration:none; font-size:16px; }
 </section>
 
 <!-- FLOATING BUTTONS -->
-<button id="registerBtnFloat" class="floating-btn">Register Now</button>
+<button id="registerBtnFloat" class="floating-btn" onclick="window.open('https://forms.gle/zFoxAiqmSvfC735m7','_blank')">Register Now</button>
 <button id="tutorCornerFloat" class="floating-btn" onclick="window.location.href='tutors-portal.html'">Tutors' Portal</button>
-
-<!-- MODAL -->
-<div id="modal">
-<form>
-<button type="button" class="close">×</button>
-<h2>Service Registration</h2>
-<label>Full Name<input type="text" required></label>
-<label>Email<input type="email" required></label>
-<label>Cellphone Number<input type="tel" placeholder="+264 81 123 4567" required></label>
-<label>Select Service
-<select id="service" required>
-<option value="">Select a service</option>
-<option>Introduction to Academic Writing</option>
-<option>Topic-specific Session</option>
-<option>One-on-One Hourly Session</option>
-<option>Group Session (2–5 People)</option>
-<option>Group Session (6–14 People)</option>
-<option>Group Session (More than 14 People)</option>
-<option>Draft Editing</option>
-<option>Document Proofreading</option>
-<option>Referencing Assistance</option>
-<option>Public Speaking Support</option>
-</select>
-</label>
-<label>Select Tutor
-<select id="tutorSelect" style="display:none">
-<option>No Preference</option>
-<option>Tutor 1</option>
-<option>Tutor 2</option>
-<option>Tutor 3</option>
-</select>
-</label>
-<label>
-<input type="checkbox" required>
-I agree to the <a href="documents/Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a>
-</label>
-<button type="button" class="submit-btn" onclick="window.open('https://forms.gle/zFoxAiqmSvfC735m7','_blank')">Submit Registration</button>
-</form>
-</div>
 
 <!-- FOOTER -->
 <footer>
@@ -221,22 +177,8 @@ C&T Tutorials operates independently and is not affiliated with, endorsed by, or
 </div>
 <br>
 <a href="tutors-portal.html">Tutors' Portal</a> | 
-<a href="admin-portal.html">Admin Portal</a>
+<a href="admin-portal.html">Admin Login</a>
 </footer>
-
-<script>
-const modal = document.getElementById("modal");
-const openBtn = document.getElementById("registerBtnFloat");
-const closeBtn = document.querySelector(".close");
-openBtn.onclick = () => modal.classList.add("active");
-closeBtn.onclick = () => modal.classList.remove("active");
-modal.onclick = (e)=>{if(e.target===modal) modal.classList.remove("active");}
-const serviceSelect = document.getElementById("service");
-const tutorSelect = document.getElementById("tutorSelect");
-serviceSelect.addEventListener("change",()=>{
-if(serviceSelect.value){ tutorSelect.style.display="block"; }else{ tutorSelect.style.display="none"; }
-});
-</script>
 
 </body>
 </html>
