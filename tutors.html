@@ -12,12 +12,12 @@ body {
     background:#f4f4f4;
 }
 
-/* Header/Footer color matching Create Account button */
+/* Header/Footer styling (centered) */
 header {
     background:#008080;
     color:white;
     padding:20px;
-    text-align:center; /* header stays centered */
+    text-align:center;
 }
 footer {
     background:#008080;
@@ -26,7 +26,7 @@ footer {
     margin-top:60px;
     font-size:14px;
     line-height:1.6;
-    text-align:center; /* footer stays centered */
+    text-align:center;
 }
 
 nav a {
@@ -36,19 +36,20 @@ nav a {
     font-weight:bold;
 }
 
+/* Main page content (always left-aligned) */
 section {
     padding:60px 20px;
     max-width:900px;
     margin:auto;
     line-height:1.6;
-    text-align:left; /* page content always left-aligned */
+    text-align:left;
 }
 
 .login-link, #loginSection, #dashboard {
-    text-align:center; /* login & dashboard content stays centered */
+    text-align:center; /* keep login/dashboard centered */
 }
 
-/* Login Section as centered card */
+/* Login Section card */
 #loginSection{
     display:none;
     opacity:0;
@@ -89,7 +90,7 @@ button:hover{
     background:#1565c0;
 }
 
-/* Overlay when login is open */
+/* Overlay for login */
 #overlay{
     display:none;
     position:fixed;
@@ -101,7 +102,7 @@ button:hover{
     display:block;
 }
 
-/* Dashboard centered and slide animation */
+/* Dashboard centered card */
 #dashboard{
     display:none;
     background:white;
