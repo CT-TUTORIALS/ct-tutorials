@@ -6,68 +6,121 @@
 <title>Tutors' Portal | C&T Tutorials</title>
 
 <style>
-body{margin:0;font-family:Arial;background:#f4f4f4;text-align:center;}
+body {
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:#f4f4f4;
+    text-align:left; /* always left-aligned */
+}
+
 /* Header/Footer color matching Create Account button */
-header{background:#008080;color:white;padding:20px;}
-footer{background:#008080;color:white;padding:20px;margin-top:60px; font-size:14px; line-height:1.6;}
-nav a{color:white;text-decoration:none;margin:0 15px;font-weight:bold;}
-section{padding:60px 20px; max-width:900px; margin:auto; text-align:left; line-height:1.6;}
-.login-link, #loginSection, #dashboard {text-align:center;}
+header {
+    background:#008080;
+    color:white;
+    padding:20px;
+}
+footer {
+    background:#008080;
+    color:white;
+    padding:20px;
+    margin-top:60px;
+    font-size:14px;
+    line-height:1.6;
+}
+
+nav a {
+    color:white;
+    text-decoration:none;
+    margin:0 15px;
+    font-weight:bold;
+}
+
+section {
+    padding:60px 20px;
+    max-width:900px;
+    margin:auto;
+    line-height:1.6;
+    text-align:left; /* always left-aligned */
+}
+
+.login-link, #loginSection, #dashboard {
+    text-align:center; /* login & dashboard content stays centered */
+}
 
 /* Login Section as centered card */
 #loginSection{
-  display:none;
-  opacity:0;
-  transition: opacity 0.5s ease;
-  position: fixed;
-  top:50%;
-  left:50%;
-  transform: translate(-50%, -50%);
-  background:white;
-  padding:30px;
-  border-radius:10px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.2);
-  width:90%;
-  max-width:360px;
-  z-index:1000;
+    display:none;
+    opacity:0;
+    transition: opacity 0.5s ease;
+    position: fixed;
+    top:50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.2);
+    width:90%;
+    max-width:360px;
+    z-index:1000;
 }
-#loginSection.show{display:block; opacity:1;}
+#loginSection.show{
+    display:block; 
+    opacity:1;
+}
 
-input{padding:10px;margin:10px 0;width:100%; box-sizing:border-box;}
-button{padding:10px 20px;background:#1e88e5;color:white;border:none;border-radius:5px;cursor:pointer;}
-button:hover{background:#1565c0;}
+input {
+    padding:10px;
+    margin:10px 0;
+    width:100%;
+    box-sizing:border-box;
+}
+
+button {
+    padding:10px 20px;
+    background:#1e88e5;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+button:hover{
+    background:#1565c0;
+}
 
 /* Overlay when login is open */
 #overlay{
-  display:none;
-  position:fixed;
-  inset:0;
-  background: rgba(0,0,0,0.5);
-  z-index: 900;
+    display:none;
+    position:fixed;
+    inset:0;
+    background: rgba(0,0,0,0.5);
+    z-index: 900;
 }
-#overlay.show{display:block;}
+#overlay.show{
+    display:block;
+}
 
 /* Dashboard centered and slide animation */
 #dashboard{
-  display:none;
-  background:white;
-  padding:30px;
-  border-radius:10px;
-  position: fixed;
-  top:50%;
-  left:50%;
-  transform: translate(-50%, -50%) translateY(50px);
-  width:70%;
-  max-width:800px;
-  box-shadow:0 0 10px rgba(0,0,0,0.1);
-  opacity:0;
-  transition: opacity 0.5s ease, transform 0.5s ease;
-  z-index:1000;
+    display:none;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    position: fixed;
+    top:50%;
+    left:50%;
+    transform: translate(-50%, -50%) translateY(50px);
+    width:70%;
+    max-width:800px;
+    box-shadow:0 0 10px rgba(0,0,0,0.1);
+    opacity:0;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    z-index:1000;
 }
 #dashboard.show{
-  display:block;
-  opacity:1;
-  transform: translate(-50%, -50%) translateY(0);
+    display:block;
+    opacity:1;
+    transform: translate(-50%, -50%) translateY(0);
 }
 </style>
 </head>
@@ -127,39 +180,39 @@ All tutors participating with C&T Tutorials are responsible for their own teachi
 
 <script>
 function toggleLogin(){ 
-  const login = document.getElementById("loginSection");
-  const overlay = document.getElementById("overlay");
-  if(login.classList.contains("show")){
-    login.style.opacity = 0;
-    overlay.classList.remove("show");
-    setTimeout(()=>{ login.classList.remove("show"); }, 500);
-  } else {
-    login.classList.add("show");
-    overlay.classList.add("show");
-  }
+    const login = document.getElementById("loginSection");
+    const overlay = document.getElementById("overlay");
+    if(login.classList.contains("show")){
+        login.style.opacity = 0;
+        overlay.classList.remove("show");
+        setTimeout(()=>{ login.classList.remove("show"); }, 500);
+    } else {
+        login.classList.add("show");
+        overlay.classList.add("show");
+    }
 }
 
 function login(){
-  const username = document.querySelector('#loginSection input[type=text]').value;
-  const password = document.querySelector('#loginSection input[type=password]').value;
-  const tutors = JSON.parse(localStorage.getItem('tutors')) || [];
-  const validTutor = tutors.find(t=>t.email===username && t.password===password);
-  if(validTutor){
-    toggleLogin();
-    const dashboard = document.getElementById("dashboard");
-    dashboard.classList.add("show");
-    alert(`Welcome, ${validTutor.name}`);
-  } else { alert('Invalid credentials!'); }
+    const username = document.querySelector('#loginSection input[type=text]').value;
+    const password = document.querySelector('#loginSection input[type=password]').value;
+    const tutors = JSON.parse(localStorage.getItem('tutors')) || [];
+    const validTutor = tutors.find(t=>t.email===username && t.password===password);
+    if(validTutor){
+        toggleLogin();
+        const dashboard = document.getElementById("dashboard");
+        dashboard.classList.add("show");
+        alert(`Welcome, ${validTutor.name}`);
+    } else { alert('Invalid credentials!'); }
 }
 
 function logout(){ 
-  const dashboard = document.getElementById("dashboard");
-  dashboard.classList.remove("show");
-  setTimeout(()=>{ 
-    dashboard.style.display="none"; 
-    dashboard.style.opacity=0; 
-    dashboard.style.transform="translate(-50%, -50%) translateY(50px)"; 
-  }, 500);
+    const dashboard = document.getElementById("dashboard");
+    dashboard.classList.remove("show");
+    setTimeout(()=>{ 
+        dashboard.style.display="none"; 
+        dashboard.style.opacity=0; 
+        dashboard.style.transform="translate(-50%, -50%) translateY(50px)"; 
+    }, 500);
 }
 </script>
 
