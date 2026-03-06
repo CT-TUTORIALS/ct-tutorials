@@ -5,175 +5,243 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>C&T Tutorials</title>
 
+<meta name="google-site-verification" content="aSucaMc_aX_kQpRFNvVRgTX0pEeCD1c48mTuirk4qwY" />
+
 <style>
-/* --- Header & Banner --- */
-header {
-    background: url('images/banner.jpg') center top / cover no-repeat;
-    height: 320px;
-    position: relative;
-}
-header::after {
-    content:"";
-    position:absolute;
-    inset:0;
-    background: rgba(0,0,0,0.45);
-}
-.header-content {
-    position: relative;
-    z-index:2;
-    display:flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 30px;
-}
-.logo { 
-    height: 60px; 
-    width: auto; 
-}
 
-/* --- Navigation --- */
-nav a {
-    color:white;
-    text-decoration:none;
-    margin-left:20px;
-    font-weight:bold;
-    font-size:16px;
-}
-nav a:hover { text-decoration:underline; }
-
-/* --- Body & Fonts --- */
 body {
-    font-family: Arial, sans-serif;
-    color: #333;
-    margin:0;
-    font-size:16px;
-    line-height:1.6;
-    text-align:left;
-}
-h2, h3, h4, p, ul, li, label, input, select, button {
-    text-align:left;
-}
-h2 { font-size:28px; margin-bottom:20px; color:#003366; font-weight:bold; }
-h3 { font-size:22px; margin-top:25px; color:#00509e; font-weight:bold; }
-h4 { font-size:18px; margin-top:20px; color:#003366; font-weight:bold; }
-p { font-size:16px; text-align:left; }
-ul { font-size:16px; margin-left:25px; text-align:left; }
-li { margin-bottom:8px; }
-a { font-size:16px; color:#00509e; text-decoration:none; }
-a:hover { text-decoration:underline; }
-
-/* --- Sections --- */
-section {
-    max-width:900px;
-    margin:auto;
-    padding:40px 20px;
-    text-align:left;
+margin:0;
+font-family:Arial, sans-serif;
+color:#333;
 }
 
-/* --- Floating Buttons --- */
-.floating-btn {
-    position: fixed;
-    right: 25px;
-    padding: 15px 22px;
-    border-radius: 50px;
-    color:white;
-    border:none;
-    font-size:16px;
-    cursor:pointer;
-    z-index:999;
-    box-shadow:0 4px 6px rgba(0,0,0,0.3);
+header{
+background:url("images/banner.jpg") center/cover no-repeat;
+height:320px;
+position:relative;
 }
-#registerBtnFloat { bottom: 25px; background: #003366; }
-#tutorCornerFloat { bottom: 90px; background: #008080; }
 
-/* --- Footer --- */
-footer {
-    background:#003366;
-    color:white;
-    text-align:left;
-    padding:25px 20px;
-    font-size:14px;
+header::after{
+content:"";
+position:absolute;
+inset:0;
+background:rgba(0,0,0,0.45);
 }
-.footer-divider { border-top:1px solid rgba(255,255,255,0.3); margin:20px 0; width:100%; }
-.footer-disclaimer { font-size:12px; color:rgba(255,255,255,0.8); max-width:900px; line-height:1.6; text-align:left; }
-footer a { color:white; margin:0 10px; text-decoration:none; font-size:16px; }
 
-/* --- Modal (Register Now) --- */
-#modal {
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,0.7);
-    z-index:1000;
-    justify-content:center;
-    align-items:center;
+.header-content{
+position:relative;
+z-index:2;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 30px;
 }
-#modal.active { display:flex; }
-#modal form {
-    background:white;
-    padding:25px;
-    width:90%;
-    max-width:460px;
-    border-radius:10px;
-    position:relative;
+
+.logo{
+height:60px;
 }
-.close {
-    position:absolute;
-    top:10px;
-    right:15px;
-    font-size:22px;
-    cursor:pointer;
-    background:none;
-    border:none;
+
+nav a{
+color:white;
+text-decoration:none;
+margin-left:20px;
+font-weight:bold;
 }
-label { display:block; margin-top:12px; }
-input, select { width:100%; padding:10px; margin-top:5px; }
-.submit-btn {
-    margin-top:20px;
-    width:100%;
-    padding:12px;
-    background:#003366;
-    color:white;
-    border:none;
-    font-size:16px;
-    cursor:pointer;
+
+nav a:hover{
+text-decoration:underline;
 }
+
+section{
+max-width:900px;
+margin:auto;
+padding:40px 20px;
+}
+
+h2{
+color:#003366;
+}
+
+h3{
+color:#00509e;
+margin-top:25px;
+}
+
+ul{
+margin-left:20px;
+}
+
+.resource-link{
+color:#00509e;
+font-weight:bold;
+text-decoration:none;
+}
+
+.resource-link:hover{
+text-decoration:underline;
+}
+
+/* Floating buttons */
+
+.floating-btn{
+position:fixed;
+right:25px;
+padding:15px 22px;
+border-radius:50px;
+color:white;
+border:none;
+font-size:16px;
+cursor:pointer;
+z-index:999;
+box-shadow:0 4px 6px rgba(0,0,0,0.3);
+}
+
+#registerBtnFloat{
+bottom:25px;
+background:#003366;
+}
+
+#tutorCornerFloat{
+bottom:90px;
+background:#008080;
+}
+
+/* Modal */
+
+#modal{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.7);
+z-index:1000;
+justify-content:center;
+align-items:center;
+}
+
+#modal.active{
+display:flex;
+}
+
+#modal form{
+background:white;
+padding:25px;
+width:90%;
+max-width:460px;
+border-radius:10px;
+position:relative;
+}
+
+.close{
+position:absolute;
+top:10px;
+right:15px;
+font-size:22px;
+cursor:pointer;
+background:none;
+border:none;
+}
+
+label{
+display:block;
+margin-top:12px;
+}
+
+input,select{
+width:100%;
+padding:10px;
+margin-top:5px;
+}
+
+.submit-btn{
+margin-top:20px;
+width:100%;
+padding:12px;
+background:#003366;
+color:white;
+border:none;
+font-size:16px;
+cursor:pointer;
+}
+
+/* Footer */
+
+footer{
+background:#003366;
+color:white;
+text-align:center;
+padding:25px 20px;
+font-size:14px;
+}
+
+.footer-divider{
+border-top:1px solid rgba(255,255,255,0.3);
+margin:20px auto;
+width:80%;
+}
+
+.footer-disclaimer{
+font-size:12px;
+color:rgba(255,255,255,0.8);
+max-width:900px;
+margin:auto;
+line-height:1.6;
+}
+
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
 <header>
 <div class="header-content">
-<img src="images/logo.jpg" class="logo" alt="C&T Tutorials Logo">
+
+<img src="images/logo.jpg" alt="C&T Tutorials Logo" class="logo">
+
 <nav>
 <a href="#about">About Us</a>
 <a href="#services">Services</a>
 <a href="#resources">Resources</a>
 <a href="#contact">Contact</a>
 </nav>
+
 </div>
 </header>
 
-<!-- ABOUT -->
+
 <section id="about">
+
 <h2>About C&T Tutorials</h2>
-<p>C&T Tutorials is an independent academic support service committed to enhancing students’ academic performance through structured guidance in academic writing, research, and communication skills.</p>
-<p>Our services are designed to provide focused, student-centred support through one-on-one tutorials, group sessions, and assignment-based assistance.</p>
+
+<p>
+C&T Tutorials is an independent academic support service committed to enhancing
+students’ academic performance through structured guidance in academic writing,
+research, and communication skills.
+</p>
+
+<p>
+Our services are designed to provide focused, student-centred support through
+one-on-one tutorials, group sessions, and assignment-based assistance.
+</p>
+
 </section>
 
-<!-- SERVICES -->
+
 <section id="services">
+
 <h2>Our Services</h2>
+
 <h3>Tutorial Services</h3>
+
 <h4>One-on-One Sessions</h4>
+
 <ul>
 <li>Introduction to Academic Writing (4 sessions) – <strong>N$150.00</strong></li>
 <li>Topic-specific Sessions – N$40.00</li>
 <li>Hourly Rate – N$40.00</li>
 </ul>
+
 <h4>Group Sessions</h4>
+
 <ul>
 <li>2–5 People – N$200.00</li>
 <li>6–14 People – N$450.00</li>
@@ -181,50 +249,81 @@ input, select { width:100%; padding:10px; margin-top:5px; }
 </ul>
 
 <h3>Assignment Support Services</h3>
+
 <ul>
 <li>Draft Editing – N$15.00 per page</li>
 <li>Document Proofreading – N$10.00 per page</li>
 </ul>
 
 <h3>Other Services</h3>
+
 <ul>
 <li>Referencing Assistance – N$20.00</li>
 <li>Public Speaking Support – N$35.00 per session</li>
 </ul>
+
 </section>
 
-<!-- RESOURCES -->
+
 <section id="resources">
+
 <h2>Resources</h2>
+
 <ul>
-<li><a href="documents/Business-Policies.pdf" target="_blank">Business Policies</a></li>
-<li><a href="documents/Student-form-for-offline-application.pdf" target="_blank">Offline Application Form</a></li>
-<li><a href="documents/Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a></li>
+<li><a class="resource-link" href="documents/Business-Policies.pdf" target="_blank">Business Policies</a></li>
+<li><a class="resource-link" href="documents/Student-form-for-offline-application.pdf" target="_blank">Offline Application Form</a></li>
 </ul>
+
 </section>
 
-<!-- CONTACT -->
+
 <section id="contact">
+
 <h2>Contact</h2>
+
 <p>Email: <a href="mailto:ct0tutorials@gmail.com">ct0tutorials@gmail.com</a></p>
+
 <p>Phone: +264 815 621 879 / +264 818 479 958</p>
+
 </section>
 
-<!-- FLOATING BUTTONS -->
-<button id="registerBtnFloat" class="floating-btn">Register Now</button>
-<button id="tutorCornerFloat" class="floating-btn" onclick="window.location.href='tutors-portal.html'">Tutors' Portal</button>
 
-<!-- MODAL -->
+<button id="registerBtnFloat" class="floating-btn">Register Now</button>
+
+<button id="tutorCornerFloat"
+class="floating-btn"
+onclick="window.location.href='tutors.html'">
+
+Tutors' Corner
+
+</button>
+
+
 <div id="modal">
+
 <form>
+
 <button type="button" class="close">×</button>
+
 <h2>Service Registration</h2>
-<label>Full Name <input type="text" required></label>
-<label>Email <input type="email" required></label>
-<label>Cellphone Number <input type="tel" placeholder="+264 81 123 4567" required></label>
+
+<label>Full Name
+<input type="text" required>
+</label>
+
+<label>Email
+<input type="email" required>
+</label>
+
+<label>Cellphone Number
+<input type="tel" placeholder="+264 81 123 4567" required>
+</label>
+
 <label>Select Service
 <select id="service" required>
+
 <option value="">Select a service</option>
+
 <option>Introduction to Academic Writing</option>
 <option>Topic-specific Session</option>
 <option>One-on-One Hourly Session</option>
@@ -235,37 +334,102 @@ input, select { width:100%; padding:10px; margin-top:5px; }
 <option>Document Proofreading</option>
 <option>Referencing Assistance</option>
 <option>Public Speaking Support</option>
+
 </select>
 </label>
-<label>
-<input type="checkbox" required>
-I agree to the
-<a href="documents/Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a>
+
+<label>Select Tutor
+<select id="tutorSelect" style="display:none">
+
+<option>No Preference</option>
+<option>Tutor 1</option>
+<option>Tutor 2</option>
+
+</select>
 </label>
-<button type="button" class="submit-btn" onclick="window.open('https://forms.gle/zFoxAiqmSvfC735m7','_blank')">Submit Registration</button>
+
+<label>
+
+<input type="checkbox" required>
+
+I agree to the
+<a href="documents/Disclosure-Agreement.pdf" target="_blank">
+
+Disclosure Agreement
+
+</a>
+
+</label>
+
+<button type="submit" class="submit-btn">
+
+Submit Registration
+
+</button>
+
 </form>
+
 </div>
 
-<!-- FOOTER -->
+
 <footer>
+
 <p>© 2026 C&T Tutorials. All rights reserved.</p>
+
 <div class="footer-divider"></div>
+
 <div class="footer-disclaimer">
+
 <strong>Disclaimer:</strong><br>
-C&T Tutorials operates independently and is not affiliated with, endorsed by, or formally connected to any university, college, examination body, or academic institution. Responsibility for submitted academic work remains with the student.
+
+C&T Tutorials operates independently and is not affiliated with,
+endorsed by, or formally connected to any university, college,
+examination body, or academic institution.
+
+All services are supplementary and intended to support independent
+learning.
+
+C&T Tutorials does not complete assignments or assessments on behalf
+of students. Responsibility for submitted academic work remains with
+the student.
+
 </div>
-<br>
-<a href="tutors-portal.html">Tutors' Portal</a> | 
-<a href="admin-portal.html">Admin Login</a>
+
 </footer>
 
+
 <script>
+
 const modal = document.getElementById("modal");
 const openBtn = document.getElementById("registerBtnFloat");
 const closeBtn = document.querySelector(".close");
+
 openBtn.onclick = () => modal.classList.add("active");
+
 closeBtn.onclick = () => modal.classList.remove("active");
-modal.onclick = (e)=>{ if(e.target===modal) modal.classList.remove("active"); }
+
+modal.onclick = (e)=>{
+if(e.target===modal)
+modal.classList.remove("active");
+}
+
+const serviceSelect = document.getElementById("service");
+const tutorSelect = document.getElementById("tutorSelect");
+
+serviceSelect.addEventListener("change",()=>{
+
+if(serviceSelect.value){
+
+tutorSelect.style.display="block";
+
+}else{
+
+tutorSelect.style.display="none";
+
+}
+
+});
+
 </script>
 
 </body>
