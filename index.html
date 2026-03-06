@@ -8,7 +8,7 @@
 <style>
 /* --- Header & Banner --- */
 header {
-    background: url('images/banner.jpg') center/cover no-repeat;
+    background: url('images/banner.jpg') center top / cover no-repeat;
     height: 320px;
     position: relative;
 }
@@ -20,25 +20,38 @@ header::after {
 }
 .header-content {
     position: relative;
-    z-index: 2;
+    z-index:2;
     display:flex;
     justify-content: space-between;
     align-items: center;
     padding: 20px 30px;
 }
-.logo { height: 60px; width:auto; }
+.logo { 
+    height: 60px; 
+    width: auto; 
+}
 
-/* --- Fonts & Sizes --- */
+/* --- Navigation --- */
+nav a {
+    color:white;
+    text-decoration:none;
+    margin-left:20px;
+    font-weight:bold;
+    font-size:16px;
+}
+nav a:hover { text-decoration:underline; }
+
+/* --- Body & Fonts --- */
 body {
     font-family: Arial, sans-serif;
     color: #333;
     margin:0;
     font-size:16px;
     line-height:1.6;
-    text-align: left; /* Make everything align left */
+    text-align:left;
 }
 h2, h3, h4, p, ul, li, label, input, select, button {
-    text-align: left;
+    text-align:left;
 }
 h2 { font-size:28px; margin-bottom:20px; color:#003366; font-weight:bold; }
 h3 { font-size:22px; margin-top:25px; color:#00509e; font-weight:bold; }
@@ -47,10 +60,15 @@ p { font-size:16px; text-align:left; }
 ul { font-size:16px; margin-left:25px; text-align:left; }
 li { margin-bottom:8px; }
 a { font-size:16px; color:#00509e; text-decoration:none; }
-a:hover { text-decoration: underline; }
+a:hover { text-decoration:underline; }
 
 /* --- Sections --- */
-section { max-width:900px; margin:auto; padding:40px 20px; text-align:left; }
+section {
+    max-width:900px;
+    margin:auto;
+    padding:40px 20px;
+    text-align:left;
+}
 
 /* --- Floating Buttons --- */
 .floating-btn {
@@ -68,12 +86,6 @@ section { max-width:900px; margin:auto; padding:40px 20px; text-align:left; }
 #registerBtnFloat { bottom: 25px; background: #003366; }
 #tutorCornerFloat { bottom: 90px; background: #008080; }
 
-/* --- Modal --- */
-#modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:1000; justify-content:center; align-items:center; }
-#modal.active { display:flex; }
-#modal form { background:white; padding:25px; width:90%; max-width:460px; border-radius:10px; position:relative; }
-.close { position:absolute; top:10px; right:15px; font-size:22px; cursor:pointer; background:none; border:none; }
-
 /* --- Footer --- */
 footer {
     background:#003366;
@@ -83,14 +95,49 @@ footer {
     font-size:14px;
 }
 .footer-divider { border-top:1px solid rgba(255,255,255,0.3); margin:20px 0; width:100%; }
-.footer-disclaimer {
-    font-size:12px;
-    color:rgba(255,255,255,0.8);
-    max-width:900px;
-    line-height:1.6;
-    text-align:left;
-}
+.footer-disclaimer { font-size:12px; color:rgba(255,255,255,0.8); max-width:900px; line-height:1.6; text-align:left; }
 footer a { color:white; margin:0 10px; text-decoration:none; font-size:16px; }
+
+/* --- Modal (Register Now) --- */
+#modal {
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.7);
+    z-index:1000;
+    justify-content:center;
+    align-items:center;
+}
+#modal.active { display:flex; }
+#modal form {
+    background:white;
+    padding:25px;
+    width:90%;
+    max-width:460px;
+    border-radius:10px;
+    position:relative;
+}
+.close {
+    position:absolute;
+    top:10px;
+    right:15px;
+    font-size:22px;
+    cursor:pointer;
+    background:none;
+    border:none;
+}
+label { display:block; margin-top:12px; }
+input, select { width:100%; padding:10px; margin-top:5px; }
+.submit-btn {
+    margin-top:20px;
+    width:100%;
+    padding:12px;
+    background:#003366;
+    color:white;
+    border:none;
+    font-size:16px;
+    cursor:pointer;
+}
 </style>
 </head>
 
@@ -150,9 +197,9 @@ footer a { color:white; margin:0 10px; text-decoration:none; font-size:16px; }
 <section id="resources">
 <h2>Resources</h2>
 <ul>
-<li><a class="resource-link" href="documents/Business-Policies.pdf" target="_blank">Business Policies</a></li>
-<li><a class="resource-link" href="documents/Student-form-for-offline-application.pdf" target="_blank">Offline Application Form</a></li>
-<li><a class="resource-link" href="documents/Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a></li>
+<li><a href="documents/Business-Policies.pdf" target="_blank">Business Policies</a></li>
+<li><a href="documents/Student-form-for-offline-application.pdf" target="_blank">Offline Application Form</a></li>
+<li><a href="documents/Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a></li>
 </ul>
 </section>
 
@@ -164,8 +211,40 @@ footer a { color:white; margin:0 10px; text-decoration:none; font-size:16px; }
 </section>
 
 <!-- FLOATING BUTTONS -->
-<button id="registerBtnFloat" class="floating-btn" onclick="window.open('https://forms.gle/zFoxAiqmSvfC735m7','_blank')">Register Now</button>
+<button id="registerBtnFloat" class="floating-btn">Register Now</button>
 <button id="tutorCornerFloat" class="floating-btn" onclick="window.location.href='tutors-portal.html'">Tutors' Portal</button>
+
+<!-- MODAL -->
+<div id="modal">
+<form>
+<button type="button" class="close">×</button>
+<h2>Service Registration</h2>
+<label>Full Name <input type="text" required></label>
+<label>Email <input type="email" required></label>
+<label>Cellphone Number <input type="tel" placeholder="+264 81 123 4567" required></label>
+<label>Select Service
+<select id="service" required>
+<option value="">Select a service</option>
+<option>Introduction to Academic Writing</option>
+<option>Topic-specific Session</option>
+<option>One-on-One Hourly Session</option>
+<option>Group Session (2–5 People)</option>
+<option>Group Session (6–14 People)</option>
+<option>Group Session (More than 14 People)</option>
+<option>Draft Editing</option>
+<option>Document Proofreading</option>
+<option>Referencing Assistance</option>
+<option>Public Speaking Support</option>
+</select>
+</label>
+<label>
+<input type="checkbox" required>
+I agree to the
+<a href="documents/Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a>
+</label>
+<button type="button" class="submit-btn" onclick="window.open('https://forms.gle/zFoxAiqmSvfC735m7','_blank')">Submit Registration</button>
+</form>
+</div>
 
 <!-- FOOTER -->
 <footer>
@@ -179,6 +258,15 @@ C&T Tutorials operates independently and is not affiliated with, endorsed by, or
 <a href="tutors-portal.html">Tutors' Portal</a> | 
 <a href="admin-portal.html">Admin Login</a>
 </footer>
+
+<script>
+const modal = document.getElementById("modal");
+const openBtn = document.getElementById("registerBtnFloat");
+const closeBtn = document.querySelector(".close");
+openBtn.onclick = () => modal.classList.add("active");
+closeBtn.onclick = () => modal.classList.remove("active");
+modal.onclick = (e)=>{ if(e.target===modal) modal.classList.remove("active"); }
+</script>
 
 </body>
 </html>
