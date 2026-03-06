@@ -28,25 +28,55 @@ header::after {
 }
 .logo { height: 60px; width:auto; }
 
-/* --- Fonts --- */
+/* --- Fonts & Sizes --- */
 body {
     font-family: Arial, sans-serif;
     color: #333;
     margin:0;
+    font-size:16px;
+    line-height:1.6;
 }
-h2, h3, h4 {
+h2 {
     font-family: Arial, sans-serif;
     font-weight: bold;
-    color: #003366;
+    font-size:28px;
+    color:#003366;
+    text-align:left;
+    margin-bottom:20px;
 }
-p, ul, li, label, input, select, button {
+h3 {
     font-family: Arial, sans-serif;
+    font-weight: bold;
+    font-size:22px;
+    color:#00509e;
+    text-align:left;
+    margin-top:25px;
 }
-ul { margin-left:20px; }
+h4 {
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    font-size:18px;
+    color:#003366;
+    text-align:left;
+    margin-top:20px;
+}
+p {
+    font-family: Arial, sans-serif;
+    font-size:16px;
+    text-align:justify;
+}
+ul {
+    font-family: Arial, sans-serif;
+    font-size:16px;
+    margin-left:25px;
+    text-align:left;
+}
+li { margin-bottom:8px; }
 a {
     font-family: Arial, sans-serif;
     color: #00509e;
     text-decoration: none;
+    font-size:16px;
 }
 a:hover { text-decoration: underline; }
 
@@ -70,36 +100,10 @@ section { max-width:900px; margin:auto; padding:40px 20px; }
 #tutorCornerFloat { bottom: 90px; background: #008080; }
 
 /* --- Modal --- */
-#modal {
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,0.7);
-    z-index:1000;
-    justify-content:center;
-    align-items:center;
-}
+#modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:1000; justify-content:center; align-items:center; }
 #modal.active { display:flex; }
-#modal form {
-    background:white;
-    padding:25px;
-    width:90%;
-    max-width:460px;
-    border-radius:10px;
-    position:relative;
-}
-.close {
-    position:absolute;
-    top:10px;
-    right:15px;
-    font-size:22px;
-    cursor:pointer;
-    background:none;
-    border:none;
-}
-label { display:block; margin-top:12px; }
-input, select { width:100%; padding:10px; margin-top:5px; }
-.submit-btn { margin-top:20px; width:100%; padding:12px; background:#003366; color:white; border:none; font-size:16px; cursor:pointer; }
+#modal form { background:white; padding:25px; width:90%; max-width:460px; border-radius:10px; position:relative; }
+.close { position:absolute; top:10px; right:15px; font-size:22px; cursor:pointer; background:none; border:none; }
 
 /* --- Footer --- */
 footer {
@@ -117,7 +121,7 @@ footer {
     margin:auto;
     line-height:1.6;
 }
-footer a { color:white; margin:0 10px; text-decoration:none; }
+footer a { color:white; margin:0 10px; text-decoration:none; font-size:16px; }
 </style>
 </head>
 
