@@ -1,5 +1,5 @@
 <style>
-/* Restore homepage header/banner */
+/* --- Existing header/banner styles --- */
 header {
     background: url('images/banner.jpg') center/cover no-repeat;
     height: 320px;
@@ -21,33 +21,29 @@ header::after {
 }
 .logo { height: 60px; width:auto; }
 
-/* Fonts */
+/* --- Restore fonts --- */
 body {
     font-family: Arial, sans-serif;
     color: #333;
-    margin: 0;
+    margin:0;
 }
 h2, h3, h4 {
     font-family: Arial, sans-serif;
     font-weight: bold;
     color: #003366;
 }
-ul {
+p, ul, li, label, input, select, button {
     font-family: Arial, sans-serif;
-    margin-left: 20px;
 }
-p {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-}
+ul { margin-left:20px; }
 a {
     font-family: Arial, sans-serif;
-    text-decoration: none;
     color: #00509e;
+    text-decoration: none;
 }
 a:hover { text-decoration: underline; }
 
-/* Floating Buttons */
+/* --- Floating buttons --- */
 .floating-btn {
     position: fixed;
     right: 25px;
@@ -63,39 +59,13 @@ a:hover { text-decoration: underline; }
 #registerBtnFloat { bottom: 25px; background: #003366; }
 #tutorCornerFloat { bottom: 90px; background: #008080; }
 
-/* Modal */
-#modal {
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,0.7);
-    z-index:1000;
-    justify-content:center;
-    align-items:center;
-}
+/* --- Modal --- */
+#modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:1000; justify-content:center; align-items:center; }
 #modal.active { display:flex; }
-#modal form {
-    background:white;
-    padding:25px;
-    width:90%;
-    max-width:460px;
-    border-radius:10px;
-    position:relative;
-}
-.close {
-    position:absolute;
-    top:10px;
-    right:15px;
-    font-size:22px;
-    cursor:pointer;
-    background:none;
-    border:none;
-}
-label { display:block; margin-top:12px; }
-input, select { width:100%; padding:10px; margin-top:5px; }
-.submit-btn { margin-top:20px; width:100%; padding:12px; background:#003366; color:white; border:none; font-size:16px; cursor:pointer; }
+#modal form { background:white; padding:25px; width:90%; max-width:460px; border-radius:10px; position:relative; }
+.close { position:absolute; top:10px; right:15px; font-size:22px; cursor:pointer; background:none; border:none; }
 
-/* Footer Restore */
+/* --- Footer --- */
 footer {
     background:#003366;
     color:white;
@@ -104,12 +74,6 @@ footer {
     font-size:14px;
 }
 .footer-divider { border-top:1px solid rgba(255,255,255,0.3); margin:20px auto; width:80%; }
-.footer-disclaimer {
-    font-size:12px;
-    color:rgba(255,255,255,0.8);
-    max-width:900px;
-    margin:auto;
-    line-height:1.6;
-}
+.footer-disclaimer { font-size:12px; color:rgba(255,255,255,0.8); max-width:900px; margin:auto; line-height:1.6; }
 footer a { color:white; margin:0 10px; text-decoration:none; }
 </style>
