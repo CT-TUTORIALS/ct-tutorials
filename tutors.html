@@ -12,11 +12,8 @@ header{background:#008080;color:white;padding:20px;}
 footer{background:#008080;color:white;padding:20px;margin-top:60px;}
 
 nav a{color:white;text-decoration:none;margin:0 15px;font-weight:bold;}
-section{padding:60px 20px;}
-.apply-btn{padding:18px 35px;background:#1e88e5;color:white;text-decoration:none;font-size:18px;border-radius:8px;}
-.apply-btn:hover{background:#1565c0;}
-.create-account-btn{padding:18px 35px;background:#008080;color:white;text-decoration:none;font-size:18px;border-radius:8px;margin-top:15px; display:inline-block;}
-.create-account-btn:hover{background:#006666;}
+section{padding:60px 20px; max-width:900px; margin:auto; text-align:left; line-height:1.6;}
+.login-link, #loginSection, #dashboard {text-align:center;}
 
 /* Login Section as centered card */
 #loginSection{
@@ -51,24 +48,27 @@ button:hover{background:#1565c0;}
 }
 #overlay.show{display:block;}
 
-/* Dashboard slide animation */
+/* Dashboard centered and slide animation */
 #dashboard{
   display:none;
   background:white;
   padding:30px;
   border-radius:10px;
-  margin:40px auto 0 auto;
+  position: fixed;
+  top:50%;
+  left:50%;
+  transform: translate(-50%, -50%) translateY(50px);
   width:70%;
   max-width:800px;
   box-shadow:0 0 10px rgba(0,0,0,0.1);
   opacity:0;
-  transform: translateY(50px);
   transition: opacity 0.5s ease, transform 0.5s ease;
+  z-index:1000;
 }
 #dashboard.show{
   display:block;
   opacity:1;
-  transform: translateY(0);
+  transform: translate(-50%, -50%) translateY(0);
 }
 </style>
 </head>
@@ -77,21 +77,20 @@ button:hover{background:#1565c0;}
 <header>
 <h1>C&T Tutorials</h1>
 <nav>
-<a href="https://forms.gle/frX6R74bc8tY56A3A" target="_blank">Apply</a>
-<a href="tutor-register.html">Create Account</a>
+<a href="index.html">Home</a>
 <a href="#" onclick="toggleLogin()">Sign in</a>
 </nav>
 </header>
 
 <section>
-<h2>Tutors' Portal</h2>
-<p>Join our network of professional tutors and help students achieve academic excellence.</p>
+<h2>About C&T Tutorials</h2>
+<p>C&T Tutorials is an independent academic support service committed to enhancing students’ academic performance through structured guidance in academic writing, research, and communication skills.</p>
+<p>Our services are designed to provide focused, student-centred support through one-on-one tutorials, group sessions, and assignment-based assistance.</p>
 
-<!-- Apply Button -->
-<a href="https://forms.gle/frX6R74bc8tY56A3A" target="_blank" class="apply-btn">Apply as a Tutor</a>
-
-<!-- Create Account Button -->
-<a href="tutor-register.html" class="create-account-btn">Create Account</a>
+<div class="tutor-disclaimer" style="margin-top:25px; font-size:14px; color:#555;">
+<strong>Disclaimer for Tutors:</strong><br>
+All tutors participating with C&T Tutorials are responsible for their own teaching practices and interactions with students. C&T Tutorials provides a platform for academic support but is not liable for any disputes, misconduct, or academic outcomes resulting from tutoring sessions. Tutors must ensure professionalism, ethical conduct, and adherence to academic integrity standards at all times.
+</div>
 
 <!-- Login Section -->
 <div id="overlay" onclick="toggleLogin()"></div>
@@ -153,7 +152,11 @@ function login(){
 function logout(){ 
   const dashboard = document.getElementById("dashboard");
   dashboard.classList.remove("show");
-  setTimeout(()=>{ dashboard.style.display="none"; dashboard.style.opacity=0; dashboard.style.transform="translateY(50px)"; }, 500);
+  setTimeout(()=>{ 
+    dashboard.style.display="none"; 
+    dashboard.style.opacity=0; 
+    dashboard.style.transform="translate(-50%, -50%) translateY(50px)"; 
+  }, 500);
 }
 </script>
 
