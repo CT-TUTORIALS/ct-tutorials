@@ -35,53 +35,27 @@ body {
     margin:0;
     font-size:16px;
     line-height:1.6;
+    text-align: left; /* Make everything align left by default */
 }
-h2 {
-    font-family: Arial, sans-serif;
-    font-weight: bold;
-    font-size:28px;
-    color:#003366;
-    text-align:left;
-    margin-bottom:20px;
+h2, h3, h4, p, ul, li, label, input, select, button {
+    text-align: left; /* Ensure all elements are left-aligned */
 }
-h3 {
-    font-family: Arial, sans-serif;
-    font-weight: bold;
-    font-size:22px;
-    color:#00509e;
-    text-align:left;
-    margin-top:25px;
-}
-h4 {
-    font-family: Arial, sans-serif;
-    font-weight: bold;
-    font-size:18px;
-    color:#003366;
-    text-align:left;
-    margin-top:20px;
-}
-p {
-    font-family: Arial, sans-serif;
-    font-size:16px;
-    text-align:justify;
-}
-ul {
-    font-family: Arial, sans-serif;
-    font-size:16px;
-    margin-left:25px;
-    text-align:left;
-}
+h2 { font-size:28px; margin-bottom:20px; color:#003366; font-weight:bold; }
+h3 { font-size:22px; margin-top:25px; color:#00509e; font-weight:bold; }
+h4 { font-size:18px; margin-top:20px; color:#003366; font-weight:bold; }
+p { font-size:16px; text-align:left; }
+ul { font-size:16px; margin-left:25px; text-align:left; }
 li { margin-bottom:8px; }
-a {
-    font-family: Arial, sans-serif;
-    color: #00509e;
-    text-decoration: none;
-    font-size:16px;
-}
+a { font-size:16px; color:#00509e; text-decoration:none; }
 a:hover { text-decoration: underline; }
 
 /* --- Sections --- */
-section { max-width:900px; margin:auto; padding:40px 20px; }
+section {
+    max-width:900px;
+    margin: auto;
+    padding:40px 20px;
+    text-align:left; /* Section content aligns left */
+}
 
 /* --- Floating Buttons --- */
 .floating-btn {
@@ -109,17 +83,17 @@ section { max-width:900px; margin:auto; padding:40px 20px; }
 footer {
     background:#003366;
     color:white;
-    text-align:center;
+    text-align:left; /* Footer content aligned left */
     padding:25px 20px;
     font-size:14px;
 }
-.footer-divider { border-top:1px solid rgba(255,255,255,0.3); margin:20px auto; width:80%; }
+.footer-divider { border-top:1px solid rgba(255,255,255,0.3); margin:20px 0; width:100%; }
 .footer-disclaimer {
     font-size:12px;
     color:rgba(255,255,255,0.8);
     max-width:900px;
-    margin:auto;
     line-height:1.6;
+    text-align:left;
 }
 footer a { color:white; margin:0 10px; text-decoration:none; font-size:16px; }
 </style>
