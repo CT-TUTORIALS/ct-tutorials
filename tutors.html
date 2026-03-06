@@ -36,17 +36,19 @@ nav a {
     font-weight:bold;
 }
 
-/* Main page content (always left-aligned) */
+/* Main page content */
 section {
     padding:60px 20px;
     max-width:900px;
-    margin:auto;
+    margin-left:0; /* remove centering */
+    margin-right:0; /* remove centering */
     line-height:1.6;
-    text-align:left;
+    text-align:left; /* always left-aligned */
 }
 
+/* Login & Dashboard centered visually */
 .login-link, #loginSection, #dashboard {
-    text-align:center; /* keep login/dashboard centered */
+    text-align:center;
 }
 
 /* Login Section card */
@@ -102,7 +104,7 @@ button:hover{
     display:block;
 }
 
-/* Dashboard centered card */
+/* Dashboard card */
 #dashboard{
     display:none;
     background:white;
