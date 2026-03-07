@@ -8,92 +8,38 @@
 <meta name="google-site-verification" content="aSucaMc_aX_kQpRFNvVRgTX0pEeCD1c48mTuirk4qwY" />
 
 <style>
-/* GENERAL STYLES */
 body { margin:0; font-family:"Segoe UI",Arial,sans-serif; background:#f4f4f4; color:#333; line-height:1.6; }
-
-/* HERO BANNER */
-header {
-  background-image: url("images/banner.jpg");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-color: #003366;
-  height: 420px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
-  color: white;
-  padding: 20px;
-  position: relative;
-}
-
-/* Anchor links at bottom of banner */
-nav {
-  position: absolute;
-  bottom: 15px;
-  width: 100%;
-  text-align: center;
-}
-
-nav a {
-  color: white;
-  text-decoration: none;
-  margin: 0 15px;
-  font-weight: bold;
-}
-
-nav a:hover { text-decoration: underline; }
-
+header { background-image: url("images/banner.jpg"); background-position: center; background-repeat: no-repeat; background-size: cover; background-color: #003366; height: 420px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: white; padding: 20px; position: relative; }
 .hero-title { font-size: 42px; margin-bottom: 10px; }
-.hero-tagline { font-size: 20px; max-width: 700px; margin: 0 auto; }
-
-/* MAIN CONTENT */
+.hero-tagline { font-size: 20px; max-width: 700px; margin:0 auto; }
+nav { position: absolute; bottom: 15px; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; width: 100%; }
+nav a { color:white; text-decoration:none; font-weight:bold; white-space: nowrap; }
+nav a:hover { text-decoration: underline; }
 .main-content { max-width: 1100px; margin: auto; padding: 50px 40px; background: white; }
 section { margin-bottom: 60px; }
 h2 { color: #003366; border-bottom: 2px solid #003366; padding-bottom: 8px; margin-bottom: 25px; }
 h3 { color: #00509e; }
-
-/* SERVICES CARDS */
 .services-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:25px; margin-top:20px; }
 .service-card { background:#f7f7f7; padding:20px; border-radius:8px; box-shadow:0 3px 6px rgba(0,0,0,0.1); }
 .service-card h3 { margin-top:0; }
-
-/* RESOURCES */
 .resource-link { color:#00509e; font-weight:bold; text-decoration:none; }
 .resource-link:hover { text-decoration: underline; }
-
-/* CONTACT */
 .contact-box { background:#f7f7f7; padding:20px; border-radius:8px; }
-
-/* FLOATING BUTTON */
 .floating-btn { position: fixed; bottom:25px; right:25px; background:#003366; color:white; padding:15px 22px; border:none; border-radius:40px; font-size:16px; cursor:pointer; box-shadow:0 4px 6px rgba(0,0,0,0.3); }
-
-/* MODAL */
 #modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); justify-content:center; align-items:center; z-index:1000; }
 #modal form { background:white; padding:25px; width:90%; max-width:500px; border-radius:10px; position:relative; }
 .close { position:absolute; right:15px; top:10px; font-size:22px; cursor:pointer; border:none; background:none; }
 label { display:block; margin-top:12px; font-weight:500; }
 input, select, textarea { width:100%; padding:10px; margin-top:5px; border-radius:5px; border:1px solid #ccc; box-sizing:border-box; }
 textarea { resize:vertical; min-height:80px; }
-.submit-btn { margin-top:20px; width:100%; padding:12px; background:#003366; color:white; border:none; cursor:pointer; border-radius:5px; font-size:16px; transition:background 0.3s ease; }
+.submit-btn { margin-top:20px; width:100%; padding:12px; background:#003366; color:white; border:none; cursor:pointer; border-radius:5px; font-size:16px; transition: background 0.3s ease; }
 .submit-btn:hover { background:#00509e; }
-
-/* FOOTER */
 footer { background:#003366; color:white; text-align:center; padding:25px; }
 .footer-divider { border-top:1px solid rgba(255,255,255,0.3); margin:20px auto; width:80%; }
 .footer-disclaimer { font-size:12px; max-width:900px; margin:auto; line-height:1.6; }
 footer nav a { color:white; margin:0 10px; text-decoration:none; }
 footer nav a:hover { text-decoration:underline; }
-
-/* RESPONSIVE */
-@media(max-width:768px) {
-  header { height:300px; }
-  .hero-title { font-size:30px; }
-  .hero-tagline { font-size:16px; }
-  .main-content { padding:30px 20px; }
-  nav a { margin:0 10px; display:inline-block; }
-}
+@media(max-width:768px) { header { height:300px; } .hero-title { font-size:30px; } .hero-tagline { font-size:16px; } .main-content { padding:30px 20px; } nav { gap:10px; } nav a { margin:0; } }
 </style>
 </head>
 
@@ -150,15 +96,12 @@ Supporting Academic Success through Professional Tutorial Services, Academic Wri
 
 </div>
 
-<!-- FLOATING STUDENT BUTTON -->
 <button class="floating-btn" onclick="openForm()">Register Now</button>
 
-<!-- MODAL: STUDENT REGISTRATION -->
 <div id="modal">
 <form action="https://formspree.io/f/mlgbjkwq" method="POST" target="_blank">
 <button type="button" class="close" onclick="closeForm()">×</button>
 <h2>Service Registration</h2>
-
 <label>Full Name<input type="text" name="name" required></label>
 <label>Email<input type="email" name="email" required></label>
 <label>Cellphone Number<input type="tel" name="cell_number" required></label>
@@ -184,9 +127,7 @@ Supporting Academic Success through Professional Tutorial Services, Academic Wri
 <option>Public Speaking Support – N$ 35.00 per session</option>
 </optgroup>
 </select></label>
-
 <label><input type="checkbox" required>I agree to the <a href="documents/Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a></label>
-
 <button type="submit" class="submit-btn">Submit Registration</button>
 </form>
 </div>
