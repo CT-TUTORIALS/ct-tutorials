@@ -5,183 +5,62 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tutor Application | C&T Tutorials</title>
-
 <style>
-/* ---------------- GENERAL ---------------- */
-body {
-  margin: 0;
-  font-family: "Segoe UI", Arial, sans-serif;
-  background: #f4f4f4;
-  color: #333;
-  line-height: 1.6;
-}
-
-/* ---------------- HEADER ---------------- */
-header {
-  background: #003366;
-  color: white;
-  text-align: center;
-  padding: 30px 20px;
-}
-
-nav a {
-  color: white;
-  margin: 0 15px;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-nav a:hover {
-  text-decoration: underline;
-}
-
-/* ---------------- MAIN ---------------- */
-.main {
-  max-width: 700px;
-  margin: 30px auto;
-  background: white;
-  padding: 40px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-h2 {
-  color: #003366;
-  margin-bottom: 20px;
-}
-
-/* ---------------- FORM ---------------- */
-label {
-  display: block;
-  margin-top: 15px;
-  font-weight: 500;
-}
-
-input, select, textarea {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  font-size: 15px;
-  box-sizing: border-box;
-}
-
-textarea {
-  resize: vertical;
-  min-height: 80px;
-}
-
-.submit-btn {
-  margin-top: 20px;
-  padding: 12px;
-  width: 100%;
-  background: #003366;
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-  font-size: 16px;
-  transition: background 0.3s ease;
-}
-
-.submit-btn:hover {
-  background: #00509e;
-}
-
-input[type="checkbox"] {
-  width: auto;
-  margin-right: 10px;
-}
-
-/* ---------------- FOOTER ---------------- */
-footer {
-  background: #003366;
-  color: white;
-  text-align: center;
-  padding: 20px;
-  margin-top: 40px;
-}
-
-footer a {
-  color: white;
-  margin: 0 10px;
-  text-decoration: none;
-}
-
-footer a:hover {
-  text-decoration: underline;
-}
-
-/* ---------------- RESPONSIVE ---------------- */
-@media(max-width:500px){
-  .main {
-    padding: 20px;
-    margin-top: 20px;
-  }
-
-  nav a {
-    display: block;
-    margin: 5px 0;
-  }
-}
+body{margin:0;font-family:"Segoe UI",Arial,sans-serif;background:#f4f4f4;}
+header{background:#003366;color:white;text-align:center;padding:30px;}
+nav a{color:white;margin:0 15px;text-decoration:none;font-weight:bold;}
+nav a:hover{text-decoration:underline;}
+.main{max-width:700px;margin:auto;background:white;padding:40px;margin-top:30px;}
+label{display:block;margin-top:15px;}
+input,select,textarea{width:100%;padding:10px;margin-top:5px;}
+.submit-btn{margin-top:20px;padding:12px;width:100%;background:#003366;color:white;border:none;cursor:pointer;}
+footer{background:#003366;color:white;text-align:center;padding:20px;margin-top:40px;}
 </style>
 </head>
 
 <body>
 
 <header>
-  <h1>Tutor Application</h1>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="tutors.html">Tutors Portal</a>
-  </nav>
+<h1>Tutor Application</h1>
+<nav>
+<a href="index.html">Home</a>
+<a href="tutors.html">Tutors Portal</a>
+</nav>
 </header>
 
 <div class="main">
-  <h2>Apply to Become a Tutor</h2>
-  <p>Complete the application form below to apply as a tutor with C&T Tutorials.</p>
+<h2>Apply to Become a Tutor</h2>
+<p>Complete the application form below to apply as a tutor with C&T Tutorials.</p>
 
-  <form action="https://formspree.io/f/frX6R74bc8tY56A3A" method="POST">
+<form action="https://formspree.io/f/frX6R74bc8tY56A3A" method="POST">
+<label>Full Name</label>
+<input type="text" name="name" required>
 
-    <label for="name">Full Name</label>
-    <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+<label>Email</label>
+<input type="email" name="email" required>
 
-    <label for="email">Email</label>
-    <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+<label>Phone Number</label>
+<input type="tel" name="phone" required>
 
-    <label for="phone">Phone Number</label>
-    <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+<label>Field of Study</label>
+<input type="text" name="field">
 
-    <label for="field">Field of Study</label>
-    <input type="text" id="field" name="field" placeholder="Your field of study">
+<label>Subjects you can tutor</label>
+<textarea name="subjects"></textarea>
 
-    <label for="subjects">Subjects you can tutor</label>
-    <textarea id="subjects" name="subjects" placeholder="List subjects you can tutor"></textarea>
+<label>Level</label>
+<select name="level">
+<option>Undergraduate</option>
+<option>Postgraduate</option>
+</select>
 
-    <label for="level">Level</label>
-    <select id="level" name="level">
-      <option>Undergraduate</option>
-      <option>Postgraduate</option>
-    </select>
+<label><input type="checkbox" required>I agree to the terms and conditions.</label>
 
-    <label for="terms">
-      <input type="checkbox" id="terms" required>
-      I agree to the <a href="documents/Disclosure-Agreement.pdf" target="_blank">terms and conditions</a>.
-    </label>
-
-    <button class="submit-btn" type="submit">Submit Application</button>
-
-  </form>
+<button class="submit-btn" type="submit">Submit Application</button>
+</form>
 </div>
 
-<footer>
-  © 2026 C&T Tutorials
-  <div>
-    <a href="index.html">Home</a>
-    <a href="tutors.html">Tutors Portal</a>
-  </div>
-</footer>
+<footer>© 2026 C&T Tutorials</footer>
 
 </body>
 </html>
