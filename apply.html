@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Tutor Application | C&T Tutorials</title>
+
+<style>
+
+body{
+margin:0;
+font-family:"Segoe UI",Arial,sans-serif;
+background:#f4f4f4;
+}
+
+header{
+background:#003366;
+color:white;
+text-align:center;
+padding:30px;
+}
+
+nav a{
+color:white;
+margin:0 15px;
+text-decoration:none;
+font-weight:bold;
+}
+
+nav a:hover{
+text-decoration:underline;
+}
+
+.main{
+max-width:700px;
+margin:auto;
+background:white;
+padding:40px;
+margin-top:30px;
+}
+
+label{
+display:block;
+margin-top:15px;
+}
+
+input,select,textarea{
+width:100%;
+padding:10px;
+margin-top:5px;
+}
+
+.submit-btn{
+margin-top:20px;
+padding:12px;
+width:100%;
+background:#003366;
+color:white;
+border:none;
+cursor:pointer;
+}
+
+footer{
+background:#003366;
+color:white;
+text-align:center;
+padding:20px;
+margin-top:40px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>Tutor Application</h1>
+
+<nav>
+
+<a href="index.html">Home</a>
+<a href="tutors.html">Tutors Portal</a>
+
+</nav>
+
+</header>
+
+<div class="main">
+
+<h2>Apply to Become a Tutor</h2>
+
+<p>
+Complete the application form below to apply as a tutor
+with C&T Tutorials.
+</p>
+
+<form action="https://formspree.io/f/frX6R74bc8tY56A3A" method="POST">
+
+<label>Full Name</label>
+<input type="text" name="name" required>
+
+<label>Email</label>
+<input type="email" name="email" required>
+
+<label>Phone Number</label>
+<input type="tel" name="phone" required>
+
+<label>Field of Study</label>
+<input type="text" name="field">
+
+<label>Subjects you can tutor</label>
+<textarea name="subjects"></textarea>
+
+<label>Level</label>
+
+<select name="level">
+
+<option>Undergraduate</option>
+<option>Postgraduate</option>
+
+</select>
+
+<label>
+<input type="checkbox" required>
+I agree to the terms and conditions.
+</label>
+
+<button class="submit-btn">Submit Application</button>
+
+</form>
+
+</div>
+
+<footer>
+
+© 2026 C&T Tutorials
+
+</footer>
+
+</body>
+  </html>
