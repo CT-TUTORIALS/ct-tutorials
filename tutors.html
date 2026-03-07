@@ -8,234 +8,259 @@
 
 <style>
 body{
-margin:0;
-font-family:"Segoe UI",Arial,sans-serif;
-background:#f4f4f4;
+  margin:0;
+  font-family:"Segoe UI",Arial,sans-serif;
+  background:#f4f4f4;
 }
 
 /* HEADER */
 header{
-background:#003366;
-color:white;
-text-align:center;
-padding:30px 20px;
-position:relative;
+  background:#003366;
+  color:white;
+  text-align:center;
+  padding:20px 30px;
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
 }
+
+header h1{
+  margin:0;
+  font-size:1.5rem;
+}
+
 nav a{
-color:white;
-margin:0 15px;
-text-decoration:none;
-font-weight:bold;
+  color:white;
+  margin-left:15px;
+  text-decoration:none;
+  font-weight:bold;
 }
+
 nav a:hover{
-text-decoration:underline;
+  text-decoration:underline;
 }
 
 /* MAIN */
 .main{
-max-width:1000px;
-margin:auto;
-padding:40px;
-background:white;
-margin-top:30px;
+  max-width:1000px;
+  margin:auto;
+  padding:40px;
+  background:white;
+  margin-top:30px;
 }
 
 /* DASHBOARD CARDS */
 .dashboard{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:25px;
-margin-top:30px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:25px;
+  margin-top:30px;
 }
 .card{
-background:#f7f7f7;
-padding:25px;
-border-radius:8px;
-box-shadow:0 3px 6px rgba(0,0,0,0.1);
-text-align:center;
+  background:#f7f7f7;
+  padding:25px;
+  border-radius:8px;
+  box-shadow:0 3px 6px rgba(0,0,0,0.1);
+  text-align:center;
 }
 .card h3{
-color:#003366;
-margin-bottom:10px;
+  color:#003366;
+  margin-bottom:10px;
 }
 .card button{
-margin-top:10px;
-padding:10px 15px;
-background:#003366;
-color:white;
-border:none;
-cursor:pointer;
+  margin-top:10px;
+  padding:10px 15px;
+  background:#003366;
+  color:white;
+  border:none;
+  cursor:pointer;
 }
 
 /* LOGIN */
 .login-box{
-max-width:350px;
-margin:40px auto;
-background:#f7f7f7;
-padding:25px;
-border-radius:8px;
+  max-width:350px;
+  margin:40px auto;
+  background:#f7f7f7;
+  padding:25px;
+  border-radius:8px;
 }
 input{
-width:100%;
-padding:10px;
-margin-top:10px;
+  width:100%;
+  padding:10px;
+  margin-top:10px;
 }
 .login-btn{
-margin-top:15px;
-width:100%;
-padding:12px;
-background:#003366;
-color:white;
-border:none;
-cursor:pointer;
+  margin-top:15px;
+  width:100%;
+  padding:12px;
+  background:#003366;
+  color:white;
+  border:none;
+  cursor:pointer;
+  border-radius:5px;
 }
 
 /* FLOATING BUTTON */
 .floating-btn{
-position:fixed;
-bottom:25px;
-right:25px;
-background:#003366;
-color:white;
-padding:15px 22px;
-border:none;
-border-radius:40px;
-font-size:16px;
-cursor:pointer;
-box-shadow:0 4px 6px rgba(0,0,0,0.3);
+  position:fixed;
+  bottom:25px;
+  right:25px;
+  background:#003366;
+  color:white;
+  padding:15px 22px;
+  border:none;
+  border-radius:40px;
+  font-size:16px;
+  cursor:pointer;
+  box-shadow:0 4px 6px rgba(0,0,0,0.3);
 }
 
 /* MODAL FORM */
 #modal{
-display:none;
-position:fixed;
-inset:0;
-background:rgba(0,0,0,0.7);
-justify-content:center;
-align-items:center;
-z-index:1000;
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.7);
+  justify-content:center;
+  align-items:center;
+  z-index:1000;
 }
+
 #modal form{
-background:white;
-padding:25px;
-width:90%;
-max-width:500px;
-border-radius:10px;
-position:relative;
+  background:white;
+  padding:25px;
+  width:90%;
+  max-width:500px;
+  border-radius:10px;
+  position:relative;
 }
+
 .close{
-position:absolute;
-right:15px;
-top:10px;
-font-size:22px;
-cursor:pointer;
-border:none;
-background:none;
+  position:absolute;
+  right:15px;
+  top:10px;
+  font-size:22px;
+  cursor:pointer;
+  border:none;
+  background:none;
 }
+
 label{
-display:block;
-margin-top:12px;
-font-weight:500;
+  display:block;
+  margin-top:12px;
+  font-weight:500;
 }
+
 input,select,textarea{
-width:100%;
-padding:10px;
-margin-top:5px;
-border-radius:5px;
-border:1px solid #ccc;
-box-sizing:border-box;
+  width:100%;
+  padding:10px;
+  margin-top:5px;
+  border-radius:5px;
+  border:1px solid #ccc;
+  box-sizing:border-box;
 }
+
 textarea{
-resize:vertical;
-min-height:80px;
+  resize:vertical;
+  min-height:80px;
 }
+
 .submit-btn{
-margin-top:20px;
-width:100%;
-padding:12px;
-background:#003366;
-color:white;
-border:none;
-cursor:pointer;
-border-radius:5px;
-font-size:16px;
-transition: background 0.3s ease;
+  margin-top:20px;
+  width:100%;
+  padding:12px;
+  background:#003366;
+  color:white;
+  border:none;
+  cursor:pointer;
+  border-radius:5px;
+  font-size:16px;
+  transition: background 0.3s ease;
 }
+
 .submit-btn:hover{
-background:#00509e;
+  background:#00509e;
 }
 
 /* FOOTER */
 footer{
-background:#003366;
-color:white;
-text-align:center;
-padding:20px;
-margin-top:40px;
+  background:#003366;
+  color:white;
+  text-align:center;
+  padding:20px;
+  margin-top:40px;
 }
+
 </style>
 </head>
 
 <body>
 
 <header>
-<h1>C&T Tutorials – Tutors Portal</h1>
+<h1>C&T Tutorials</h1>
 <nav>
-<a href="index.html">Home</a>
-<a href="apply.html">Apply as Tutor</a>
+  <a href="create-account.html">Create Account</a>
+  <a href="#login-modal" onclick="openLogin()">Login</a>
+  <a href="admins.html">Admins Portal</a>
 </nav>
 </header>
 
 <div class="main">
-
 <h2>Welcome Tutors</h2>
 <p>This portal allows tutors to access teaching resources, update availability, and manage tutoring activities.</p>
 
-<div class="login-box">
-<h3>Tutor Login / Account</h3>
-<input type="text" placeholder="Email">
-<input type="password" placeholder="Password">
-<button class="login-btn">Login</button>
+<!-- Login Modal Trigger -->
+<div id="login-modal" style="display:none;">
+  <div class="login-box">
+    <h3>Tutor Login</h3>
+    <input type="text" placeholder="Email">
+    <input type="password" placeholder="Password">
+    <button class="login-btn" onclick="authorizeTutor()">Login</button>
+  </div>
 </div>
 
+<!-- Dashboard: Only visible after login -->
+<div id="dashboard" style="display:none;">
 <h2>Tutor Dashboard</h2>
 <div class="dashboard">
-<div class="card">
-<h3>Assigned Students</h3>
-<p>View students assigned to you.</p>
-<button>View</button>
-</div>
-<div class="card">
-<h3>Teaching Resources</h3>
-<p>Download tutorial materials.</p>
-<button>Open</button>
-</div>
-<div class="card">
-<h3>Availability</h3>
-<p>Update your tutoring schedule.</p>
-<button>Update</button>
-</div>
-<div class="card">
-<h3>Messages</h3>
-<p>Contact C&T Tutorials admin.</p>
-<button>Open</button>
+  <div class="card">
+    <h3>Assigned Students</h3>
+    <p>View students assigned to you.</p>
+    <button>View</button>
+  </div>
+  <div class="card">
+    <h3>Teaching Resources</h3>
+    <p>Download tutorial materials.</p>
+    <button>Open</button>
+  </div>
+  <div class="card">
+    <h3>Availability</h3>
+    <p>Update your tutoring schedule.</p>
+    <button>Update</button>
+  </div>
+  <div class="card">
+    <h3>Messages</h3>
+    <p>Contact C&T Tutorials admin.</p>
+    <button>Open</button>
+  </div>
 </div>
 </div>
 
 <button class="floating-btn" onclick="openForm()">Apply Now</button>
 
+<!-- Application Modal -->
 <div id="modal">
 <form action="https://formspree.io/f/frX6R74bc8tY56A3A" method="POST" target="_blank">
-<button type="button" class="close" onclick="closeForm()">×</button>
-<h2>Tutor Application</h2>
-<label>Full Name<input type="text" name="name" required></label>
-<label>Email<input type="email" name="email" required></label>
-<label>Phone Number<input type="tel" name="phone" required></label>
-<label>Field of Study<input type="text" name="field"></label>
-<label>Subjects you can tutor<textarea name="subjects"></textarea></label>
-<label>Level<select name="level"><option>Undergraduate</option><option>Postgraduate</option></select></label>
-<label><input type="checkbox" required>I agree to the terms and conditions.</label>
-<button type="submit" class="submit-btn">Submit Application</button>
+  <button type="button" class="close" onclick="closeForm()">×</button>
+  <h2>Tutor Application</h2>
+  <label>Full Name<input type="text" name="name" required></label>
+  <label>Email<input type="email" name="email" required></label>
+  <label>Phone Number<input type="tel" name="phone" required></label>
+  <label>Field of Study<input type="text" name="field"></label>
+  <label>Subjects you can tutor<textarea name="subjects"></textarea></label>
+  <label>Level<select name="level"><option>Undergraduate</option><option>Postgraduate</option></select></label>
+  <label><input type="checkbox" required>I agree to the terms and conditions.</label>
+  <button type="submit" class="submit-btn">Submit Application</button>
 </form>
 </div>
 
@@ -244,8 +269,16 @@ margin-top:40px;
 <script>
 function openForm(){document.getElementById("modal").style.display="flex";}
 function closeForm(){document.getElementById("modal").style.display="none";}
-window.onclick=function(event){if(event.target==document.getElementById("modal")){closeForm();}}
+
+/* Login Modal */
+function openLogin(){document.getElementById("login-modal").style.display="block";}
+function authorizeTutor(){
+  // This is a placeholder for actual authorization
+  alert("Login successful. Dashboard unlocked!");
+  document.getElementById("login-modal").style.display="none";
+  document.getElementById("dashboard").style.display="block";
+}
 </script>
 
 </body>
-  </html>
+</html>
