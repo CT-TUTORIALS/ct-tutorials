@@ -4,11 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>C&T Tutorials</title>
+
 <meta name="google-site-verification" content="aSucaMc_aX_kQpRFNvVRgTX0pEeCD1c48mTuirk4qwY" />
 
 <style>
 
 /* ---------------- GENERAL ---------------- */
+
 body{
 margin:0;
 font-family:"Segoe UI", Arial, sans-serif;
@@ -33,15 +35,20 @@ align-items:center;
 text-align:center;
 padding:20px;
 position:relative;
-transition:0.3s;
+transition:all 0.3s ease;
 }
 
-/* header after scrolling */
+/* COLLAPSED HEADER */
 
 header.scrolled{
-background-image:none;
 background:#003366;
+background-image:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
 height:70px;
+z-index:999;
 justify-content:center;
 }
 
@@ -74,6 +81,13 @@ max-width:1100px;
 margin:auto;
 padding:50px 40px;
 background:white;
+transition:margin-top 0.3s ease;
+}
+
+/* push content down when header collapses */
+
+header.scrolled + .main-content{
+margin-top:70px;
 }
 
 section{
@@ -91,7 +105,7 @@ h3{
 color:#00509e;
 }
 
-/* ---------------- SERVICES CARDS ---------------- */
+/* ---------------- SERVICES ---------------- */
 
 .services-grid{
 display:grid;
@@ -186,18 +200,13 @@ margin-top:12px;
 font-weight:500;
 }
 
-input,select,textarea{
+input,select{
 width:100%;
 padding:10px;
 margin-top:5px;
 border-radius:5px;
 border:1px solid #ccc;
 box-sizing:border-box;
-}
-
-textarea{
-resize:vertical;
-min-height:80px;
 }
 
 .submit-btn{
@@ -210,7 +219,6 @@ border:none;
 cursor:pointer;
 border-radius:5px;
 font-size:16px;
-transition:background 0.3s ease;
 }
 
 .submit-btn:hover{
@@ -226,12 +234,6 @@ text-align:center;
 padding:25px;
 }
 
-.footer-divider{
-border-top:1px solid rgba(255,255,255,0.3);
-margin:20px auto;
-width:80%;
-}
-
 .footer-disclaimer{
 font-size:12px;
 max-width:900px;
@@ -245,7 +247,6 @@ line-height:1.6;
 
 header{
 height:300px;
-background-size:cover;
 }
 
 .main-content{
@@ -254,10 +255,6 @@ padding:30px 20px;
 
 nav{
 gap:10px;
-}
-
-nav a{
-margin:0;
 }
 
 }
@@ -283,6 +280,7 @@ margin:0;
 <div class="main-content">
 
 <section id="about">
+
 <h2>About C&T Tutorials</h2>
 
 <p>C&T Tutorials is an independent academic support service committed to enhancing students’ academic performance through structured guidance in academic writing, research, and communication skills.</p>
@@ -350,7 +348,9 @@ Offline Application Form
 <div class="contact-box">
 
 <p>Email:
-<a href="mailto:ct0tutorials@gmail.com">ct0tutorials@gmail.com</a>
+<a href="mailto:ct0tutorials@gmail.com">
+ct0tutorials@gmail.com
+</a>
 </p>
 
 <p>Phone:
@@ -363,7 +363,9 @@ Offline Application Form
 
 <button class="floating-btn" onclick="openForm()">Register Now</button>
 
-<!-- STUDENT FORM MODAL -->
+</div>
+
+<!-- REGISTRATION MODAL -->
 
 <div id="modal">
 
@@ -373,89 +375,37 @@ Offline Application Form
 
 <h2>Service Registration</h2>
 
-<label>
-Full Name
+<label>Full Name
 <input type="text" name="name" required>
 </label>
 
-<label>
-Email
+<label>Email
 <input type="email" name="email" required>
 </label>
 
-<label>
-Cellphone Number
+<label>Cellphone Number
 <input type="tel" name="cell_number" required>
 </label>
 
-<label>
-Select Service
+<label>Select Service
 
 <select name="service" required>
 
 <option value="">Select a service</option>
 
-<optgroup label="One-on-One Sessions">
-
-<option>
-Introduction to Academic Writing (4 sessions) – N$ 150.00
-</option>
-
-<option>
-Topic-specific Sessions – N$ 40.00
-</option>
-
-<option>
-Hourly Rate – N$ 40.00
-</option>
-
-</optgroup>
-
-<optgroup label="Group Sessions">
-
-<option>
-2–5 People – N$ 200.00
-</option>
-
-<option>
-6–14 People – N$ 450.00
-</option>
-
-<option>
-More than 14 People – N$ 600.00
-</option>
-
-</optgroup>
-
-<optgroup label="Assignment Support Services">
-
-<option>
-Draft Editing – N$ 15.00 per page
-</option>
-
-<option>
-Document Proofreading – N$ 10.00 per page
-</option>
-
-</optgroup>
-
-<optgroup label="Other Services">
-
-<option>
-Referencing Assistance – N$ 20.00
-</option>
-
-<option>
-Public Speaking Support – N$ 35.00 per session
-</option>
-
-</optgroup>
+<option>Introduction to Academic Writing (4 sessions) – N$150</option>
+<option>Topic Specific Sessions – N$40</option>
+<option>Hourly Rate – N$40</option>
+<option>Group Sessions – N$200 to N$600</option>
+<option>Draft Editing – N$15 per page</option>
+<option>Proofreading – N$10 per page</option>
 
 </select>
 
 </label>
 
 <label>
+
 <input type="checkbox" required>
 
 I agree to the
@@ -483,13 +433,11 @@ Submit Registration
 
 <h2>Admin Login</h2>
 
-<label>
-Username
+<label>Username
 <input type="text" required>
 </label>
 
-<label>
-Password
+<label>Password
 <input type="password" required>
 </label>
 
@@ -505,9 +453,7 @@ Login
 
 <div class="footer-disclaimer">
 
-<strong>Disclaimer:</strong>
-
-<br>
+<strong>Disclaimer:</strong><br>
 
 C&T Tutorials operates independently and is not affiliated with, endorsed by, or formally connected to any university, college, examination body, or academic institution.
 
@@ -519,6 +465,8 @@ All services are supplementary and intended to support independent learning.
 
 <script>
 
+/* registration form */
+
 function openForm(){
 document.getElementById("modal").style.display="flex";
 }
@@ -527,6 +475,8 @@ function closeForm(){
 document.getElementById("modal").style.display="none";
 }
 
+/* admin popup */
+
 function openAdmin(){
 document.getElementById("adminModal").style.display="flex";
 }
@@ -534,6 +484,8 @@ document.getElementById("adminModal").style.display="flex";
 function closeAdmin(){
 document.getElementById("adminModal").style.display="none";
 }
+
+/* close when clicking outside */
 
 window.onclick=function(event){
 
@@ -547,13 +499,13 @@ closeAdmin();
 
 }
 
-/* header mobile scroll effect */
-
-window.addEventListener("scroll",function(){
+/* smooth header collapse */
 
 let header=document.querySelector("header");
 
-if(window.scrollY>80){
+window.addEventListener("scroll",function(){
+
+if(window.scrollY>120){
 header.classList.add("scrolled");
 }
 
