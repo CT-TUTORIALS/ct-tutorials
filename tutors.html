@@ -1,194 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tutors Portal | C&T Tutorials</title>
 
 <style>
+
 body{
-  margin:0;
-  font-family:"Segoe UI",Arial,sans-serif;
-  background:#f4f4f4;
+margin:0;
+font-family:"Segoe UI",Arial,sans-serif;
+background:#f4f4f4;
 }
 
 /* HEADER */
 header{
-  background:#003366;
-  color:white;
-  text-align:center;
-  padding:20px 30px;
-  display:flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-header h1{
-  margin:0;
-  font-size:1.5rem;
+background:#003366;
+color:white;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 30px;
+position:sticky;
+top:0;
+z-index:999;
 }
 
 nav a{
-  color:white;
-  margin-left:15px;
-  text-decoration:none;
-  font-weight:bold;
+color:white;
+margin-left:18px;
+text-decoration:none;
+font-weight:bold;
 }
 
 nav a:hover{
-  text-decoration:underline;
+text-decoration:underline;
 }
 
 /* MAIN */
 .main{
-  max-width:1000px;
-  margin:auto;
-  padding:40px;
-  background:white;
-  margin-top:30px;
+max-width:1000px;
+margin:auto;
+padding:40px;
+background:white;
+margin-top:30px;
 }
 
-/* DASHBOARD CARDS */
+/* DASHBOARD */
 .dashboard{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:25px;
-  margin-top:30px;
-}
-.card{
-  background:#f7f7f7;
-  padding:25px;
-  border-radius:8px;
-  box-shadow:0 3px 6px rgba(0,0,0,0.1);
-  text-align:center;
-}
-.card h3{
-  color:#003366;
-  margin-bottom:10px;
-}
-.card button{
-  margin-top:10px;
-  padding:10px 15px;
-  background:#003366;
-  color:white;
-  border:none;
-  cursor:pointer;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:25px;
+margin-top:30px;
 }
 
-/* LOGIN */
-.login-box{
-  max-width:350px;
-  margin:40px auto;
-  background:#f7f7f7;
-  padding:25px;
-  border-radius:8px;
+.card{
+background:#f7f7f7;
+padding:25px;
+border-radius:8px;
+box-shadow:0 3px 6px rgba(0,0,0,0.1);
+text-align:center;
 }
+
+.card h3{
+color:#003366;
+}
+
+.card button{
+margin-top:10px;
+padding:10px 15px;
+background:#003366;
+color:white;
+border:none;
+cursor:pointer;
+}
+
+/* MODALS */
+.modal{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.7);
+justify-content:center;
+align-items:center;
+z-index:1000;
+}
+
+.modal-content{
+background:white;
+padding:25px;
+border-radius:8px;
+width:90%;
+max-width:420px;
+}
+
+.modal-content h2{
+margin-top:0;
+}
+
 input{
-  width:100%;
-  padding:10px;
-  margin-top:10px;
+width:100%;
+padding:10px;
+margin-top:10px;
 }
-.login-btn{
-  margin-top:15px;
-  width:100%;
-  padding:12px;
-  background:#003366;
-  color:white;
-  border:none;
-  cursor:pointer;
-  border-radius:5px;
+
+button{
+padding:10px 15px;
+background:#003366;
+color:white;
+border:none;
+margin-top:15px;
+cursor:pointer;
+width:100%;
 }
 
 /* FLOATING BUTTON */
 .floating-btn{
-  position:fixed;
-  bottom:25px;
-  right:25px;
-  background:#003366;
-  color:white;
-  padding:15px 22px;
-  border:none;
-  border-radius:40px;
-  font-size:16px;
-  cursor:pointer;
-  box-shadow:0 4px 6px rgba(0,0,0,0.3);
+position:fixed;
+bottom:25px;
+right:25px;
+background:#003366;
+color:white;
+padding:15px 22px;
+border:none;
+border-radius:40px;
+font-size:16px;
+cursor:pointer;
+box-shadow:0 4px 6px rgba(0,0,0,0.3);
 }
 
-/* MODAL FORM */
-#modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.7);
-  justify-content:center;
-  align-items:center;
-  z-index:1000;
-}
-
-#modal form{
-  background:white;
-  padding:25px;
-  width:90%;
-  max-width:500px;
-  border-radius:10px;
-  position:relative;
-}
-
-.close{
-  position:absolute;
-  right:15px;
-  top:10px;
-  font-size:22px;
-  cursor:pointer;
-  border:none;
-  background:none;
-}
-
-label{
-  display:block;
-  margin-top:12px;
-  font-weight:500;
-}
-
-input,select,textarea{
-  width:100%;
-  padding:10px;
-  margin-top:5px;
-  border-radius:5px;
-  border:1px solid #ccc;
-  box-sizing:border-box;
-}
-
-textarea{
-  resize:vertical;
-  min-height:80px;
-}
-
-.submit-btn{
-  margin-top:20px;
-  width:100%;
-  padding:12px;
-  background:#003366;
-  color:white;
-  border:none;
-  cursor:pointer;
-  border-radius:5px;
-  font-size:16px;
-  transition: background 0.3s ease;
-}
-
-.submit-btn:hover{
-  background:#00509e;
-}
-
-/* FOOTER */
 footer{
-  background:#003366;
-  color:white;
-  text-align:center;
-  padding:20px;
-  margin-top:40px;
+background:#003366;
+color:white;
+text-align:center;
+padding:20px;
+margin-top:40px;
 }
 
 </style>
@@ -197,87 +143,116 @@ footer{
 <body>
 
 <header>
-<h1>C&T Tutorials</h1>
+<div><strong>C&T Tutorials</strong></div>
+
 <nav>
-  <a href="create-account.html">Create Account</a>
-  <a href="#login-modal" onclick="openLogin()">Login</a>
-  <a href="admins.html">Admins Portal</a>
+<a href="index.html">Home</a>
+<a href="#" onclick="openModal('createModal')">Create Account</a>
+<a href="#" onclick="openModal('loginModal')">Login</a>
 </nav>
+
 </header>
 
+
 <div class="main">
+
 <h2>Welcome Tutors</h2>
-<p>This portal allows tutors to access teaching resources, update availability, and manage tutoring activities.</p>
+<p>Only approved tutors can access the dashboard after logging in.</p>
 
-<!-- Login Modal Trigger -->
-<div id="login-modal" style="display:none;">
-  <div class="login-box">
-    <h3>Tutor Login</h3>
-    <input type="text" placeholder="Email">
-    <input type="password" placeholder="Password">
-    <button class="login-btn" onclick="authorizeTutor()">Login</button>
-  </div>
-</div>
+<div id="dashboard" style="display:none">
 
-<!-- Dashboard: Only visible after login -->
-<div id="dashboard" style="display:none;">
 <h2>Tutor Dashboard</h2>
+
 <div class="dashboard">
-  <div class="card">
-    <h3>Assigned Students</h3>
-    <p>View students assigned to you.</p>
-    <button>View</button>
-  </div>
-  <div class="card">
-    <h3>Teaching Resources</h3>
-    <p>Download tutorial materials.</p>
-    <button>Open</button>
-  </div>
-  <div class="card">
-    <h3>Availability</h3>
-    <p>Update your tutoring schedule.</p>
-    <button>Update</button>
-  </div>
-  <div class="card">
-    <h3>Messages</h3>
-    <p>Contact C&T Tutorials admin.</p>
-    <button>Open</button>
-  </div>
+
+<div class="card">
+<h3>Assigned Students</h3>
+<button>View</button>
+</div>
+
+<div class="card">
+<h3>Resources</h3>
+<button>Open</button>
+</div>
+
+<div class="card">
+<h3>Availability</h3>
+<button>Update</button>
+</div>
+
+<div class="card">
+<h3>Messages</h3>
+<button>Open</button>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<button class="floating-btn" onclick="openModal('applyModal')">Apply Now</button>
+
+
+<!-- CREATE ACCOUNT -->
+<div id="createModal" class="modal">
+<div class="modal-content">
+<h2>Create Tutor Account</h2>
+<input type="text" placeholder="Full Name">
+<input type="email" placeholder="Email">
+<input type="password" placeholder="Password">
+<button>Create Account</button>
 </div>
 </div>
 
-<button class="floating-btn" onclick="openForm()">Apply Now</button>
 
-<!-- Application Modal -->
-<div id="modal">
-<form action="https://formspree.io/f/frX6R74bc8tY56A3A" method="POST" target="_blank">
-  <button type="button" class="close" onclick="closeForm()">×</button>
-  <h2>Tutor Application</h2>
-  <label>Full Name<input type="text" name="name" required></label>
-  <label>Email<input type="email" name="email" required></label>
-  <label>Phone Number<input type="tel" name="phone" required></label>
-  <label>Field of Study<input type="text" name="field"></label>
-  <label>Subjects you can tutor<textarea name="subjects"></textarea></label>
-  <label>Level<select name="level"><option>Undergraduate</option><option>Postgraduate</option></select></label>
-  <label><input type="checkbox" required>I agree to the terms and conditions.</label>
-  <button type="submit" class="submit-btn">Submit Application</button>
-</form>
+<!-- LOGIN -->
+<div id="loginModal" class="modal">
+<div class="modal-content">
+<h2>Tutor Login</h2>
+<input type="email" placeholder="Email">
+<input type="password" placeholder="Password">
+<button onclick="unlockDashboard()">Login</button>
+</div>
 </div>
 
-<footer>© 2026 C&T Tutorials</footer>
+
+<!-- APPLY -->
+<div id="applyModal" class="modal">
+<div class="modal-content">
+<h2>Tutor Application</h2>
+<input type="text" placeholder="Full Name">
+<input type="email" placeholder="Email">
+<input type="text" placeholder="Subjects you can tutor">
+<button>Submit Application</button>
+</div>
+</div>
+
+
+<footer>
+© 2026 C&T Tutorials
+</footer>
+
 
 <script>
-function openForm(){document.getElementById("modal").style.display="flex";}
-function closeForm(){document.getElementById("modal").style.display="none";}
 
-/* Login Modal */
-function openLogin(){document.getElementById("login-modal").style.display="block";}
-function authorizeTutor(){
-  // This is a placeholder for actual authorization
-  alert("Login successful. Dashboard unlocked!");
-  document.getElementById("login-modal").style.display="none";
-  document.getElementById("dashboard").style.display="block";
+function openModal(id){
+document.getElementById(id).style.display="flex";
 }
+
+window.onclick=function(e){
+document.querySelectorAll(".modal").forEach(function(modal){
+if(e.target===modal){
+modal.style.display="none";
+}
+});
+}
+
+function unlockDashboard(){
+document.getElementById("loginModal").style.display="none";
+document.getElementById("dashboard").style.display="block";
+}
+
 </script>
 
 </body>
