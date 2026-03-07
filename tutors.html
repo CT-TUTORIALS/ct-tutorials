@@ -7,188 +7,172 @@
 <title>Tutors Portal | C&T Tutorials</title>
 
 <style>
-/* GENERAL STYLES */
-body {
-  margin:0;
-  font-family:"Segoe UI",Arial,sans-serif;
-  background:#f4f4f4;
+body{
+margin:0;
+font-family:"Segoe UI",Arial,sans-serif;
+background:#f4f4f4;
 }
 
 /* HEADER */
-header {
-  background:#003366;
-  color:white;
-  text-align:center;
-  padding:30px 20px;
+header{
+background:#003366;
+color:white;
+text-align:center;
+padding:30px 20px;
+position:relative;
 }
-
-nav a {
-  color:white;
-  margin:0 15px;
-  text-decoration:none;
-  font-weight:bold;
+nav a{
+color:white;
+margin:0 15px;
+text-decoration:none;
+font-weight:bold;
 }
-
-nav a:hover {
-  text-decoration:underline;
+nav a:hover{
+text-decoration:underline;
 }
 
 /* MAIN */
-.main {
-  max-width:1000px;
-  margin:auto;
-  padding:40px;
-  background:white;
-  margin-top:30px;
+.main{
+max-width:1000px;
+margin:auto;
+padding:40px;
+background:white;
+margin-top:30px;
 }
 
 /* DASHBOARD CARDS */
-.dashboard {
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:25px;
-  margin-top:30px;
+.dashboard{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:25px;
+margin-top:30px;
+}
+.card{
+background:#f7f7f7;
+padding:25px;
+border-radius:8px;
+box-shadow:0 3px 6px rgba(0,0,0,0.1);
+text-align:center;
+}
+.card h3{
+color:#003366;
+margin-bottom:10px;
+}
+.card button{
+margin-top:10px;
+padding:10px 15px;
+background:#003366;
+color:white;
+border:none;
+cursor:pointer;
 }
 
-.card {
-  background:#f7f7f7;
-  padding:25px;
-  border-radius:8px;
-  box-shadow:0 3px 6px rgba(0,0,0,0.1);
-  text-align:center;
+/* LOGIN */
+.login-box{
+max-width:350px;
+margin:40px auto;
+background:#f7f7f7;
+padding:25px;
+border-radius:8px;
 }
-
-.card h3 {
-  color:#003366;
-  margin-bottom:10px;
+input{
+width:100%;
+padding:10px;
+margin-top:10px;
 }
-
-.card button {
-  margin-top:10px;
-  padding:10px 15px;
-  background:#003366;
-  color:white;
-  border:none;
-  cursor:pointer;
-  border-radius:5px;
-}
-
-/* LOGIN & ACCOUNT CREATION */
-.login-box {
-  max-width:350px;
-  margin:40px auto;
-  background:#f7f7f7;
-  padding:25px;
-  border-radius:8px;
-}
-
-input {
-  width:100%;
-  padding:10px;
-  margin-top:10px;
-  border-radius:5px;
-  border:1px solid #ccc;
-}
-
-.login-btn {
-  margin-top:15px;
-  width:100%;
-  padding:12px;
-  background:#003366;
-  color:white;
-  border:none;
-  cursor:pointer;
-  border-radius:5px;
+.login-btn{
+margin-top:15px;
+width:100%;
+padding:12px;
+background:#003366;
+color:white;
+border:none;
+cursor:pointer;
 }
 
 /* FLOATING BUTTON */
-.floating-btn {
-  position: fixed;
-  bottom:25px;
-  right:25px;
-  background:#003366;
-  color:white;
-  padding:15px 22px;
-  border:none;
-  border-radius:40px;
-  font-size:16px;
-  cursor:pointer;
-  box-shadow:0 4px 6px rgba(0,0,0,0.3);
+.floating-btn{
+position:fixed;
+bottom:25px;
+right:25px;
+background:#003366;
+color:white;
+padding:15px 22px;
+border:none;
+border-radius:40px;
+font-size:16px;
+cursor:pointer;
+box-shadow:0 4px 6px rgba(0,0,0,0.3);
 }
 
-/* MODAL */
-#modal {
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.7);
-  justify-content:center;
-  align-items:center;
-  z-index:1000;
+/* MODAL FORM */
+#modal{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.7);
+justify-content:center;
+align-items:center;
+z-index:1000;
 }
-
-#modal form {
-  background:white;
-  padding:25px;
-  width:90%;
-  max-width:500px;
-  border-radius:10px;
-  position:relative;
+#modal form{
+background:white;
+padding:25px;
+width:90%;
+max-width:500px;
+border-radius:10px;
+position:relative;
 }
-
-.close {
-  position:absolute;
-  right:15px;
-  top:10px;
-  font-size:22px;
-  cursor:pointer;
-  border:none;
-  background:none;
+.close{
+position:absolute;
+right:15px;
+top:10px;
+font-size:22px;
+cursor:pointer;
+border:none;
+background:none;
 }
-
-label {
-  display:block;
-  margin-top:12px;
-  font-weight:500;
+label{
+display:block;
+margin-top:12px;
+font-weight:500;
 }
-
-select, textarea {
-  width:100%;
-  padding:10px;
-  margin-top:5px;
-  border-radius:5px;
-  border:1px solid #ccc;
-  box-sizing:border-box;
+input,select,textarea{
+width:100%;
+padding:10px;
+margin-top:5px;
+border-radius:5px;
+border:1px solid #ccc;
+box-sizing:border-box;
 }
-
-textarea { resize:vertical; min-height:80px; }
-
-.submit-btn {
-  margin-top:20px;
-  width:100%;
-  padding:12px;
-  background:#003366;
-  color:white;
-  border:none;
-  cursor:pointer;
-  border-radius:5px;
-  font-size:16px;
-  transition: background 0.3s ease;
+textarea{
+resize:vertical;
+min-height:80px;
 }
-
-.submit-btn:hover {
-  background:#00509e;
+.submit-btn{
+margin-top:20px;
+width:100%;
+padding:12px;
+background:#003366;
+color:white;
+border:none;
+cursor:pointer;
+border-radius:5px;
+font-size:16px;
+transition: background 0.3s ease;
+}
+.submit-btn:hover{
+background:#00509e;
 }
 
 /* FOOTER */
-footer {
-  background:#003366;
-  color:white;
-  text-align:center;
-  padding:20px;
-  margin-top:40px;
+footer{
+background:#003366;
+color:white;
+text-align:center;
+padding:20px;
+margin-top:40px;
 }
-
 </style>
 </head>
 
@@ -205,22 +189,13 @@ footer {
 <div class="main">
 
 <h2>Welcome Tutors</h2>
-<p>
-This portal allows tutors to access teaching resources, update availability, and manage tutoring activities.
-</p>
+<p>This portal allows tutors to access teaching resources, update availability, and manage tutoring activities.</p>
 
-<!-- LOGIN / ACCOUNT CREATION -->
 <div class="login-box">
-<h3>Tutor Login</h3>
+<h3>Tutor Login / Account</h3>
 <input type="text" placeholder="Email">
 <input type="password" placeholder="Password">
 <button class="login-btn">Login</button>
-
-<h3 style="margin-top:20px;">Or Create New Account</h3>
-<input type="text" placeholder="Full Name">
-<input type="email" placeholder="Email">
-<input type="password" placeholder="Password">
-<button class="login-btn">Create Account</button>
 </div>
 
 <h2>Tutor Dashboard</h2>
@@ -247,49 +222,30 @@ This portal allows tutors to access teaching resources, update availability, and
 </div>
 </div>
 
-</div>
-
-<!-- FLOATING APPLY BUTTON FOR TUTORS -->
 <button class="floating-btn" onclick="openForm()">Apply Now</button>
 
-<!-- MODAL: TUTOR APPLICATION -->
 <div id="modal">
 <form action="https://formspree.io/f/frX6R74bc8tY56A3A" method="POST" target="_blank">
 <button type="button" class="close" onclick="closeForm()">×</button>
-<h2>Apply to Join C&T Tutorials</h2>
-
+<h2>Tutor Application</h2>
 <label>Full Name<input type="text" name="name" required></label>
 <label>Email<input type="email" name="email" required></label>
 <label>Phone Number<input type="tel" name="phone" required></label>
 <label>Field of Study<input type="text" name="field"></label>
-<label>Subjects You Can Tutor<textarea name="subjects"></textarea></label>
-<label>Level
-<select name="level">
-<option>Undergraduate</option>
-<option>Postgraduate</option>
-</select></label>
-
-<label>
-<input type="checkbox" required>
-I agree to the terms and conditions.
-</label>
-
+<label>Subjects you can tutor<textarea name="subjects"></textarea></label>
+<label>Level<select name="level"><option>Undergraduate</option><option>Postgraduate</option></select></label>
+<label><input type="checkbox" required>I agree to the terms and conditions.</label>
 <button type="submit" class="submit-btn">Submit Application</button>
 </form>
 </div>
 
-<footer>
-<p>© 2026 C&T Tutorials</p>
-</footer>
+<footer>© 2026 C&T Tutorials</footer>
 
 <script>
-function openForm(){ document.getElementById("modal").style.display="flex"; }
-function closeForm(){ document.getElementById("modal").style.display="none"; }
-window.onclick = function(event) {
-  const modal = document.getElementById("modal");
-  if(event.target == modal){ modal.style.display = "none"; }
-}
+function openForm(){document.getElementById("modal").style.display="flex";}
+function closeForm(){document.getElementById("modal").style.display="none";}
+window.onclick=function(event){if(event.target==document.getElementById("modal")){closeForm();}}
 </script>
 
 </body>
-</html>
+  </html>
