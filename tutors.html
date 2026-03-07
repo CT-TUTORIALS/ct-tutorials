@@ -1,37 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tutors Portal | C&T Tutorials</title>
 
 <style>
+
+/* ---------------- GENERAL ---------------- */
+
 body{
 margin:0;
-font-family:"Segoe UI",Arial,sans-serif;
+font-family:"Segoe UI", Arial, sans-serif;
 background:#f4f4f4;
+color:#333;
+min-height:100vh;
+display:flex;
+flex-direction:column;
 }
 
-/* HEADER */
+/* ---------------- HEADER ---------------- */
+
 header{
 background:#003366;
 color:white;
+padding:20px;
 text-align:center;
-padding:20px 30px;
-display:flex;
-justify-content: space-between;
-align-items: center;
 }
 
-header h1{
-margin:0;
-font-size:1.5rem;
+/* navigation */
+
+nav{
+margin-top:10px;
+display:flex;
+justify-content:center;
+flex-wrap:wrap;
+gap:15px;
 }
 
 nav a{
 color:white;
-margin-left:15px;
 text-decoration:none;
 font-weight:bold;
 }
@@ -40,43 +48,47 @@ nav a:hover{
 text-decoration:underline;
 }
 
-/* MAIN */
-.main{
-max-width:1000px;
+/* ---------------- MAIN ---------------- */
+
+.main-content{
+max-width:900px;
 margin:auto;
 padding:40px;
 background:white;
-margin-top:30px;
+flex:1;
 }
 
-/* DASHBOARD CARDS */
-.dashboard{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:25px;
-margin-top:30px;
-}
-.card{
-background:#f7f7f7;
-padding:25px;
-border-radius:8px;
-box-shadow:0 3px 6px rgba(0,0,0,0.1);
-text-align:center;
-}
-.card h3{
+h2{
 color:#003366;
-margin-bottom:10px;
+border-bottom:2px solid #003366;
+padding-bottom:8px;
 }
-.card button{
-margin-top:10px;
-padding:10px 15px;
+
+/* ---------------- BUTTONS ---------------- */
+
+.portal-buttons{
+margin-top:30px;
+display:flex;
+gap:20px;
+flex-wrap:wrap;
+}
+
+.portal-btn{
 background:#003366;
 color:white;
+padding:12px 20px;
 border:none;
+border-radius:5px;
 cursor:pointer;
+font-size:16px;
 }
 
-/* MODALS */
+.portal-btn:hover{
+background:#00509e;
+}
+
+/* ---------------- MODALS ---------------- */
+
 .modal{
 display:none;
 position:fixed;
@@ -91,18 +103,27 @@ z-index:1000;
 background:white;
 padding:25px;
 width:90%;
-max-width:500px;
+max-width:450px;
 border-radius:10px;
 position:relative;
 }
 
-label{
-display:block;
-margin-top:12px;
-font-weight:500;
+.close{
+position:absolute;
+top:10px;
+right:15px;
+font-size:22px;
+cursor:pointer;
+border:none;
+background:none;
 }
 
-input,textarea{
+label{
+display:block;
+margin-top:15px;
+}
+
+input{
 width:100%;
 padding:10px;
 margin-top:5px;
@@ -117,122 +138,209 @@ padding:12px;
 background:#003366;
 color:white;
 border:none;
-cursor:pointer;
 border-radius:5px;
+cursor:pointer;
+font-size:16px;
 }
 
 .submit-btn:hover{
 background:#00509e;
 }
 
-/* FLOATING BUTTON */
-.floating-btn{
-position:fixed;
-bottom:25px;
-right:25px;
-background:#003366;
-color:white;
-padding:15px 22px;
-border:none;
-border-radius:40px;
-font-size:16px;
-cursor:pointer;
-box-shadow:0 4px 6px rgba(0,0,0,0.3);
-}
+/* ---------------- FOOTER ---------------- */
 
-/* FOOTER */
 footer{
 background:#003366;
 color:white;
 text-align:center;
-padding:20px;
-margin-top:40px;
+padding:25px;
+margin-top:auto;
 }
+
+.footer-disclaimer{
+font-size:12px;
+max-width:900px;
+margin:auto;
+line-height:1.6;
+}
+
+/* ---------------- MOBILE ---------------- */
+
+@media(max-width:768px){
+
+.main-content{
+padding:25px;
+}
+
+.portal-buttons{
+flex-direction:column;
+}
+
+}
+
 </style>
 </head>
 
 <body>
 
 <header>
-<h1>C&T Tutorials</h1>
+
+<h1>C&T Tutorials Tutors Portal</h1>
+
 <nav>
+
 <a href="index.html">Home</a>
-<a href="#" onclick="openModal('createModal')">Create Account</a>
-<a href="#" onclick="openModal('loginModal')">Login</a>
+<a href="#" onclick="openLogin()">Login</a>
+<a href="#" onclick="openCreate()">Create Account</a>
+
 </nav>
+
 </header>
 
-<div class="main">
+<div class="main-content">
 
-<h2>Welcome Tutors</h2>
-<p>This portal allows tutors to access teaching resources, update availability, and manage tutoring activities.</p>
+<h2>Welcome Tutors!</h2>
 
-<!-- Dashboard hidden until login -->
-<div id="dashboard" style="display:none;">
-<h2>Tutor Dashboard</h2>
-<div class="dashboard">
-<div class="card"><h3>Assigned Students</h3><button>View</button></div>
-<div class="card"><h3>Teaching Resources</h3><button>Open</button></div>
-<div class="card"><h3>Availability</h3><button>Update</button></div>
-<div class="card"><h3>Messages</h3><button>Open</button></div>
+<p>
+We are excited to have you join our network of professional tutors.
+Through this portal you will be able to manage your tutoring activities
+and collaborate with students seeking academic support.
+</p>
+
+<p>
+C&T Tutorials values professionalism, academic integrity, and a strong
+commitment to supporting student learning and development.
+</p>
+
+<div class="portal-buttons">
+
+<button class="portal-btn" onclick="openLogin()">
+Tutor Login
+</button>
+
+<button class="portal-btn" onclick="openCreate()">
+Create Tutor Account
+</button>
+
 </div>
+
 </div>
 
-<button class="floating-btn" onclick="openModal('applyModal')">Apply Now</button>
+<!-- LOGIN MODAL -->
+
+<div id="loginModal" class="modal">
+
+<form>
+
+<button type="button" class="close" onclick="closeLogin()">×</button>
+
+<h2>Tutor Login</h2>
+
+<label>Email
+<input type="email" required>
+</label>
+
+<label>Password
+<input type="password" required>
+</label>
+
+<button class="submit-btn">
+Login
+</button>
+
+</form>
 
 </div>
 
 <!-- CREATE ACCOUNT MODAL -->
+
 <div id="createModal" class="modal">
+
 <form>
+
+<button type="button" class="close" onclick="closeCreate()">×</button>
+
 <h2>Create Tutor Account</h2>
-<label>Full Name<input type="text"></label>
-<label>Email<input type="email"></label>
-<label>Password<input type="password"></label>
-<button class="submit-btn">Create Account</button>
+
+<label>Full Name
+<input type="text" required>
+</label>
+
+<label>Email
+<input type="email" required>
+</label>
+
+<label>Cellphone Number
+<input type="tel" required>
+</label>
+
+<label>Password
+<input type="password" required>
+</label>
+
+<button class="submit-btn">
+Create Account
+</button>
+
 </form>
+
 </div>
 
-<!-- LOGIN MODAL -->
-<div id="loginModal" class="modal">
-<form>
-<h2>Tutor Login</h2>
-<label>Email<input type="email"></label>
-<label>Password<input type="password"></label>
-<button type="button" class="submit-btn" onclick="authorizeTutor()">Login</button>
-</form>
+<footer>
+
+<div class="footer-disclaimer">
+
+<strong>Disclaimer:</strong><br>
+
+C&T Tutorials engages tutors as independent academic facilitators.
+Tutors provide academic support services only and do not represent
+any university, college, examination body, or academic institution.
+
+All tutoring services offered through this platform are supplementary
+and are intended solely to support students’ independent learning
+and academic development.
+
 </div>
 
-<!-- APPLICATION MODAL -->
-<div id="applyModal" class="modal">
-<form action="https://formspree.io/f/frX6R74bc8tY56A3A" method="POST">
-<h2>Tutor Application</h2>
-<label>Full Name<input type="text" name="name"></label>
-<label>Email<input type="email" name="email"></label>
-<label>Subjects you can tutor<textarea name="subjects"></textarea></label>
-<button class="submit-btn">Submit Application</button>
-</form>
-</div>
-
-<footer>© 2026 C&T Tutorials</footer>
+</footer>
 
 <script>
 
-function openModal(id){
-document.getElementById(id).style.display="flex";
+/* LOGIN */
+
+function openLogin(){
+document.getElementById("loginModal").style.display="flex";
 }
+
+function closeLogin(){
+document.getElementById("loginModal").style.display="none";
+}
+
+/* CREATE ACCOUNT */
+
+function openCreate(){
+document.getElementById("createModal").style.display="flex";
+}
+
+function closeCreate(){
+document.getElementById("createModal").style.display="none";
+}
+
+/* OUTSIDE CLICK CLOSE */
 
 window.onclick=function(event){
-document.querySelectorAll(".modal").forEach(function(modal){
-if(event.target===modal){
-modal.style.display="none";
-}
-});
+
+let login=document.getElementById("loginModal");
+let create=document.getElementById("createModal");
+
+if(event.target==login){
+login.style.display="none";
 }
 
-function authorizeTutor(){
-document.getElementById("loginModal").style.display="none";
-document.getElementById("dashboard").style.display="block";
+if(event.target==create){
+create.style.display="none";
+}
+
 }
 
 </script>
