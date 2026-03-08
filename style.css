@@ -33,32 +33,32 @@ padding:10px 20px;
 cursor:pointer;
 }
 
-.modal{
-display:none;
-position:fixed;
-left:0;
-top:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.5);
-}
-
-.modal-content{
-background:white;
-margin:10% auto;
-padding:20px;
-width:400px;
-}
-
 input,textarea,select{
 width:100%;
 padding:10px;
 margin:10px 0;
 }
 
+.modal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.6);
+}
+
+.modal-content{
+background:white;
+width:400px;
+margin:10% auto;
+padding:20px;
+}
+
 footer{
 background:#002147;
 color:white;
-text-align:center;
 padding:20px;
+text-align:center;
 }
