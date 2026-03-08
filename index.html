@@ -1,262 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>C&T Tutorials</title>
 
-<meta name="google-site-verification" content="aSucaMc_aX_kQpRFNvVRgTX0pEeCD1c48mTuirk4qwY" />
+<meta name="google-site-verification" content="aSucaMc_aX_kQpRFNvVRgTX0pEeCD1c48mTuirk4qwY"/>
 
 <style>
 
-/* ---------------- GENERAL ---------------- */
-
 body{
 margin:0;
-font-family:"Segoe UI", Arial, sans-serif;
-background:#f4f4f4;
-color:#333;
-line-height:1.6;
+font-family:Arial, Helvetica, sans-serif;
+background:#ffffff;
+color:#222;
 }
-
-/* ---------------- HERO BANNER ---------------- */
 
 header{
-background-image:url("images/banner.jpg");
-background-position:center;
-background-repeat:no-repeat;
-background-size:cover;
-background-color:#003366;
-height:420px;
-display:flex;
-flex-direction:column;
-justify-content:flex-end;
-align-items:center;
-text-align:center;
+background:#0b3d91;
+color:white;
 padding:20px;
-position:relative;
-transition:all 0.3s ease;
+text-align:center;
 }
-
-/* COLLAPSED HEADER */
-
-header.scrolled{
-background:#003366;
-background-image:none;
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:70px;
-z-index:999;
-justify-content:center;
-}
-
-/* Navigation */
 
 nav{
+background:#111;
 display:flex;
-flex-wrap:wrap;
 justify-content:center;
-gap:15px;
-width:100%;
+flex-wrap:wrap;
 }
 
 nav a{
 color:white;
+padding:14px 20px;
 text-decoration:none;
-font-weight:bold;
-white-space:nowrap;
-cursor:pointer;
+display:block;
 }
 
 nav a:hover{
-text-decoration:underline;
+background:#575757;
 }
 
-/* ---------------- CONTENT ---------------- */
+.hero{
+width:100%;
+height:420px;
+overflow:hidden;
+}
 
-.main-content{
+.hero img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.container{
+padding:40px;
 max-width:1100px;
 margin:auto;
-padding:50px 40px;
-background:white;
-transition:margin-top 0.3s ease;
+line-height:1.7;
 }
 
-/* push content down when header collapses */
-
-header.scrolled + .main-content{
-margin-top:70px;
+.section{
+margin-bottom:40px;
 }
-
-section{
-margin-bottom:60px;
-}
-
-h2{
-color:#003366;
-border-bottom:2px solid #003366;
-padding-bottom:8px;
-margin-bottom:25px;
-}
-
-h3{
-color:#00509e;
-}
-
-/* ---------------- SERVICES ---------------- */
-
-.services-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:25px;
-margin-top:20px;
-}
-
-.service-card{
-background:#f7f7f7;
-padding:20px;
-border-radius:8px;
-box-shadow:0 3px 6px rgba(0,0,0,0.1);
-}
-
-.service-card h3{
-margin-top:0;
-}
-
-/* ---------------- RESOURCES ---------------- */
-
-.resource-link{
-color:#00509e;
-font-weight:bold;
-text-decoration:none;
-}
-
-.resource-link:hover{
-text-decoration:underline;
-}
-
-/* ---------------- CONTACT ---------------- */
-
-.contact-box{
-background:#f7f7f7;
-padding:20px;
-border-radius:8px;
-}
-
-/* ---------------- BUTTON ---------------- */
-
-.floating-btn{
-position:fixed;
-bottom:25px;
-right:25px;
-background:#003366;
-color:white;
-padding:15px 22px;
-border:none;
-border-radius:40px;
-font-size:16px;
-cursor:pointer;
-box-shadow:0 4px 6px rgba(0,0,0,0.3);
-}
-
-/* ---------------- MODALS ---------------- */
-
-#modal,
-#adminModal{
-display:none;
-position:fixed;
-inset:0;
-background:rgba(0,0,0,0.7);
-justify-content:center;
-align-items:center;
-z-index:1000;
-}
-
-#modal form,
-#adminModal form{
-background:white;
-padding:25px;
-width:90%;
-max-width:500px;
-border-radius:10px;
-position:relative;
-}
-
-.close{
-position:absolute;
-right:15px;
-top:10px;
-font-size:22px;
-cursor:pointer;
-border:none;
-background:none;
-}
-
-label{
-display:block;
-margin-top:12px;
-font-weight:500;
-}
-
-input,select{
-width:100%;
-padding:10px;
-margin-top:5px;
-border-radius:5px;
-border:1px solid #ccc;
-box-sizing:border-box;
-}
-
-.submit-btn{
-margin-top:20px;
-width:100%;
-padding:12px;
-background:#003366;
-color:white;
-border:none;
-cursor:pointer;
-border-radius:5px;
-font-size:16px;
-}
-
-.submit-btn:hover{
-background:#00509e;
-}
-
-/* ---------------- FOOTER ---------------- */
 
 footer{
-background:#003366;
+background:#111;
 color:white;
 text-align:center;
-padding:25px;
+padding:20px;
 }
 
-.footer-disclaimer{
-font-size:12px;
-max-width:900px;
-margin:auto;
-line-height:1.6;
+button{
+background:#0b3d91;
+color:white;
+padding:12px 20px;
+border:none;
+cursor:pointer;
+margin-top:15px;
 }
 
-/* ---------------- RESPONSIVE ---------------- */
-
-@media(max-width:768px){
-
-header{
-height:300px;
-}
-
-.main-content{
-padding:30px 20px;
-}
-
-nav{
-gap:10px;
-}
-
+button:hover{
+background:#062c6b;
 }
 
 </style>
@@ -265,257 +92,78 @@ gap:10px;
 <body>
 
 <header>
-
-<nav>
-<a href="#about">About</a>
-<a href="#services">Services</a>
-<a href="#resources">Resources</a>
-<a href="#contact">Contact</a>
-<a href="tutors.html">Tutors Portal</a>
-<a onclick="openAdmin()">Admins Portal</a>
-</nav>
-
+<h1>C&T Tutorials</h1>
+<p>Empowering Academic Excellence</p>
 </header>
 
-<div class="main-content">
+<nav>
 
-<section id="about">
+<a href="index.html">Home</a>
+
+<a href="tutors.html">Tutor Portal</a>
+
+<a href="booking.html">Student Booking</a>
+
+<a href="contact.html">Contact</a>
+
+</nav>
+
+
+<div class="hero">
+<img src="banner.jpg" alt="C&T Tutorials Banner">
+</div>
+
+
+<div class="container">
+
+<div class="section">
+
+<h2>Welcome Tutors!</h2>
+
+<p>
+We’re excited to have you join our network of professional tutors. Here you can access your dashboard, manage students, and keep track of your teaching activities.
+</p>
+
+</div>
+
+
+<div class="section">
 
 <h2>About C&T Tutorials</h2>
 
-<p>C&T Tutorials is an independent academic support service committed to enhancing students’ academic performance through structured guidance in academic writing, research, and communication skills.</p>
-
-<p>Our services provide focused and student-centred academic support through personalised tutorials, collaborative group learning, and assignment-based guidance.</p>
-
-</section>
-
-<section id="services">
-
-<h2>Our Services</h2>
-
-<div class="services-grid">
-
-<div class="service-card">
-<h3>Academic Writing Tutorials</h3>
-<p>Structured sessions covering academic writing principles, essay development, and research techniques.</p>
-</div>
-
-<div class="service-card">
-<h3>Group Learning Sessions</h3>
-<p>Collaborative sessions designed to support multiple students working on similar academic challenges.</p>
-</div>
-
-<div class="service-card">
-<h3>Assignment Support</h3>
-<p>Professional assistance with editing, proofreading, and improving assignment structure and clarity.</p>
-</div>
-
-<div class="service-card">
-<h3>Public Speaking Support</h3>
-<p>Coaching sessions designed to strengthen presentation and communication skills for academic purposes.</p>
-</div>
-
-</div>
-
-</section>
-
-<section id="resources">
-
-<h2>Resources</h2>
-
-<ul>
-
-<li>
-<a class="resource-link" href="documents/Business-Policies.pdf" target="_blank">
-Business Policies
-</a>
-</li>
-
-<li>
-<a class="resource-link" href="documents/Student-form-for-offline-application.pdf" target="_blank">
-Offline Application Form
-</a>
-</li>
-
-</ul>
-
-</section>
-
-<section id="contact">
-
-<h2>Contact</h2>
-
-<div class="contact-box">
-
-<p>Email:
-<a href="mailto:ct0tutorials@gmail.com">
-ct0tutorials@gmail.com
-</a>
+<p>
+C&T Tutorials is committed to supporting students by connecting them with dedicated and qualified tutors. Our goal is to create a supportive learning environment where students can strengthen their academic abilities, improve confidence, and reach their educational goals.
 </p>
 
-<p>Phone:
-+264 815 621 879 / +264 818 479 958
+<p>
+We believe that education should be accessible and empowering. Through personalized tutoring, structured support, and professional guidance, we aim to make learning engaging and impactful for every student.
 </p>
 
 </div>
 
-</section>
 
-<button class="floating-btn" onclick="openForm()">Register Now</button>
+<div class="section">
 
-</div>
+<h2>Join Our Tutor Network</h2>
 
-<!-- REGISTRATION MODAL -->
+<p>
+If you are passionate about teaching and want to help students succeed academically, we invite you to apply to become a tutor with C&T Tutorials.
+</p>
 
-<div id="modal">
-
-<form action="https://formspree.io/f/mlgbjkwq" method="POST" target="_blank">
-
-<button type="button" class="close" onclick="closeForm()">×</button>
-
-<h2>Service Registration</h2>
-
-<label>Full Name
-<input type="text" name="name" required>
-</label>
-
-<label>Email
-<input type="email" name="email" required>
-</label>
-
-<label>Cellphone Number
-<input type="tel" name="cell_number" required>
-</label>
-
-<label>Select Service
-
-<select name="service" required>
-
-<option value="">Select a service</option>
-
-<option>Introduction to Academic Writing (4 sessions) – N$150</option>
-<option>Topic Specific Sessions – N$40</option>
-<option>Hourly Rate – N$40</option>
-<option>Group Sessions – N$200 to N$600</option>
-<option>Draft Editing – N$15 per page</option>
-<option>Proofreading – N$10 per page</option>
-
-</select>
-
-</label>
-
-<label>
-
-<input type="checkbox" required>
-
-I agree to the
-<a href="documents/Disclosure-Agreement.pdf" target="_blank">
-Disclosure Agreement
-</a>
-
-</label>
-
-<button type="submit" class="submit-btn">
-Submit Registration
+<button onclick="window.location.href='tutors.html'">
+Apply to Become a Tutor
 </button>
 
-</form>
+</div>
 
 </div>
 
-<!-- ADMIN LOGIN POPUP -->
-
-<div id="adminModal">
-
-<form>
-
-<button type="button" class="close" onclick="closeAdmin()">×</button>
-
-<h2>Admin Login</h2>
-
-<label>Username
-<input type="text" required>
-</label>
-
-<label>Password
-<input type="password" required>
-</label>
-
-<button class="submit-btn">
-Login
-</button>
-
-</form>
-
-</div>
 
 <footer>
 
-<div class="footer-disclaimer">
-
-<strong>Disclaimer:</strong><br>
-
-C&T Tutorials operates independently and is not affiliated with, endorsed by, or formally connected to any university, college, examination body, or academic institution.
-
-All services are supplementary and intended to support independent learning.
-
-</div>
+<p>© 2026 C&T Tutorials. All Rights Reserved.</p>
 
 </footer>
 
-<script>
-
-/* registration form */
-
-function openForm(){
-document.getElementById("modal").style.display="flex";
-}
-
-function closeForm(){
-document.getElementById("modal").style.display="none";
-}
-
-/* admin popup */
-
-function openAdmin(){
-document.getElementById("adminModal").style.display="flex";
-}
-
-function closeAdmin(){
-document.getElementById("adminModal").style.display="none";
-}
-
-/* close when clicking outside */
-
-window.onclick=function(event){
-
-if(event.target==document.getElementById("modal")){
-closeForm();
-}
-
-if(event.target==document.getElementById("adminModal")){
-closeAdmin();
-}
-
-}
-
-/* smooth header collapse */
-
-let header=document.querySelector("header");
-
-window.addEventListener("scroll",function(){
-
-if(window.scrollY>120){
-header.classList.add("scrolled");
-}
-
-else{
-header.classList.remove("scrolled");
-}
-
-});
-
-</script>
-
 </body>
-  </html>
+</html>
