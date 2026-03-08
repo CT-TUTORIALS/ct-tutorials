@@ -296,7 +296,7 @@ Tutor Login
 
 <div id="applyModal" class="modal">
 
-<form action="https://formspree.io/f/mlgbjkwq" method="POST" target="_blank">
+<form id="tutorForm">
 
 <button type="button" class="close" onclick="closeApply()">×</button>
 
@@ -405,7 +405,26 @@ apply.style.display="none";
 
 }
 
+/* ---------------- SUBMIT APPLICATION TO GOOGLE SHEET ---------------- */
+
+const scriptURL = "YOUR_GOOGLE_SCRIPT_WEB_APP_URL";
+
+document.getElementById("tutorForm").addEventListener("submit", e => {
+  e.preventDefault();
+
+  fetch(scriptURL, {
+    method: "POST",
+    body: new FormData(document.getElementById("tutorForm"))
+  })
+  .then(response => {
+    alert("Application submitted successfully!");
+    document.getElementById("tutorForm").reset();
+    closeApply();
+  })
+  .catch(error => alert("Error submitting application"));
+});
+
 </script>
 
 </body>
-  </html>
+</html>
