@@ -118,7 +118,7 @@ display:block;
 margin-top:15px;
 }
 
-input, textarea, select{
+input, textarea{
 width:100%;
 padding:10px;
 margin-top:5px;
@@ -210,7 +210,7 @@ and a strong commitment to student success.</p>
 
 <!-- APPLY MODAL -->
 <div id="applyModal" class="modal">
-<form id="tutorForm">
+<form id="tutorForm" action="https://script.google.com/macros/s/AKfycbynavvtHgE1MTKmmxCPmUyFlL_foWRWwHHTwWLOi37jjmmpLwhUeQOIrbXzlSWbb9__Rg/exec" method="POST" target="_blank">
 <button type="button" class="close" onclick="closeApply()">×</button>
 <h2>Tutor Application</h2>
 
@@ -262,11 +262,7 @@ and intended solely to support independent learning and academic development.
 
 <script>
 /* OPEN APPLY */
-function openApply(){
-document.getElementById("applyModal").style.display="flex";
-}
-
-/* CLOSE APPLY */
+function openApply(){ document.getElementById("applyModal").style.display="flex"; }
 function closeApply(){ document.getElementById("applyModal").style.display="none"; }
 
 /* CLOSE MODAL OUTSIDE CLICK */
@@ -276,25 +272,25 @@ if(event.target==apply) apply.style.display="none";
 }
 
 /* ------------------- SUBMIT TO GOOGLE SHEETS ------------------- */
-const scriptURL = "https://script.google.com/macros/s/AKfycbynavvtHgE1MTKmmxCPmUyFlL_foWRWwHHTwWLOi37jjmmpLwhUeQOIrbXzlSWbb9__Rg/exec";
+const form = document.getElementById("tutorForm");
 
-document.getElementById("tutorForm").addEventListener("submit", e => {
+form.addEventListener("submit", e => {
 e.preventDefault();
 
 /* honeypot check */
 if(document.querySelector("input[name='website']").value !== "") return;
 
-/* submit form directly without bot timer */
-fetch(scriptURL,{
+/* submit form immediately (No Bot Timer) */
+fetch(form.action,{
 method:"POST",
-body:new FormData(document.getElementById("tutorForm"))
+body:new FormData(form)
 })
-.then(response=>{
+.then(res=>{
 alert("Application submitted successfully!");
-document.getElementById("tutorForm").reset();
+form.reset();
 closeApply();
 })
-.catch(error=>alert("Error submitting application"));
+.catch(err=>alert("Error submitting application"));
 });
 </script>
 
