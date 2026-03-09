@@ -34,8 +34,6 @@ padding:20px;
 position:relative;
 transition:all 0.3s ease;
 }
-
-/* COLLAPSED HEADER */
 header.scrolled{
 background:#003366;
 background-image:none;
@@ -56,7 +54,6 @@ justify-content:center;
 gap:15px;
 width:100%;
 }
-
 nav a{
 color:white;
 text-decoration:none;
@@ -64,7 +61,6 @@ font-weight:bold;
 white-space:nowrap;
 cursor:pointer;
 }
-
 nav a:hover{
 text-decoration:underline;
 }
@@ -77,23 +73,18 @@ padding:50px 40px;
 background:white;
 transition:margin-top 0.3s ease;
 }
-
-/* push content down when header collapses */
 header.scrolled + .main-content{
 margin-top:70px;
 }
-
 section{
 margin-bottom:60px;
 }
-
 h2{
 color:#003366;
 border-bottom:2px solid #003366;
 padding-bottom:8px;
 margin-bottom:25px;
 }
-
 h3{
 color:#00509e;
 }
@@ -105,14 +96,12 @@ grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
 gap:25px;
 margin-top:20px;
 }
-
 .service-card{
 background:#f7f7f7;
 padding:20px;
 border-radius:8px;
 box-shadow:0 3px 6px rgba(0,0,0,0.1);
 }
-
 .service-card h3{
 margin-top:0;
 }
@@ -123,7 +112,6 @@ color:#00509e;
 font-weight:bold;
 text-decoration:none;
 }
-
 .resource-link:hover{
 text-decoration:underline;
 }
@@ -161,7 +149,6 @@ justify-content:center;
 align-items:center;
 z-index:1000;
 }
-
 #modal form,
 #adminModal form{
 background:white;
@@ -171,7 +158,6 @@ max-width:500px;
 border-radius:10px;
 position:relative;
 }
-
 .close{
 position:absolute;
 right:15px;
@@ -181,14 +167,12 @@ cursor:pointer;
 border:none;
 background:none;
 }
-
 label{
 display:block;
 margin-top:12px;
 font-weight:500;
 }
-
-input,select{
+input,select,textarea{
 width:100%;
 padding:10px;
 margin-top:5px;
@@ -196,7 +180,10 @@ border-radius:5px;
 border:1px solid #ccc;
 box-sizing:border-box;
 }
-
+textarea{
+min-height:80px;
+resize:vertical;
+}
 .submit-btn{
 margin-top:20px;
 width:100%;
@@ -208,7 +195,6 @@ cursor:pointer;
 border-radius:5px;
 font-size:16px;
 }
-
 .submit-btn:hover{
 background:#00509e;
 }
@@ -220,7 +206,6 @@ color:white;
 text-align:center;
 padding:25px;
 }
-
 .footer-disclaimer{
 font-size:12px;
 max-width:900px;
@@ -228,21 +213,19 @@ margin:auto;
 line-height:1.6;
 }
 
+/* hidden honeypot */
+.honeypot{
+display:none;
+}
+
 /* ---------------- RESPONSIVE ---------------- */
 @media(max-width:768px){
-header{
-height:300px;
-}
-.main-content{
-padding:30px 20px;
-}
-nav{
-gap:10px;
-}
+header{height:300px;}
+.main-content{padding:30px 20px;}
+nav{gap:10px;}
 }
 </style>
 </head>
-
 <body>
 
 <header>
@@ -250,6 +233,7 @@ gap:10px;
 <a href="#about">About</a>
 <a href="#services">Services</a>
 <a href="#resources">Resources</a>
+<a href="#tutors">Tutors</a>
 <a href="#contact">Contact</a>
 <a href="tutors.html">Tutors Portal</a>
 <a onclick="openAdmin()">Admins Portal</a>
@@ -289,13 +273,16 @@ gap:10px;
 <section id="resources">
 <h2>Resources</h2>
 <ul>
-<li>
-<a class="resource-link" href="documents/Business-Policies.pdf" target="_blank">Business Policies</a>
-</li>
-<li>
-<a class="resource-link" href="documents/Student-form-for-offline-application.pdf" target="_blank">Offline Application Form</a>
-</li>
+<li><a class="resource-link" href="documents/Business-Policies.pdf" target="_blank">Business Policies</a></li>
+<li><a class="resource-link" href="documents/Student-form-for-offline-application.pdf" target="_blank">Offline Application Form</a></li>
+<li><a class="resource-link" href="documents/Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a></li>
 </ul>
+</section>
+
+<section id="tutors">
+<h2>Our Approved Tutors</h2>
+<p>Below is the list of tutors currently approved by C&T Tutorials. Students can contact them directly through the portal.</p>
+<div id="tutorsList" style="display:flex;flex-wrap:wrap;gap:15px;"></div>
 </section>
 
 <section id="contact">
@@ -311,22 +298,12 @@ gap:10px;
 
 <!-- REGISTRATION MODAL -->
 <div id="modal">
-<form action="https://formspree.io/f/mlgbjkwq" method="POST" target="_blank">
+<form action="https://script.google.com/macros/s/AKfycbynavvtHgE1MTKmmxCPmUyFlL_foWRWwHHTwWLOi37jjmmpLwhUeQOIrbXzlSWbb9__Rg/exec" method="POST" target="_blank">
 <button type="button" class="close" onclick="closeForm()">×</button>
 <h2>Service Registration</h2>
-
-<label>Full Name
-<input type="text" name="name" required>
-</label>
-
-<label>Email
-<input type="email" name="email" required>
-</label>
-
-<label>Cellphone Number
-<input type="tel" name="cell_number" required>
-</label>
-
+<label>Full Name<input type="text" name="name" required></label>
+<label>Email<input type="email" name="email" required></label>
+<label>Cellphone Number<input type="tel" name="cell_number" required></label>
 <label>Select Service
 <select name="service" required>
 <option value="">Select a service</option>
@@ -338,19 +315,7 @@ gap:10px;
 <option>Proofreading – N$10 per page</option>
 </select>
 </label>
-
-<!-- NEW: Tutor Dropdown -->
-<label>Select Tutor
-<select id="tutorDropdown" name="tutor" required>
-<option>Loading tutors...</option>
-</select>
-</label>
-
-<label>
-<input type="checkbox" required>
-I agree to the <a href="documents/Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a>
-</label>
-
+<label><input type="checkbox" required>I agree to the <a href="documents/Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a></label>
 <button type="submit" class="submit-btn">Submit Registration</button>
 </form>
 </div>
@@ -360,12 +325,8 @@ I agree to the <a href="documents/Disclosure-Agreement.pdf" target="_blank">Disc
 <form>
 <button type="button" class="close" onclick="closeAdmin()">×</button>
 <h2>Admin Login</h2>
-<label>Username
-<input type="text" required>
-</label>
-<label>Password
-<input type="password" required>
-</label>
+<label>Username<input type="text" required></label>
+<label>Password<input type="password" required></label>
 <button class="submit-btn">Login</button>
 </form>
 </div>
@@ -382,11 +343,9 @@ All services are supplementary and intended to support independent learning.
 /* registration form */
 function openForm(){ document.getElementById("modal").style.display="flex"; }
 function closeForm(){ document.getElementById("modal").style.display="none"; }
-
 /* admin popup */
 function openAdmin(){ document.getElementById("adminModal").style.display="flex"; }
 function closeAdmin(){ document.getElementById("adminModal").style.display="none"; }
-
 /* close when clicking outside */
 window.onclick=function(event){
 if(event.target==document.getElementById("modal")) closeForm();
@@ -396,26 +355,34 @@ if(event.target==document.getElementById("adminModal")) closeAdmin();
 /* smooth header collapse */
 let header=document.querySelector("header");
 window.addEventListener("scroll",function(){
-if(window.scrollY>120){ header.classList.add("scrolled"); }
-else{ header.classList.remove("scrolled"); }
+if(window.scrollY>120){header.classList.add("scrolled");}
+else{header.classList.remove("scrolled");}
 });
 
-/* ------------------- LOAD APPROVED TUTORS ------------------- */
-fetch("https://script.google.com/macros/s/YOUR_DEPLOYED_WEBAPP_ID/exec?action=getTutors")
-.then(res => res.json())
-.then(data => {
-    let dropdown = document.getElementById("tutorDropdown");
-    dropdown.innerHTML = '<option value="">Select Tutor</option>';
-    data.forEach(tutor => {
-        let option = document.createElement("option");
-        option.value = tutor.name;
-        option.text = tutor.name + " - " + tutor.subjects;
-        dropdown.appendChild(option);
-    });
-})
-.catch(err => {
-    document.getElementById("tutorDropdown").innerHTML = '<option>No tutors available</option>';
+/* ------------------- LOAD TUTORS ------------------- */
+const tutorsURL = "https://script.google.com/macros/s/AKfycbynavvtHgE1MTKmmxCPmUyFlL_foWRWwHHTwWLOi37jjmmpLwhUeQOIrbXzlSWbb9__Rg/exec?action=getTutors";
+
+function loadTutors(){
+const container = document.getElementById("tutorsList");
+container.innerHTML="Loading tutors...";
+fetch(tutorsURL)
+.then(res=>res.json())
+.then(data=>{
+if(data.length===0){ container.innerHTML="<p>No tutors are approved yet.</p>"; return; }
+container.innerHTML="";
+data.forEach(tutor=>{
+const card = document.createElement("div");
+card.style.background="#f7f7f7";
+card.style.padding="15px";
+card.style.borderRadius="8px";
+card.style.flex="1 1 250px";
+card.innerHTML=`<h3 style="margin-top:0;color:#003366;">${tutor.name}</h3><p><strong>Subjects:</strong> ${tutor.subject}</p>`;
+container.appendChild(card);
 });
+})
+.catch(err=>{ console.error(err); container.innerHTML="<p>Error loading tutors. Please try again later.</p>"; });
+}
+window.addEventListener("DOMContentLoaded", loadTutors);
 </script>
 
 </body>
