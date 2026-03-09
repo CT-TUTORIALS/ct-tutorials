@@ -245,8 +245,6 @@ and a strong commitment to student success.</p>
 </label>
 </div>
 
-<input type="hidden" id="formStart">
-
 <button type="submit" class="submit-btn">Submit Application</button>
 </form>
 </div>
@@ -266,8 +264,6 @@ and intended solely to support independent learning and academic development.
 /* OPEN APPLY */
 function openApply(){
 document.getElementById("applyModal").style.display="flex";
-/* record form start time */
-document.getElementById("formStart").value = Date.now();
 }
 function closeApply(){ document.getElementById("applyModal").style.display="none"; }
 
@@ -278,18 +274,13 @@ if(event.target==apply) apply.style.display="none";
 }
 
 /* ------------------- SUBMIT TO GOOGLE SHEETS ------------------- */
-const scriptURL = "https://script.google.com/macros/s/AKfycbzMCx7JDK0f1US6G9hLq2Ag1u_jQPiABcCPk0gzd6B3cKSERg-pHfZ0DpchZoqyQFHaQg/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbxn0m1Yy5ykPFb6Id6tX2PyBmbU-HuM4tl-ak1JNYc0C_KtD-fWu8468XVikHE2uN0WPg/exec";
 
 document.getElementById("tutorForm").addEventListener("submit", e => {
 e.preventDefault();
 
 /* honeypot check */
 if(document.querySelector("input[name='website']").value !== "") return;
-
-/* time check */
-const startTime = document.getElementById("formStart").value;
-const timeTaken = Date.now() - startTime;
-if(timeTaken < 4000){ alert("Submission blocked (possible bot). Please try again."); return; }
 
 /* submit form */
 fetch(scriptURL,{
