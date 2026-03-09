@@ -405,23 +405,31 @@ apply.style.display="none";
 
 }
 
-/* ---------------- SUBMIT APPLICATION TO GOOGLE SHEET ---------------- */
+/* SEND APPLICATION TO GOOGLE APPS SCRIPT */
 
-const scriptURL = "YOUR_GOOGLE_SCRIPT_WEB_APP_URL";
+const scriptURL = "https://script.google.com/macros/s/AKfycbzMCx7JDK0f1US6G9hLq2Ag1u_jQPiABcCPk0gzd6B3cKSERg-pHfZ0DpchZoqyQFHaQg/exec";
 
 document.getElementById("tutorForm").addEventListener("submit", e => {
-  e.preventDefault();
 
-  fetch(scriptURL, {
-    method: "POST",
-    body: new FormData(document.getElementById("tutorForm"))
-  })
-  .then(response => {
-    alert("Application submitted successfully!");
-    document.getElementById("tutorForm").reset();
-    closeApply();
-  })
-  .catch(error => alert("Error submitting application"));
+e.preventDefault();
+
+fetch(scriptURL, {
+method: "POST",
+body: new FormData(document.getElementById("tutorForm"))
+})
+
+.then(response => {
+
+alert("Application submitted successfully!");
+
+document.getElementById("tutorForm").reset();
+
+closeApply();
+
+})
+
+.catch(error => alert("Error submitting application"));
+
 });
 
 </script>
