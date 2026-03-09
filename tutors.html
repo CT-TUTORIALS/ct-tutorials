@@ -245,8 +245,6 @@ and a strong commitment to student success.</p>
 </label>
 </div>
 
-<input type="hidden" id="formStart">
-
 <button type="submit" class="submit-btn">Submit Application</button>
 </form>
 </div>
@@ -268,6 +266,7 @@ function openApply(){
 document.getElementById("applyModal").style.display="flex";
 }
 
+/* CLOSE APPLY */
 function closeApply(){ document.getElementById("applyModal").style.display="none"; }
 
 /* CLOSE MODAL OUTSIDE CLICK */
@@ -277,7 +276,7 @@ if(event.target==apply) apply.style.display="none";
 }
 
 /* ------------------- SUBMIT TO GOOGLE SHEETS ------------------- */
-const scriptURL = "https://script.google.com/macros/s/AKfycbxn0m1Yy5ykPFb6Id6tX2PyBmbU-HuM4tl-ak1JNYc0C_KtD-fWu8468XVikHE2uN0WPg/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbynavvtHgE1MTKmmxCPmUyFlL_foWRWwHHTwWLOi37jjmmpLwhUeQOIrbXzlSWbb9__Rg/exec";
 
 document.getElementById("tutorForm").addEventListener("submit", e => {
 e.preventDefault();
@@ -285,7 +284,7 @@ e.preventDefault();
 /* honeypot check */
 if(document.querySelector("input[name='website']").value !== "") return;
 
-/* submit form */
+/* submit form directly without bot timer */
 fetch(scriptURL,{
 method:"POST",
 body:new FormData(document.getElementById("tutorForm"))
