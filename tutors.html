@@ -118,7 +118,7 @@ display:block;
 margin-top:15px;
 }
 
-input, textarea{
+input, textarea, select{
 width:100%;
 padding:10px;
 margin-top:5px;
@@ -188,37 +188,24 @@ flex-direction:column;
 <nav>
 <a href="index.html">Home</a>
 <a onclick="openApply()">Apply</a>
-<a onclick="openAdminLogin()">Admin Login</a>
+<a onclick="openCreate()">Create Account</a>
+<a onclick="openLogin()">Login</a>
 </nav>
 </header>
 
 <div class="main-content">
 <h2>Welcome Tutors!</h2>
-<p>
-We are excited to have you join our network of professional tutors.
+<p>We are excited to have you join our network of professional tutors.
 Through this portal you will be able to manage tutoring activities and
-support students seeking academic guidance.
-</p>
-
-<p>
-C&T Tutorials values professionalism, academic integrity,
-and a strong commitment to student success.
-</p>
+support students seeking academic guidance.</p>
+<p>C&T Tutorials values professionalism, academic integrity,
+and a strong commitment to student success.</p>
 
 <div class="portal-buttons">
 <button class="portal-btn" onclick="openApply()">Apply to Become a Tutor</button>
-<button class="portal-btn" onclick="openAdminLogin()">Admin Login</button>
+<button class="portal-btn" onclick="openCreate()">Create Tutor Account</button>
+<button class="portal-btn" onclick="openLogin()">Tutor Login</button>
 </div>
-
-<!-- ADMIN DASHBOARD -->
-<div id="adminDashboard" class="modal">
-<h2 style="color:#003366; text-align:center;">Tutor Approval Dashboard</h2>
-<div id="tutorListContainer" style="max-height:400px; overflow:auto; padding:10px;">
-<p>Loading tutors...</p>
-</div>
-<button class="submit-btn" onclick="closeAdminDashboard()">Close</button>
-</div>
-
 </div>
 
 <!-- APPLY MODAL -->
@@ -251,6 +238,7 @@ and a strong commitment to student success.
 <textarea name="experience" required></textarea>
 </label>
 
+<!-- HONEYPOT FIELD -->
 <div class="honeypot">
 <label>Leave this field empty
 <input type="text" name="website">
@@ -260,21 +248,6 @@ and a strong commitment to student success.
 <input type="hidden" id="formStart">
 
 <button type="submit" class="submit-btn">Submit Application</button>
-</form>
-</div>
-
-<!-- ADMIN LOGIN MODAL -->
-<div id="adminLoginModal" class="modal">
-<form id="adminLoginForm">
-<button type="button" class="close" onclick="closeAdminLogin()">×</button>
-<h2>Admin Login</h2>
-<label>Username
-<input type="text" id="adminUsername" required>
-</label>
-<label>Password
-<input type="password" id="adminPassword" required>
-</label>
-<button type="submit" class="submit-btn">Login</button>
 </form>
 </div>
 
@@ -290,104 +263,47 @@ and intended solely to support independent learning and academic development.
 </footer>
 
 <script>
-/* MODAL FUNCTIONS */
-function openApply(){document.getElementById("applyModal").style.display="flex"; document.getElementById("formStart").value = Date.now();}
-function closeApply(){document.getElementById("applyModal").style.display="none";}
-
-function openAdminLogin(){document.getElementById("adminLoginModal").style.display="flex";}
-function closeAdminLogin(){document.getElementById("adminLoginModal").style.display="none";}
-
-function openAdminDashboard(){document.getElementById("adminDashboard").style.display="flex";}
-function closeAdminDashboard(){document.getElementById("adminDashboard").style.display="none";}
+/* OPEN APPLY */
+function openApply(){
+document.getElementById("applyModal").style.display="flex";
+/* record form start time */
+document.getElementById("formStart").value = Date.now();
+}
+function closeApply(){ document.getElementById("applyModal").style.display="none"; }
 
 /* CLOSE MODAL OUTSIDE CLICK */
 window.onclick=function(event){
-if(event.target==document.getElementById("applyModal")) closeApply();
-if(event.target==document.getElementById("adminLoginModal")) closeAdminLogin();
-if(event.target==document.getElementById("adminDashboard")) closeAdminDashboard();
+let apply=document.getElementById("applyModal");
+if(event.target==apply) apply.style.display="none";
 }
 
-/* GOOGLE SCRIPT URL */
-const scriptURL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
+/* ------------------- SUBMIT TO GOOGLE SHEETS ------------------- */
+const scriptURL = "https://script.google.com/macros/s/YOUR_DEPLOYED_WEBAPP_ID/exec";
 
-/* TUTOR APPLICATION SUBMISSION */
-document.getElementById("tutorForm").addEventListener("submit", e=>{
+document.getElementById("tutorForm").addEventListener("submit", e => {
 e.preventDefault();
+
 /* honeypot check */
 if(document.querySelector("input[name='website']").value !== "") return;
+
 /* time check */
-if(Date.now() - document.getElementById("formStart").value < 4000){alert("Submission blocked (possible bot)"); return;}
+const startTime = document.getElementById("formStart").value;
+const timeTaken = Date.now() - startTime;
+if(timeTaken < 4000){ alert("Submission blocked (possible bot). Please try again."); return; }
+
+/* submit form */
 fetch(scriptURL,{
 method:"POST",
 body:new FormData(document.getElementById("tutorForm"))
 })
-.then(res=>{
+.then(response=>{
 alert("Application submitted successfully!");
 document.getElementById("tutorForm").reset();
 closeApply();
-loadTutorList(); // refresh dashboard
 })
-.catch(err=>alert("Error submitting application"));
+.catch(error=>alert("Error submitting application"));
 });
-
-/* ADMIN LOGIN */
-document.getElementById("adminLoginForm").addEventListener("submit", e=>{
-e.preventDefault();
-const user=document.getElementById("adminUsername").value;
-const pass=document.getElementById("adminPassword").value;
-
-// Simple static admin login (replace with secure authentication if desired)
-if(user==="admin" && pass==="password123"){
-closeAdminLogin();
-openAdminDashboard();
-loadTutorList();
-}else{
-alert("Incorrect admin credentials");
-}
-});
-
-/* LOAD TUTORS INTO DASHBOARD */
-function loadTutorList(){
-fetch(scriptURL+"?action=getAllTutors")
-.then(res=>res.json())
-.then(data=>{
-let container=document.getElementById("tutorListContainer");
-container.innerHTML="";
-if(data.length===0){container.innerHTML="<p>No tutor applications yet.</p>"; return;}
-data.forEach((tutor,i)=>{
-let div=document.createElement("div");
-div.style.border="1px solid #ccc";
-div.style.padding="10px";
-div.style.margin="8px 0";
-div.style.borderRadius="5px";
-div.innerHTML=`
-<strong>${tutor.name}</strong> - ${tutor.subjects}<br>
-Status: <span id="status-${i}">${tutor.status}</span>
-<button style="margin-top:5px;" onclick="approveTutor(${i},'${tutor.email}')">Approve</button>
-<button style="margin-top:5px;" onclick="rejectTutor(${i},'${tutor.email}')">Reject</button>
-`;
-container.appendChild(div);
-});
-})
-.catch(err=>console.error(err));
-}
-
-/* APPROVE / REJECT TUTOR */
-function approveTutor(index,email){
-updateTutorStatus(email,"Approved",index);
-}
-function rejectTutor(index,email){
-updateTutorStatus(email,"Rejected",index);
-}
-
-function updateTutorStatus(email,status,index){
-fetch(scriptURL+"?action=updateStatus&email="+encodeURIComponent(email)+"&status="+status)
-.then(res=>res.json())
-.then(data=>{
-document.getElementById("status-"+index).innerText=status;
-})
-.catch(err=>console.error(err));
-}
 </script>
+
 </body>
 </html>
