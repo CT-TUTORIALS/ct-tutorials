@@ -6,9 +6,7 @@
 <title>Tutors Portal | C&T Tutorials</title>
 
 <style>
-
 /* ---------------- GENERAL ---------------- */
-
 body{
 margin:0;
 font-family:"Segoe UI", Arial, sans-serif;
@@ -20,7 +18,6 @@ flex-direction:column;
 }
 
 /* ---------------- HEADER ---------------- */
-
 header{
 background:#003366;
 color:white;
@@ -48,7 +45,6 @@ text-decoration:underline;
 }
 
 /* ---------------- MAIN ---------------- */
-
 .main-content{
 max-width:900px;
 margin:auto;
@@ -64,7 +60,6 @@ padding-bottom:8px;
 }
 
 /* ---------------- BUTTONS ---------------- */
-
 .portal-buttons{
 margin-top:30px;
 display:flex;
@@ -87,7 +82,6 @@ background:#00509e;
 }
 
 /* ---------------- MODALS ---------------- */
-
 .modal{
 display:none;
 position:fixed;
@@ -155,7 +149,6 @@ background:#00509e;
 }
 
 /* ---------------- FOOTER ---------------- */
-
 footer{
 background:#003366;
 color:white;
@@ -172,47 +165,35 @@ line-height:1.6;
 }
 
 /* hidden honeypot */
-
 .honeypot{
 display:none;
 }
 
 /* ---------------- MOBILE ---------------- */
-
 @media(max-width:768px){
-
 .main-content{
 padding:25px;
 }
-
 .portal-buttons{
 flex-direction:column;
 }
-
 }
-
 </style>
 </head>
 
 <body>
 
 <header>
-
 <h1>C&T Tutorials Tutors Portal</h1>
-
 <nav>
 <a href="index.html">Home</a>
 <a onclick="openApply()">Apply</a>
-<a onclick="openCreate()">Create Account</a>
-<a onclick="openLogin()">Login</a>
+<a onclick="openAdminLogin()">Admin Login</a>
 </nav>
-
 </header>
 
 <div class="main-content">
-
 <h2>Welcome Tutors!</h2>
-
 <p>
 We are excited to have you join our network of professional tutors.
 Through this portal you will be able to manage tutoring activities and
@@ -225,31 +206,25 @@ and a strong commitment to student success.
 </p>
 
 <div class="portal-buttons">
+<button class="portal-btn" onclick="openApply()">Apply to Become a Tutor</button>
+<button class="portal-btn" onclick="openAdminLogin()">Admin Login</button>
+</div>
 
-<button class="portal-btn" onclick="openApply()">
-Apply to Become a Tutor
-</button>
-
-<button class="portal-btn" onclick="openCreate()">
-Create Tutor Account
-</button>
-
-<button class="portal-btn" onclick="openLogin()">
-Tutor Login
-</button>
-
+<!-- ADMIN DASHBOARD -->
+<div id="adminDashboard" class="modal">
+<h2 style="color:#003366; text-align:center;">Tutor Approval Dashboard</h2>
+<div id="tutorListContainer" style="max-height:400px; overflow:auto; padding:10px;">
+<p>Loading tutors...</p>
+</div>
+<button class="submit-btn" onclick="closeAdminDashboard()">Close</button>
 </div>
 
 </div>
 
 <!-- APPLY MODAL -->
-
 <div id="applyModal" class="modal">
-
 <form id="tutorForm">
-
 <button type="button" class="close" onclick="closeApply()">×</button>
-
 <h2>Tutor Application</h2>
 
 <label>Full Name
@@ -276,8 +251,6 @@ Tutor Login
 <textarea name="experience" required></textarea>
 </label>
 
-<!-- HONEYPOT FIELD -->
-
 <div class="honeypot">
 <label>Leave this field empty
 <input type="text" name="website">
@@ -286,107 +259,135 @@ Tutor Login
 
 <input type="hidden" id="formStart">
 
-<button type="submit" class="submit-btn">
-Submit Application
-</button>
-
+<button type="submit" class="submit-btn">Submit Application</button>
 </form>
+</div>
 
+<!-- ADMIN LOGIN MODAL -->
+<div id="adminLoginModal" class="modal">
+<form id="adminLoginForm">
+<button type="button" class="close" onclick="closeAdminLogin()">×</button>
+<h2>Admin Login</h2>
+<label>Username
+<input type="text" id="adminUsername" required>
+</label>
+<label>Password
+<input type="password" id="adminPassword" required>
+</label>
+<button type="submit" class="submit-btn">Login</button>
+</form>
 </div>
 
 <footer>
-
 <div class="footer-disclaimer">
-
 <strong>Disclaimer:</strong><br>
-
 C&T Tutorials engages tutors as independent academic facilitators.
 Tutors provide academic support services only and do not represent
 any university, college, examination body, or academic institution.
-
 All tutoring services offered through this platform are supplementary
 and intended solely to support independent learning and academic development.
-
 </div>
-
 </footer>
 
 <script>
+/* MODAL FUNCTIONS */
+function openApply(){document.getElementById("applyModal").style.display="flex"; document.getElementById("formStart").value = Date.now();}
+function closeApply(){document.getElementById("applyModal").style.display="none";}
 
-/* OPEN APPLY */
+function openAdminLogin(){document.getElementById("adminLoginModal").style.display="flex";}
+function closeAdminLogin(){document.getElementById("adminLoginModal").style.display="none";}
 
-function openApply(){
-
-document.getElementById("applyModal").style.display="flex";
-
-/* record form start time */
-
-document.getElementById("formStart").value = Date.now();
-
-}
-
-function closeApply(){
-document.getElementById("applyModal").style.display="none";
-}
+function openAdminDashboard(){document.getElementById("adminDashboard").style.display="flex";}
+function closeAdminDashboard(){document.getElementById("adminDashboard").style.display="none";}
 
 /* CLOSE MODAL OUTSIDE CLICK */
-
 window.onclick=function(event){
-
-let apply=document.getElementById("applyModal");
-
-if(event.target==apply){
-apply.style.display="none";
-}
-
+if(event.target==document.getElementById("applyModal")) closeApply();
+if(event.target==document.getElementById("adminLoginModal")) closeAdminLogin();
+if(event.target==document.getElementById("adminDashboard")) closeAdminDashboard();
 }
 
 /* GOOGLE SCRIPT URL */
+const scriptURL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
 
-const scriptURL = "https://script.google.com/macros/s/AKfycbzMCx7JDK0f1US6G9hLq2Ag1u_jQPiABcCPk0gzd6B3cKSERg-pHfZ0DpchZoqyQFHaQg/exec";
-
-document.getElementById("tutorForm").addEventListener("submit", e => {
-
+/* TUTOR APPLICATION SUBMISSION */
+document.getElementById("tutorForm").addEventListener("submit", e=>{
 e.preventDefault();
-
 /* honeypot check */
-
-if(document.querySelector("input[name='website']").value !== ""){
-return;
-}
-
+if(document.querySelector("input[name='website']").value !== "") return;
 /* time check */
-
-const startTime = document.getElementById("formStart").value;
-const timeTaken = Date.now() - startTime;
-
-if(timeTaken < 4000){
-alert("Submission blocked (possible bot). Please try again.");
-return;
-}
-
-/* submit form */
-
+if(Date.now() - document.getElementById("formStart").value < 4000){alert("Submission blocked (possible bot)"); return;}
 fetch(scriptURL,{
 method:"POST",
 body:new FormData(document.getElementById("tutorForm"))
 })
-
-.then(response=>{
-
+.then(res=>{
 alert("Application submitted successfully!");
-
 document.getElementById("tutorForm").reset();
-
 closeApply();
-
+loadTutorList(); // refresh dashboard
 })
-
-.catch(error=>alert("Error submitting application"));
-
+.catch(err=>alert("Error submitting application"));
 });
 
-</script>
+/* ADMIN LOGIN */
+document.getElementById("adminLoginForm").addEventListener("submit", e=>{
+e.preventDefault();
+const user=document.getElementById("adminUsername").value;
+const pass=document.getElementById("adminPassword").value;
 
+// Simple static admin login (replace with secure authentication if desired)
+if(user==="admin" && pass==="password123"){
+closeAdminLogin();
+openAdminDashboard();
+loadTutorList();
+}else{
+alert("Incorrect admin credentials");
+}
+});
+
+/* LOAD TUTORS INTO DASHBOARD */
+function loadTutorList(){
+fetch(scriptURL+"?action=getAllTutors")
+.then(res=>res.json())
+.then(data=>{
+let container=document.getElementById("tutorListContainer");
+container.innerHTML="";
+if(data.length===0){container.innerHTML="<p>No tutor applications yet.</p>"; return;}
+data.forEach((tutor,i)=>{
+let div=document.createElement("div");
+div.style.border="1px solid #ccc";
+div.style.padding="10px";
+div.style.margin="8px 0";
+div.style.borderRadius="5px";
+div.innerHTML=`
+<strong>${tutor.name}</strong> - ${tutor.subjects}<br>
+Status: <span id="status-${i}">${tutor.status}</span>
+<button style="margin-top:5px;" onclick="approveTutor(${i},'${tutor.email}')">Approve</button>
+<button style="margin-top:5px;" onclick="rejectTutor(${i},'${tutor.email}')">Reject</button>
+`;
+container.appendChild(div);
+});
+})
+.catch(err=>console.error(err));
+}
+
+/* APPROVE / REJECT TUTOR */
+function approveTutor(index,email){
+updateTutorStatus(email,"Approved",index);
+}
+function rejectTutor(index,email){
+updateTutorStatus(email,"Rejected",index);
+}
+
+function updateTutorStatus(email,status,index){
+fetch(scriptURL+"?action=updateStatus&email="+encodeURIComponent(email)+"&status="+status)
+.then(res=>res.json())
+.then(data=>{
+document.getElementById("status-"+index).innerText=status;
+})
+.catch(err=>console.error(err));
+}
+</script>
 </body>
 </html>
