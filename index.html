@@ -404,6 +404,17 @@ ct0tutorials@gmail.com
 
 </label>
 
+<!-- TUTOR DROPDOWN ADDED -->
+<label>Select Tutor
+
+<select id="tutorDropdown" name="tutor">
+
+<option value="">Loading tutors...</option>
+
+</select>
+
+</label>
+
 <label>
 
 <input type="checkbox" required>
@@ -466,7 +477,6 @@ All services are supplementary and intended to support independent learning.
 <script>
 
 /* registration form */
-
 function openForm(){
 document.getElementById("modal").style.display="flex";
 }
@@ -476,7 +486,6 @@ document.getElementById("modal").style.display="none";
 }
 
 /* admin popup */
-
 function openAdmin(){
 document.getElementById("adminModal").style.display="flex";
 }
@@ -486,36 +495,45 @@ document.getElementById("adminModal").style.display="none";
 }
 
 /* close when clicking outside */
-
 window.onclick=function(event){
-
 if(event.target==document.getElementById("modal")){
 closeForm();
 }
-
 if(event.target==document.getElementById("adminModal")){
 closeAdmin();
 }
-
 }
 
 /* smooth header collapse */
-
 let header=document.querySelector("header");
-
 window.addEventListener("scroll",function(){
-
 if(window.scrollY>120){
 header.classList.add("scrolled");
 }
-
 else{
 header.classList.remove("scrolled");
 }
+});
 
+/* ---------------- AUTO-LOAD APPROVED TUTORS ---------------- */
+fetch("https://script.google.com/macros/s/AKfycbzMCx7JDK0f1US6G9hLq2Ag1u_jQPiABcCPk0gzd6B3cKSERg-pHfZ0DpchZoqyQFHaQg/exec?action=getTutors")
+.then(response => response.json())
+.then(data => {
+let dropdown = document.getElementById("tutorDropdown");
+dropdown.innerHTML = '<option value="">Select Tutor</option>';
+data.forEach(function(tutor){
+let option = document.createElement("option");
+option.value = tutor.name;
+option.text = tutor.name + " - " + tutor.subject;
+dropdown.appendChild(option);
+});
+})
+.catch(error => {
+document.getElementById("tutorDropdown").innerHTML =
+"<option>No tutors available</option>";
 });
 
 </script>
 
 </body>
-  </html>
+</html>
