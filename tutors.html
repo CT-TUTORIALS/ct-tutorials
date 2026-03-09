@@ -171,6 +171,12 @@ margin:auto;
 line-height:1.6;
 }
 
+/* hidden honeypot */
+
+.honeypot{
+display:none;
+}
+
 /* ---------------- MOBILE ---------------- */
 
 @media(max-width:768px){
@@ -236,62 +242,6 @@ Tutor Login
 
 </div>
 
-<!-- LOGIN MODAL -->
-
-<div id="loginModal" class="modal">
-
-<form>
-
-<button type="button" class="close" onclick="closeLogin()">×</button>
-
-<h2>Tutor Login</h2>
-
-<label>Email
-<input type="email" required>
-</label>
-
-<label>Password
-<input type="password" required>
-</label>
-
-<button class="submit-btn">Login</button>
-
-</form>
-
-</div>
-
-<!-- CREATE ACCOUNT MODAL -->
-
-<div id="createModal" class="modal">
-
-<form>
-
-<button type="button" class="close" onclick="closeCreate()">×</button>
-
-<h2>Create Tutor Account</h2>
-
-<label>Full Name
-<input type="text" required>
-</label>
-
-<label>Email
-<input type="email" required>
-</label>
-
-<label>Cellphone Number
-<input type="tel" required>
-</label>
-
-<label>Password
-<input type="password" required>
-</label>
-
-<button class="submit-btn">Create Account</button>
-
-</form>
-
-</div>
-
 <!-- APPLY MODAL -->
 
 <div id="applyModal" class="modal">
@@ -326,6 +276,16 @@ Tutor Login
 <textarea name="experience" required></textarea>
 </label>
 
+<!-- HONEYPOT FIELD -->
+
+<div class="honeypot">
+<label>Leave this field empty
+<input type="text" name="website">
+</label>
+</div>
+
+<input type="hidden" id="formStart">
+
 <button type="submit" class="submit-btn">
 Submit Application
 </button>
@@ -353,51 +313,27 @@ and intended solely to support independent learning and academic development.
 
 <script>
 
-/* LOGIN */
-
-function openLogin(){
-document.getElementById("loginModal").style.display="flex";
-}
-
-function closeLogin(){
-document.getElementById("loginModal").style.display="none";
-}
-
-/* CREATE ACCOUNT */
-
-function openCreate(){
-document.getElementById("createModal").style.display="flex";
-}
-
-function closeCreate(){
-document.getElementById("createModal").style.display="none";
-}
-
-/* APPLY */
+/* OPEN APPLY */
 
 function openApply(){
+
 document.getElementById("applyModal").style.display="flex";
+
+/* record form start time */
+
+document.getElementById("formStart").value = Date.now();
+
 }
 
 function closeApply(){
 document.getElementById("applyModal").style.display="none";
 }
 
-/* CLOSE WHEN CLICKING OUTSIDE */
+/* CLOSE MODAL OUTSIDE CLICK */
 
 window.onclick=function(event){
 
-let login=document.getElementById("loginModal");
-let create=document.getElementById("createModal");
 let apply=document.getElementById("applyModal");
-
-if(event.target==login){
-login.style.display="none";
-}
-
-if(event.target==create){
-create.style.display="none";
-}
 
 if(event.target==apply){
 apply.style.display="none";
@@ -405,7 +341,7 @@ apply.style.display="none";
 
 }
 
-/* SEND APPLICATION TO GOOGLE APPS SCRIPT */
+/* GOOGLE SCRIPT URL */
 
 const scriptURL = "https://script.google.com/macros/s/AKfycbzMCx7JDK0f1US6G9hLq2Ag1u_jQPiABcCPk0gzd6B3cKSERg-pHfZ0DpchZoqyQFHaQg/exec";
 
@@ -413,12 +349,30 @@ document.getElementById("tutorForm").addEventListener("submit", e => {
 
 e.preventDefault();
 
-fetch(scriptURL, {
-method: "POST",
-body: new FormData(document.getElementById("tutorForm"))
+/* honeypot check */
+
+if(document.querySelector("input[name='website']").value !== ""){
+return;
+}
+
+/* time check */
+
+const startTime = document.getElementById("formStart").value;
+const timeTaken = Date.now() - startTime;
+
+if(timeTaken < 4000){
+alert("Submission blocked (possible bot). Please try again.");
+return;
+}
+
+/* submit form */
+
+fetch(scriptURL,{
+method:"POST",
+body:new FormData(document.getElementById("tutorForm"))
 })
 
-.then(response => {
+.then(response=>{
 
 alert("Application submitted successfully!");
 
@@ -428,7 +382,7 @@ closeApply();
 
 })
 
-.catch(error => alert("Error submitting application"));
+.catch(error=>alert("Error submitting application"));
 
 });
 
