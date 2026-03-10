@@ -1,33 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>C&T Tutorials Admin Dashboard</title>
+<title>C&T Tutorials Admin</title>
 
 <style>
 
-body{
-font-family:Arial;
-margin:0;
-background:#f4f4f4;
-}
-
-header{
-background:#003366;
-color:white;
-padding:20px;
-text-align:center;
-}
+body{font-family:Arial;background:#f4f4f4}
 
 .container{
-max-width:1100px;
+max-width:900px;
 margin:auto;
 background:white;
 padding:40px;
+}
+
+input{
+width:100%;
+padding:10px;
+margin-top:10px;
+}
+
+button{
+padding:10px 15px;
+background:#003366;
+color:white;
+border:none;
+margin-top:15px;
 }
 
 table{
@@ -36,30 +35,13 @@ border-collapse:collapse;
 margin-top:20px;
 }
 
-th,td{
+td,th{
 border:1px solid #ddd;
 padding:10px;
-text-align:left;
 }
 
 th{
 background:#003366;
-color:white;
-}
-
-button{
-padding:8px 12px;
-border:none;
-cursor:pointer;
-}
-
-.approve{
-background:green;
-color:white;
-}
-
-.reject{
-background:red;
 color:white;
 }
 
@@ -69,17 +51,25 @@ color:white;
 
 <body>
 
-<header>
+<div class="container" id="loginPage">
 
-<h1>C&T Tutorials Admin Dashboard</h1>
+<h2>Admin Login</h2>
 
-</header>
+<input id="user" placeholder="Username">
+<input id="pass" type="password" placeholder="Password">
 
-<div class="container">
+<button onclick="login()">Login</button>
+
+<p id="error" style="color:red"></p>
+
+</div>
+
+
+<div class="container" id="dashboard" style="display:none">
 
 <h2>Tutor Applications</h2>
 
-<table id="tutorTable">
+<table id="table">
 
 <thead>
 
@@ -89,8 +79,6 @@ color:white;
 <th>Email</th>
 <th>Phone</th>
 <th>Subjects</th>
-<th>Qualification</th>
-<th>Experience</th>
 <th>Status</th>
 <th>Action</th>
 
@@ -98,19 +86,52 @@ color:white;
 
 </thead>
 
-<tbody>
-
-</tbody>
+<tbody></tbody>
 
 </table>
 
 </div>
 
+
 <script>
 
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbyc3T_2QAX2LKbJE4mPPYztVrBj7gE0BCHb9otc4JPkctR_yY6U381B0uX3MYjv_tzoQg/exec";
 
-/* LOAD TUTOR APPLICATIONS */
+
+function login(){
+
+fetch(SCRIPT_URL,{
+method:"POST",
+body:JSON.stringify({
+action:"adminLogin",
+user:document.getElementById("user").value,
+pass:document.getElementById("pass").value
+})
+})
+
+.then(res=>res.json())
+
+.then(data=>{
+
+if(data.success){
+
+document.getElementById("loginPage").style.display="none";
+
+document.getElementById("dashboard").style.display="block";
+
+loadTutors();
+
+}else{
+
+document.getElementById("error").innerText="Invalid login";
+
+}
+
+});
+
+}
+
+
 
 function loadTutors(){
 
@@ -120,35 +141,33 @@ fetch(SCRIPT_URL+"?action=getAllTutors")
 
 .then(tutors=>{
 
-const table=document.querySelector("#tutorTable tbody");
+const tbody=document.querySelector("#table tbody");
 
-table.innerHTML="";
+tbody.innerHTML="";
 
-tutors.forEach((tutor,index)=>{
+tutors.forEach((t,i)=>{
 
 const row=document.createElement("tr");
 
 row.innerHTML=`
 
-<td>${tutor.name}</td>
-<td>${tutor.email}</td>
-<td>${tutor.phone}</td>
-<td>${tutor.subjects}</td>
-<td>${tutor.qualification}</td>
-<td>${tutor.experience}</td>
-<td>${tutor.status}</td>
+<td>${t.name}</td>
+<td>${t.email}</td>
+<td>${t.phone}</td>
+<td>${t.subjects}</td>
+<td>${t.status}</td>
 
 <td>
 
-<button class="approve" onclick="updateStatus(${index},'Approved')">Approve</button>
+<button onclick="update(${i},'Approved')">Approve</button>
 
-<button class="reject" onclick="updateStatus(${index},'Rejected')">Reject</button>
+<button onclick="update(${i},'Rejected')">Reject</button>
 
 </td>
 
 `;
 
-table.appendChild(row);
+tbody.appendChild(row);
 
 });
 
@@ -156,9 +175,9 @@ table.appendChild(row);
 
 }
 
-/* UPDATE STATUS */
 
-function updateStatus(index,status){
+
+function update(index,status){
 
 fetch(SCRIPT_URL,{
 method:"POST",
@@ -170,21 +189,13 @@ status:status
 })
 
 .then(res=>res.json())
-
 .then(data=>{
-
-alert("Tutor status updated");
-
 loadTutors();
-
 });
 
 }
 
-window.onload=loadTutors;
-
 </script>
 
 </body>
-
 </html>
