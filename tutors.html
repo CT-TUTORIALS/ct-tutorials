@@ -6,213 +6,67 @@
 <title>Tutors Portal | C&T Tutorials</title>
 
 <style>
-/* ---------------- GENERAL ---------------- */
 body{
-margin:0;
-font-family:"Segoe UI", Arial, sans-serif;
-background:#f4f4f4;
-color:#333;
-min-height:100vh;
-display:flex;
-flex-direction:column;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #f4f4f4;
+  margin:0;
+  padding:0;
 }
 
-/* ---------------- HEADER ---------------- */
-header{
-background:#003366;
-color:white;
-padding:20px;
-text-align:center;
-}
-
-nav{
-margin-top:10px;
-display:flex;
-justify-content:center;
-flex-wrap:wrap;
-gap:15px;
-}
-
-nav a{
-color:white;
-text-decoration:none;
-font-weight:bold;
-cursor:pointer;
-}
-
-nav a:hover{
-text-decoration:underline;
-}
-
-/* ---------------- MAIN ---------------- */
-.main-content{
-max-width:900px;
-margin:auto;
-padding:40px;
-background:white;
-flex:1;
-}
-
-h2{
-color:#003366;
-border-bottom:2px solid #003366;
-padding-bottom:8px;
-}
-
-/* ---------------- BUTTONS ---------------- */
-.portal-buttons{
-margin-top:30px;
-display:flex;
-gap:20px;
-flex-wrap:wrap;
-}
-
-.portal-btn{
-background:#003366;
-color:white;
-padding:12px 20px;
-border:none;
-border-radius:5px;
-cursor:pointer;
-font-size:16px;
-}
-
-.portal-btn:hover{
-background:#00509e;
-}
-
-/* ---------------- MODALS ---------------- */
-.modal{
-display:none;
-position:fixed;
-inset:0;
-background:rgba(0,0,0,0.7);
-justify-content:center;
-align-items:center;
-z-index:1000;
-overflow:auto;
-padding:20px;
-}
-
-.modal form{
-background:white;
-padding:25px;
-width:90%;
-max-width:500px;
-border-radius:10px;
-position:relative;
-}
-
-.close{
-position:absolute;
-top:10px;
-right:15px;
-font-size:22px;
-cursor:pointer;
-border:none;
-background:none;
+.container{
+  max-width:500px;
+  margin:50px auto;
+  background:white;
+  padding:25px;
+  border-radius:8px;
+  box-shadow:0 0 10px rgba(0,0,0,0.1);
 }
 
 label{
-display:block;
-margin-top:15px;
+  display:block;
+  margin-top:15px;
+  font-weight:500;
 }
 
 input, textarea{
-width:100%;
-padding:10px;
-margin-top:5px;
-border-radius:5px;
-border:1px solid #ccc;
-box-sizing:border-box;
+  width:100%;
+  padding:10px;
+  margin-top:5px;
+  border-radius:5px;
+  border:1px solid #ccc;
+  box-sizing:border-box;
 }
 
 textarea{
-min-height:80px;
-resize:vertical;
+  min-height:80px;
+  resize:vertical;
 }
 
-.submit-btn{
-margin-top:20px;
-width:100%;
-padding:12px;
-background:#003366;
-color:white;
-border:none;
-border-radius:5px;
-cursor:pointer;
-font-size:16px;
+button{
+  margin-top:20px;
+  width:100%;
+  padding:12px;
+  background:#003366;
+  color:white;
+  border:none;
+  border-radius:5px;
+  font-size:16px;
+  cursor:pointer;
 }
 
-.submit-btn:hover{
-background:#00509e;
-}
-
-/* ---------------- FOOTER ---------------- */
-footer{
-background:#003366;
-color:white;
-text-align:center;
-padding:25px;
-margin-top:auto;
-}
-
-.footer-disclaimer{
-font-size:12px;
-max-width:900px;
-margin:auto;
-line-height:1.6;
-}
-
-/* hidden honeypot */
-.honeypot{
-display:none;
-}
-
-/* ---------------- MOBILE ---------------- */
-@media(max-width:768px){
-.main-content{
-padding:25px;
-}
-.portal-buttons{
-flex-direction:column;
-}
+button:hover{
+  background:#00509e;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-<h1>C&T Tutorials Tutors Portal</h1>
-<nav>
-<a href="index.html">Home</a>
-<a onclick="openApply()">Apply</a>
-<a onclick="openCreate()">Create Account</a>
-<a onclick="openLogin()">Login</a>
-</nav>
-</header>
+<div class="container">
 
-<div class="main-content">
-<h2>Welcome Tutors!</h2>
-<p>We are excited to have you join our network of professional tutors.
-Through this portal you will be able to manage tutoring activities and
-support students seeking academic guidance.</p>
-<p>C&T Tutorials values professionalism, academic integrity,
-and a strong commitment to student success.</p>
-
-<div class="portal-buttons">
-<button class="portal-btn" onclick="openApply()">Apply to Become a Tutor</button>
-<button class="portal-btn" onclick="openCreate()">Create Tutor Account</button>
-<button class="portal-btn" onclick="openLogin()">Tutor Login</button>
-</div>
-</div>
-
-<!-- APPLY MODAL -->
-<div id="applyModal" class="modal">
-<form id="tutorForm" action="https://script.google.com/macros/s/AKfycbynavvtHgE1MTKmmxCPmUyFlL_foWRWwHHTwWLOi37jjmmpLwhUeQOIrbXzlSWbb9__Rg/exec" method="POST" target="_blank">
-<button type="button" class="close" onclick="closeApply()">×</button>
 <h2>Tutor Application</h2>
+
+<form id="tutorForm">
 
 <label>Full Name
 <input type="text" name="name" required>
@@ -238,59 +92,30 @@ and a strong commitment to student success.</p>
 <textarea name="experience" required></textarea>
 </label>
 
-<!-- HONEYPOT FIELD -->
-<div class="honeypot">
-<label>Leave this field empty
-<input type="text" name="website">
-</label>
-</div>
+<button type="submit">Submit Application</button>
 
-<button type="submit" class="submit-btn">Submit Application</button>
 </form>
-</div>
 
-<footer>
-<div class="footer-disclaimer">
-<strong>Disclaimer:</strong><br>
-C&T Tutorials engages tutors as independent academic facilitators.
-Tutors provide academic support services only and do not represent
-any university, college, examination body, or academic institution.
-All tutoring services offered through this platform are supplementary
-and intended solely to support independent learning and academic development.
 </div>
-</footer>
 
 <script>
-/* OPEN APPLY */
-function openApply(){ document.getElementById("applyModal").style.display="flex"; }
-function closeApply(){ document.getElementById("applyModal").style.display="none"; }
+/* --- Send tutor data to Google Apps Script --- */
 
-/* CLOSE MODAL OUTSIDE CLICK */
-window.onclick=function(event){
-let apply=document.getElementById("applyModal");
-if(event.target==apply) apply.style.display="none";
-}
+const scriptURL = "https://script.google.com/macros/s/AKfycbzMCx7JDK0f1US6G9hLq2Ag1u_jQPiABcCPk0gzd6B3cKSERg-pHfZ0DpchZoqyQFHaQg/exec";
 
-/* ------------------- SUBMIT TO GOOGLE SHEETS ------------------- */
-const form = document.getElementById("tutorForm");
+document.getElementById("tutorForm").addEventListener("submit", function(e){
+  e.preventDefault();
 
-form.addEventListener("submit", e => {
-e.preventDefault();
-
-/* honeypot check */
-if(document.querySelector("input[name='website']").value !== "") return;
-
-/* submit form immediately (No Bot Timer) */
-fetch(form.action,{
-method:"POST",
-body:new FormData(form)
-})
-.then(res=>{
-alert("Application submitted successfully!");
-form.reset();
-closeApply();
-})
-.catch(err=>alert("Error submitting application"));
+  fetch(scriptURL, {
+    method: "POST",
+    body: new FormData(this)
+  })
+  .then(response => response.json())
+  .then(data => {
+    alert("Application submitted successfully! Admins will review and approve.");
+    document.getElementById("tutorForm").reset();
+  })
+  .catch(error => alert("Error submitting application. Please try again."));
 });
 </script>
 
