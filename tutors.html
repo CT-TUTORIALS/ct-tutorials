@@ -1,14 +1,18 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>C&T Tutorials Tutors Portal</title>
+
+<title>C&T Tutorials | Become a Tutor</title>
 
 <style>
 
 body{
-font-family:Arial;
+font-family:Arial, Helvetica, sans-serif;
 margin:0;
 background:#f4f4f4;
 }
@@ -20,144 +24,126 @@ padding:20px;
 text-align:center;
 }
 
-.main{
+.container{
 max-width:900px;
 margin:auto;
 background:white;
 padding:40px;
+margin-top:30px;
+border-radius:6px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
 }
 
-button{
-background:#003366;
-color:white;
-border:none;
-padding:12px 20px;
-cursor:pointer;
-margin-top:10px;
+h2{
+color:#003366;
 }
 
-button:hover{
-background:#00509e;
-}
-
-.modal{
-display:none;
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.7);
-justify-content:center;
-align-items:center;
-}
-
-.modal form{
-background:white;
-padding:25px;
-width:90%;
-max-width:500px;
-border-radius:10px;
+label{
+display:block;
+margin-top:15px;
+font-weight:bold;
 }
 
 input,textarea{
 width:100%;
 padding:10px;
 margin-top:5px;
+border:1px solid #ccc;
+border-radius:4px;
+}
+
+textarea{
+resize:vertical;
+}
+
+button{
+margin-top:20px;
+padding:12px 20px;
+background:#003366;
+color:white;
+border:none;
+border-radius:4px;
+cursor:pointer;
+font-size:16px;
+}
+
+button:hover{
+background:#00509e;
+}
+
+.success{
+color:green;
+margin-top:20px;
+}
+
+footer{
+text-align:center;
+margin-top:40px;
+padding:20px;
+background:#003366;
+color:white;
 }
 
 </style>
+
 </head>
 
 <body>
 
 <header>
-<h1>C&T Tutorials Tutor Portal</h1>
+<h1>C&T Tutorials</h1>
+<p>Apply to Become a Tutor</p>
 </header>
 
-<div class="main">
 
-<h2>Welcome Tutors</h2>
+<div class="container">
+
+<h2>Tutor Application Form</h2>
 
 <p>
-Apply to become a tutor or create your tutor account once approved.
+Thank you for your interest in joining <strong>C&T Tutorials</strong>. 
+Please complete the form below. Approved tutors will receive a secure tutor code
+that allows them to create a tutor account and access the tutor dashboard.
 </p>
-
-<button onclick="openApply()">Apply to Become Tutor</button>
-<button onclick="openCreate()">Create Tutor Account</button>
-
-</div>
-
-<!-- APPLY MODAL -->
-
-<div id="applyModal" class="modal">
 
 <form id="tutorForm">
 
-<h2>Tutor Application</h2>
-
 <label>Full Name</label>
-<input id="name" required>
+<input type="text" id="name" required>
 
-<label>Email</label>
-<input id="email" required>
+<label>Email Address</label>
+<input type="email" id="email" required>
 
-<label>Phone</label>
-<input id="phone" required>
+<label>Phone Number</label>
+<input type="text" id="phone" required>
 
-<label>Subjects</label>
-<input id="subjects" required>
+<label>Subjects You Can Tutor</label>
+<input type="text" id="subjects" placeholder="Example: Mathematics, Physics" required>
 
-<label>Qualification</label>
-<input id="qualification" required>
+<label>Your Qualification</label>
+<input type="text" id="qualification" placeholder="Example: BSc Mathematics" required>
 
-<label>Experience</label>
-<textarea id="experience"></textarea>
+<label>Teaching / Tutoring Experience</label>
+<textarea id="experience" rows="4" placeholder="Briefly describe your experience"></textarea>
 
 <button type="submit">Submit Application</button>
 
 </form>
 
-</div>
-
-<!-- CREATE ACCOUNT -->
-
-<div id="createModal" class="modal">
-
-<form id="createForm">
-
-<h2>Create Tutor Account</h2>
-
-<label>Email</label>
-<input id="accountEmail" required>
-
-<label>Password</label>
-<input type="password" required>
-
-<label>Tutor Code</label>
-<input id="tutorCode" required>
-
-<button type="submit">Create Account</button>
-
-</form>
+<p id="message" class="success"></p>
 
 </div>
+
+
+<footer>
+<p>© 2026 C&T Tutorials</p>
+</footer>
+
 
 <script>
 
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycbyc3T_2QAX2LKbJE4mPPYztVrBj7gE0BCHb9otc4JPkctR_yY6U381B0uX3MYjv_tzoQg/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyc3T_2QAX2LKbJE4mPPYztVrBj7gE0BCHb9otc4JPkctR_yY6U381B0uX3MYjv_tzoQg/exec";
 
-/* OPEN MODALS */
-
-function openApply(){
-document.getElementById("applyModal").style.display="flex";
-}
-
-function openCreate(){
-document.getElementById("createModal").style.display="flex";
-}
-
-/* TUTOR APPLICATION */
 
 document.getElementById("tutorForm").addEventListener("submit",function(e){
 
@@ -173,41 +159,20 @@ qualification:document.getElementById("qualification").value,
 experience:document.getElementById("experience").value
 };
 
+
 fetch(SCRIPT_URL,{
 method:"POST",
 body:JSON.stringify(data)
 })
+
 .then(res=>res.json())
-.then(data=>{
-alert("Application submitted successfully");
+
+.then(response=>{
+
+document.getElementById("message").innerText =
+"Application submitted successfully. You will receive an email if approved.";
+
 document.getElementById("tutorForm").reset();
-});
-
-});
-
-/* TUTOR CODE VALIDATION */
-
-document.getElementById("createForm").addEventListener("submit",function(e){
-
-e.preventDefault();
-
-const code=document.getElementById("tutorCode").value;
-
-fetch(SCRIPT_URL+"?action=validateCode&code="+code)
-
-.then(res=>res.json())
-
-.then(data=>{
-
-if(data.valid){
-
-alert("Tutor code verified. Account created.");
-
-}else{
-
-alert("Invalid tutor code");
-
-}
 
 });
 
@@ -217,3 +182,4 @@ alert("Invalid tutor code");
 
 </body>
 </html>
+```
