@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>C&T Tutorials</title>
+
 <meta name="google-site-verification" content="aSucaMc_aX_kQpRFNvVRgTX0pEeCD1c48mTuirk4qwY" />
+
 <style>
 /* ---------------- GENERAL ---------------- */
 body{margin:0;font-family:"Segoe UI", Arial, sans-serif;background:#f4f4f4;color:#333;line-height:1.6;}
@@ -112,21 +114,20 @@ footer{background:#003366;color:white;text-align:center;padding:25px;}
 <label>Select Service
 <select name="service" id="serviceSelect" required>
 <option value="">Select a service</option>
-<option value="Academic Writing Tutorials">Introduction to Academic Writing (4 sessions) – N$150</option>
-<option value="Topic Specific Sessions">Topic Specific Sessions – N$40</option>
-<option value="Hourly Rate">Hourly Rate – N$40</option>
-<option value="Group Sessions">Group Sessions – N$200 to N$600</option>
-<option value="Draft Editing">Draft Editing – N$15 per page</option>
-<option value="Proofreading">Proofreading – N$10 per page</option>
+<option>Introduction to Academic Writing (4 sessions) – N$150</option>
+<option>Topic Specific Sessions – N$40</option>
+<option>Hourly Rate – N$40</option>
+<option>Group Sessions – N$200 to N$600</option>
+<option>Draft Editing – N$15 per page</option>
+<option>Proofreading – N$10 per page</option>
 </select>
 </label>
-
-<!-- Tutor selection appears ONLY if tutorial service is selected -->
-<label id="tutorLabel" style="display:none;">Select a Tutor
-<select name="tutor" id="tutorSelect"></select>
+<label>Select Tutor
+<select name="tutor" id="tutorSelect">
+<option value="">Select a tutor</option>
+</select>
 </label>
-
-<label><input type="checkbox" required> I agree to the <a href="documents/Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a></label>
+<label><input type="checkbox" required>I agree to the <a href="documents/Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a></label>
 <button type="submit" class="submit-btn">Submit Registration</button>
 </form>
 </div>
@@ -151,70 +152,62 @@ All services are supplementary and intended to support independent learning.
 </footer>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxD8eu_GZrIX9hRNSV9LNEZw-05vno7EgyN6r1S7Z-CdZfHeg-JhhDF7Yv-OcJbpvVpmA/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz6fZNU0Tx42fTIoh0W8iZgHbQ-hWuqCvXFPZhmVlZEU2tKYpn1CEQjt0UKBLwGGN7qnQ/exec";
 
-/* MODALS */
+/* registration form */
 function openForm(){document.getElementById("modal").style.display="flex";}
 function closeForm(){document.getElementById("modal").style.display="none";}
+
+/* admin popup */
 function openAdmin(){document.getElementById("adminModal").style.display="flex";}
 function closeAdmin(){document.getElementById("adminModal").style.display="none";}
+
+/* close when clicking outside */
 window.onclick=function(event){
-if(event.target==document.getElementById("modal")) closeForm();
-if(event.target==document.getElementById("adminModal")) closeAdmin();
+if(event.target==document.getElementById("modal")){closeForm();}
+if(event.target==document.getElementById("adminModal")){closeAdmin();}
 }
 
-/* HEADER COLLAPSE */
+/* smooth header collapse */
 let header=document.querySelector("header");
 window.addEventListener("scroll",function(){
 if(window.scrollY>120){header.classList.add("scrolled");}
 else{header.classList.remove("scrolled");}
 });
 
-/* SHOW TUTOR DROPDOWN ONLY FOR TUTORIAL SERVICES */
-const serviceSelect = document.getElementById("serviceSelect");
-const tutorLabel = document.getElementById("tutorLabel");
-const tutorSelect = document.getElementById("tutorSelect");
-
-serviceSelect.addEventListener("change", function(){
-  const val = this.value;
-  if(val.includes("Tutorials") || val.includes("Sessions")){
-    tutorLabel.style.display="block";
-    fetch(SCRIPT_URL+"?action=getTutors")
-      .then(res=>res.json())
-      .then(data=>{
-        tutorSelect.innerHTML="";
-        data.forEach(t=>{ 
-          const opt=document.createElement("option");
-          opt.value=t.name;
-          opt.textContent=`${t.name} – ${t.subject}`;
-          tutorSelect.appendChild(opt);
-        });
-      }).catch(err=>{tutorSelect.innerHTML="<option>Error loading tutors</option>";});
-  } else {
-    tutorLabel.style.display="none";
-    tutorSelect.innerHTML="";
-  }
+/* Populate tutors dropdown only if a tutorial service is selected */
+document.getElementById("serviceSelect").addEventListener("change", function(){
+const service=this.value;
+const tutorDropdown=document.getElementById("tutorSelect");
+tutorDropdown.innerHTML='<option value="">Select a tutor</option>';
+if(service!==""){
+fetch(SCRIPT_URL+"?action=getTutors")
+.then(res=>res.json())
+.then(data=>{
+data.forEach(tutor=>{
+const opt=document.createElement("option");
+opt.value=tutor.name;
+opt.textContent=`${tutor.name} – ${tutor.subject}`;
+tutorDropdown.appendChild(opt);
+});
+});
+}
 });
 
-/* HANDLE STUDENT REGISTRATION SUBMISSION */
+/* Submit student registration */
 document.getElementById("studentForm").addEventListener("submit", function(e){
-  e.preventDefault();
-  const formData = new FormData(this);
-  const data = {};
-  formData.forEach((v,k)=>data[k]=v);
-  fetch(SCRIPT_URL,{
-    method:"POST",
-    body:JSON.stringify(data)
-  }).then(res=>res.json())
-    .then(r=>{
-      alert("Registration submitted successfully!");
-      this.reset();
-      tutorLabel.style.display="none";
-      closeForm();
-    })
-    .catch(err=>alert("Error submitting registration."));
+e.preventDefault();
+const formData=new FormData(this);
+const data={};
+formData.forEach((value,key)=>data[key]=value);
+fetch(SCRIPT_URL,{
+method:"POST",
+body:JSON.stringify(data)
+})
+.then(res=>res.json())
+.then(()=>{alert("Registration submitted!");this.reset();closeForm();})
+.catch(()=>alert("Error submitting registration"));
 });
 </script>
-
 </body>
 </html>
