@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tutors Portal | C&T Tutorials</title>
+<title>C&T Tutorials Tutors Portal</title>
 
 <style>
 /* ---------------- GENERAL ---------------- */
@@ -16,7 +16,6 @@ body{
   display:flex;
   flex-direction:column;
 }
-
 /* ---------------- HEADER ---------------- */
 header{
   background:#003366;
@@ -40,7 +39,6 @@ nav a{
 nav a:hover{
   text-decoration:underline;
 }
-
 /* ---------------- MAIN ---------------- */
 .main-content{
   max-width:900px;
@@ -54,7 +52,6 @@ h2{
   border-bottom:2px solid #003366;
   padding-bottom:8px;
 }
-
 /* ---------------- BUTTONS ---------------- */
 .portal-buttons{
   margin-top:30px;
@@ -74,7 +71,6 @@ h2{
 .portal-btn:hover{
   background:#00509e;
 }
-
 /* ---------------- MODALS ---------------- */
 .modal{
   display:none;
@@ -134,7 +130,6 @@ textarea{
 .submit-btn:hover{
   background:#00509e;
 }
-
 /* ---------------- FOOTER ---------------- */
 footer{
   background:#003366;
@@ -149,7 +144,6 @@ footer{
   margin:auto;
   line-height:1.6;
 }
-
 /* ---------------- MOBILE ---------------- */
 @media(max-width:768px){
   .main-content{
@@ -167,10 +161,10 @@ footer{
 <header>
 <h1>C&T Tutorials Tutors Portal</h1>
 <nav>
-  <a href="index.html">Home</a>
-  <a onclick="openApply()">Apply</a>
-  <a onclick="openCreate()">Create Account</a>
-  <a onclick="openLogin()">Login</a>
+<a href="index.html">Home</a>
+<a onclick="openApply()">Apply</a>
+<a onclick="openCreate()">Create Account</a>
+<a onclick="openLogin()">Login</a>
 </nav>
 </header>
 
@@ -180,15 +174,15 @@ footer{
 <p>C&T Tutorials values professionalism, academic integrity, and a strong commitment to student success.</p>
 
 <div class="portal-buttons">
-  <button class="portal-btn" onclick="openApply()">Apply to Become a Tutor</button>
-  <button class="portal-btn" onclick="openCreate()">Create Tutor Account</button>
-  <button class="portal-btn" onclick="openLogin()">Tutor Login</button>
+<button class="portal-btn" onclick="openApply()">Apply to Become a Tutor</button>
+<button class="portal-btn" onclick="openCreate()">Create Tutor Account</button>
+<button class="portal-btn" onclick="openLogin()">Tutor Login</button>
 </div>
 </div>
 
 <!-- APPLY MODAL -->
 <div id="applyModal" class="modal">
-<form id="tutorApplyForm">
+<form id="applyForm">
   <button type="button" class="close" onclick="closeApply()">×</button>
   <h2>Tutor Application</h2>
   <label>Full Name<input type="text" name="name" required></label>
@@ -206,8 +200,9 @@ footer{
 <form id="createAccountForm">
   <button type="button" class="close" onclick="closeCreate()">×</button>
   <h2>Create Tutor Account</h2>
-  <label>Unique Code (sent via email)<input type="text" name="tutorCode" required></label>
+  <label>Full Name / Access Code<input type="text" name="code" required></label>
   <label>Email<input type="email" name="email" required></label>
+  <label>Cellphone Number<input type="tel" name="phone" required></label>
   <label>Password<input type="password" name="password" required></label>
   <button type="submit" class="submit-btn">Create Account</button>
 </form>
@@ -215,7 +210,7 @@ footer{
 
 <!-- LOGIN MODAL -->
 <div id="loginModal" class="modal">
-<form>
+<form id="loginForm">
   <button type="button" class="close" onclick="closeLogin()">×</button>
   <h2>Tutor Login</h2>
   <label>Email<input type="email" required></label>
@@ -232,26 +227,25 @@ C&T Tutorials engages tutors as independent academic facilitators. Tutors provid
 </footer>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzoXVTRhe05PwBKhFVOi0bcwMtHtu_hBH4xCXsGhR-YZBJMd2-PusZtQIuqbcI8F8Mp/exec";
+const TUTOR_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzoXVTRhe05PwBKhFVOi0bcwMtHtu_hBH4xCXsGhR-YZBJMd2-PusZtQIuqbcI8F8Mp/exec";
 
-/* OPEN/CLOSE MODALS */
-function openApply(){document.getElementById("applyModal").style.display="flex";}
-function closeApply(){document.getElementById("applyModal").style.display="none";}
-function openCreate(){document.getElementById("createModal").style.display="flex";}
-function closeCreate(){document.getElementById("createModal").style.display="none";}
+/* MODALS */
 function openLogin(){document.getElementById("loginModal").style.display="flex";}
 function closeLogin(){document.getElementById("loginModal").style.display="none";}
-
-/* CLOSE WHEN CLICKING OUTSIDE */
+function openCreate(){document.getElementById("createModal").style.display="flex";}
+function closeCreate(){document.getElementById("createModal").style.display="none";}
+function openApply(){document.getElementById("applyModal").style.display="flex";}
+function closeApply(){document.getElementById("applyModal").style.display="none";}
 window.onclick=function(event){
-  let modals=["applyModal","createModal","loginModal"];
+  let modals=["loginModal","createModal","applyModal"];
   modals.forEach(id=>{
-    if(event.target==document.getElementById(id)) document.getElementById(id).style.display="none";
+    let m=document.getElementById(id);
+    if(event.target==m)m.style.display="none";
   });
-};
+}
 
-/* ---------------- TUTOR APPLICATION SUBMISSION ---------------- */
-document.getElementById("tutorApplyForm").addEventListener("submit", function(e){
+/* ---------------- TUTOR APPLICATION SUBMIT ---------------- */
+document.getElementById("applyForm").addEventListener("submit", function(e){
   e.preventDefault();
   const data={
     name:this.name.value,
@@ -261,40 +255,32 @@ document.getElementById("tutorApplyForm").addEventListener("submit", function(e)
     qualification:this.qualification.value,
     experience:this.experience.value
   };
-  fetch(SCRIPT_URL,{
+  fetch(TUTOR_SCRIPT_URL,{
     method:"POST",
     body:JSON.stringify(data)
-  })
-  .then(res=>res.json())
-  .then(resp=>{
-    alert("Application submitted! You will receive a code via email once approved.");
+  }).then(res=>res.json()).then(resp=>{
+    alert("Application submitted successfully!");
     this.reset();
     closeApply();
   });
 });
 
-/* ---------------- CREATE ACCOUNT USING UNIQUE CODE ---------------- */
+/* ---------------- CREATE ACCOUNT SUBMIT ---------------- */
 document.getElementById("createAccountForm").addEventListener("submit", function(e){
   e.preventDefault();
   const data={
-    action:"createAccount",
-    code:this.tutorCode.value,
+    code:this.code.value, // The unique code generated after approval
     email:this.email.value,
+    phone:this.phone.value,
     password:this.password.value
   };
-  fetch(SCRIPT_URL,{
+  fetch(TUTOR_SCRIPT_URL,{
     method:"POST",
     body:JSON.stringify(data)
-  })
-  .then(res=>res.json())
-  .then(resp=>{
-    if(resp.status==="success"){
-      alert("Account created successfully!");
-      this.reset();
-      closeCreate();
-    }else{
-      alert("Invalid or unapproved code.");
-    }
+  }).then(res=>res.json()).then(resp=>{
+    alert("Account creation request submitted!");
+    this.reset();
+    closeCreate();
   });
 });
 </script>
