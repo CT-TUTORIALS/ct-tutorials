@@ -110,11 +110,16 @@ footer{background:#003366;color:white;text-align:center;padding:25px;}
 <option>Proofreading – N$10 per page</option>
 </select>
 </label>
-<label>Select Tutor (only if service selected)
-<select name="tutor" id="tutorSelect" disabled required>
+
+<!-- Select Tutor (hidden until a service is selected) -->
+<div id="tutorField" style="display:none;">
+<label>Select Tutor
+<select name="tutor" id="tutorSelect" required>
 <option value="">Select a tutor</option>
 </select>
 </label>
+</div>
+
 <label>
 <input type="checkbox" required>
 I agree to the <a href="documents/Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a>
@@ -164,12 +169,14 @@ if(event.target==document.getElementById("modal")) closeForm();
 if(event.target==document.getElementById("adminModal")) closeAdmin();
 }
 
-/* Tutor dropdown population when service is selected */
+/* Tutor dropdown logic */
 const serviceSelect = document.getElementById("serviceSelect");
+const tutorField = document.getElementById("tutorField");
 const tutorSelect = document.getElementById("tutorSelect");
 
 serviceSelect.addEventListener("change", function(){
   if(this.value){
+    tutorField.style.display = "block";
     fetch(`${SCRIPT_URL}?action=getTutors`)
       .then(res=>res.json())
       .then(data=>{
@@ -178,8 +185,13 @@ serviceSelect.addEventListener("change", function(){
           tutorSelect.innerHTML += `<option>${t.name} (${t.subject})</option>`;
         });
         tutorSelect.disabled = false;
-      }).catch(err=>{console.error(err); tutorSelect.disabled=true;});
+      })
+      .catch(err=>{
+        console.error(err);
+        tutorSelect.disabled=true;
+      });
   }else{
+    tutorField.style.display = "none";
     tutorSelect.innerHTML='<option value="">Select a tutor</option>';
     tutorSelect.disabled = true;
   }
@@ -197,7 +209,7 @@ document.getElementById("studentForm").addEventListener("submit", function(e){
   };
   fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify(formData)})
     .then(res=>res.json())
-    .then(data=>{alert("Registration Submitted Successfully!"); this.reset(); tutorSelect.disabled=true; closeForm();})
+    .then(data=>{alert("Registration Submitted Successfully!"); this.reset(); tutorField.style.display="none"; tutorSelect.disabled=true; closeForm();})
     .catch(err=>alert("Error submitting registration!"));
 });
 
