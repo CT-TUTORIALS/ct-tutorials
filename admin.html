@@ -1,107 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Dashboard | C&T Tutorials</title>
+
+<title>C&T Tutorials Admin Dashboard</title>
+
 <style>
-body{margin:0;font-family:"Segoe UI", Arial, sans-serif;background:#f4f4f4;color:#333;line-height:1.6;}
-header{background:#003366;color:white;padding:20px;text-align:center;}
-nav{margin-top:10px;display:flex;justify-content:center;flex-wrap:wrap;gap:15px;}
-nav a{color:white;text-decoration:none;font-weight:bold;cursor:pointer;}
-nav a:hover{text-decoration:underline;}
-.main-content{max-width:1100px;margin:auto;padding:40px;background:white;min-height:80vh;}
-h2{color:#003366;border-bottom:2px solid #003366;padding-bottom:8px;margin-bottom:25px;}
-table{width:100%;border-collapse:collapse;margin-top:20px;}
-table, th, td{border:1px solid #ccc;}
-th, td{padding:12px;text-align:left;}
-th{background:#003366;color:white;}
-button.approve{background:green;color:white;padding:5px 10px;border:none;border-radius:4px;cursor:pointer;}
-button.decline{background:red;color:white;padding:5px 10px;border:none;border-radius:4px;cursor:pointer;}
-button.approve:hover{opacity:0.8;}
-button.decline:hover{opacity:0.8;}
+
+body{
+font-family:Arial;
+margin:0;
+background:#f4f4f4;
+}
+
+header{
+background:#003366;
+color:white;
+padding:20px;
+text-align:center;
+}
+
+.container{
+max-width:1100px;
+margin:auto;
+background:white;
+padding:40px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
+
+th,td{
+border:1px solid #ddd;
+padding:10px;
+text-align:left;
+}
+
+th{
+background:#003366;
+color:white;
+}
+
+button{
+padding:8px 12px;
+border:none;
+cursor:pointer;
+}
+
+.approve{
+background:green;
+color:white;
+}
+
+.reject{
+background:red;
+color:white;
+}
+
 </style>
+
 </head>
+
 <body>
 
 <header>
-<h1>Admin Dashboard – Tutor Applications</h1>
-<nav>
-<a href="index.html">Home</a>
-<a href="tutors.html">Tutors Portal</a>
-</nav>
+
+<h1>C&T Tutorials Admin Dashboard</h1>
+
 </header>
 
-<div class="main-content">
-<h2>Pending Tutor Applications</h2>
+<div class="container">
+
+<h2>Tutor Applications</h2>
+
 <table id="tutorTable">
+
 <thead>
+
 <tr>
-<th>Timestamp</th>
-<th>Full Name</th>
+
+<th>Name</th>
 <th>Email</th>
 <th>Phone</th>
 <th>Subjects</th>
 <th>Qualification</th>
 <th>Experience</th>
 <th>Status</th>
-<th>Actions</th>
+<th>Action</th>
+
 </tr>
+
 </thead>
+
 <tbody>
-<!-- Populated dynamically -->
+
 </tbody>
+
 </table>
+
 </div>
 
 <script>
-// Web App URL
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyc3T_2QAX2LKbJE4mPPYztVrBj7gE0BCHb9otc4JPkctR_yY6U381B0uX3MYjv_tzoQg/exec";
 
-const tutorTableBody = document.querySelector("#tutorTable tbody");
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbyc3T_2QAX2LKbJE4mPPYztVrBj7gE0BCHb9otc4JPkctR_yY6U381B0uX3MYjv_tzoQg/exec";
 
-/* Fetch tutor applications from Web App */
-function loadTutorApplications(){
-  fetch(`${SCRIPT_URL}?action=getApplications`)
-    .then(res=>res.json())
-    .then(data=>{
-      tutorTableBody.innerHTML="";
-      data.forEach((t,index)=>{
-        let tr=document.createElement("tr");
-        tr.innerHTML=`
-          <td>${t.Timestamp}</td>
-          <td>${t.name}</td>
-          <td>${t.email}</td>
-          <td>${t.phone}</td>
-          <td>${t.subjects}</td>
-          <td>${t.qualification}</td>
-          <td>${t.experience}</td>
-          <td>${t.status}</td>
-          <td>
-            <button class="approve" onclick="updateStatus('${t.Timestamp}','Approved')">Approve</button>
-            <button class="decline" onclick="updateStatus('${t.Timestamp}','Declined')">Decline</button>
-          </td>
-        `;
-        tutorTableBody.appendChild(tr);
-      });
-    }).catch(err=>console.error("Error fetching applications",err));
+/* LOAD TUTOR APPLICATIONS */
+
+function loadTutors(){
+
+fetch(SCRIPT_URL+"?action=getAllTutors")
+
+.then(res=>res.json())
+
+.then(tutors=>{
+
+const table=document.querySelector("#tutorTable tbody");
+
+table.innerHTML="";
+
+tutors.forEach((tutor,index)=>{
+
+const row=document.createElement("tr");
+
+row.innerHTML=`
+
+<td>${tutor.name}</td>
+<td>${tutor.email}</td>
+<td>${tutor.phone}</td>
+<td>${tutor.subjects}</td>
+<td>${tutor.qualification}</td>
+<td>${tutor.experience}</td>
+<td>${tutor.status}</td>
+
+<td>
+
+<button class="approve" onclick="updateStatus(${index},'Approved')">Approve</button>
+
+<button class="reject" onclick="updateStatus(${index},'Rejected')">Reject</button>
+
+</td>
+
+`;
+
+table.appendChild(row);
+
+});
+
+});
+
 }
 
-/* Update tutor status via Web App */
-function updateStatus(timestamp,status){
-  fetch(SCRIPT_URL,{
-    method:"POST",
-    body: JSON.stringify({action:"updateStatus", timestamp:timestamp, status:status})
-  }).then(res=>res.json())
-    .then(data=>{
-      alert("Status updated successfully!");
-      loadTutorApplications();
-    }).catch(err=>alert("Error updating status!"));
+/* UPDATE STATUS */
+
+function updateStatus(index,status){
+
+fetch(SCRIPT_URL,{
+method:"POST",
+body:JSON.stringify({
+action:"updateStatus",
+index:index,
+status:status
+})
+})
+
+.then(res=>res.json())
+
+.then(data=>{
+
+alert("Tutor status updated");
+
+loadTutors();
+
+});
+
 }
 
-/* Initial load */
-loadTutorApplications();
+window.onload=loadTutors;
+
 </script>
 
 </body>
+
 </html>
