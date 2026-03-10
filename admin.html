@@ -5,60 +5,32 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Portal | C&T Tutorials</title>
 <style>
-body{
-  font-family:"Segoe UI", Arial, sans-serif;
-  background:#f4f4f4;
-  margin:0;
-  padding:0;
-}
-header{
-  background:#003366;
-  color:white;
-  padding:20px;
-  text-align:center;
-}
-h2{color:#003366;}
-table{
-  width:100%;
-  border-collapse:collapse;
-  margin-top:20px;
-}
-th, td{
-  padding:10px;
-  border:1px solid #ccc;
-  text-align:left;
-}
-th{background:#003366; color:white;}
-button{
-  padding:6px 12px;
-  margin:2px;
-  border:none;
-  border-radius:5px;
-  cursor:pointer;
-  font-size:14px;
-}
-button.approve{background:#28a745; color:white;}
-button.decline{background:#dc3545; color:white;}
-button:hover{opacity:0.85;}
-footer{
-  background:#003366;
-  color:white;
-  text-align:center;
-  padding:20px;
-  margin-top:20px;
-}
+body{margin:0;font-family:"Segoe UI", Arial, sans-serif;background:#f4f4f4;color:#333;}
+header{background:#003366;color:white;padding:20px;text-align:center;}
+h1,h2{color:#003366;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+th,td{border:1px solid #ccc;padding:10px;text-align:left;}
+th{background:#003366;color:white;}
+button{padding:6px 12px;margin-right:5px;border:none;border-radius:4px;cursor:pointer;}
+button.approve{background:#28a745;color:white;}
+button.decline{background:#dc3545;color:white;}
+button.approve:hover{background:#218838;}
+button.decline:hover{background:#c82333;}
+.container{max-width:1200px;margin:auto;padding:20px;background:white;}
 </style>
 </head>
 <body>
 
 <header>
-<h1>C&T Tutorials Admin Portal</h1>
+<h1>Admin Portal | C&T Tutorials</h1>
 </header>
 
-<div class="main-content">
-<h2>Tutor Applications</h2>
+<div class="container">
+<h2>Pending Tutor Applications</h2>
 <table id="tutorTable">
+<thead>
 <tr>
+<th>#</th>
 <th>Full Name</th>
 <th>Email</th>
 <th>Phone</th>
@@ -68,65 +40,56 @@ footer{
 <th>Status</th>
 <th>Actions</th>
 </tr>
-<tr><td colspan="8">Loading tutor applications...</td></tr>
+</thead>
+<tbody>
+<tr><td colspan="9">Loading applications...</td></tr>
+</tbody>
 </table>
 </div>
 
-<footer>
-C&T Tutorials Admin Portal
-</footer>
-
 <script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbxD8eu_GZrIX9hRNSV9LNEZw-05vno7EgyN6r1S7Z-CdZfHeg-JhhDF7Yv-OcJbpvVpmA/exec?action=getAllTutors";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxD8eu_GZrIX9hRNSV9LNEZw-05vno7EgyN6r1S7Z-CdZfHeg-JhhDF7Yv-OcJbpvVpmA/exec";
 
-function loadTutors(){
-  fetch(scriptURL)
-  .then(res=>res.json())
-  .then(data=>{
-    const table = document.getElementById("tutorTable");
-    if(data.length===0){
-      table.innerHTML = '<tr><td colspan="8">No tutor applications found.</td></tr>';
-      return;
-    }
-    table.innerHTML = '<tr><th>Full Name</th><th>Email</th><th>Phone</th><th>Subjects</th><th>Qualification</th><th>Experience</th><th>Status</th><th>Actions</th></tr>';
-    data.forEach((tutor,index)=>{
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td>${tutor.name}</td>
-        <td>${tutor.email}</td>
-        <td>${tutor.phone}</td>
-        <td>${tutor.subjects}</td>
-        <td>${tutor.qualification}</td>
-        <td>${tutor.experience}</td>
-        <td>${tutor.status || "Pending"}</td>
-        <td>
-          <button class="approve" onclick="updateStatus(${index}, 'Approved')">Approve</button>
-          <button class="decline" onclick="updateStatus(${index}, 'Declined')">Decline</button>
-        </td>`;
-      table.appendChild(row);
-    });
-  })
-  .catch(err=>{
-    document.getElementById("tutorTable").innerHTML = '<tr><td colspan="8">Error loading data.</td></tr>';
-    console.error(err);
-  });
+function loadApplications(){
+  fetch(SCRIPT_URL+"?action=getAllTutors")
+    .then(res=>res.json())
+    .then(data=>{
+      const tbody=document.querySelector("#tutorTable tbody");
+      tbody.innerHTML="";
+      if(data.length===0){tbody.innerHTML="<tr><td colspan='9'>No applications found</td></tr>"; return;}
+      data.forEach((t,index)=>{
+        const tr=document.createElement("tr");
+        tr.innerHTML=`
+          <td>${index+1}</td>
+          <td>${t.name}</td>
+          <td>${t.email}</td>
+          <td>${t.phone}</td>
+          <td>${t.subjects}</td>
+          <td>${t.qualification}</td>
+          <td>${t.experience}</td>
+          <td>${t.status}</td>
+          <td>
+            <button class="approve" onclick="updateStatus(${index},'Approved')">Approve</button>
+            <button class="decline" onclick="updateStatus(${index},'Declined')">Decline</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    })
+    .catch(err=>console.error("Error loading tutors:",err));
 }
 
-function updateStatus(index, status){
-  fetch("https://script.google.com/macros/s/AKfycbxD8eu_GZrIX9hRNSV9LNEZw-05vno7EgyN6r1S7Z-CdZfHeg-JhhDF7Yv-OcJbpvVpmA/exec", {
+function updateStatus(index,status){
+  fetch(SCRIPT_URL,{
     method:"POST",
-    body: JSON.stringify({action:"updateStatus", index:index, status:status})
-  })
-  .then(res=>res.json())
-  .then(data=>{
-    alert("Status updated!");
-    loadTutors(); // refresh table
-  })
-  .catch(err=>alert("Error updating status."));
+    body:JSON.stringify({action:"updateStatus",index:index,status:status})
+  }).then(res=>res.json())
+    .then(r=>{loadApplications();})
+    .catch(err=>alert("Error updating status"));
 }
 
-// initial load
-loadTutors();
+// Initial load
+loadApplications();
 </script>
 
 </body>
