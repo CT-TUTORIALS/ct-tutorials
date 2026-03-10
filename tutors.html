@@ -4,9 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tutors Portal | C&T Tutorials</title>
-
 <style>
-/* ---------------- GENERAL ---------------- */
+/* General styles (unchanged from your previous version) */
 body{margin:0;font-family:"Segoe UI", Arial, sans-serif;background:#f4f4f4;color:#333;min-height:100vh;display:flex;flex-direction:column;}
 header{background:#003366;color:white;padding:20px;text-align:center;}
 nav{margin-top:10px;display:flex;justify-content:center;flex-wrap:wrap;gap:15px;}
@@ -25,7 +24,7 @@ input, textarea{width:100%;padding:10px;margin-top:5px;border-radius:5px;border:
 textarea{min-height:80px;resize:vertical;}
 .submit-btn{margin-top:20px;width:100%;padding:12px;background:#003366;color:white;border:none;border-radius:5px;cursor:pointer;font-size:16px;}
 .submit-btn:hover{background:#00509e;}
-footer{background:#003366;color:white;text-align:center;padding:25px;margin-top:auto;}
+footer{background:#003366;color:white;text-align:center;padding:25px;}
 .footer-disclaimer{font-size:12px;max-width:900px;margin:auto;line-height:1.6;}
 @media(max-width:768px){.main-content{padding:25px;}.portal-buttons{flex-direction:column;}}
 </style>
@@ -44,8 +43,15 @@ footer{background:#003366;color:white;text-align:center;padding:25px;margin-top:
 
 <div class="main-content">
 <h2>Welcome Tutors!</h2>
-<p>We are excited to have you join our network of professional tutors. Through this portal you will be able to manage tutoring activities and support students seeking academic guidance.</p>
-<p>C&T Tutorials values professionalism, academic integrity, and a strong commitment to student success.</p>
+<p>
+We are excited to have you join our network of professional tutors.
+Through this portal you will be able to manage tutoring activities and
+support students seeking academic guidance.
+</p>
+<p>
+C&T Tutorials values professionalism, academic integrity,
+and a strong commitment to student success.
+</p>
 
 <div class="portal-buttons">
 <button class="portal-btn" onclick="openApply()">Apply to Become a Tutor</button>
@@ -54,28 +60,17 @@ footer{background:#003366;color:white;text-align:center;padding:25px;margin-top:
 </div>
 </div>
 
-<!-- APPLY MODAL -->
-<div id="applyModal" class="modal">
-<form id="tutorForm">
-<button type="button" class="close" onclick="closeApply()">×</button>
-<h2>Tutor Application</h2>
-<label>Full Name<input type="text" name="name" required></label>
-<label>Email<input type="email" name="email" required></label>
-<label>Cellphone Number<input type="tel" name="phone" required></label>
-<label>Area of Expertise / Subjects<input type="text" name="subjects" required></label>
-<label>Highest Qualification<input type="text" name="qualification" required></label>
-<label>Brief Teaching or Academic Experience<textarea name="experience" required></textarea></label>
-<button type="submit" class="submit-btn">Submit Application</button>
-</form>
-</div>
-
 <!-- LOGIN MODAL -->
 <div id="loginModal" class="modal">
 <form>
 <button type="button" class="close" onclick="closeLogin()">×</button>
 <h2>Tutor Login</h2>
-<label>Email<input type="email" required></label>
-<label>Password<input type="password" required></label>
+<label>Email
+<input type="email" required>
+</label>
+<label>Password
+<input type="password" required>
+</label>
 <button class="submit-btn">Login</button>
 </form>
 </div>
@@ -85,24 +80,63 @@ footer{background:#003366;color:white;text-align:center;padding:25px;margin-top:
 <form>
 <button type="button" class="close" onclick="closeCreate()">×</button>
 <h2>Create Tutor Account</h2>
-<label>Full Name<input type="text" required></label>
-<label>Email<input type="email" required></label>
-<label>Cellphone Number<input type="tel" required></label>
-<label>Password<input type="password" required></label>
+<label>Full Name
+<input type="text" required>
+</label>
+<label>Email
+<input type="email" required>
+</label>
+<label>Cellphone Number
+<input type="tel" required>
+</label>
+<label>Password
+<input type="password" required>
+</label>
 <button class="submit-btn">Create Account</button>
+</form>
+</div>
+
+<!-- APPLY MODAL -->
+<div id="applyModal" class="modal">
+<form id="tutorForm">
+<button type="button" class="close" onclick="closeApply()">×</button>
+<h2>Tutor Application</h2>
+<label>Full Name
+<input type="text" name="name" required>
+</label>
+<label>Email
+<input type="email" name="email" required>
+</label>
+<label>Cellphone Number
+<input type="tel" name="phone" required>
+</label>
+<label>Area of Expertise / Subjects
+<input type="text" name="subjects" required>
+</label>
+<label>Highest Qualification
+<input type="text" name="qualification" required>
+</label>
+<label>Brief Teaching or Academic Experience
+<textarea name="experience" required></textarea>
+</label>
+<button type="submit" class="submit-btn">Submit Application</button>
 </form>
 </div>
 
 <footer>
 <div class="footer-disclaimer">
 <strong>Disclaimer:</strong><br>
-C&T Tutorials engages tutors as independent academic facilitators. Tutors provide academic support services only and do not represent any university, college, examination body, or academic institution.
-All tutoring services offered through this platform are supplementary and intended solely to support independent learning and academic development.
+C&T Tutorials engages tutors as independent academic facilitators.
+Tutors provide academic support services only and do not represent
+any university, college, examination body, or academic institution.
+All tutoring services offered through this platform are supplementary
+and intended solely to support independent learning and academic development.
 </div>
 </footer>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz6fZNU0Tx42fTIoh0W8iZgHbQ-hWuqCvXFPZhmVlZEU2tKYpn1CEQjt0UKBLwGGN7qnQ/exec";
+// Set your Web App URL here
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyc3T_2QAX2LKbJE4mPPYztVrBj7gE0BCHb9otc4JPkctR_yY6U381B0uX3MYjv_tzoQg/exec";
 
 /* LOGIN */
 function openLogin(){document.getElementById("loginModal").style.display="flex";}
@@ -121,29 +155,30 @@ window.onclick=function(event){
 let login=document.getElementById("loginModal");
 let create=document.getElementById("createModal");
 let apply=document.getElementById("applyModal");
-if(event.target==login){login.style.display="none";}
-if(event.target==create){create.style.display="none";}
-if(event.target==apply){apply.style.display="none";}
+if(event.target==login) login.style.display="none";
+if(event.target==create) create.style.display="none";
+if(event.target==apply) apply.style.display="none";
 }
 
-/* SUBMIT TUTOR APPLICATION */
+/* TUTOR FORM SUBMISSION */
 document.getElementById("tutorForm").addEventListener("submit", function(e){
-e.preventDefault();
-const formData=new FormData(this);
-const data={};
-formData.forEach((value,key)=>data[key]=value);
-fetch(SCRIPT_URL,{
-method:"POST",
-body:JSON.stringify(data)
-})
-.then(res=>res.json())
-.then(res=>{
-alert("Application submitted successfully!");
-this.reset();
-closeApply();
-})
-.catch(err=>alert("Error submitting application"));
+  e.preventDefault();
+  const formData = {
+    name: this.name.value,
+    email: this.email.value,
+    phone: this.phone.value,
+    subjects: this.subjects.value,
+    qualification: this.qualification.value,
+    experience: this.experience.value
+  };
+  fetch(SCRIPT_URL,{
+    method:"POST",
+    body: JSON.stringify(formData)
+  }).then(res=>res.json())
+    .then(data=>{alert("Application Submitted Successfully!"); this.reset(); closeApply();})
+    .catch(err=>alert("Error submitting application!"));
 });
 </script>
+
 </body>
 </html>
