@@ -3,131 +3,160 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tutor Application | C&T Tutorials</title>
+<title>Tutors Portal | C&T Tutorials</title>
 
 <style>
-/* --- Base Styles --- */
-body {
-  font-family: Arial, sans-serif;
-  background: #f5f5f5;
-  margin: 0;
-  padding: 0;
-  line-height: 1.5;
+/* ---------------- GENERAL ---------------- */
+body{
+  margin:0;
+  font-family:"Segoe UI", Arial, sans-serif;
+  background:#f4f4f4;
+  color:#333;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
 }
 
-header {
-  background: #003366;
-  color: white;
-  padding: 20px 10px;
-  text-align: center;
+/* ---------------- HEADER ---------------- */
+header{
+  background:#003366;
+  color:white;
+  padding:20px;
+  text-align:center;
+}
+nav{
+  margin-top:10px;
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:15px;
+}
+nav a{
+  color:white;
+  text-decoration:none;
+  font-weight:bold;
+  cursor:pointer;
+}
+nav a:hover{
+  text-decoration:underline;
 }
 
-header h1 {
-  margin: 0;
-  font-size: 1.8rem;
+/* ---------------- MAIN ---------------- */
+.main-content{
+  max-width:900px;
+  margin:auto;
+  padding:40px;
+  background:white;
+  flex:1;
+}
+h2{
+  color:#003366;
+  border-bottom:2px solid #003366;
+  padding-bottom:8px;
 }
 
-header p {
-  margin: 5px 0 0 0;
-  font-size: 1rem;
+/* ---------------- BUTTONS ---------------- */
+.portal-buttons{
+  margin-top:30px;
+  display:flex;
+  gap:20px;
+  flex-wrap:wrap;
+}
+.portal-btn{
+  background:#003366;
+  color:white;
+  padding:12px 20px;
+  border:none;
+  border-radius:5px;
+  cursor:pointer;
+  font-size:16px;
+}
+.portal-btn:hover{
+  background:#00509e;
 }
 
-.container {
-  width: 90%;
-  max-width: 500px;
-  margin: 30px auto;
-  background: white;
-  padding: 30px 25px;
-  border-radius: 8px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+/* ---------------- MODALS ---------------- */
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.7);
+  justify-content:center;
+  align-items:center;
+  z-index:1000;
+  overflow:auto;
+  padding:20px;
+}
+.modal form{
+  background:white;
+  padding:25px;
+  width:90%;
+  max-width:500px;
+  border-radius:10px;
+  position:relative;
+}
+.close{
+  position:absolute;
+  top:10px;
+  right:15px;
+  font-size:22px;
+  cursor:pointer;
+  border:none;
+  background:none;
+}
+label{
+  display:block;
+  margin-top:15px;
+}
+input, textarea{
+  width:100%;
+  padding:10px;
+  margin-top:5px;
+  border-radius:5px;
+  border:1px solid #ccc;
+  box-sizing:border-box;
+}
+textarea{
+  min-height:80px;
+  resize:vertical;
+}
+.submit-btn{
+  margin-top:20px;
+  width:100%;
+  padding:12px;
+  background:#003366;
+  color:white;
+  border:none;
+  border-radius:5px;
+  cursor:pointer;
+  font-size:16px;
+}
+.submit-btn:hover{
+  background:#00509e;
 }
 
-h2 {
-  color: #003366;
-  margin-top: 0;
-  font-size: 1.6rem;
+/* ---------------- FOOTER ---------------- */
+footer{
+  background:#003366;
+  color:white;
+  text-align:center;
+  padding:25px;
+  margin-top:auto;
+}
+.footer-disclaimer{
+  font-size:12px;
+  max-width:900px;
+  margin:auto;
+  line-height:1.6;
 }
 
-p {
-  margin-top: 10px;
-}
-
-/* --- Form Styles --- */
-label {
-  display: block;
-  margin-top: 15px;
-  font-weight: bold;
-}
-
-input, textarea {
-  width: 100%;
-  padding: 12px;
-  margin-top: 5px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-  font-size: 1rem;
-}
-
-textarea {
-  min-height: 100px;
-  resize: vertical;
-}
-
-button {
-  margin-top: 20px;
-  width: 100%;
-  padding: 14px;
-  background: #003366;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 1.1rem;
-  transition: background 0.3s ease;
-}
-
-button:hover {
-  background: #00509e;
-}
-
-.success {
-  color: green;
-  margin-top: 20px;
-  font-weight: bold;
-}
-
-/* --- Footer --- */
-footer {
-  text-align: center;
-  margin-top: 40px;
-  padding: 20px 10px;
-  background: #003366;
-  color: white;
-}
-
-/* --- Responsive Adjustments --- */
-@media (max-width: 600px) {
-  .container {
-    padding: 25px 15px;
+/* ---------------- MOBILE ---------------- */
+@media(max-width:768px){
+  .main-content{
+    padding:25px;
   }
-
-  header h1 {
-    font-size: 1.5rem;
-  }
-
-  header p {
-    font-size: 0.9rem;
-  }
-
-  button {
-    font-size: 1rem;
-    padding: 12px;
-  }
-
-  input, textarea {
-    font-size: 0.95rem;
-    padding: 10px;
+  .portal-buttons{
+    flex-direction:column;
   }
 }
 </style>
@@ -136,89 +165,143 @@ footer {
 <body>
 
 <header>
-  <h1>C&T Tutorials</h1>
-  <p>Apply to Become a Tutor</p>
+<h1>C&T Tutorials Tutors Portal</h1>
+<nav>
+  <a href="index.html">Home</a>
+  <a onclick="openApply()">Apply</a>
+  <a onclick="openCreate()">Create Account</a>
+  <a onclick="openLogin()">Login</a>
+</nav>
 </header>
 
-<div class="container">
+<div class="main-content">
+<h2>Welcome Tutors!</h2>
+<p>We are excited to have you join our network of professional tutors. Through this portal you will be able to manage tutoring activities and support students seeking academic guidance.</p>
+<p>C&T Tutorials values professionalism, academic integrity, and a strong commitment to student success.</p>
 
-<h2>Tutor Application</h2>
+<div class="portal-buttons">
+  <button class="portal-btn" onclick="openApply()">Apply to Become a Tutor</button>
+  <button class="portal-btn" onclick="openCreate()">Create Tutor Account</button>
+  <button class="portal-btn" onclick="openLogin()">Tutor Login</button>
+</div>
+</div>
 
-<p>
-Thank you for your interest in joining <strong>C&T Tutorials</strong>. 
-Please complete the form below. Approved tutors will receive a secure tutor code
-to create a tutor account and access the tutor dashboard.
-</p>
-
-<form id="tutorForm">
-
-<label>Full Name
-<input type="text" name="name" id="name" placeholder="Your full name" required>
-</label>
-
-<label>Email Address
-<input type="email" name="email" id="email" placeholder="you@example.com" required>
-</label>
-
-<label>Cellphone Number
-<input type="tel" name="phone" id="phone" placeholder="+264 81 234 5678" required>
-</label>
-
-<label>Subjects You Can Tutor
-<input type="text" name="subjects" id="subjects" placeholder="Example: Mathematics, Physics" required>
-</label>
-
-<label>Highest Qualification
-<input type="text" name="qualification" id="qualification" placeholder="Example: BSc Mathematics" required>
-</label>
-
-<label>Brief Teaching or Academic Experience
-<textarea name="experience" id="experience" placeholder="Briefly describe your experience" required></textarea>
-</label>
-
-<button type="submit">Submit Application</button>
-
+<!-- LOGIN MODAL -->
+<div id="loginModal" class="modal">
+<form>
+  <button type="button" class="close" onclick="closeLogin()">×</button>
+  <h2>Tutor Login</h2>
+  <label>Email
+    <input type="email" required>
+  </label>
+  <label>Password
+    <input type="password" required>
+  </label>
+  <button class="submit-btn">Login</button>
 </form>
+</div>
 
-<p id="message" class="success"></p>
+<!-- CREATE ACCOUNT MODAL -->
+<div id="createModal" class="modal">
+<form>
+  <button type="button" class="close" onclick="closeCreate()">×</button>
+  <h2>Create Tutor Account</h2>
+  <label>Full Name
+    <input type="text" required>
+  </label>
+  <label>Email
+    <input type="email" required>
+  </label>
+  <label>Cellphone Number
+    <input type="tel" required>
+  </label>
+  <label>Password
+    <input type="password" required>
+  </label>
+  <button class="submit-btn">Create Account</button>
+</form>
+</div>
 
+<!-- APPLY MODAL -->
+<div id="applyModal" class="modal">
+<form id="applyForm">
+  <button type="button" class="close" onclick="closeApply()">×</button>
+  <h2>Tutor Application</h2>
+  <label>Full Name
+    <input type="text" name="name" required>
+  </label>
+  <label>Email
+    <input type="email" name="email" required>
+  </label>
+  <label>Cellphone Number
+    <input type="tel" name="phone" required>
+  </label>
+  <label>Area of Expertise / Subjects
+    <input type="text" name="subjects" required>
+  </label>
+  <label>Highest Qualification
+    <input type="text" name="qualification" required>
+  </label>
+  <label>Brief Teaching or Academic Experience
+    <textarea name="experience" required></textarea>
+  </label>
+  <button type="submit" class="submit-btn">Submit Application</button>
+</form>
+<p id="applyMessage" style="color:green; margin-top:15px;"></p>
 </div>
 
 <footer>
-<p>© 2026 C&T Tutorials</p>
+<div class="footer-disclaimer">
+<strong>Disclaimer:</strong><br>
+C&T Tutorials engages tutors as independent academic facilitators. Tutors provide academic support services only and do not represent any university, college, examination body, or academic institution.
+</div>
 </footer>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyc3T_2QAX2LKbJE4mPPYztVrBj7gE0BCHb9otc4JPkctR_yY6U381B0uX3MYjv_tzoQg/exec";
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbyc3T_2QAX2LKbJE4mPPYztVrBj7gE0BCHb9otc4JPkctR_yY6U381B0uX3MYjv_tzoQg/exec";
 
-document.getElementById("tutorForm").addEventListener("submit", function(e){
+/* LOGIN */
+function openLogin(){document.getElementById("loginModal").style.display="flex";}
+function closeLogin(){document.getElementById("loginModal").style.display="none";}
+
+/* CREATE ACCOUNT */
+function openCreate(){document.getElementById("createModal").style.display="flex";}
+function closeCreate(){document.getElementById("createModal").style.display="none";}
+
+/* APPLY */
+function openApply(){document.getElementById("applyModal").style.display="flex";}
+function closeApply(){document.getElementById("applyModal").style.display="none";}
+
+/* SUBMIT APPLICATION TO SHEET */
+document.getElementById("applyForm").addEventListener("submit", function(e){
   e.preventDefault();
-
   const data = {
-    action: "applyTutor",
-    name: document.getElementById("name").value,
-    email: document.getElementById("email").value,
-    phone: document.getElementById("phone").value,
-    subjects: document.getElementById("subjects").value,
-    qualification: document.getElementById("qualification").value,
-    experience: document.getElementById("experience").value
+    action:"applyTutor",
+    name:this.name.value,
+    email:this.email.value,
+    phone:this.phone.value,
+    subjects:this.subjects.value,
+    qualification:this.qualification.value,
+    experience:this.experience.value
   };
-
-  fetch(SCRIPT_URL, {
-    method: "POST",
-    body: JSON.stringify(data)
+  fetch(SCRIPT_URL,{
+    method:"POST",
+    body:JSON.stringify(data)
   })
-  .then(res => res.json())
-  .then(response => {
-    document.getElementById("message").innerText = 
-      "Application submitted successfully. You will receive an email if approved.";
-    document.getElementById("tutorForm").reset();
-  })
-  .catch(error => {
-    alert("Error submitting application. Please try again.");
-    console.error(error);
+  .then(res=>res.json())
+  .then(resp=>{
+    document.getElementById("applyMessage").innerText="Application submitted successfully. You will receive an email if approved.";
+    this.reset();
   });
 });
+
+/* CLOSE MODALS WHEN CLICKING OUTSIDE */
+window.onclick=function(event){
+  ["loginModal","createModal","applyModal"].forEach(id=>{
+    const modal=document.getElementById(id);
+    if(event.target==modal) modal.style.display="none";
+  });
+};
 </script>
 
 </body>
