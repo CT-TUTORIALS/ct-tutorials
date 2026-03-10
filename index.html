@@ -8,9 +8,7 @@
 <meta name="google-site-verification" content="aSucaMc_aX_kQpRFNvVRgTX0pEeCD1c48mTuirk4qwY" />
 
 <style>
-
 /* ---------------- GENERAL ---------------- */
-
 body{
 margin:0;
 font-family:"Segoe UI", Arial, sans-serif;
@@ -20,7 +18,6 @@ line-height:1.6;
 }
 
 /* ---------------- HERO BANNER ---------------- */
-
 header{
 background-image:url("images/banner.jpg");
 background-position:center;
@@ -39,7 +36,6 @@ transition:all 0.3s ease;
 }
 
 /* COLLAPSED HEADER */
-
 header.scrolled{
 background:#003366;
 background-image:none;
@@ -53,7 +49,6 @@ justify-content:center;
 }
 
 /* Navigation */
-
 nav{
 display:flex;
 flex-wrap:wrap;
@@ -75,7 +70,6 @@ text-decoration:underline;
 }
 
 /* ---------------- CONTENT ---------------- */
-
 .main-content{
 max-width:1100px;
 margin:auto;
@@ -85,7 +79,6 @@ transition:margin-top 0.3s ease;
 }
 
 /* push content down when header collapses */
-
 header.scrolled + .main-content{
 margin-top:70px;
 }
@@ -106,7 +99,6 @@ color:#00509e;
 }
 
 /* ---------------- SERVICES ---------------- */
-
 .services-grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
@@ -126,7 +118,6 @@ margin-top:0;
 }
 
 /* ---------------- RESOURCES ---------------- */
-
 .resource-link{
 color:#00509e;
 font-weight:bold;
@@ -138,7 +129,6 @@ text-decoration:underline;
 }
 
 /* ---------------- CONTACT ---------------- */
-
 .contact-box{
 background:#f7f7f7;
 padding:20px;
@@ -146,7 +136,6 @@ border-radius:8px;
 }
 
 /* ---------------- BUTTON ---------------- */
-
 .floating-btn{
 position:fixed;
 bottom:25px;
@@ -162,7 +151,6 @@ box-shadow:0 4px 6px rgba(0,0,0,0.3);
 }
 
 /* ---------------- MODALS ---------------- */
-
 #modal,
 #adminModal{
 display:none;
@@ -226,7 +214,6 @@ background:#00509e;
 }
 
 /* ---------------- FOOTER ---------------- */
-
 footer{
 background:#003366;
 color:white;
@@ -242,30 +229,23 @@ line-height:1.6;
 }
 
 /* ---------------- RESPONSIVE ---------------- */
-
 @media(max-width:768px){
-
 header{
 height:300px;
 }
-
 .main-content{
 padding:30px 20px;
 }
-
 nav{
 gap:10px;
 }
-
 }
-
 </style>
 </head>
 
 <body>
 
 <header>
-
 <nav>
 <a href="#about">About</a>
 <a href="#services">Services</a>
@@ -274,103 +254,60 @@ gap:10px;
 <a href="tutors.html">Tutors Portal</a>
 <a onclick="openAdmin()">Admins Portal</a>
 </nav>
-
 </header>
 
 <div class="main-content">
 
 <section id="about">
-
 <h2>About C&T Tutorials</h2>
-
 <p>C&T Tutorials is an independent academic support service committed to enhancing students’ academic performance through structured guidance in academic writing, research, and communication skills.</p>
-
 <p>Our services provide focused and student-centred academic support through personalised tutorials, collaborative group learning, and assignment-based guidance.</p>
-
 </section>
 
 <section id="services">
-
 <h2>Our Services</h2>
-
 <div class="services-grid">
-
 <div class="service-card">
 <h3>Academic Writing Tutorials</h3>
 <p>Structured sessions covering academic writing principles, essay development, and research techniques.</p>
 </div>
-
 <div class="service-card">
 <h3>Group Learning Sessions</h3>
 <p>Collaborative sessions designed to support multiple students working on similar academic challenges.</p>
 </div>
-
 <div class="service-card">
 <h3>Assignment Support</h3>
 <p>Professional assistance with editing, proofreading, and improving assignment structure and clarity.</p>
 </div>
-
 <div class="service-card">
 <h3>Public Speaking Support</h3>
 <p>Coaching sessions designed to strengthen presentation and communication skills for academic purposes.</p>
 </div>
-
 </div>
-
 </section>
 
 <section id="resources">
-
 <h2>Resources</h2>
-
 <ul>
-
-<li>
-<a class="resource-link" href="documents/Business-Policies.pdf" target="_blank">
-Business Policies
-</a>
-</li>
-
-<li>
-<a class="resource-link" href="documents/Student-form-for-offline-application.pdf" target="_blank">
-Offline Application Form
-</a>
-</li>
-
+<li><a class="resource-link" href="documents/Business-Policies.pdf" target="_blank">Business Policies</a></li>
+<li><a class="resource-link" href="documents/Student-form-for-offline-application.pdf" target="_blank">Offline Application Form</a></li>
 </ul>
-
 </section>
 
 <section id="contact">
-
 <h2>Contact</h2>
-
 <div class="contact-box">
-
-<p>Email:
-<a href="mailto:ct0tutorials@gmail.com">
-ct0tutorials@gmail.com
-</a>
-</p>
-
-<p>Phone:
-+264 815 621 879 / +264 818 479 958
-</p>
-
+<p>Email: <a href="mailto:ct0tutorials@gmail.com">ct0tutorials@gmail.com</a></p>
+<p>Phone: +264 815 621 879 / +264 818 479 958</p>
 </div>
-
 </section>
 
 <button class="floating-btn" onclick="openForm()">Register Now</button>
-
 </div>
 
 <!-- REGISTRATION MODAL -->
-
 <div id="modal">
-
 <form action="https://formspree.io/f/mlgbjkwq" method="POST" target="_blank">
-
 <button type="button" class="close" onclick="closeForm()">×</button>
 
 <h2>Service Registration</h2>
@@ -388,148 +325,84 @@ ct0tutorials@gmail.com
 </label>
 
 <label>Select Service
-
-<select name="service" required>
-
+<select id="serviceSelect" name="service" required>
 <option value="">Select a service</option>
-
-<option>Introduction to Academic Writing (4 sessions) – N$150</option>
-<option>Topic Specific Sessions – N$40</option>
-<option>Hourly Rate – N$40</option>
-<option>Group Sessions – N$200 to N$600</option>
-<option>Draft Editing – N$15 per page</option>
-<option>Proofreading – N$10 per page</option>
-
+<option value="tutorial">Introduction to Academic Writing (4 sessions) – N$150</option>
+<option value="tutorial">Topic Specific Sessions – N$40</option>
+<option value="tutorial">Hourly Rate – N$40</option>
+<option value="tutorial">Group Sessions – N$200 to N$600</option>
+<option value="editing">Draft Editing – N$15 per page</option>
+<option value="proofreading">Proofreading – N$10 per page</option>
 </select>
-
 </label>
 
-<!-- ---------------- Tutor Dropdown Added ---------------- -->
-
+<!-- Tutor Dropdown (Initially Hidden) -->
+<div id="tutorSelectWrapper" style="display:none;">
 <label>Select Tutor
-
 <select id="tutorDropdown" name="tutor">
-
 <option>Loading tutors...</option>
-
 </select>
-
 </label>
+</div>
 
 <label>
-
 <input type="checkbox" required>
-
-I agree to the
-<a href="documents/Disclosure-Agreement.pdf" target="_blank">
-Disclosure Agreement
-</a>
-
+I agree to the <a href="documents/Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a>
 </label>
 
-<button type="submit" class="submit-btn">
-Submit Registration
-</button>
-
+<button type="submit" class="submit-btn">Submit Registration</button>
 </form>
-
 </div>
 
 <!-- ADMIN LOGIN POPUP -->
-
 <div id="adminModal">
-
 <form>
-
 <button type="button" class="close" onclick="closeAdmin()">×</button>
-
 <h2>Admin Login</h2>
-
 <label>Username
 <input type="text" required>
 </label>
-
 <label>Password
 <input type="password" required>
 </label>
-
-<button class="submit-btn">
-Login
-</button>
-
+<button class="submit-btn">Login</button>
 </form>
-
 </div>
 
 <footer>
-
 <div class="footer-disclaimer">
-
 <strong>Disclaimer:</strong><br>
-
 C&T Tutorials operates independently and is not affiliated with, endorsed by, or formally connected to any university, college, examination body, or academic institution.
-
 All services are supplementary and intended to support independent learning.
-
 </div>
-
 </footer>
 
 <script>
-
 /* registration form */
-
-function openForm(){
-document.getElementById("modal").style.display="flex";
-}
-
-function closeForm(){
-document.getElementById("modal").style.display="none";
-}
+function openForm(){ document.getElementById("modal").style.display="flex"; }
+function closeForm(){ document.getElementById("modal").style.display="none"; }
 
 /* admin popup */
-
-function openAdmin(){
-document.getElementById("adminModal").style.display="flex";
-}
-
-function closeAdmin(){
-document.getElementById("adminModal").style.display="none";
-}
+function openAdmin(){ document.getElementById("adminModal").style.display="flex"; }
+function closeAdmin(){ document.getElementById("adminModal").style.display="none"; }
 
 /* close when clicking outside */
-
 window.onclick=function(event){
-
-if(event.target==document.getElementById("modal")){
-closeForm();
-}
-
-if(event.target==document.getElementById("adminModal")){
-closeAdmin();
-}
-
+if(event.target==document.getElementById("modal")){ closeForm(); }
+if(event.target==document.getElementById("adminModal")){ closeAdmin(); }
 }
 
 /* smooth header collapse */
-
 let header=document.querySelector("header");
-
 window.addEventListener("scroll",function(){
-
-if(window.scrollY>120){
-header.classList.add("scrolled");
-}
-
-else{
-header.classList.remove("scrolled");
-}
-
+if(window.scrollY>120){ header.classList.add("scrolled"); }
+else{ header.classList.remove("scrolled"); }
 });
 
 /* ---------------- Tutor Dropdown Script ---------------- */
+const scriptURL = "https://script.google.com/macros/s/AKfycbxD8eu_GZrIX9hRNSV9LNEZw-05vno7EgyN6r1S7Z-CdZfHeg-JhhDF7Yv-OcJbpvVpmA/exec";
 
-fetch("https://script.google.com/macros/s/AKfycbxD8eu_GZrIX9hRNSV9LNEZw-05vno7EgyN6r1S7Z-CdZfHeg-JhhDF7Yv-OcJbpvVpmA/exec?action=getTutors")
+fetch(scriptURL + "?action=getTutors")
 .then(res => res.json())
 .then(data => {
 let dropdown = document.getElementById("tutorDropdown");
@@ -541,10 +414,19 @@ option.text = tutor.name + " - " + tutor.subject;
 dropdown.appendChild(option);
 });
 })
-.catch(err => {
-document.getElementById("tutorDropdown").innerHTML = "<option>No tutors available</option>";
-});
+.catch(err => { document.getElementById("tutorDropdown").innerHTML = "<option>No tutors available</option>"; });
 
+/* ---------------- Show/Hide Tutor Dropdown based on Service ---------------- */
+const serviceSelect = document.getElementById("serviceSelect");
+const tutorWrapper = document.getElementById("tutorSelectWrapper");
+
+serviceSelect.addEventListener("change", function(){
+if(this.value === "tutorial"){
+  tutorWrapper.style.display = "block";
+}else{
+  tutorWrapper.style.display = "none";
+}
+});
 </script>
 
 </body>
