@@ -4,242 +4,37 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>C&T Tutorials</title>
-
 <meta name="google-site-verification" content="aSucaMc_aX_kQpRFNvVRgTX0pEeCD1c48mTuirk4qwY" />
-
 <style>
 /* ---------------- GENERAL ---------------- */
-body{
-margin:0;
-font-family:"Segoe UI", Arial, sans-serif;
-background:#f4f4f4;
-color:#333;
-line-height:1.6;
-}
-
-/* ---------------- HERO BANNER ---------------- */
-header{
-background-image:url("images/banner.jpg");
-background-position:center;
-background-repeat:no-repeat;
-background-size:cover;
-background-color:#003366;
-height:420px;
-display:flex;
-flex-direction:column;
-justify-content:flex-end;
-align-items:center;
-text-align:center;
-padding:20px;
-position:relative;
-transition:all 0.3s ease;
-}
-
-/* COLLAPSED HEADER */
-header.scrolled{
-background:#003366;
-background-image:none;
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:70px;
-z-index:999;
-justify-content:center;
-}
-
-/* Navigation */
-nav{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-gap:15px;
-width:100%;
-}
-
-nav a{
-color:white;
-text-decoration:none;
-font-weight:bold;
-white-space:nowrap;
-cursor:pointer;
-}
-
-nav a:hover{
-text-decoration:underline;
-}
-
-/* ---------------- CONTENT ---------------- */
-.main-content{
-max-width:1100px;
-margin:auto;
-padding:50px 40px;
-background:white;
-transition:margin-top 0.3s ease;
-}
-
-/* push content down when header collapses */
-header.scrolled + .main-content{
-margin-top:70px;
-}
-
-section{
-margin-bottom:60px;
-}
-
-h2{
-color:#003366;
-border-bottom:2px solid #003366;
-padding-bottom:8px;
-margin-bottom:25px;
-}
-
-h3{
-color:#00509e;
-}
-
-/* ---------------- SERVICES ---------------- */
-.services-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:25px;
-margin-top:20px;
-}
-
-.service-card{
-background:#f7f7f7;
-padding:20px;
-border-radius:8px;
-box-shadow:0 3px 6px rgba(0,0,0,0.1);
-}
-
-.service-card h3{
-margin-top:0;
-}
-
-/* ---------------- RESOURCES ---------------- */
-.resource-link{
-color:#00509e;
-font-weight:bold;
-text-decoration:none;
-}
-
-.resource-link:hover{
-text-decoration:underline;
-}
-
-/* ---------------- CONTACT ---------------- */
-.contact-box{
-background:#f7f7f7;
-padding:20px;
-border-radius:8px;
-}
-
-/* ---------------- BUTTON ---------------- */
-.floating-btn{
-position:fixed;
-bottom:25px;
-right:25px;
-background:#003366;
-color:white;
-padding:15px 22px;
-border:none;
-border-radius:40px;
-font-size:16px;
-cursor:pointer;
-box-shadow:0 4px 6px rgba(0,0,0,0.3);
-}
-
-/* ---------------- MODALS ---------------- */
-#modal,
-#adminModal{
-display:none;
-position:fixed;
-inset:0;
-background:rgba(0,0,0,0.7);
-justify-content:center;
-align-items:center;
-z-index:1000;
-}
-
-#modal form,
-#adminModal form{
-background:white;
-padding:25px;
-width:90%;
-max-width:500px;
-border-radius:10px;
-position:relative;
-}
-
-.close{
-position:absolute;
-right:15px;
-top:10px;
-font-size:22px;
-cursor:pointer;
-border:none;
-background:none;
-}
-
-label{
-display:block;
-margin-top:12px;
-font-weight:500;
-}
-
-input,select{
-width:100%;
-padding:10px;
-margin-top:5px;
-border-radius:5px;
-border:1px solid #ccc;
-box-sizing:border-box;
-}
-
-.submit-btn{
-margin-top:20px;
-width:100%;
-padding:12px;
-background:#003366;
-color:white;
-border:none;
-cursor:pointer;
-border-radius:5px;
-font-size:16px;
-}
-
-.submit-btn:hover{
-background:#00509e;
-}
-
-/* ---------------- FOOTER ---------------- */
-footer{
-background:#003366;
-color:white;
-text-align:center;
-padding:25px;
-}
-
-.footer-disclaimer{
-font-size:12px;
-max-width:900px;
-margin:auto;
-line-height:1.6;
-}
-
-/* ---------------- RESPONSIVE ---------------- */
-@media(max-width:768px){
-header{
-height:300px;
-}
-.main-content{
-padding:30px 20px;
-}
-nav{
-gap:10px;
-}
-}
+body{margin:0;font-family:"Segoe UI", Arial, sans-serif;background:#f4f4f4;color:#333;line-height:1.6;}
+header{background-image:url("images/banner.jpg");background-position:center;background-repeat:no-repeat;background-size:cover;background-color:#003366;height:420px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;text-align:center;padding:20px;position:relative;transition:all 0.3s ease;}
+header.scrolled{background:#003366;background-image:none;position:fixed;top:0;left:0;width:100%;height:70px;z-index:999;justify-content:center;}
+nav{display:flex;flex-wrap:wrap;justify-content:center;gap:15px;width:100%;}
+nav a{color:white;text-decoration:none;font-weight:bold;white-space:nowrap;cursor:pointer;}
+nav a:hover{text-decoration:underline;}
+.main-content{max-width:1100px;margin:auto;padding:50px 40px;background:white;transition:margin-top 0.3s ease;}
+header.scrolled + .main-content{margin-top:70px;}
+section{margin-bottom:60px;}
+h2{color:#003366;border-bottom:2px solid #003366;padding-bottom:8px;margin-bottom:25px;}
+h3{color:#00509e;}
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:25px;margin-top:20px;}
+.service-card{background:#f7f7f7;padding:20px;border-radius:8px;box-shadow:0 3px 6px rgba(0,0,0,0.1);}
+.service-card h3{margin-top:0;}
+.resource-link{color:#00509e;font-weight:bold;text-decoration:none;}
+.resource-link:hover{text-decoration:underline;}
+.contact-box{background:#f7f7f7;padding:20px;border-radius:8px;}
+.floating-btn{position:fixed;bottom:25px;right:25px;background:#003366;color:white;padding:15px 22px;border:none;border-radius:40px;font-size:16px;cursor:pointer;box-shadow:0 4px 6px rgba(0,0,0,0.3);}
+#modal,#adminModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);justify-content:center;align-items:center;z-index:1000;}
+#modal form,#adminModal form{background:white;padding:25px;width:90%;max-width:500px;border-radius:10px;position:relative;}
+.close{position:absolute;right:15px;top:10px;font-size:22px;cursor:pointer;border:none;background:none;}
+label{display:block;margin-top:12px;font-weight:500;}
+input,select{width:100%;padding:10px;margin-top:5px;border-radius:5px;border:1px solid #ccc;box-sizing:border-box;}
+.submit-btn{margin-top:20px;width:100%;padding:12px;background:#003366;color:white;border:none;cursor:pointer;border-radius:5px;font-size:16px;}
+.submit-btn:hover{background:#00509e;}
+footer{background:#003366;color:white;text-align:center;padding:25px;}
+.footer-disclaimer{font-size:12px;max-width:900px;margin:auto;line-height:1.6;}
+@media(max-width:768px){header{height:300px;}.main-content{padding:30px 20px;}nav{gap:10px;}}
 </style>
 </head>
 
@@ -303,53 +98,35 @@ gap:10px;
 </section>
 
 <button class="floating-btn" onclick="openForm()">Register Now</button>
+
 </div>
 
 <!-- REGISTRATION MODAL -->
 <div id="modal">
-<form action="https://formspree.io/f/mlgbjkwq" method="POST" target="_blank">
+<form id="studentForm">
 <button type="button" class="close" onclick="closeForm()">×</button>
-
 <h2>Service Registration</h2>
-
-<label>Full Name
-<input type="text" name="name" required>
-</label>
-
-<label>Email
-<input type="email" name="email" required>
-</label>
-
-<label>Cellphone Number
-<input type="tel" name="cell_number" required>
-</label>
-
+<label>Full Name<input type="text" name="name" required></label>
+<label>Email<input type="email" name="email" required></label>
+<label>Cellphone Number<input type="tel" name="cell_number" required></label>
 <label>Select Service
-<select id="serviceSelect" name="service" required>
+<select name="service" id="serviceSelect" required>
 <option value="">Select a service</option>
-<option value="tutorial">Introduction to Academic Writing (4 sessions) – N$150</option>
-<option value="tutorial">Topic Specific Sessions – N$40</option>
-<option value="tutorial">Hourly Rate – N$40</option>
-<option value="tutorial">Group Sessions – N$200 to N$600</option>
-<option value="editing">Draft Editing – N$15 per page</option>
-<option value="proofreading">Proofreading – N$10 per page</option>
+<option value="Academic Writing Tutorials">Introduction to Academic Writing (4 sessions) – N$150</option>
+<option value="Topic Specific Sessions">Topic Specific Sessions – N$40</option>
+<option value="Hourly Rate">Hourly Rate – N$40</option>
+<option value="Group Sessions">Group Sessions – N$200 to N$600</option>
+<option value="Draft Editing">Draft Editing – N$15 per page</option>
+<option value="Proofreading">Proofreading – N$10 per page</option>
 </select>
 </label>
 
-<!-- Tutor Dropdown (Initially Hidden) -->
-<div id="tutorSelectWrapper" style="display:none;">
-<label>Select Tutor
-<select id="tutorDropdown" name="tutor">
-<option>Loading tutors...</option>
-</select>
-</label>
-</div>
-
-<label>
-<input type="checkbox" required>
-I agree to the <a href="documents/Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a>
+<!-- Tutor selection appears ONLY if tutorial service is selected -->
+<label id="tutorLabel" style="display:none;">Select a Tutor
+<select name="tutor" id="tutorSelect"></select>
 </label>
 
+<label><input type="checkbox" required> I agree to the <a href="documents/Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a></label>
 <button type="submit" class="submit-btn">Submit Registration</button>
 </form>
 </div>
@@ -359,12 +136,8 @@ I agree to the <a href="documents/Disclosure-Agreement.pdf" target="_blank">Disc
 <form>
 <button type="button" class="close" onclick="closeAdmin()">×</button>
 <h2>Admin Login</h2>
-<label>Username
-<input type="text" required>
-</label>
-<label>Password
-<input type="password" required>
-</label>
+<label>Username<input type="text" required></label>
+<label>Password<input type="password" required></label>
 <button class="submit-btn">Login</button>
 </form>
 </div>
@@ -378,54 +151,68 @@ All services are supplementary and intended to support independent learning.
 </footer>
 
 <script>
-/* registration form */
-function openForm(){ document.getElementById("modal").style.display="flex"; }
-function closeForm(){ document.getElementById("modal").style.display="none"; }
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxD8eu_GZrIX9hRNSV9LNEZw-05vno7EgyN6r1S7Z-CdZfHeg-JhhDF7Yv-OcJbpvVpmA/exec";
 
-/* admin popup */
-function openAdmin(){ document.getElementById("adminModal").style.display="flex"; }
-function closeAdmin(){ document.getElementById("adminModal").style.display="none"; }
-
-/* close when clicking outside */
+/* MODALS */
+function openForm(){document.getElementById("modal").style.display="flex";}
+function closeForm(){document.getElementById("modal").style.display="none";}
+function openAdmin(){document.getElementById("adminModal").style.display="flex";}
+function closeAdmin(){document.getElementById("adminModal").style.display="none";}
 window.onclick=function(event){
-if(event.target==document.getElementById("modal")){ closeForm(); }
-if(event.target==document.getElementById("adminModal")){ closeAdmin(); }
+if(event.target==document.getElementById("modal")) closeForm();
+if(event.target==document.getElementById("adminModal")) closeAdmin();
 }
 
-/* smooth header collapse */
+/* HEADER COLLAPSE */
 let header=document.querySelector("header");
 window.addEventListener("scroll",function(){
-if(window.scrollY>120){ header.classList.add("scrolled"); }
-else{ header.classList.remove("scrolled"); }
+if(window.scrollY>120){header.classList.add("scrolled");}
+else{header.classList.remove("scrolled");}
 });
 
-/* ---------------- Tutor Dropdown Script ---------------- */
-const scriptURL = "https://script.google.com/macros/s/AKfycbxD8eu_GZrIX9hRNSV9LNEZw-05vno7EgyN6r1S7Z-CdZfHeg-JhhDF7Yv-OcJbpvVpmA/exec";
-
-fetch(scriptURL + "?action=getTutors")
-.then(res => res.json())
-.then(data => {
-let dropdown = document.getElementById("tutorDropdown");
-dropdown.innerHTML = '<option value="">Select Tutor</option>';
-data.forEach(tutor => {
-let option = document.createElement("option");
-option.value = tutor.name;
-option.text = tutor.name + " - " + tutor.subject;
-dropdown.appendChild(option);
-});
-})
-.catch(err => { document.getElementById("tutorDropdown").innerHTML = "<option>No tutors available</option>"; });
-
-/* ---------------- Show/Hide Tutor Dropdown based on Service ---------------- */
+/* SHOW TUTOR DROPDOWN ONLY FOR TUTORIAL SERVICES */
 const serviceSelect = document.getElementById("serviceSelect");
-const tutorWrapper = document.getElementById("tutorSelectWrapper");
+const tutorLabel = document.getElementById("tutorLabel");
+const tutorSelect = document.getElementById("tutorSelect");
 
 serviceSelect.addEventListener("change", function(){
-if(this.value === "tutorial"){
-  tutorWrapper.style.display = "block";
-}else{
-  tutorWrapper.style.display = "none";
-}
+  const val = this.value;
+  if(val.includes("Tutorials") || val.includes("Sessions")){
+    tutorLabel.style.display="block";
+    fetch(SCRIPT_URL+"?action=getTutors")
+      .then(res=>res.json())
+      .then(data=>{
+        tutorSelect.innerHTML="";
+        data.forEach(t=>{ 
+          const opt=document.createElement("option");
+          opt.value=t.name;
+          opt.textContent=`${t.name} – ${t.subject}`;
+          tutorSelect.appendChild(opt);
+        });
+      }).catch(err=>{tutorSelect.innerHTML="<option>Error loading tutors</option>";});
+  } else {
+    tutorLabel.style.display="none";
+    tutorSelect.innerHTML="";
+  }
+});
+
+/* HANDLE STUDENT REGISTRATION SUBMISSION */
+document.getElementById("studentForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  const formData = new FormData(this);
+  const data = {};
+  formData.forEach((v,k)=>data[k]=v);
+  fetch(SCRIPT_URL,{
+    method:"POST",
+    body:JSON.stringify(data)
+  }).then(res=>res.json())
+    .then(r=>{
+      alert("Registration submitted successfully!");
+      this.reset();
+      tutorLabel.style.display="none";
+      closeForm();
+    })
+    .catch(err=>alert("Error submitting registration."));
 });
 </script>
 
