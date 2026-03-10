@@ -186,68 +186,42 @@ footer{
 </div>
 </div>
 
-<!-- LOGIN MODAL -->
-<div id="loginModal" class="modal">
-<form>
-  <button type="button" class="close" onclick="closeLogin()">×</button>
-  <h2>Tutor Login</h2>
-  <label>Email
-    <input type="email" required>
-  </label>
-  <label>Password
-    <input type="password" required>
-  </label>
-  <button class="submit-btn">Login</button>
+<!-- APPLY MODAL -->
+<div id="applyModal" class="modal">
+<form id="tutorApplyForm">
+  <button type="button" class="close" onclick="closeApply()">×</button>
+  <h2>Tutor Application</h2>
+  <label>Full Name<input type="text" name="name" required></label>
+  <label>Email<input type="email" name="email" required></label>
+  <label>Cellphone Number<input type="tel" name="phone" required></label>
+  <label>Area of Expertise / Subjects<input type="text" name="subjects" required></label>
+  <label>Highest Qualification<input type="text" name="qualification" required></label>
+  <label>Brief Teaching or Academic Experience<textarea name="experience" required></textarea></label>
+  <button type="submit" class="submit-btn">Submit Application</button>
 </form>
 </div>
 
 <!-- CREATE ACCOUNT MODAL -->
 <div id="createModal" class="modal">
-<form>
+<form id="createAccountForm">
   <button type="button" class="close" onclick="closeCreate()">×</button>
   <h2>Create Tutor Account</h2>
-  <label>Full Name
-    <input type="text" required>
-  </label>
-  <label>Email
-    <input type="email" required>
-  </label>
-  <label>Cellphone Number
-    <input type="tel" required>
-  </label>
-  <label>Password
-    <input type="password" required>
-  </label>
-  <button class="submit-btn">Create Account</button>
+  <label>Unique Code (sent via email)<input type="text" name="tutorCode" required></label>
+  <label>Email<input type="email" name="email" required></label>
+  <label>Password<input type="password" name="password" required></label>
+  <button type="submit" class="submit-btn">Create Account</button>
 </form>
 </div>
 
-<!-- APPLY MODAL -->
-<div id="applyModal" class="modal">
-<form id="applyForm">
-  <button type="button" class="close" onclick="closeApply()">×</button>
-  <h2>Tutor Application</h2>
-  <label>Full Name
-    <input type="text" name="name" required>
-  </label>
-  <label>Email
-    <input type="email" name="email" required>
-  </label>
-  <label>Cellphone Number
-    <input type="tel" name="phone" required>
-  </label>
-  <label>Area of Expertise / Subjects
-    <input type="text" name="subjects" required>
-  </label>
-  <label>Highest Qualification
-    <input type="text" name="qualification" required>
-  </label>
-  <label>Brief Teaching or Academic Experience
-    <textarea name="experience" required></textarea>
-  </label>
-  <button type="submit" class="submit-btn">Submit Application</button>
+<!-- LOGIN MODAL -->
+<div id="loginModal" class="modal">
+<form>
+  <button type="button" class="close" onclick="closeLogin()">×</button>
+  <h2>Tutor Login</h2>
+  <label>Email<input type="email" required></label>
+  <label>Password<input type="password" required></label>
+  <button class="submit-btn">Login</button>
 </form>
-<p id="applyMessage" style="color:green; margin-top:15px;"></p>
 </div>
 
 <footer>
@@ -258,25 +232,28 @@ C&T Tutorials engages tutors as independent academic facilitators. Tutors provid
 </footer>
 
 <script>
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycbyc3T_2QAX2LKbJE4mPPYztVrBj7gE0BCHb9otc4JPkctR_yY6U381B0uX3MYjv_tzoQg/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyc3T_2QAX2LKbJE4mPPYztVrBj7gE0BCHb9otc4JPkctR_yY6U381B0uX3MYjv_tzoQg/exec";
 
-/* LOGIN */
+/* OPEN/CLOSE MODALS */
+function openApply(){document.getElementById("applyModal").style.display="flex";}
+function closeApply(){document.getElementById("applyModal").style.display="none";}
+function openCreate(){document.getElementById("createModal").style.display="flex";}
+function closeCreate(){document.getElementById("createModal").style.display="none";}
 function openLogin(){document.getElementById("loginModal").style.display="flex";}
 function closeLogin(){document.getElementById("loginModal").style.display="none";}
 
-/* CREATE ACCOUNT */
-function openCreate(){document.getElementById("createModal").style.display="flex";}
-function closeCreate(){document.getElementById("createModal").style.display="none";}
+/* CLOSE WHEN CLICKING OUTSIDE */
+window.onclick=function(event){
+  let modals=["applyModal","createModal","loginModal"];
+  modals.forEach(id=>{
+    if(event.target==document.getElementById(id)) document.getElementById(id).style.display="none";
+  });
+};
 
-/* APPLY */
-function openApply(){document.getElementById("applyModal").style.display="flex";}
-function closeApply(){document.getElementById("applyModal").style.display="none";}
-
-/* SUBMIT APPLICATION TO SHEET */
-document.getElementById("applyForm").addEventListener("submit", function(e){
+/* ---------------- TUTOR APPLICATION SUBMISSION ---------------- */
+document.getElementById("tutorApplyForm").addEventListener("submit", function(e){
   e.preventDefault();
-  const data = {
-    action:"applyTutor",
+  const data={
     name:this.name.value,
     email:this.email.value,
     phone:this.phone.value,
@@ -290,18 +267,36 @@ document.getElementById("applyForm").addEventListener("submit", function(e){
   })
   .then(res=>res.json())
   .then(resp=>{
-    document.getElementById("applyMessage").innerText="Application submitted successfully. You will receive an email if approved.";
+    alert("Application submitted! You will receive a code via email once approved.");
     this.reset();
+    closeApply();
   });
 });
 
-/* CLOSE MODALS WHEN CLICKING OUTSIDE */
-window.onclick=function(event){
-  ["loginModal","createModal","applyModal"].forEach(id=>{
-    const modal=document.getElementById(id);
-    if(event.target==modal) modal.style.display="none";
+/* ---------------- CREATE ACCOUNT USING UNIQUE CODE ---------------- */
+document.getElementById("createAccountForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  const data={
+    action:"createAccount",
+    code:this.tutorCode.value,
+    email:this.email.value,
+    password:this.password.value
+  };
+  fetch(SCRIPT_URL,{
+    method:"POST",
+    body:JSON.stringify(data)
+  })
+  .then(res=>res.json())
+  .then(resp=>{
+    if(resp.status==="success"){
+      alert("Account created successfully!");
+      this.reset();
+      closeCreate();
+    }else{
+      alert("Invalid or unapproved code.");
+    }
   });
-};
+});
 </script>
 
 </body>
