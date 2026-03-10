@@ -3,133 +3,59 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>C&T Tutorials</title>
-
-<meta name="google-site-verification" content="aSucaMc_aX_kQpRFNvVRgTX0pEeCD1c48mTuirk4qwY" />
+<title>Admins Portal | C&T Tutorials</title>
 
 <style>
-/* ---------------- GENERAL ---------------- */
 body{margin:0;font-family:"Segoe UI", Arial, sans-serif;background:#f4f4f4;color:#333;line-height:1.6;}
-header{background-image:url("images/banner.jpg");background-position:center;background-repeat:no-repeat;background-size:cover;background-color:#003366;height:420px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;text-align:center;padding:20px;position:relative;transition:all 0.3s ease;}
-header.scrolled{background:#003366;background-image:none;position:fixed;top:0;left:0;width:100%;height:70px;z-index:999;justify-content:center;}
-nav{display:flex;flex-wrap:wrap;justify-content:center;gap:15px;width:100%;}
-nav a{color:white;text-decoration:none;font-weight:bold;white-space:nowrap;cursor:pointer;}
+header{background:#003366;color:white;padding:20px;text-align:center;}
+nav{margin-top:10px;display:flex;justify-content:center;flex-wrap:wrap;gap:15px;}
+nav a{color:white;text-decoration:none;font-weight:bold;cursor:pointer;}
 nav a:hover{text-decoration:underline;}
-.main-content{max-width:1100px;margin:auto;padding:50px 40px;background:white;transition:margin-top 0.3s ease;}
-header.scrolled + .main-content{margin-top:70px;}
-section{margin-bottom:60px;}
+.main-content{max-width:1100px;margin:auto;padding:50px 40px;background:white;}
 h2{color:#003366;border-bottom:2px solid #003366;padding-bottom:8px;margin-bottom:25px;}
-h3{color:#00509e;}
-.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:25px;margin-top:20px;}
-.service-card{background:#f7f7f7;padding:20px;border-radius:8px;box-shadow:0 3px 6px rgba(0,0,0,0.1);}
-.service-card h3{margin-top:0;}
-.resource-link{color:#00509e;font-weight:bold;text-decoration:none;}
-.resource-link:hover{text-decoration:underline;}
-.contact-box{background:#f7f7f7;padding:20px;border-radius:8px;}
-.floating-btn{position:fixed;bottom:25px;right:25px;background:#003366;color:white;padding:15px 22px;border:none;border-radius:40px;font-size:16px;cursor:pointer;box-shadow:0 4px 6px rgba(0,0,0,0.3);}
-#modal,#adminModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);justify-content:center;align-items:center;z-index:1000;}
-#modal form,#adminModal form{background:white;padding:25px;width:90%;max-width:500px;border-radius:10px;position:relative;}
+table{width:100%;border-collapse:collapse;}
+th,td{border:1px solid #ccc;padding:8px;text-align:left;}
+th{background:#003366;color:white;}
+button{padding:6px 12px;margin:2px;border:none;border-radius:4px;cursor:pointer;}
+.approve{background:#28a745;color:white;}
+.decline{background:#dc3545;color:white;}
 .close{position:absolute;right:15px;top:10px;font-size:22px;cursor:pointer;border:none;background:none;}
-label{display:block;margin-top:12px;font-weight:500;}
-input,select{width:100%;padding:10px;margin-top:5px;border-radius:5px;border:1px solid #ccc;box-sizing:border-box;}
+#adminModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);justify-content:center;align-items:center;z-index:1000;}
+#adminModal form{background:white;padding:25px;width:90%;max-width:500px;border-radius:10px;position:relative;}
 .submit-btn{margin-top:20px;width:100%;padding:12px;background:#003366;color:white;border:none;cursor:pointer;border-radius:5px;font-size:16px;}
 .submit-btn:hover{background:#00509e;}
-footer{background:#003366;color:white;text-align:center;padding:25px;}
-.footer-disclaimer{font-size:12px;max-width:900px;margin:auto;line-height:1.6;}
-@media(max-width:768px){header{height:300px;}.main-content{padding:30px 20px;}nav{gap:10px;}}
 </style>
 </head>
-
 <body>
 
 <header>
+<h1>Admins Portal | C&T Tutorials</h1>
 <nav>
-<a href="#about">About</a>
-<a href="#services">Services</a>
-<a href="#resources">Resources</a>
-<a href="#contact">Contact</a>
+<a href="index.html">Home</a>
 <a href="tutors.html">Tutors Portal</a>
-<a onclick="openAdmin()">Admins Portal</a>
 </nav>
 </header>
 
 <div class="main-content">
-
-<section id="about">
-<h2>About C&T Tutorials</h2>
-<p>C&T Tutorials is an independent academic support service committed to enhancing students’ academic performance through structured guidance in academic writing, research, and communication skills.</p>
-<p>Our services provide focused and student-centred academic support through personalised tutorials, collaborative group learning, and assignment-based guidance.</p>
-</section>
-
-<section id="services">
-<h2>Our Services</h2>
-<div class="services-grid">
-<div class="service-card">
-<h3>Academic Writing Tutorials</h3>
-<p>Structured sessions covering academic writing principles, essay development, and research techniques.</p>
-</div>
-<div class="service-card">
-<h3>Group Learning Sessions</h3>
-<p>Collaborative sessions designed to support multiple students working on similar academic challenges.</p>
-</div>
-<div class="service-card">
-<h3>Assignment Support</h3>
-<p>Professional assistance with editing, proofreading, and improving assignment structure and clarity.</p>
-</div>
-<div class="service-card">
-<h3>Public Speaking Support</h3>
-<p>Coaching sessions designed to strengthen presentation and communication skills for academic purposes.</p>
-</div>
-</div>
-</section>
-
-<section id="resources">
-<h2>Resources</h2>
-<ul>
-<li><a class="resource-link" href="documents/Business-Policies.pdf" target="_blank">Business Policies</a></li>
-<li><a class="resource-link" href="documents/Student-form-for-offline-application.pdf" target="_blank">Offline Application Form</a></li>
-</ul>
-</section>
-
-<section id="contact">
-<h2>Contact</h2>
-<div class="contact-box">
-<p>Email: <a href="mailto:ct0tutorials@gmail.com">ct0tutorials@gmail.com</a></p>
-<p>Phone: +264 815 621 879 / +264 818 479 958</p>
-</div>
-</section>
-
-<button class="floating-btn" onclick="openForm()">Register Now</button>
-
-</div>
-
-<!-- REGISTRATION MODAL -->
-<div id="modal">
-<form id="studentForm">
-<button type="button" class="close" onclick="closeForm()">×</button>
-<h2>Service Registration</h2>
-<label>Full Name<input type="text" name="name" required></label>
-<label>Email<input type="email" name="email" required></label>
-<label>Cellphone Number<input type="tel" name="cell_number" required></label>
-<label>Select Service
-<select name="service" id="serviceSelect" required>
-<option value="">Select a service</option>
-<option>Introduction to Academic Writing (4 sessions) – N$150</option>
-<option>Topic Specific Sessions – N$40</option>
-<option>Hourly Rate – N$40</option>
-<option>Group Sessions – N$200 to N$600</option>
-<option>Draft Editing – N$15 per page</option>
-<option>Proofreading – N$10 per page</option>
-</select>
-</label>
-<label>Select Tutor
-<select name="tutor" id="tutorSelect">
-<option value="">Select a tutor</option>
-</select>
-</label>
-<label><input type="checkbox" required>I agree to the <a href="documents/Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a></label>
-<button type="submit" class="submit-btn">Submit Registration</button>
-</form>
+<h2>Tutor Applications</h2>
+<table id="tutorTable">
+<thead>
+<tr>
+<th>#</th>
+<th>Full Name</th>
+<th>Email</th>
+<th>Phone</th>
+<th>Subjects</th>
+<th>Qualification</th>
+<th>Experience</th>
+<th>Status</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody>
+<tr><td colspan="9">Loading applications...</td></tr>
+</tbody>
+</table>
 </div>
 
 <!-- ADMIN LOGIN POPUP -->
@@ -143,71 +69,60 @@ footer{background:#003366;color:white;text-align:center;padding:25px;}
 </form>
 </div>
 
-<footer>
-<div class="footer-disclaimer">
-<strong>Disclaimer:</strong><br>
-C&T Tutorials operates independently and is not affiliated with, endorsed by, or formally connected to any university, college, examination body, or academic institution.
-All services are supplementary and intended to support independent learning.
-</div>
-</footer>
-
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz6fZNU0Tx42fTIoh0W8iZgHbQ-hWuqCvXFPZhmVlZEU2tKYpn1CEQjt0UKBLwGGN7qnQ/exec";
 
-/* registration form */
-function openForm(){document.getElementById("modal").style.display="flex";}
-function closeForm(){document.getElementById("modal").style.display="none";}
+/* Load tutor applications */
+function loadApplications(){
+  fetch(SCRIPT_URL+"?action=getAllTutors")
+  .then(res=>res.json())
+  .then(data=>{
+    const tbody=document.querySelector("#tutorTable tbody");
+    tbody.innerHTML="";
+    if(data.length===0){tbody.innerHTML="<tr><td colspan='9'>No applications found.</td></tr>";return;}
+    data.forEach((tutor,index)=>{
+      const row=document.createElement("tr");
+      row.innerHTML=`
+        <td>${index+1}</td>
+        <td>${tutor.name}</td>
+        <td>${tutor.email}</td>
+        <td>${tutor.phone}</td>
+        <td>${tutor.subjects}</td>
+        <td>${tutor.qualification}</td>
+        <td>${tutor.experience}</td>
+        <td>${tutor.status}</td>
+        <td>
+          <button class="approve" onclick="updateStatus(${index},'Approved')">Approve</button>
+          <button class="decline" onclick="updateStatus(${index},'Declined')">Decline</button>
+        </td>
+      `;
+      tbody.appendChild(row);
+    });
+  })
+  .catch(err=>console.error("Error loading applications:",err));
+}
 
-/* admin popup */
-function openAdmin(){document.getElementById("adminModal").style.display="flex";}
+/* Update application status */
+function updateStatus(index,status){
+  fetch(SCRIPT_URL,{
+    method:"POST",
+    body:JSON.stringify({action:"updateStatus",index:index,status:status})
+  })
+  .then(res=>res.json())
+  .then(()=>loadApplications())
+  .catch(()=>alert("Error updating status"));
+}
+
+/* Admin login modal */
 function closeAdmin(){document.getElementById("adminModal").style.display="none";}
-
-/* close when clicking outside */
+function openAdmin(){document.getElementById("adminModal").style.display="flex";}
 window.onclick=function(event){
-if(event.target==document.getElementById("modal")){closeForm();}
-if(event.target==document.getElementById("adminModal")){closeAdmin();}
+  if(event.target==document.getElementById("adminModal")){closeAdmin();}
 }
 
-/* smooth header collapse */
-let header=document.querySelector("header");
-window.addEventListener("scroll",function(){
-if(window.scrollY>120){header.classList.add("scrolled");}
-else{header.classList.remove("scrolled");}
-});
-
-/* Populate tutors dropdown only if a tutorial service is selected */
-document.getElementById("serviceSelect").addEventListener("change", function(){
-const service=this.value;
-const tutorDropdown=document.getElementById("tutorSelect");
-tutorDropdown.innerHTML='<option value="">Select a tutor</option>';
-if(service!==""){
-fetch(SCRIPT_URL+"?action=getTutors")
-.then(res=>res.json())
-.then(data=>{
-data.forEach(tutor=>{
-const opt=document.createElement("option");
-opt.value=tutor.name;
-opt.textContent=`${tutor.name} – ${tutor.subject}`;
-tutorDropdown.appendChild(opt);
-});
-});
-}
-});
-
-/* Submit student registration */
-document.getElementById("studentForm").addEventListener("submit", function(e){
-e.preventDefault();
-const formData=new FormData(this);
-const data={};
-formData.forEach((value,key)=>data[key]=value);
-fetch(SCRIPT_URL,{
-method:"POST",
-body:JSON.stringify(data)
-})
-.then(res=>res.json())
-.then(()=>{alert("Registration submitted!");this.reset();closeForm();})
-.catch(()=>alert("Error submitting registration"));
-});
+/* Load applications on page load */
+loadApplications();
 </script>
+
 </body>
 </html>
