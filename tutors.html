@@ -200,7 +200,7 @@ footer{
 <form id="createAccountForm">
   <button type="button" class="close" onclick="closeCreate()">×</button>
   <h2>Create Tutor Account</h2>
-  <label>Full Name / Access Code<input type="text" name="code" required></label>
+  <label>Access Code<input type="text" name="code" required></label>
   <label>Email<input type="email" name="email" required></label>
   <label>Cellphone Number<input type="tel" name="phone" required></label>
   <label>Password<input type="password" name="password" required></label>
@@ -227,7 +227,7 @@ C&T Tutorials engages tutors as independent academic facilitators. Tutors provid
 </footer>
 
 <script>
-const TUTOR_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzoXVTRhe05PwBKhFVOi0bcwMtHtu_hBH4xCXsGhR-YZBJMd2-PusZtQIuqbcI8F8Mp/exec";
+const TUTOR_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyc3T_2QAX2LKbJE4mPPYztVrBj7gE0BCHb9otc4JPkctR_yY6U381B0uX3MYjv_tzoQg/exec";
 
 /* MODALS */
 function openLogin(){document.getElementById("loginModal").style.display="flex";}
@@ -269,7 +269,7 @@ document.getElementById("applyForm").addEventListener("submit", function(e){
 document.getElementById("createAccountForm").addEventListener("submit", function(e){
   e.preventDefault();
   const data={
-    code:this.code.value, // The unique code generated after approval
+    code:this.code.value,
     email:this.email.value,
     phone:this.phone.value,
     password:this.password.value
@@ -278,9 +278,13 @@ document.getElementById("createAccountForm").addEventListener("submit", function
     method:"POST",
     body:JSON.stringify(data)
   }).then(res=>res.json()).then(resp=>{
-    alert("Account creation request submitted!");
-    this.reset();
-    closeCreate();
+    if(resp.status==="account_created"){
+      alert("Account successfully created!");
+      this.reset();
+      closeCreate();
+    }else{
+      alert("Invalid access code. Please check your email for the correct code.");
+    }
   });
 });
 </script>
