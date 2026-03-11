@@ -6,7 +6,153 @@
 <title>C&T Tutorials Tutors Portal</title>
 
 <style>
-/* ... (same CSS as before, unchanged) ... */
+/* ---------------- GENERAL ---------------- */
+body{
+  margin:0;
+  font-family:"Segoe UI", Arial, sans-serif;
+  background:#f4f4f4;
+  color:#333;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+/* ---------------- HEADER ---------------- */
+header{
+  background:#003366;
+  color:white;
+  padding:20px;
+  text-align:center;
+}
+nav{
+  margin-top:10px;
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:15px;
+}
+nav a{
+  color:white;
+  text-decoration:none;
+  font-weight:bold;
+  cursor:pointer;
+}
+nav a:hover{
+  text-decoration:underline;
+}
+/* ---------------- MAIN ---------------- */
+.main-content{
+  max-width:900px;
+  margin:auto;
+  padding:40px;
+  background:white;
+  flex:1;
+}
+h2{
+  color:#003366;
+  border-bottom:2px solid #003366;
+  padding-bottom:8px;
+}
+/* ---------------- BUTTONS ---------------- */
+.portal-buttons{
+  margin-top:30px;
+  display:flex;
+  gap:20px;
+  flex-wrap:wrap;
+}
+.portal-btn{
+  background:#003366;
+  color:white;
+  padding:12px 20px;
+  border:none;
+  border-radius:5px;
+  cursor:pointer;
+  font-size:16px;
+}
+.portal-btn:hover{
+  background:#00509e;
+}
+/* ---------------- MODALS ---------------- */
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.7);
+  justify-content:center;
+  align-items:center;
+  z-index:1000;
+  overflow:auto;
+  padding:20px;
+}
+.modal form{
+  background:white;
+  padding:25px;
+  width:90%;
+  max-width:500px;
+  border-radius:10px;
+  position:relative;
+}
+.close{
+  position:absolute;
+  top:10px;
+  right:15px;
+  font-size:22px;
+  cursor:pointer;
+  border:none;
+  background:none;
+}
+label{
+  display:block;
+  margin-top:15px;
+}
+input, textarea{
+  width:100%;
+  padding:10px;
+  margin-top:5px;
+  border-radius:5px;
+  border:1px solid #ccc;
+  box-sizing:border-box;
+}
+textarea{
+  min-height:80px;
+  resize:vertical;
+}
+.submit-btn{
+  margin-top:20px;
+  width:100%;
+  padding:12px;
+  background:#003366;
+  color:white;
+  border:none;
+  border-radius:5px;
+  cursor:pointer;
+  font-size:16px;
+}
+.submit-btn:hover{
+  background:#00509e;
+}
+/* ---------------- FOOTER ---------------- */
+footer{
+  background:#003366;
+  color:white;
+  text-align:center;
+  padding:25px;
+  margin-top:auto;
+}
+.footer-disclaimer{
+  font-size:12px;
+  max-width:900px;
+  margin:auto;
+  line-height:1.6;
+}
+/* ---------------- MOBILE ---------------- */
+@media(max-width:768px){
+  .main-content{
+    padding:25px;
+  }
+  .portal-buttons{
+    flex-direction:column;
+  }
+}
 </style>
 </head>
 
