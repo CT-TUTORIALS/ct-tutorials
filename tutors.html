@@ -186,8 +186,7 @@ footer{
   <button type="button" class="close" onclick="closeApply()">×</button>
   <h2>Tutor Application</h2>
   <label>Full Name<input type="text" name="name" required></label>
-  <label>Email<input type="email" name="email" required></label>
-  <label>Cellphone Number<input type="tel" name="phone" required></label>
+  <label>Phone<input type="tel" name="phone" required></label>
   <label>Area of Expertise / Subjects<input type="text" name="subjects" required></label>
   <label>Highest Qualification<input type="text" name="qualification" required></label>
   <label>Brief Teaching or Academic Experience<textarea name="experience" required></textarea></label>
@@ -201,8 +200,6 @@ footer{
   <button type="button" class="close" onclick="closeCreate()">×</button>
   <h2>Create Tutor Account</h2>
   <label>Access Code<input type="text" name="code" required></label>
-  <label>Email<input type="email" name="email" required></label>
-  <label>Cellphone Number<input type="tel" name="phone" required></label>
   <label>Password<input type="password" name="password" required></label>
   <button type="submit" class="submit-btn">Create Account</button>
 </form>
@@ -238,18 +235,15 @@ function openApply(){document.getElementById("applyModal").style.display="flex";
 function closeApply(){document.getElementById("applyModal").style.display="none";}
 window.onclick=function(event){
   let modals=["loginModal","createModal","applyModal"];
-  modals.forEach(id=>{
-    let m=document.getElementById(id);
-    if(event.target==m)m.style.display="none";
-  });
-}
+  modals.forEach(id=>{let m=document.getElementById(id);if(event.target==m)m.style.display="none";});
+};
 
 /* ---------------- TUTOR APPLICATION SUBMIT ---------------- */
 document.getElementById("applyForm").addEventListener("submit", function(e){
   e.preventDefault();
   const data={
+    type:"tutorApplication",
     name:this.name.value,
-    email:this.email.value,
     phone:this.phone.value,
     subjects:this.subjects.value,
     qualification:this.qualification.value,
@@ -269,10 +263,8 @@ document.getElementById("applyForm").addEventListener("submit", function(e){
 document.getElementById("createAccountForm").addEventListener("submit", function(e){
   e.preventDefault();
   const data={
-    action:"createAccount",
+    type:"createTutorAccount",
     code:this.code.value,
-    email:this.email.value,
-    phone:this.phone.value,
     password:this.password.value
   };
   fetch(TUTOR_SCRIPT_URL,{
