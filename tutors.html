@@ -6,29 +6,28 @@
 <title>C&T Tutorials Tutors Portal</title>
 
 <style>
-/* ---------------- GENERAL ---------------- */
 body{
   margin:0;
   font-family:"Segoe UI", Arial, sans-serif;
   background:#f4f4f4;
   color:#333;
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
+  line-height:1.6;
 }
-/* ---------------- HEADER ---------------- */
 header{
   background:#003366;
-  color:white;
-  padding:20px;
+  height:100px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
   text-align:center;
+  padding:20px;
 }
 nav{
-  margin-top:10px;
   display:flex;
   justify-content:center;
-  flex-wrap:wrap;
   gap:15px;
+  width:100%;
 }
 nav a{
   color:white;
@@ -39,104 +38,36 @@ nav a{
 nav a:hover{
   text-decoration:underline;
 }
-/* ---------------- MAIN ---------------- */
 .main-content{
-  max-width:900px;
+  max-width:1100px;
   margin:auto;
-  padding:40px;
+  padding:50px 40px;
   background:white;
-  flex:1;
 }
 h2{
   color:#003366;
   border-bottom:2px solid #003366;
   padding-bottom:8px;
+  margin-bottom:25px;
 }
-/* ---------------- BUTTONS ---------------- */
-.portal-buttons{
-  margin-top:30px;
-  display:flex;
-  gap:20px;
-  flex-wrap:wrap;
-}
-.portal-btn{
-  background:#003366;
-  color:white;
-  padding:12px 20px;
-  border:none;
-  border-radius:5px;
-  cursor:pointer;
-  font-size:16px;
-}
-.portal-btn:hover{
-  background:#00509e;
-}
-/* ---------------- MODALS ---------------- */
-.modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.7);
-  justify-content:center;
-  align-items:center;
-  z-index:1000;
-  overflow:auto;
+.tutor-card{
+  border:1px solid #ddd;
   padding:20px;
+  border-radius:8px;
+  margin-bottom:20px;
 }
-.modal form{
-  background:white;
-  padding:25px;
-  width:90%;
-  max-width:500px;
-  border-radius:10px;
-  position:relative;
+.tutor-card h3{
+  margin:0 0 10px 0;
+  color:#00509e;
 }
-.close{
-  position:absolute;
-  top:10px;
-  right:15px;
-  font-size:22px;
-  cursor:pointer;
-  border:none;
-  background:none;
+.tutor-card p{
+  margin:4px 0;
 }
-label{
-  display:block;
-  margin-top:15px;
-}
-input, textarea{
-  width:100%;
-  padding:10px;
-  margin-top:5px;
-  border-radius:5px;
-  border:1px solid #ccc;
-  box-sizing:border-box;
-}
-textarea{
-  min-height:80px;
-  resize:vertical;
-}
-.submit-btn{
-  margin-top:20px;
-  width:100%;
-  padding:12px;
-  background:#003366;
-  color:white;
-  border:none;
-  border-radius:5px;
-  cursor:pointer;
-  font-size:16px;
-}
-.submit-btn:hover{
-  background:#00509e;
-}
-/* ---------------- FOOTER ---------------- */
 footer{
   background:#003366;
   color:white;
   text-align:center;
   padding:25px;
-  margin-top:auto;
 }
 .footer-disclaimer{
   font-size:12px;
@@ -144,151 +75,85 @@ footer{
   margin:auto;
   line-height:1.6;
 }
-/* ---------------- MOBILE ---------------- */
-@media(max-width:768px){
-  .main-content{
-    padding:25px;
-  }
-  .portal-buttons{
-    flex-direction:column;
-  }
-}
 </style>
 </head>
 
 <body>
 
 <header>
-<h1>C&T Tutorials Tutors Portal</h1>
-<nav>
-<a href="index.html">Home</a>
-<a onclick="openApply()">Apply</a>
-<a onclick="openCreate()">Create Account</a>
-<a onclick="openLogin()">Login</a>
-</nav>
+  <nav>
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#resources">Resources</a>
+    <a href="#contact">Contact</a>
+    <a href="tutors.html">Tutors' Portal</a>
+  </nav>
 </header>
 
 <div class="main-content">
-<h2>Welcome Tutors!</h2>
-<p>We are excited to have you join our network of professional tutors. Through this portal you will be able to manage tutoring activities and support students seeking academic guidance.</p>
-<p>C&T Tutorials values professionalism, academic integrity, and a strong commitment to student success.</p>
+<section id="about">
+<h2>About C&T Tutorials</h2>
+<p>C&T Tutorials provides academic support to enhance student performance through personalized tutoring.</p>
+</section>
 
-<div class="portal-buttons">
-<button class="portal-btn" onclick="openApply()">Apply to Become a Tutor</button>
-<button class="portal-btn" onclick="openCreate()">Create Tutor Account</button>
-<button class="portal-btn" onclick="openLogin()">Tutor Login</button>
-</div>
-</div>
+<section id="services">
+<h2>Our Services</h2>
+<p>Academic Writing, Group Learning, Assignment Support, and Public Speaking Coaching.</p>
+</section>
 
-<!-- APPLY MODAL -->
-<div id="applyModal" class="modal">
-<form id="applyForm">
-  <button type="button" class="close" onclick="closeApply()">×</button>
-  <h2>Tutor Application</h2>
-  <label>Full Name<input type="text" name="name" required></label>
-  <label>Phone<input type="tel" name="phone" required></label>
-  <label>Email<input type="email" name="email" required></label>
-  <label>Area of Expertise / Subjects<input type="text" name="subjects" required></label>
-  <label>Highest Qualification<input type="text" name="qualification" required></label>
-  <label>Brief Teaching or Academic Experience<textarea name="experience" required></textarea></label>
-  <button type="submit" class="submit-btn">Submit Application</button>
-</form>
+<section id="resources">
+<h2>Approved Tutors</h2>
+<div id="tutorsList">
+<p>Loading tutors...</p>
 </div>
+</section>
 
-<!-- CREATE ACCOUNT MODAL -->
-<div id="createModal" class="modal">
-<form id="createAccountForm">
-  <button type="button" class="close" onclick="closeCreate()">×</button>
-  <h2>Create Tutor Account</h2>
-  <label>Access Code<input type="text" name="code" required></label>
-  <label>Email<input type="email" name="email" required></label>
-  <label>Phone<input type="tel" name="phone" required></label>
-  <label>Password<input type="password" name="password" required></label>
-  <button type="submit" class="submit-btn">Create Account</button>
-</form>
-</div>
-
-<!-- LOGIN MODAL -->
-<div id="loginModal" class="modal">
-<form id="loginForm">
-  <button type="button" class="close" onclick="closeLogin()">×</button>
-  <h2>Tutor Login</h2>
-  <label>Email<input type="email" required></label>
-  <label>Password<input type="password" required></label>
-  <button class="submit-btn">Login</button>
-</form>
+<section id="contact">
+<h2>Contact</h2>
+<p>Email: <a href="mailto:ct0tutorials@gmail.com">ct0tutorials@gmail.com</a></p>
+<p>Phone: +264 815 621 879 / +264 818 479 958</p>
+</section>
 </div>
 
 <footer>
 <div class="footer-disclaimer">
 <strong>Disclaimer:</strong><br>
-C&T Tutorials engages tutors as independent academic facilitators. Tutors provide academic support services only and do not represent any university, college, examination body, or academic institution.
+C&T Tutorials operates independently and is not affiliated with any university or academic institution.
 </div>
 </footer>
 
 <script>
-const TUTOR_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyc3T_2QAX2LKbJE4mPPYztVrBj7gE0BCHb9otc4JPkctR_yY6U381B0uX3MYjv_tzoQg/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxsXkwPLpdTK9oiBayEl_-TkN_T2x3SubSrjk-0TIC3eYbwbgD1-coQjNk0PqDmJDd35w/exec";
 
-/* MODALS */
-function openLogin(){document.getElementById("loginModal").style.display="flex";}
-function closeLogin(){document.getElementById("loginModal").style.display="none";}
-function openCreate(){document.getElementById("createModal").style.display="flex";}
-function closeCreate(){document.getElementById("createModal").style.display="none";}
-function openApply(){document.getElementById("applyModal").style.display="flex";}
-function closeApply(){document.getElementById("applyModal").style.display="none";}
-window.onclick=function(event){
-  let modals=["loginModal","createModal","applyModal"];
-  modals.forEach(id=>{
-    let m=document.getElementById(id);
-    if(event.target==m)m.style.display="none";
-  });
+function loadTutors() {
+  fetch(SCRIPT_URL + "?action=getApprovedTutors")
+    .then(res => res.json())
+    .then(tutors => {
+      const container = document.getElementById("tutorsList");
+      container.innerHTML = "";
+      if(tutors.length === 0){
+        container.innerHTML = "<p>No approved tutors at the moment.</p>";
+        return;
+      }
+      tutors.forEach(t => {
+        const card = document.createElement("div");
+        card.className = "tutor-card";
+        card.innerHTML = `
+          <h3>${t.name}</h3>
+          <p><strong>Email:</strong> ${t.email}</p>
+          <p><strong>Phone:</strong> ${t.phone}</p>
+          <p><strong>Subjects:</strong> ${t.subjects}</p>
+          <p><strong>Qualification:</strong> ${t.qualification}</p>
+          <p><strong>Experience:</strong> ${t.experience}</p>
+          <p><strong>Access Code:</strong> ${t.accessCode}</p>
+        `;
+        container.appendChild(card);
+      });
+    });
 }
 
-/* ---------------- TUTOR APPLICATION SUBMIT ---------------- */
-document.getElementById("applyForm").addEventListener("submit", function(e){
-  e.preventDefault();
-  const data={
-    name:this.name.value,
-    phone:this.phone.value,
-    email:this.email.value,
-    subjects:this.subjects.value,
-    qualification:this.qualification.value,
-    experience:this.experience.value,
-    type:"tutorApplication"
-  };
-  fetch(TUTOR_SCRIPT_URL,{
-    method:"POST",
-    body:JSON.stringify(data)
-  }).then(res=>res.json()).then(resp=>{
-    alert("Application submitted successfully!");
-    this.reset();
-    closeApply();
-  });
-});
-
-/* ---------------- CREATE ACCOUNT SUBMIT ---------------- */
-document.getElementById("createAccountForm").addEventListener("submit", function(e){
-  e.preventDefault();
-  const data={
-    code:this.code.value,
-    email:this.email.value,
-    phone:this.phone.value,
-    password:this.password.value,
-    type:"createTutorAccount"
-  };
-  fetch(TUTOR_SCRIPT_URL,{
-    method:"POST",
-    body:JSON.stringify(data)
-  }).then(res=>res.json()).then(resp=>{
-    if(resp.status==="account_created"){
-      alert("Account successfully created!");
-      this.reset();
-      closeCreate();
-    }else{
-      alert("Invalid access code. Please check your email for the correct code.");
-    }
-  });
-});
+// Load tutors on page load
+window.onload = loadTutors;
 </script>
 
 </body>
