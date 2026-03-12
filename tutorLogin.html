@@ -3,84 +3,45 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>C&T Tutorials Tutor Login</title>
+<title>Tutor Login - C&T Tutorials</title>
 <style>
-body{font-family:Arial;background:#f4f4f4;margin:0;padding:0;}
-header{background:#003366;color:white;padding:20px;text-align:center;}
-.container{max-width:600px;margin:40px auto;background:white;padding:30px;border-radius:8px;}
-input,button{width:100%;padding:10px;margin-top:10px;}
-button{background:#003366;color:white;border:none;cursor:pointer;}
+body{font-family:"Segoe UI", Arial,sans-serif;background:#f4f4f4}
+.container{max-width:500px;margin:auto;padding:40px;background:white;margin-top:50px;border-radius:10px}
+input{width:100%;padding:10px;margin:10px 0;}
+button{padding:10px;background:#003366;color:white;border:none;width:100%;}
+#error{color:red;margin-top:10px;}
 </style>
 </head>
 <body>
-
-<header>
-<h1>C&T Tutorials Tutor Login</h1>
-</header>
-
-<div class="container" id="accessPage">
-<h2>Access Code Verification</h2>
-<p>Enter your Access Code to create your login account:</p>
-<input id="tutorName" placeholder="Full Name">
-<input id="accessCode" placeholder="Access Code">
-<button onclick="verifyAccess()">Verify</button>
-<p id="error" style="color:red"></p>
-</div>
-
-<div class="container" id="createPasswordPage" style="display:none">
-<h2>Create Your Password</h2>
-<input id="newPassword" type="password" placeholder="Enter new password">
-<button onclick="createPassword()">Set Password</button>
-<p id="success" style="color:green"></p>
+<div class="container">
+<h2>Tutor Login</h2>
+<input id="email" type="email" placeholder="Email">
+<input id="password" type="password" placeholder="Password">
+<button onclick="login()">Login</button>
+<p id="error"></p>
 </div>
 
 <script>
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxsXkwPLpdTK9oiBayEl_-TkN_T2x3SubSrjk-0TIC3eYbwbgD1-coQjNk0PqDmJDd35w/exec";
-let tutorIndex=null;
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxsXkwPLpdTK9oiBayEl_-TkN_T2x3SubSrjk-0TIC3eYbwbgD1-coQjNk0PqDmJDd35w/exec";
 
-function verifyAccess(){
-  const name=document.getElementById("tutorName").value.trim();
-  const code=document.getElementById("accessCode").value.trim();
-  if(!name || !code){document.getElementById("error").innerText="Please enter both fields."; return;}
-
-  fetch(SCRIPT_URL+"?action=verifyAccess&name="+encodeURIComponent(name)+"&code="+encodeURIComponent(code))
-  .then(res=>res.json())
-  .then(data=>{
-    if(data.valid){
-      tutorIndex=data.index;
-      document.getElementById("accessPage").style.display="none";
-      document.getElementById("createPasswordPage").style.display="block";
-      document.getElementById("success").innerText="";
-    } else {
-      document.getElementById("error").innerText="Invalid Access Code or Name.";
-    }
-  });
-}
-
-function createPassword(){
-  const password=document.getElementById("newPassword").value.trim();
-  if(!password){document.getElementById("success").innerText="Enter a password."; return;}
-
+function login(){
   fetch(SCRIPT_URL,{
     method:"POST",
     body:JSON.stringify({
-      action:"setTutorPassword",
-      index:tutorIndex,
-      password:password
+      type:"tutorLogin",
+      email:document.getElementById("email").value,
+      password:document.getElementById("password").value
     })
-  })
-  .then(res=>res.json())
-  .then(data=>{
-    if(data.status==="success"){
-      document.getElementById("createPasswordPage").style.display="none";
-      document.getElementById("success").innerText="Password created successfully! You can now login.";
-      alert("Your password has been set. Use your Access Code and password next time to login.");
-    } else {
-      document.getElementById("success").innerText="Error setting password. Try again.";
-    }
-  });
+  }).then(res=>res.json())
+    .then(data=>{
+      if(data.status==="success"){
+        localStorage.setItem("tutorData", JSON.stringify(data.tutor));
+        window.location.href="tutors.html";
+      } else {
+        document.getElementById("error").innerText="Invalid credentials or not approved.";
+      }
+    });
 }
 </script>
-
 </body>
 </html>
