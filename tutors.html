@@ -6,139 +6,284 @@
 <title>C&T Tutorials Tutors Portal</title>
 
 <style>
-body{margin:0;font-family:"Segoe UI",Arial,sans-serif;background:#f4f4f4;color:#333;line-height:1.6;}
-header{background:#003366;height:100px;display:flex;align-items:center;justify-content:center;padding:0 20px;}
-nav{display:flex;gap:15px;width:100%;justify-content:center;}
-nav a{color:white;text-decoration:none;font-weight:bold;cursor:pointer;}
-nav a:hover{text-decoration:underline;}
-.main-content{max-width:1100px;margin:auto;padding:50px 40px;background:white;}
-h2{color:#003366;border-bottom:2px solid #003366;padding-bottom:8px;margin-bottom:25px;}
-h3{color:#00509e;}
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);justify-content:center;align-items:center;z-index:1000;}
-.modal form{background:white;padding:25px;width:90%;max-width:500px;border-radius:10px;position:relative;}
-.close{position:absolute;right:15px;top:10px;font-size:22px;cursor:pointer;border:none;background:none;}
-input,select{width:100%;padding:10px;margin-top:5px;border-radius:5px;border:1px solid #ccc;box-sizing:border-box;}
-.submit-btn{margin-top:20px;width:100%;padding:12px;background:#003366;color:white;border:none;cursor:pointer;border-radius:5px;font-size:16px;}
-.submit-btn:hover{background:#00509e;}
-footer{background:#003366;color:white;text-align:center;padding:25px;}
-.footer-disclaimer{font-size:12px;max-width:900px;margin:auto;line-height:1.6;}
-table{width:100%;border-collapse:collapse;margin-top:20px;}
-td,th{border:1px solid #ddd;padding:10px;}
-th{background:#003366;color:white;}
+body {
+  margin:0;
+  font-family:"Segoe UI", Arial, sans-serif;
+  background:#f4f4f4;
+  color:#333;
+  line-height:1.6;
+}
+
+/* Header & Navigation */
+header {
+  background:#003366;
+  height:100px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:20px;
+}
+nav {
+  display:flex;
+  justify-content:center;
+  gap:15px;
+  width:100%;
+}
+nav a {
+  color:white;
+  text-decoration:none;
+  font-weight:bold;
+  cursor:pointer;
+}
+nav a:hover {
+  text-decoration:underline;
+}
+
+/* Main Content */
+.main-content {
+  max-width:1100px;
+  margin:auto;
+  padding:50px 40px;
+  background:white;
+}
+h2 {
+  color:#003366;
+  border-bottom:2px solid #003366;
+  padding-bottom:8px;
+  margin-bottom:25px;
+}
+h3 {
+  color:#00509e;
+}
+
+/* Modals */
+#loginModal, #applyModal, #createAccountModal {
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.7);
+  justify-content:center;
+  align-items:center;
+  z-index:1000;
+}
+#loginModal form, #applyModal form, #createAccountModal form {
+  background:white;
+  padding:25px;
+  width:90%;
+  max-width:500px;
+  border-radius:10px;
+  position:relative;
+}
+.close {
+  position:absolute;
+  right:15px;
+  top:10px;
+  font-size:22px;
+  cursor:pointer;
+  border:none;
+  background:none;
+}
+label {
+  display:block;
+  margin-top:12px;
+  font-weight:500;
+}
+input, select {
+  width:100%;
+  padding:10px;
+  margin-top:5px;
+  border-radius:5px;
+  border:1px solid #ccc;
+  box-sizing:border-box;
+}
+.submit-btn {
+  margin-top:20px;
+  width:100%;
+  padding:12px;
+  background:#003366;
+  color:white;
+  border:none;
+  cursor:pointer;
+  border-radius:5px;
+  font-size:16px;
+}
+.submit-btn:hover {
+  background:#00509e;
+}
+
+/* Footer */
+footer {
+  background:#003366;
+  color:white;
+  text-align:center;
+  padding:25px;
+}
+.footer-disclaimer {
+  font-size:12px;
+  max-width:900px;
+  margin:auto;
+  line-height:1.6;
+}
+
+/* Responsive */
+@media(max-width:768px){
+  .main-content {
+    padding:30px 20px;
+  }
+}
 </style>
 </head>
-
 <body>
 
 <header>
-<nav>
-<a href="index.html">Home</a>
-<a onclick="openApply()">Apply</a>
-<a onclick="openCreateAccount()">Create Account</a>
-<a onclick="openLogin()">Login</a>
-</nav>
+  <nav>
+    <a href="index.html">Home</a>
+    <a onclick="openApply()">Apply</a>
+    <a onclick="openCreateAccount()">Create Account</a>
+    <a onclick="openLogin()">Login</a>
+  </nav>
 </header>
 
-<div class="main-content">
-<section id="preLoginMessage">
-<h2>Welcome to C&T Tutorials</h2>
-<p>C&T Tutorials is an equal opportunity employer. Thank you for showing interest in joining our tutoring team!</p>
-</section>
+<div class="main-content" id="mainContent">
 
-<section id="tutorsContent" style="display:none;">
-<h2>Welcome to Your Dashboard</h2>
-<p>You are now logged in as an approved tutor. Below are the students who selected you for tutorials:</p>
+  <!-- Prospective tutors content -->
+  <section id="infoSection">
+    <h2>Welcome to C&T Tutorials</h2>
+    <p>Thank you for your interest in joining our team. C&T Tutorials is an equal opportunity employer committed to creating an inclusive and supportive environment for all our tutors. We value diverse backgrounds, experiences, and perspectives, and we aim to provide professional development opportunities for every member of our team.</p>
+    <p>At C&T Tutorials, we offer flexible working arrangements, continuous learning opportunities, and a collaborative culture where your expertise is respected and celebrated. If you are passionate about teaching and mentoring students, we encourage you to apply!</p>
+  </section>
 
-<table id="studentsTable">
-<thead>
-<tr>
-<th>Timestamp</th>
-<th>Name</th>
-<th>Email</th>
-<th>Cell Number</th>
-<th>Service</th>
-</tr>
-</thead>
-<tbody></tbody>
-</table>
-</section>
+  <!-- Approved tutors dashboard -->
+  <section id="dashboardSection" style="display:none;">
+    <h2>Welcome to the Team!</h2>
+    <p>You are now an approved tutor at C&T Tutorials. Below is the list of students who have selected you for tutorial services.</p>
+    <div id="studentsList">
+      <p>Loading students...</p>
+    </div>
+  </section>
+
 </div>
 
-<!-- TUTOR APPLICATION MODAL -->
-<div class="modal" id="applyModal">
-<form id="tutorApplyForm">
-  <button type="button" class="close" onclick="closeApply()">×</button>
-  <h2>Apply to Become a Tutor</h2>
+<!-- APPLY MODAL -->
+<div id="applyModal">
+  <form id="applyForm">
+    <button type="button" class="close" onclick="closeApply()">×</button>
+    <h2>Apply as a Tutor</h2>
 
-  <label>Full Name<input type="text" name="name" required></label>
-  <label>Email<input type="email" name="email" required></label>
-  <label>Phone<input type="tel" name="phone" required></label>
-  <label>Subjects<input type="text" name="subjects" required></label>
-  <label>Qualification<input type="text" name="qualification" required></label>
-  <label>Experience<input type="text" name="experience" required></label>
-  <button type="submit" class="submit-btn">Submit Application</button>
-</form>
+    <label>Full Name
+      <input type="text" name="name" required>
+    </label>
+
+    <label>Email
+      <input type="email" name="email" required>
+    </label>
+
+    <label>Phone
+      <input type="tel" name="phone" required>
+    </label>
+
+    <label>Subjects
+      <input type="text" name="subjects" required>
+    </label>
+
+    <label>Qualification
+      <input type="text" name="qualification" required>
+    </label>
+
+    <label>Experience
+      <input type="text" name="experience">
+    </label>
+
+    <button type="submit" class="submit-btn">Submit Application</button>
+  </form>
 </div>
 
 <!-- CREATE ACCOUNT MODAL -->
-<div class="modal" id="createAccountModal">
-<form id="tutorCreateForm">
-  <button type="button" class="close" onclick="closeCreateAccount()">×</button>
-  <h2>Create Your Tutor Account</h2>
-  <label>Email<input type="email" name="email" required></label>
-  <label>Access Code<input type="text" name="code" required></label>
-  <label>Password<input type="password" name="password" required></label>
-  <label>Confirm Password<input type="password" name="password2" required></label>
-  <button type="submit" class="submit-btn">Create Account</button>
-</form>
+<div id="createAccountModal">
+  <form id="createAccountForm">
+    <button type="button" class="close" onclick="closeCreateAccount()">×</button>
+    <h2>Create Tutor Account</h2>
+
+    <label>Email
+      <input type="email" name="email" required>
+    </label>
+
+    <label>Access Code
+      <input type="text" name="code" required>
+    </label>
+
+    <label>Password
+      <input type="password" name="password" required>
+    </label>
+
+    <label>Confirm Password
+      <input type="password" name="confirmPassword" required>
+    </label>
+
+    <button type="submit" class="submit-btn">Create Account</button>
+  </form>
 </div>
 
 <!-- LOGIN MODAL -->
-<div class="modal" id="loginModal">
-<form id="tutorLoginForm">
-  <button type="button" class="close" onclick="closeLogin()">×</button>
-  <h2>Tutor Login</h2>
-  <label>Email<input type="email" name="email" required></label>
-  <label>Password<input type="password" name="password" required></label>
-  <p id="loginError" style="color:red;"></p>
-  <button type="submit" class="submit-btn">Login</button>
-</form>
+<div id="loginModal">
+  <form id="loginForm">
+    <button type="button" class="close" onclick="closeLogin()">×</button>
+    <h2>Tutor Login</h2>
+
+    <label>Email
+      <input type="email" name="email" required>
+    </label>
+
+    <label>Password
+      <input type="password" name="password" required>
+    </label>
+
+    <button type="submit" class="submit-btn">Login</button>
+  </form>
 </div>
 
 <footer>
-<div class="footer-disclaimer">
-<strong>Disclaimer:</strong><br>
-C&T Tutorials operates independently and is not affiliated with any university or academic institution.
-</div>
+  <div class="footer-disclaimer">
+    <strong>Disclaimer:</strong><br>
+    C&T Tutorials operates independently and is not affiliated with any university or academic institution.
+  </div>
 </footer>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxsXkwPLpdTK9oiBayEl_-TkN_T2x3SubSrjk-0TIC3eYbwbgD1-coQjNk0PqDmJDd35w/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec";
 
-/* MODALS OPEN/CLOSE */
+/* ---------- MODALS ---------- */
 function openApply(){document.getElementById("applyModal").style.display="flex";}
 function closeApply(){document.getElementById("applyModal").style.display="none";}
 function openCreateAccount(){document.getElementById("createAccountModal").style.display="flex";}
 function closeCreateAccount(){document.getElementById("createAccountModal").style.display="none";}
 function openLogin(){document.getElementById("loginModal").style.display="flex";}
 function closeLogin(){document.getElementById("loginModal").style.display="none";}
-window.onclick = function(event){
-  if(event.target==document.getElementById("applyModal")) closeApply();
-  if(event.target==document.getElementById("createAccountModal")) closeCreateAccount();
-  if(event.target==document.getElementById("loginModal")) closeLogin();
-}
 
-/* ---------------- TUTOR APPLICATION SUBMIT ---------------- */
-document.getElementById("tutorApplyForm").addEventListener("submit", function(e){
+window.onclick = function(e){
+  if(e.target==document.getElementById("applyModal")) closeApply();
+  if(e.target==document.getElementById("createAccountModal")) closeCreateAccount();
+  if(e.target==document.getElementById("loginModal")) closeLogin();
+};
+
+/* ---------- APPLY FORM SUBMIT ---------- */
+document.getElementById("applyForm").addEventListener("submit", function(e){
   e.preventDefault();
-  const data = {type:"tutorApplication",
-                name:this.name.value,
-                email:this.email.value,
-                phone:this.phone.value,
-                subjects:this.subjects.value,
-                qualification:this.qualification.value,
-                experience:this.experience.value};
-  fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify(data)})
+  const data = {
+    type:"tutorApplication",
+    name: this.name.value,
+    email: this.email.value,
+    phone: this.phone.value,
+    subjects: this.subjects.value,
+    qualification: this.qualification.value,
+    experience: this.experience.value
+  };
+  fetch(SCRIPT_URL, {
+    method:"POST",
+    body:JSON.stringify(data)
+  })
   .then(res=>res.json())
   .then(resp=>{
     alert("Application submitted successfully!");
@@ -147,62 +292,69 @@ document.getElementById("tutorApplyForm").addEventListener("submit", function(e)
   });
 });
 
-/* ---------------- CREATE ACCOUNT ---------------- */
-document.getElementById("tutorCreateForm").addEventListener("submit", function(e){
+/* ---------- CREATE ACCOUNT ---------- */
+document.getElementById("createAccountForm").addEventListener("submit", function(e){
   e.preventDefault();
-  if(this.password.value!==this.password2.value){
-    alert("Passwords do not match"); return;
+  if(this.password.value !== this.confirmPassword.value){
+    alert("Passwords do not match!");
+    return;
   }
-  const data = {type:"createTutorAccount", email:this.email.value, code:this.code.value, password:this.password.value};
-  fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify(data)})
+  const data = {
+    type:"createTutorAccount",
+    email: this.email.value,
+    code: this.code.value,
+    password: this.password.value
+  };
+  fetch(SCRIPT_URL,{
+    method:"POST",
+    body:JSON.stringify(data)
+  })
   .then(res=>res.json())
   .then(resp=>{
     if(resp.status==="account_created"){
-      alert("Account created! You can now login.");
+      alert("Account created successfully! You can now log in.");
       this.reset();
       closeCreateAccount();
-    } else alert("Invalid Access Code");
+    } else {
+      alert("Invalid access code!");
+    }
   });
 });
 
-/* ---------------- TUTOR LOGIN ---------------- */
-let loggedInTutorEmail = "";
-document.getElementById("tutorLoginForm").addEventListener("submit", function(e){
+/* ---------- LOGIN ---------- */
+document.getElementById("loginForm").addEventListener("submit", function(e){
   e.preventDefault();
-  const data = {type:"tutorLogin", email:this.email.value, password:this.password.value};
-  fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify(data)})
+  const email = this.email.value;
+  const password = this.password.value;
+  fetch(SCRIPT_URL+"?action=tutorLogin&email="+encodeURIComponent(email)+"&password="+encodeURIComponent(password))
   .then(res=>res.json())
   .then(resp=>{
-    if(resp.status==="success"){
-      loggedInTutorEmail = resp.email;
-      this.reset();
+    if(resp.success){
+      document.getElementById("infoSection").style.display="none";
+      document.getElementById("dashboardSection").style.display="block";
+      loadStudents(email);
       closeLogin();
-      document.getElementById("preLoginMessage").style.display="none";
-      document.getElementById("tutorsContent").style.display="block";
-      loadTutorStudents();
-    } else document.getElementById("loginError").innerText="Invalid credentials";
+    } else {
+      alert("Invalid email or password!");
+    }
   });
 });
 
-/* ---------------- LOAD STUDENTS ---------------- */
-function loadTutorStudents(){
-  fetch(`${SCRIPT_URL}?action=getStudentsForTutor&tutorEmail=${loggedInTutorEmail}`)
+/* ---------- LOAD STUDENTS FOR APPROVED TUTOR ---------- */
+function loadStudents(tutorEmail){
+  fetch(SCRIPT_URL+"?action=getStudentsForTutor&tutorEmail="+encodeURIComponent(tutorEmail))
     .then(res=>res.json())
     .then(students=>{
-      const tbody = document.querySelector("#studentsTable tbody");
-      tbody.innerHTML = "";
+      const container = document.getElementById("studentsList");
+      container.innerHTML="";
       if(students.length===0){
-        tbody.innerHTML="<tr><td colspan='5'>No students have selected you yet.</td></tr>";
+        container.innerHTML="<p>No students have selected you yet.</p>";
         return;
       }
       students.forEach(s=>{
-        const row = document.createElement("tr");
-        row.innerHTML = `<td>${new Date(s.timestamp).toLocaleString()}</td>
-                         <td>${s.name}</td>
-                         <td>${s.email}</td>
-                         <td>${s.cell_number}</td>
-                         <td>${s.service}</td>`;
-        tbody.appendChild(row);
+        const div = document.createElement("div");
+        div.innerHTML = `<p><strong>${s.name}</strong> - ${s.service} - ${s.cell_number} - ${s.timestamp}</p>`;
+        container.appendChild(div);
       });
     });
 }
