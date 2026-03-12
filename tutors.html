@@ -4,10 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>C&T Tutorials Tutors Portal</title>
+
 <style>
 body{margin:0;font-family:"Segoe UI",Arial,sans-serif;background:#f4f4f4;color:#333;line-height:1.6;}
-header{background:#003366;height:100px;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:20px;}
-nav{display:flex;justify-content:center;gap:15px;width:100%;}
+header{background:#003366;height:100px;display:flex;align-items:center;justify-content:center;padding:0 20px;}
+nav{display:flex;gap:15px;width:100%;justify-content:center;}
 nav a{color:white;text-decoration:none;font-weight:bold;cursor:pointer;}
 nav a:hover{text-decoration:underline;}
 .main-content{max-width:1100px;margin:auto;padding:50px 40px;background:white;}
@@ -19,12 +20,14 @@ h3{color:#00509e;}
 input,select{width:100%;padding:10px;margin-top:5px;border-radius:5px;border:1px solid #ccc;box-sizing:border-box;}
 .submit-btn{margin-top:20px;width:100%;padding:12px;background:#003366;color:white;border:none;cursor:pointer;border-radius:5px;font-size:16px;}
 .submit-btn:hover{background:#00509e;}
-.tutor-card{border:1px solid #ddd;padding:20px;border-radius:8px;margin-bottom:20px;}
-.tutor-card p{margin:4px 0;}
 footer{background:#003366;color:white;text-align:center;padding:25px;}
 .footer-disclaimer{font-size:12px;max-width:900px;margin:auto;line-height:1.6;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+td,th{border:1px solid #ddd;padding:10px;}
+th{background:#003366;color:white;}
 </style>
 </head>
+
 <body>
 
 <header>
@@ -36,50 +39,69 @@ footer{background:#003366;color:white;text-align:center;padding:25px;}
 </nav>
 </header>
 
-<div class="main-content" id="tutorsContent" style="display:none;">
-<h2>Welcome to C&T Tutorials Tutors' Portal</h2>
-<p>C&T Tutorials is an equal opportunity employer and values the expertise of all approved tutors. Here you can access resources and stay updated on our tutoring services.</p>
-<div id="tutorsList"><p>Loading tutors...</p></div>
+<div class="main-content">
+<section id="preLoginMessage">
+<h2>Welcome to C&T Tutorials</h2>
+<p>C&T Tutorials is an equal opportunity employer. Thank you for showing interest in joining our tutoring team!</p>
+</section>
+
+<section id="tutorsContent" style="display:none;">
+<h2>Welcome to Your Dashboard</h2>
+<p>You are now logged in as an approved tutor. Below are the students who selected you for tutorials:</p>
+
+<table id="studentsTable">
+<thead>
+<tr>
+<th>Timestamp</th>
+<th>Name</th>
+<th>Email</th>
+<th>Cell Number</th>
+<th>Service</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+</section>
 </div>
 
-<!-- APPLY MODAL -->
-<div id="applyModal" class="modal">
+<!-- TUTOR APPLICATION MODAL -->
+<div class="modal" id="applyModal">
 <form id="tutorApplyForm">
-<button type="button" class="close" onclick="closeApply()">×</button>
-<h2>Tutor Application</h2>
-<label>Full Name<input type="text" name="name" required></label>
-<label>Email<input type="email" name="email" required></label>
-<label>Phone<input type="tel" name="phone" required></label>
-<label>Subjects<input type="text" name="subjects" required></label>
-<label>Qualification<input type="text" name="qualification" required></label>
-<label>Experience<input type="text" name="experience"></label>
-<button type="submit" class="submit-btn">Submit Application</button>
+  <button type="button" class="close" onclick="closeApply()">×</button>
+  <h2>Apply to Become a Tutor</h2>
+
+  <label>Full Name<input type="text" name="name" required></label>
+  <label>Email<input type="email" name="email" required></label>
+  <label>Phone<input type="tel" name="phone" required></label>
+  <label>Subjects<input type="text" name="subjects" required></label>
+  <label>Qualification<input type="text" name="qualification" required></label>
+  <label>Experience<input type="text" name="experience" required></label>
+  <button type="submit" class="submit-btn">Submit Application</button>
 </form>
 </div>
 
 <!-- CREATE ACCOUNT MODAL -->
-<div id="createAccountModal" class="modal">
-<form id="createAccountForm">
-<button type="button" class="close" onclick="closeCreateAccount()">×</button>
-<h2>Create Tutor Account</h2>
-<label>Email<input type="email" name="email" required></label>
-<label>Access Code<input type="text" name="accessCode" required></label>
-<label>Password<input type="password" name="password" required></label>
-<label>Confirm Password<input type="password" name="confirmPassword" required></label>
-<button type="submit" class="submit-btn">Create Account</button>
-<p id="accountError" style="color:red;"></p>
+<div class="modal" id="createAccountModal">
+<form id="tutorCreateForm">
+  <button type="button" class="close" onclick="closeCreateAccount()">×</button>
+  <h2>Create Your Tutor Account</h2>
+  <label>Email<input type="email" name="email" required></label>
+  <label>Access Code<input type="text" name="code" required></label>
+  <label>Password<input type="password" name="password" required></label>
+  <label>Confirm Password<input type="password" name="password2" required></label>
+  <button type="submit" class="submit-btn">Create Account</button>
 </form>
 </div>
 
 <!-- LOGIN MODAL -->
-<div id="loginModal" class="modal">
+<div class="modal" id="loginModal">
 <form id="tutorLoginForm">
-<button type="button" class="close" onclick="closeLogin()">×</button>
-<h2>Tutor Login</h2>
-<label>Email<input type="email" name="email" required></label>
-<label>Password<input type="password" name="password" required></label>
-<button type="submit" class="submit-btn">Login</button>
-<p id="loginError" style="color:red;"></p>
+  <button type="button" class="close" onclick="closeLogin()">×</button>
+  <h2>Tutor Login</h2>
+  <label>Email<input type="email" name="email" required></label>
+  <label>Password<input type="password" name="password" required></label>
+  <p id="loginError" style="color:red;"></p>
+  <button type="submit" class="submit-btn">Login</button>
 </form>
 </div>
 
@@ -93,7 +115,7 @@ C&T Tutorials operates independently and is not affiliated with any university o
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxsXkwPLpdTK9oiBayEl_-TkN_T2x3SubSrjk-0TIC3eYbwbgD1-coQjNk0PqDmJDd35w/exec";
 
-/* MODAL FUNCTIONS */
+/* MODALS OPEN/CLOSE */
 function openApply(){document.getElementById("applyModal").style.display="flex";}
 function closeApply(){document.getElementById("applyModal").style.display="none";}
 function openCreateAccount(){document.getElementById("createAccountModal").style.display="flex";}
@@ -104,80 +126,85 @@ window.onclick = function(event){
   if(event.target==document.getElementById("applyModal")) closeApply();
   if(event.target==document.getElementById("createAccountModal")) closeCreateAccount();
   if(event.target==document.getElementById("loginModal")) closeLogin();
-};
+}
 
-/* APPLY SUBMISSION */
+/* ---------------- TUTOR APPLICATION SUBMIT ---------------- */
 document.getElementById("tutorApplyForm").addEventListener("submit", function(e){
   e.preventDefault();
   const data = {type:"tutorApplication",
-    name:this.name.value,
-    email:this.email.value,
-    phone:this.phone.value,
-    subjects:this.subjects.value,
-    qualification:this.qualification.value,
-    experience:this.experience.value
-  };
-  fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify(data)})
-  .then(res=>res.json())
-  .then(resp=>{alert("Application submitted!");this.reset();closeApply();});
-});
-
-/* CREATE ACCOUNT SUBMISSION */
-document.getElementById("createAccountForm").addEventListener("submit", function(e){
-  e.preventDefault();
-  const data = {
-    type:"createTutorAccount",
-    email:this.email.value,
-    code:this.accessCode.value,
-    password:this.password.value,
-    confirmPassword:this.confirmPassword.value
-  };
+                name:this.name.value,
+                email:this.email.value,
+                phone:this.phone.value,
+                subjects:this.subjects.value,
+                qualification:this.qualification.value,
+                experience:this.experience.value};
   fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify(data)})
   .then(res=>res.json())
   .then(resp=>{
-    if(resp.status==="account_created"){alert("Account created! You can now login.");this.reset();closeCreateAccount();}
-    else if(resp.status==="password_mismatch"){document.getElementById("accountError").innerText="Passwords do not match";}
-    else if(resp.status==="invalid_code"){document.getElementById("accountError").innerText="Invalid Access Code";}
+    alert("Application submitted successfully!");
+    this.reset();
+    closeApply();
   });
 });
 
-/* LOGIN SUBMISSION */
+/* ---------------- CREATE ACCOUNT ---------------- */
+document.getElementById("tutorCreateForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  if(this.password.value!==this.password2.value){
+    alert("Passwords do not match"); return;
+  }
+  const data = {type:"createTutorAccount", email:this.email.value, code:this.code.value, password:this.password.value};
+  fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify(data)})
+  .then(res=>res.json())
+  .then(resp=>{
+    if(resp.status==="account_created"){
+      alert("Account created! You can now login.");
+      this.reset();
+      closeCreateAccount();
+    } else alert("Invalid Access Code");
+  });
+});
+
+/* ---------------- TUTOR LOGIN ---------------- */
+let loggedInTutorEmail = "";
 document.getElementById("tutorLoginForm").addEventListener("submit", function(e){
   e.preventDefault();
-  const data = {
-    type:"tutorLogin",
-    email:this.email.value,
-    password:this.password.value
-  };
+  const data = {type:"tutorLogin", email:this.email.value, password:this.password.value};
   fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify(data)})
   .then(res=>res.json())
   .then(resp=>{
-    if(resp.status==="success"){this.reset();closeLogin();loadTutorsContent();}
-    else{document.getElementById("loginError").innerText="Invalid credentials";}
+    if(resp.status==="success"){
+      loggedInTutorEmail = resp.email;
+      this.reset();
+      closeLogin();
+      document.getElementById("preLoginMessage").style.display="none";
+      document.getElementById("tutorsContent").style.display="block";
+      loadTutorStudents();
+    } else document.getElementById("loginError").innerText="Invalid credentials";
   });
 });
 
-/* LOAD TUTORS CONTENT AFTER LOGIN */
-function loadTutorsContent(){
-  document.getElementById("tutorsContent").style.display="block";
-  fetch(SCRIPT_URL+"?action=getApprovedTutors")
-  .then(res=>res.json())
-  .then(tutors=>{
-    const container=document.getElementById("tutorsList");
-    container.innerHTML="";
-    if(tutors.length===0){container.innerHTML="<p>No tutors approved yet.</p>";return;}
-    tutors.forEach(t=>{
-      const card=document.createElement("div");
-      card.className="tutor-card";
-      card.innerHTML=`<h3>${t.name}</h3>
-      <p><strong>Email:</strong> ${t.email}</p>
-      <p><strong>Phone:</strong> ${t.phone}</p>
-      <p><strong>Subjects:</strong> ${t.subjects}</p>
-      <p><strong>Qualification:</strong> ${t.qualification}</p>
-      <p><strong>Experience:</strong> ${t.experience}</p>`;
-      container.appendChild(card);
+/* ---------------- LOAD STUDENTS ---------------- */
+function loadTutorStudents(){
+  fetch(`${SCRIPT_URL}?action=getStudentsForTutor&tutorEmail=${loggedInTutorEmail}`)
+    .then(res=>res.json())
+    .then(students=>{
+      const tbody = document.querySelector("#studentsTable tbody");
+      tbody.innerHTML = "";
+      if(students.length===0){
+        tbody.innerHTML="<tr><td colspan='5'>No students have selected you yet.</td></tr>";
+        return;
+      }
+      students.forEach(s=>{
+        const row = document.createElement("tr");
+        row.innerHTML = `<td>${new Date(s.timestamp).toLocaleString()}</td>
+                         <td>${s.name}</td>
+                         <td>${s.email}</td>
+                         <td>${s.cell_number}</td>
+                         <td>${s.service}</td>`;
+        tbody.appendChild(row);
+      });
     });
-  });
 }
 </script>
 
