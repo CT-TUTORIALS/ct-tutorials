@@ -16,7 +16,6 @@ body{
   color:#333;
   line-height:1.6;
 }
-/* ---------------- HERO BANNER ---------------- */
 header{
   background-image:url("images/banner.jpg");
   background-position:center;
@@ -44,7 +43,6 @@ header.scrolled{
   z-index:999;
   justify-content:center;
 }
-/* Navigation */
 nav{
   display:flex;
   flex-wrap:wrap;
@@ -62,13 +60,9 @@ nav a{
 nav a:hover{
   text-decoration:underline;
 }
-
-/* Tutors portal pushed right */
 nav a.portal-link{
   margin-left:auto;
 }
-
-/* ---------------- CONTENT ---------------- */
 .main-content{
   max-width:1100px;
   margin:auto;
@@ -91,7 +85,6 @@ h2{
 h3{
   color:#00509e;
 }
-/* ---------------- SERVICES ---------------- */
 .services-grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
@@ -107,7 +100,6 @@ h3{
 .service-card h3{
   margin-top:0;
 }
-/* ---------------- RESOURCES ---------------- */
 .resource-link{
   color:#00509e;
   font-weight:bold;
@@ -116,13 +108,11 @@ h3{
 .resource-link:hover{
   text-decoration:underline;
 }
-/* ---------------- CONTACT ---------------- */
 .contact-box{
   background:#f7f7f7;
   padding:20px;
   border-radius:8px;
 }
-/* ---------------- BUTTON ---------------- */
 .floating-btn{
   position:fixed;
   bottom:25px;
@@ -136,9 +126,7 @@ h3{
   cursor:pointer;
   box-shadow:0 4px 6px rgba(0,0,0,0.3);
 }
-/* ---------------- MODALS ---------------- */
-#modal,
-#adminModal{
+#modal, #adminModal{
   display:none;
   position:fixed;
   inset:0;
@@ -147,14 +135,15 @@ h3{
   align-items:center;
   z-index:1000;
 }
-#modal form,
-#adminModal form{
+#modal form, #adminModal form{
   background:white;
   padding:25px;
   width:90%;
-  max-width:500px;
+  max-width:600px;
   border-radius:10px;
   position:relative;
+  max-height:90vh;
+  overflow-y:auto;
 }
 .close{
   position:absolute;
@@ -192,7 +181,19 @@ input,select{
 .submit-btn:hover{
   background:#00509e;
 }
-/* ---------------- FOOTER ---------------- */
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:15px;
+}
+th,td{
+  border:1px solid #ccc;
+  padding:8px;
+  text-align:left;
+}
+th{background:#003366;color:white;}
+button.approve{background:#28a745;}
+button.reject{background:#dc3545;}
 footer{
   background:#003366;
   color:white;
@@ -205,17 +206,10 @@ footer{
   margin:auto;
   line-height:1.6;
 }
-/* ---------------- RESPONSIVE ---------------- */
 @media(max-width:768px){
-  header{
-    height:300px;
-  }
-  .main-content{
-    padding:30px 20px;
-  }
-  nav{
-    gap:10px;
-  }
+  header{height:300px;}
+  .main-content{padding:30px 20px;}
+  nav{gap:10px;}
 }
 </style>
 </head>
@@ -267,6 +261,7 @@ footer{
 <ul>
 <li><a class="resource-link" href="documents/Business-Policies.pdf" target="_blank">Business Policies</a></li>
 <li><a class="resource-link" href="documents/Student-form-for-offline-application.pdf" target="_blank">Offline Application Form</a></li>
+<li><a class="resource-link" href="documents/Tutor-Disclosure-Agreement.pdf" target="_blank">Tutor Disclosure Agreement</a></li>
 </ul>
 </section>
 
@@ -320,25 +315,40 @@ footer{
   <label>
     <input type="checkbox" required>
     I agree to the
-    <a href="documents/Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a>
+    <a href="documents/Tutor-Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a>
   </label>
 
   <button type="submit" class="submit-btn">Submit Registration</button>
 </form>
 </div>
 
-<!-- ADMIN LOGIN POPUP -->
+<!-- ADMIN LOGIN & DASHBOARD MODAL -->
 <div id="adminModal">
-<form>
+<form id="adminForm">
   <button type="button" class="close" onclick="closeAdmin()">×</button>
   <h2>Admin Login</h2>
   <label>Username
-    <input type="text" required>
+    <input type="text" name="username" required>
   </label>
   <label>Password
-    <input type="password" required>
+    <input type="password" name="password" required>
   </label>
-  <button class="submit-btn">Login</button>
+  <button type="submit" class="submit-btn">Login</button>
+
+  <!-- DASHBOARD -->
+  <div id="adminDashboard" style="display:none;margin-top:20px;">
+    <h3>Tutor Applications</h3>
+    <table id="adminTable">
+      <thead>
+        <tr>
+          <th>Name</th><th>Email</th><th>Phone</th><th>Subjects</th><th>Qualification</th><th>Experience</th><th>Status</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="8">Loading...</td></tr>
+      </tbody>
+    </table>
+  </div>
 </form>
 </div>
 
@@ -351,42 +361,40 @@ C&T Tutorials operates independently and is not affiliated with, endorsed by, or
 
 <script>
 const STUDENT_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzoXVTRhe05PwBKhFVOi0bcwMtHtu_hBH4xCXsGhR-YZBJMd2-PusZtQIuqbcI8F8Mp/exec";
+const ADMIN_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwbcrO4DEvMFHoRNF2hTf134in0pImfBPGj-j6hXMety_sUwiz-liYeIfujAQ4s8-G_eQ/exec";
 
 /* MODAL OPEN/CLOSE */
 function openForm(){document.getElementById("modal").style.display="flex";}
 function closeForm(){document.getElementById("modal").style.display="none";}
 function openAdmin(){document.getElementById("adminModal").style.display="flex";}
-function closeAdmin(){document.getElementById("adminModal").style.display="none";}
-
-/* CLOSE WHEN CLICKING OUTSIDE */
+function closeAdmin(){document.getElementById("adminModal").style.display="none";document.getElementById("adminDashboard").style.display="none";}
 window.onclick=function(event){
   if(event.target==document.getElementById("modal")) closeForm();
   if(event.target==document.getElementById("adminModal")) closeAdmin();
 }
 
-/* SMOOTH HEADER COLLAPSE */
+/* HEADER COLLAPSE */
 let header=document.querySelector("header");
 window.addEventListener("scroll",function(){
   if(window.scrollY>120) header.classList.add("scrolled");
   else header.classList.remove("scrolled");
 });
 
-/* ---------------- DYNAMIC TUTOR SELECTION ---------------- */
+/* DYNAMIC TUTOR SELECT */
 function fetchTutors() {
-  fetch(`${STUDENT_SCRIPT_URL}?action=getTutors`)
+  fetch(`${STUDENT_SCRIPT_URL}?action=getApprovedTutors`)
     .then(res => res.json())
     .then(tutors => {
       const tutorSelect = document.getElementById("tutorSelect");
       tutorSelect.innerHTML = '<option value="">Select a tutor</option>';
       tutors.forEach(t => {
         const opt = document.createElement("option");
-        opt.value = t.name;
-        opt.textContent = `${t.name} (${t.subject})`;
+        opt.value = t.email;
+        opt.textContent = `${t.name} (${t.subjects})`;
         tutorSelect.appendChild(opt);
       });
     });
 }
-
 document.getElementById("serviceSelect").addEventListener("change", function(){
   const tutorLabel = document.getElementById("tutorLabel");
   if(this.value && this.value!==""){
@@ -408,18 +416,82 @@ document.getElementById("studentRegisterForm").addEventListener("submit", functi
     service: this.service.value,
     tutor: this.tutor.value
   };
-  fetch(STUDENT_SCRIPT_URL, {
+  fetch(STUDENT_SCRIPT_URL, {method:"POST",body: JSON.stringify(data)})
+    .then(res=>res.json())
+    .then(resp=>{
+      alert("Registration submitted successfully!");
+      this.reset();
+      closeForm();
+      document.getElementById("tutorLabel").style.display="none";
+    });
+});
+
+/* ---------------- ADMIN LOGIN & DASHBOARD ---------------- */
+document.getElementById("adminForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  const username = this.username.value;
+  const password = this.password.value;
+
+  fetch(ADMIN_SCRIPT_URL, {
     method:"POST",
-    body: JSON.stringify(data)
+    body: JSON.stringify({type:"adminLogin", user:username, pass:password})
   })
-  .then(res=>res.json())
-  .then(resp=>{
-    alert("Registration submitted successfully!");
-    this.reset();
-    closeForm();
-    document.getElementById("tutorLabel").style.display="none";
+  .then(r=>r.json())
+  .then(res=>{
+    if(res.success){
+      alert("Login successful!");
+      document.getElementById("adminDashboard").style.display="block";
+      loadAdminTutors();
+    } else {
+      alert("Invalid credentials");
+    }
   });
 });
+
+/* LOAD TUTOR APPLICATIONS */
+function loadAdminTutors(){
+  fetch(ADMIN_SCRIPT_URL+"?action=getAllTutors")
+    .then(res=>res.json())
+    .then(tutors=>{
+      const tbody = document.querySelector("#adminTable tbody");
+      if(tutors.length===0){tbody.innerHTML='<tr><td colspan="8">No tutors found</td></tr>';return;}
+      tbody.innerHTML="";
+      tutors.forEach((t,i)=>{
+        const tr=document.createElement("tr");
+        tr.innerHTML=`
+          <td>${t.name}</td>
+          <td>${t.email}</td>
+          <td>${t.phone}</td>
+          <td>${t.subjects}</td>
+          <td>${t.qualification}</td>
+          <td>${t.experience}</td>
+          <td>${t.status}</td>
+          <td>
+          ${t.status!=="Approved"?`<button class="approve" onclick="updateTutorStatus(${i},'Approved')">Approve</button>`:""}
+          ${t.status!=="Rejected"?`<button class="reject" onclick="updateTutorStatus(${i},'Rejected')">Reject</button>`:""}
+          </td>`;
+        tbody.appendChild(tr);
+      });
+    });
+}
+
+/* UPDATE TUTOR STATUS */
+function updateTutorStatus(index,status){
+  if(!confirm(`Are you sure you want to ${status} this tutor?`)) return;
+  fetch(ADMIN_SCRIPT_URL,{
+    method:"POST",
+    body: JSON.stringify({type:"updateStatus", index:index, status:status})
+  })
+  .then(r=>r.json())
+  .then(res=>{
+    if(res.status==="success"){
+      alert(`Tutor ${status} successfully.`);
+      loadAdminTutors();
+    } else {
+      alert("Error updating status.");
+    }
+  });
+}
 </script>
 
 </body>
