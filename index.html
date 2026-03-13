@@ -28,15 +28,17 @@ body{
 
 .top-bar nav {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 15px;
-  padding: 15px 0;
+  padding: 12px 10px;
 }
 
 .top-bar nav a {
   color: white;
   text-decoration: none;
   font-weight: bold;
+  white-space: nowrap;
 }
 .top-bar nav a:hover {
   text-decoration: underline;
@@ -49,12 +51,7 @@ body{
   background-repeat: no-repeat;
   background-size: cover;
   height: 420px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  text-align: center;
-  margin-top: 60px; /* push below fixed top bar */
+  margin-top: 50px; /* space for fixed top bar */
 }
 
 /* ---------------- MAIN CONTENT ---------------- */
@@ -206,7 +203,8 @@ footer{
     padding:30px 20px;
   }
   .top-bar nav{
-    gap:10px;
+    justify-content: center;
+    gap:8px;
   }
 }
 </style>
@@ -227,9 +225,7 @@ footer{
 </div>
 
 <!-- HERO BANNER -->
-<div class="hero-banner">
-  <h1>Welcome to C&T Tutorials</h1>
-</div>
+<div class="hero-banner"></div>
 
 <div class="main-content">
   <section id="about">
