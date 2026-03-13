@@ -3,318 +3,100 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>C&T Tutorials | Admins Portal</title>
-
+<title>C&T Tutorials | Admin Dashboard</title>
 <style>
-body{
-  margin:0;
-  font-family:Segoe UI, Arial;
-  background:#f4f4f4;
-}
-
-header{
-  background:#003366;
-  color:white;
-  padding:15px 20px;
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  z-index:1000;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
-
-nav{
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:10px;
-  width:100%;
-}
-
-nav a{
-  color:white;
-  text-decoration:none;
-  font-weight:bold;
-  white-space:nowrap;
-  padding:8px 12px;
-}
-
-nav a:hover{
-  text-decoration:underline;
-}
-
-.main{
-  max-width:1200px;
-  margin:100px auto 40px auto; /* leave space for fixed header */
-  background:white;
-  padding:30px 40px;
-}
-
-h2{color:#003366;}
-
-.modal{
-  display:none;
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.6);
-  justify-content:center;
-  align-items:center;
-}
-
-.modal form{
-  background:white;
-  padding:25px;
-  width:90%;
-  max-width:450px;
-  border-radius:8px;
-  position:relative;
-}
-
-.close{
-  position:absolute;
-  right:15px;
-  top:10px;
-  font-size:22px;
-  cursor:pointer;
-  border:none;
-  background:none;
-}
-
-table{
-  width:100%;
-  border-collapse:collapse;
-  margin-top:20px;
-}
-
-th, td{
-  border:1px solid #ddd;
-  padding:10px;
-  text-align:left;
-}
-
-th{
-  background:#003366;
-  color:white;
-}
-
-button{
-  cursor:pointer;
-  border:none;
-  padding:8px 12px;
-  border-radius:4px;
-  color:white;
-  background:#003366;
-}
-
-button:hover{
-  background:#00509e;
-}
-
-footer{
-  background:#003366;
-  color:white;
-  padding:20px;
-  text-align:center;
-  margin-top:40px;
-  line-height:1.6;
-}
-@media(max-width:768px){
-  nav{
-    gap:5px;
-  }
-  .main{
-    padding:20px 15px;
-    margin-top:120px;
-  }
-}
+body{margin:0;font-family:Segoe UI, Arial;background:#f4f4f4;}
+header{background:#003366;color:white;padding:15px;text-align:center;display:flex;justify-content:center;gap:20px;flex-wrap:wrap;}
+header a{color:white;font-weight:bold;text-decoration:none;cursor:pointer;}
+header a:hover{text-decoration:underline;}
+.main{max-width:1200px;margin:auto;padding:40px;background:white;}
+table{width:100%;border-collapse:collapse;}
+th,td{border:1px solid #ddd;padding:10px;text-align:left;}
+th{background:#003366;color:white;}
+button{padding:6px 10px;border:none;border-radius:4px;cursor:pointer;}
+button.approve{background:#007700;color:white;}
+button.reject{background:#990000;color:white;}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);justify-content:center;align-items:center;z-index:1000;}
+.modal form{background:white;padding:25px;width:90%;max-width:400px;border-radius:10px;position:relative;}
+.close{position:absolute;top:10px;right:15px;font-size:22px;cursor:pointer;background:none;border:none;}
 </style>
 </head>
-
 <body>
 
 <header>
-<nav>
-<a href="index.html">Home</a>
-<a onclick="showLogin()">Tutors' List</a>
-<a onclick="showLogin()">Students' List</a>
-</nav>
+<a onclick="requireLogin('tutors')">Tutors' List</a>
+<a onclick="requireLogin('students')">Students' List</a>
+<a onclick="openLogin()">Admin Login</a>
 </header>
 
 <div class="main">
-
-<h2>Admins Dashboard</h2>
-
-<div id="dashboardSection">
-<p>Use the links above to view tutor applications or student registrations. Click on any link to login.</p>
+<h2>Dashboard</h2>
+<div id="contentArea">
+<p>Select an option above.</p>
+</div>
 </div>
 
-<!-- TUTOR LIST -->
-<div id="tutorList" style="display:none">
-<h2>Tutor Applications</h2>
-<table id="tutorsTable">
-<tr>
-<th>Full Name</th>
-<th>Phone</th>
-<th>Email</th>
-<th>Subjects</th>
-<th>Qualification</th>
-<th>Experience</th>
-<th>Status</th>
-<th>Access Code</th>
-<th>Actions</th>
-</tr>
-<tr><td colspan="9">Loading tutor applications...</td></tr>
-</table>
-</div>
-
-<!-- STUDENT LIST -->
-<div id="studentList" style="display:none">
-<h2>Registered Students</h2>
-<table id="studentsTable">
-<tr>
-<th>Timestamp</th>
-<th>Full Name</th>
-<th>Email</th>
-<th>Cell Number</th>
-<th>Service</th>
-<th>Tutor</th>
-</tr>
-<tr><td colspan="6">Loading student registrations...</td></tr>
-</table>
-</div>
-
-</div>
-
-<!-- LOGIN MODAL -->
 <div class="modal" id="loginModal">
-<form id="adminLoginForm">
+<form>
 <button type="button" class="close" onclick="closeLogin()">×</button>
 <h3>Admin Login</h3>
-<label>Username
-<input type="text" id="adminUser" required>
-</label>
-<label>Password
-<input type="password" id="adminPass" required>
-</label>
-<button type="submit">Login</button>
+<label>Username<input type="text" id="adminUsername" required></label>
+<label>Password<input type="password" id="adminPassword" required></label>
+<button type="submit" class="submit-btn">Login</button>
 </form>
 </div>
 
-<footer>
-<strong>Disclaimer:</strong> Admin access is restricted. Data shown here is confidential and must be used in accordance with C&T Tutorials policies.
-</footer>
-
 <script>
-const WEB_APP_URL="https://script.google.com/macros/s/AKfycbyprzZlwHhWkoAA8suvmTU0_alu22iJOf5SEcFmen1Efh-WMjBIoA67gzxMvZobMNh9HQ/exec";
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbyprzZlwHhWkoAA8suvmTU0_alu22iJOf5SEcFmen1Efh-WMjBIoA67gzxMvZobMNh9HQ/exec";
+const ADMIN_USERNAME="admin";
+const ADMIN_PASSWORD="3545Sh@kes";
+let loggedIn=false;
 
-function showLogin(){loginModal.style.display="flex";}
-function closeLogin(){loginModal.style.display="none";}
+function openLogin(){loginModal.style.display='flex';}
+function closeLogin(){loginModal.style.display='none';}
 
-window.onclick=function(e){
-  if(e.target==loginModal) closeLogin();
+document.querySelector("#loginModal form").addEventListener("submit",function(e){
+e.preventDefault();
+if(document.getElementById("adminUsername").value===ADMIN_USERNAME &&
+document.getElementById("adminPassword").value===ADMIN_PASSWORD){
+loggedIn=true;
+localStorage.setItem("adminLoggedIn","true");
+closeLogin();
+alert("Login successful!");} else {alert("Invalid credentials");}});
+
+window.onload=function(){if(localStorage.getItem("adminLoggedIn")==="true"){loggedIn=true;}};
+
+function requireLogin(type){
+if(!loggedIn){openLogin();return;}
+const contentArea=document.getElementById("contentArea");
+contentArea.innerHTML="";
+if(type==="tutors"){
+fetch(SCRIPT_URL+"?action=getTutorApplications").then(r=>r.json()).then(data=>{
+let html=`<h3>Tutor Applications</h3><table><tr><th>Full Name</th><th>Email</th><th>Phone</th><th>Subjects</th><th>Qualification</th><th>Experience</th><th>Timestamp</th><th>Status</th><th>AccessCode</th><th>Action</th></tr>`;
+data.forEach((t,i)=>{
+html+=`<tr>
+<td>${t.name}</td><td>${t.email}</td><td>${t.phone}</td><td>${t.subjects}</td><td>${t.qualification}</td><td>${t.experience}</td><td>${t.timestamp}</td><td>${t.status}</td>
+<td>${t.accessCode}</td>
+<td><button onclick="approveTutor(${i})">Approve</button><button onclick="rejectTutor(${i})">Reject</button></td>
+</tr>`;});
+html+="</table>";
+contentArea.innerHTML=html;});}
+else if(type==="students"){
+fetch(SCRIPT_URL+"?action=getStudents").then(r=>r.json()).then(data=>{
+let html=`<h3>Registered Students</h3><table><tr><th>Name</th><th>Email</th><th>Cell Number</th><th>Service</th><th>Tutor</th></tr>`;
+data.forEach(s=>{html+=`<tr><td>${s.name}</td><td>${s.email}</td><td>${s.cell_number}</td><td>${s.service}</td><td>${s.tutor}</td></tr>`;});
+html+="</table>";
+contentArea.innerHTML=html;});}
 }
 
-/* ADMIN LOGIN */
-adminLoginForm.addEventListener("submit", function(e){
-  e.preventDefault();
-  const username = document.getElementById("adminUser").value;
-  const password = document.getElementById("adminPass").value;
-
-  const admins = [
-    {user:"admin1", pass:"3545Sh@kes"},
-    {user:"admin2", pass:"P@rtner123"},
-    {user:"admin3", pass:"C&TAdmin!2026"}
-  ];
-
-  const match = admins.find(a => a.user===username && a.pass===password);
-
-  if(match){
-    closeLogin();
-    dashboardSection.style.display="none";
-    tutorList.style.display="table";
-    studentList.style.display="table";
-    fetchTutors();
-    fetchStudents();
-  } else {
-    alert("Invalid login credentials");
-  }
-});
-
-/* FETCH TUTORS */
-function fetchTutors(){
-  fetch(`${WEB_APP_URL}?action=getTutorApplications`)
-    .then(res=>res.json())
-    .then(data=>{
-      const table = document.getElementById("tutorsTable");
-      table.innerHTML='<tr><th>Full Name</th><th>Phone</th><th>Email</th><th>Subjects</th><th>Qualification</th><th>Experience</th><th>Status</th><th>Access Code</th><th>Actions</th></tr>';
-      data.forEach((t,i)=>{
-        const row = table.insertRow();
-        row.innerHTML=`<td>${t.name}</td>
-        <td>${t.phone}</td>
-        <td>${t.email}</td>
-        <td>${t.subjects}</td>
-        <td>${t.qualification}</td>
-        <td>${t.experience}</td>
-        <td>${t.status}</td>
-        <td>${t.accessCode || ""}</td>
-        <td>
-        ${t.status === "Pending" ? `<button onclick="approveTutor(${i})">Approve</button>
-        <button onclick="rejectTutor(${i})">Reject</button>` : ""}
-        </td>`;
-      });
-    });
-}
-
-/* FETCH STUDENTS */
-function fetchStudents(){
-  fetch(`${WEB_APP_URL}?action=getStudents`)
-    .then(res=>res.json())
-    .then(data=>{
-      const table = document.getElementById("studentsTable");
-      table.innerHTML='<tr><th>Timestamp</th><th>Full Name</th><th>Email</th><th>Cell Number</th><th>Service</th><th>Tutor</th></tr>';
-      data.forEach(s=>{
-        const row = table.insertRow();
-        row.innerHTML=`<td>${s.timestamp}</td>
-        <td>${s.name}</td>
-        <td>${s.email}</td>
-        <td>${s.cell_number}</td>
-        <td>${s.service}</td>
-        <td>${s.tutor}</td>`;
-      });
-    });
-}
-
-/* APPROVE TUTOR */
 function approveTutor(index){
-  fetch(`${WEB_APP_URL}`, {
-    method: "POST",
-    body: JSON.stringify({ type:"approveTutor", index:index })
-  })
-  .then(r=>r.json())
-  .then(resp=>{
-    alert("Tutor Approved and Email sent!");
-    fetchTutors(); // refresh the list
-  });
+fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify({type:"approveTutor",index:index})}).then(r=>r.json()).then(()=>requireLogin('tutors'));
 }
 
-/* REJECT TUTOR */
 function rejectTutor(index){
-  fetch(`${WEB_APP_URL}`, {
-    method: "POST",
-    body: JSON.stringify({ type:"rejectTutor", index:index })
-  })
-  .then(r=>r.json())
-  .then(resp=>{
-    alert("Tutor Rejected.");
-    fetchTutors(); // refresh the list
-  });
+fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify({type:"rejectTutor",index:index})}).then(r=>r.json()).then(()=>requireLogin('tutors'));
 }
 </script>
+
 </body>
 </html>
