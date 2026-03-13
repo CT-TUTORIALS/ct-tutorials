@@ -4,81 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>C&T Tutorials | Tutors Portal</title>
+
 <style>
-body{
-  margin:0;
-  font-family:Segoe UI, Arial;
-  background:#f4f4f4;
-}
-header{
-  background:#003366;
-  color:white;
-  padding:20px;
-  text-align:center;
-}
-nav a{
-  color:white;
-  margin:0 15px;
-  text-decoration:none;
-  font-weight:bold;
-  cursor:pointer;
-}
-.main{
-  max-width:1000px;
-  margin:auto;
-  background:white;
-  padding:40px;
-  min-height:calc(100vh - 160px);
-}
+body{margin:0;font-family:Segoe UI, Arial;background:#f4f4f4;}
+header{background:#003366;color:white;padding:20px;text-align:center;}
+nav a{color:white;margin:0 15px;text-decoration:none;font-weight:bold;cursor:pointer;}
+.main{max-width:1000px;margin:auto;background:white;padding:40px;min-height:calc(100vh - 160px);}
 h2{color:#003366;}
-.modal{
-  display:none;
-  position:fixed;
-  top:0;left:0;width:100%;height:100%;
-  background:rgba(0,0,0,0.6);
-  justify-content:center;
-  align-items:center;
-}
-.modal form{
-  background:white;
-  padding:25px;
-  width:90%;
-  max-width:450px;
-  border-radius:8px;
-}
-input, select{
-  width:100%;
-  padding:10px;
-  margin-top:5px;
-  margin-bottom:15px;
-}
-button{
-  background:#003366;
-  color:white;
-  border:none;
-  padding:10px;
-  cursor:pointer;
-  width:100%;
-}
-.student-card{
-  border:1px solid #ddd;
-  padding:15px;
-  margin-bottom:10px;
-}
-.logout{
-  margin-top:20px;
-  background:#990000;
-}
-footer{
-  background:#003366;
-  color:white;
-  text-align:center;
-  padding:25px;
-  position:relative;
-  bottom:0;
-  width:100%;
-}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);justify-content:center;align-items:center;}
+.modal form{background:white;padding:25px;width:90%;max-width:450px;border-radius:8px;position:relative;}
+input{width:100%;padding:10px;margin-top:5px;margin-bottom:15px;border-radius:5px;border:1px solid #ccc;box-sizing:border-box;}
+button{background:#003366;color:white;border:none;padding:10px;cursor:pointer;width:100%;border-radius:5px;}
+.student-card{border:1px solid #ddd;padding:15px;margin-bottom:10px;}
+.logout{margin-top:20px;background:#990000;}
+footer{background:#003366;color:white;text-align:center;padding:25px;position:relative;bottom:0;width:100%;}
 </style>
+
 </head>
 <body>
 
@@ -103,7 +44,7 @@ footer{
 
 <div id="dashboard" style="display:none">
 <h2>Welcome to the Team!</h2>
-<p>Below is the list of students who selected you.</p>
+<p>Below is the list of students who have selected you.</p>
 <div id="studentsList">Loading students...</div>
 <button class="logout" onclick="logoutTutor()">Logout</button>
 </div>
@@ -113,6 +54,7 @@ footer{
 <!-- APPLY MODAL -->
 <div class="modal" id="applyModal">
 <form id="applyForm">
+<button type="button" class="close" onclick="closeApply()">×</button>
 <h3>Apply as Tutor</h3>
 <input name="name" placeholder="Full Name" required>
 <input name="email" placeholder="Email" required>
@@ -132,6 +74,7 @@ I have read and agree to the
 <!-- CREATE ACCOUNT MODAL -->
 <div class="modal" id="createModal">
 <form id="createForm">
+<button type="button" class="close" onclick="closeCreate()">×</button>
 <h3>Create Tutor Account</h3>
 <input name="email" placeholder="Email" required>
 <input name="code" placeholder="Access Code" required>
@@ -144,6 +87,7 @@ I have read and agree to the
 <!-- LOGIN MODAL -->
 <div class="modal" id="loginModal">
 <form id="loginForm">
+<button type="button" class="close" onclick="closeLogin()">×</button>
 <h3>Tutor Login</h3>
 <input name="email" placeholder="Email" required>
 <input type="password" name="password" placeholder="Password" required>
@@ -152,79 +96,116 @@ I have read and agree to the
 </div>
 
 <footer>
-<strong>Disclaimer:</strong> By joining C&T Tutorials as a tutor, you agree to follow all professional standards and maintain confidentiality of students’ information as outlined in the Tutor Disclosure Agreement.
+<strong>Disclaimer:</strong> Tutors must adhere to the C&T Tutorials Disclosure Agreement, ensuring confidentiality, professionalism, and responsible handling of student information.
 </footer>
 
 <script>
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbyprzZlwHhWkoAA8suvmTU0_alu22iJOf5SEcFmen1Efh-WMjBIoA67gzxMvZobMNh9HQ/exec";
 
 /* MODALS */
-function openApply(){applyModal.style.display="flex"}
-function openCreate(){createModal.style.display="flex"}
-function openLogin(){loginModal.style.display="flex"}
+function openApply(){applyModal.style.display="flex";}
+function closeApply(){applyModal.style.display="none";}
+function openCreate(){createModal.style.display="flex";}
+function closeCreate(){createModal.style.display="none";}
+function openLogin(){loginModal.style.display="flex";}
+function closeLogin(){loginModal.style.display="none";}
+
 window.onclick=function(e){
-if(e.target.classList.contains("modal")) e.target.style.display="none"
+if(e.target.classList.contains("modal")) e.target.style.display="none";
 }
 
 /* SESSION RESTORE */
 window.onload=function(){
-const tutorEmail=localStorage.getItem("tutorEmail");
-if(tutorEmail){
-document.getElementById("infoSection").style.display="none";
-document.getElementById("dashboard").style.display="block";
-loadStudents(tutorEmail);
-}
+  const tutorEmail = localStorage.getItem("tutorEmail");
+  if(tutorEmail){
+    document.getElementById("infoSection").style.display="none";
+    document.getElementById("dashboard").style.display="block";
+    loadStudents(tutorEmail);
+  }
 }
 
 /* APPLY */
-applyForm.addEventListener("submit",function(e){
-e.preventDefault();
-fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify({
-type:"tutorApplication",
-name:this.name.value,email:this.email.value,phone:this.phone.value,
-subjects:this.subjects.value,qualification:this.qualification.value,
-experience:this.experience.value
-})})
-.then(r=>r.json()).then(()=>{alert("Application submitted successfully");this.reset();applyModal.style.display="none";})
-})
+applyForm.addEventListener("submit", function(e){
+  e.preventDefault();
+  fetch(SCRIPT_URL,{
+    method:"POST",
+    body: JSON.stringify({
+      type:"tutorApplication",
+      name:this.name.value,
+      email:this.email.value,
+      phone:this.phone.value,
+      subjects:this.subjects.value,
+      qualification:this.qualification.value,
+      experience:this.experience.value
+    })
+  }).then(r=>r.json())
+    .then(()=>{alert("Application submitted successfully");this.reset();closeApply();});
+});
 
 /* CREATE ACCOUNT */
-createForm.addEventListener("submit",function(e){
-e.preventDefault();
-if(this.password.value!==this.confirm.value){alert("Passwords do not match");return;}
-fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify({type:"createTutorAccount",email:this.email.value,code:this.code.value,password:this.password.value})})
-.then(r=>r.json()).then(res=>{if(res.status==="account_created"){alert("Account created successfully. You can now login.");createModal.style.display="none";}else{alert("Invalid access code")}})
-})
+createForm.addEventListener("submit", function(e){
+  e.preventDefault();
+  if(this.password.value!==this.confirm.value){alert("Passwords do not match");return;}
+  fetch(SCRIPT_URL,{
+    method:"POST",
+    body: JSON.stringify({
+      type:"createTutorAccount",
+      email:this.email.value,
+      code:this.code.value,
+      password:this.password.value
+    })
+  }).then(r=>r.json())
+    .then(res=>{
+      if(res.status==="account_created"){alert("Account created successfully. You can now login.");closeCreate();}
+      else{alert("Invalid access code");}
+    });
+});
 
 /* LOGIN */
-loginForm.addEventListener("submit",function(e){
-e.preventDefault();
-const email=this.email.value;
-const password=this.password.value;
-fetch(SCRIPT_URL+"?action=tutorLogin&email="+encodeURIComponent(email)+"&password="+encodeURIComponent(password))
-.then(r=>r.json()).then(res=>{
-if(res.success){
-localStorage.setItem("tutorEmail",email);
-document.getElementById("infoSection").style.display="none";
-document.getElementById("dashboard").style.display="block";
-loadStudents(email);
-loginModal.style.display="none";
-}else{alert("Invalid login credentials")}})
-})
+loginForm.addEventListener("submit", function(e){
+  e.preventDefault();
+  const email=this.email.value;
+  const password=this.password.value;
+  fetch(SCRIPT_URL+"?action=tutorLogin&email="+encodeURIComponent(email)+"&password="+encodeURIComponent(password))
+  .then(r=>r.json())
+  .then(res=>{
+    if(res.success){
+      localStorage.setItem("tutorEmail", email);
+      document.getElementById("infoSection").style.display="none";
+      document.getElementById("dashboard").style.display="block";
+      loadStudents(email);
+      closeLogin();
+    } else{
+      alert("Invalid login credentials");
+    }
+  });
+});
 
+/* LOAD STUDENTS */
 function loadStudents(email){
-fetch(SCRIPT_URL+"?action=getStudentsForTutor&tutorEmail="+encodeURIComponent(email))
-.then(r=>r.json())
-.then(students=>{
-let html="";
-if(students.length===0){html="No students have selected you yet.";}
-students.forEach(s=>{html+=`<div class="student-card"><b>${s.name}</b><br>${s.email}<br>${s.cell_number}<br>Service: ${s.service}</div>`})
-studentsList.innerHTML=html;
-})
-
+  fetch(SCRIPT_URL+"?action=getStudentsForTutor&tutorEmail="+encodeURIComponent(email))
+  .then(r=>r.json())
+  .then(students=>{
+    let html="";
+    if(students.length===0) html="No students have selected you yet.";
+    students.forEach(s=>{
+      html+=`<div class="student-card">
+      <b>${s.name}</b><br>
+      ${s.email}<br>
+      ${s.cell_number}<br>
+      Service: ${s.service}
+      </div>`;
+    });
+    studentsList.innerHTML=html;
+  });
 }
 
-function logoutTutor(){localStorage.removeItem("tutorEmail");location.reload()}
+/* LOGOUT */
+function logoutTutor(){
+  localStorage.removeItem("tutorEmail");
+  location.reload();
+}
 </script>
+
 </body>
 </html>
