@@ -4,157 +4,121 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>C&T Tutorials Admin Dashboard</title>
-
 <style>
-body {
-  font-family: Arial, sans-serif;
-  background: #f4f4f4;
-}
-.container {
-  max-width: 1200px;
-  margin: auto;
-  background: white;
-  padding: 40px;
-}
-input {
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  box-sizing: border-box;
-}
-button {
-  padding: 10px 15px;
-  background: #003366;
-  color: white;
-  border: none;
-  margin-top: 15px;
-  cursor: pointer;
-}
-button:hover {
-  background: #00509e;
-}
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-td, th {
-  border: 1px solid #ddd;
-  padding: 10px;
-  text-align: center;
-}
-th {
-  background: #003366;
-  color: white;
-}
+body{font-family:Arial;background:#f4f4f4;margin:0;padding:0;}
+header{background:#003366;color:white;padding:20px;text-align:center;}
+nav{display:flex;justify-content:center;gap:15px;margin-bottom:20px;}
+nav a{color:white;text-decoration:none;font-weight:bold;}
+nav a:hover{text-decoration:underline;}
+.container{max-width:1000px;margin:auto;background:white;padding:30px;}
+input,button{padding:10px;margin-top:10px;width:100%;}
+button{background:#003366;color:white;border:none;cursor:pointer;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+td,th{border:1px solid #ddd;padding:10px;text-align:left;}
+th{background:#003366;color:white;}
+.status-approved{color:green;font-weight:bold;}
+.status-rejected{color:red;font-weight:bold;}
 </style>
 </head>
 <body>
 
-<!-- LOGIN PAGE -->
+<header>
+<h1>C&T Tutorials Admin</h1>
+<nav>
+<a href="index.html">Home</a>
+<a href="tutors.html">Tutors' Portal</a>
+</nav>
+</header>
+
 <div class="container" id="loginPage">
-  <h2>Admin Login</h2>
-  <input id="user" placeholder="Username">
-  <input id="pass" type="password" placeholder="Password">
-  <button onclick="login()">Login</button>
-  <p id="error" style="color:red"></p>
+<h2>Admin Login</h2>
+<input id="user" placeholder="Username">
+<input id="pass" type="password" placeholder="Password">
+<button onclick="login()">Login</button>
+<p id="error" style="color:red"></p>
 </div>
 
-<!-- DASHBOARD PAGE -->
 <div class="container" id="dashboard" style="display:none">
-  <h2>Tutor Applications</h2>
-  <table id="table">
-    <thead>
-      <tr>
-        <th>Full Name</th>
-        <th>Email</th>
-        <th>Phone</th>
-        <th>Subjects</th>
-        <th>Qualification</th>
-        <th>Experience</th>
-        <th>Timestamp</th>
-        <th>Status</th>
-        <th>AccessCode</th>
-        <th>Password</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+<h2>Tutor Applications</h2>
+<table id="tutorsTable">
+<thead>
+<tr>
+<th>Full Name</th>
+<th>Email</th>
+<th>Phone</th>
+<th>Subjects</th>
+<th>Qualification</th>
+<th>Experience</th>
+<th>Timestamp</th>
+<th>Status</th>
+<th>AccessCode</th>
+<th>Password</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
 </div>
 
 <script>
-// NEW WEB APP URL
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxsXkwPLpdTK9oiBayEl_-TkN_T2x3SubSrjk-0TIC3eYbwbgD1-coQjNk0PqDmJDd35w/exec";
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxsXkwPLpdTK9oiBayEl_-TkN_T2x3SubSrjk-0TIC3eYbwbgD1-coQjNk0PqDmJDd35w/exec";
 
-/* ---------------- ADMIN LOGIN ---------------- */
-function login() {
-  fetch(SCRIPT_URL, {
-    method: "POST",
-    body: JSON.stringify({
-      action: "adminLogin",
-      user: document.getElementById("user").value,
-      pass: document.getElementById("pass").value
-    })
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.success) {
-      document.getElementById("loginPage").style.display = "none";
-      document.getElementById("dashboard").style.display = "block";
-      loadTutors();
-    } else {
-      document.getElementById("error").innerText = "Invalid login";
-    }
+// Replace with your real credentials
+const ADMIN_USER="admin";
+const ADMIN_PASS="password123";
+
+function login(){
+  const user=document.getElementById("user").value;
+  const pass=document.getElementById("pass").value;
+  if(user===ADMIN_USER && pass===ADMIN_PASS){
+    document.getElementById("loginPage").style.display="none";
+    document.getElementById("dashboard").style.display="block";
+    loadTutors();
+  } else {
+    document.getElementById("error").innerText="Invalid username or password";
+  }
+}
+
+function loadTutors(){
+  fetch(SCRIPT_URL+"?action=getAllTutors")
+  .then(res=>res.json())
+  .then(tutors=>{
+    const tbody=document.querySelector("#tutorsTable tbody");
+    tbody.innerHTML="";
+    tutors.forEach((t,i)=>{
+      const row=document.createElement("tr");
+      row.innerHTML=`
+<td>${t.name}</td>
+<td>${t.email}</td>
+<td>${t.phone}</td>
+<td>${t.subjects}</td>
+<td>${t.qualification}</td>
+<td>${t.experience}</td>
+<td>${t.timestamp}</td>
+<td class="${t.status==='Approved'?'status-approved':'status-rejected'}">${t.status}</td>
+<td>${t.accessCode||""}</td>
+<td>${t.password||""}</td>
+<td>
+<button onclick="updateStatus(${i},'Approved')">Approve</button>
+<button onclick="updateStatus(${i},'Rejected')">Reject</button>
+</td>
+      `;
+      tbody.appendChild(row);
+    });
   });
 }
 
-/* ---------------- LOAD ALL TUTORS ---------------- */
-function loadTutors() {
-  fetch(SCRIPT_URL + "?action=getAllTutors")
-    .then(res => res.json())
-    .then(tutors => {
-      const tbody = document.querySelector("#table tbody");
-      tbody.innerHTML = "";
-      tutors.forEach((t, i) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${t.name}</td>
-          <td>${t.email}</td>
-          <td>${t.phone}</td>
-          <td>${t.subjects}</td>
-          <td>${t.qualification}</td>
-          <td>${t.experience}</td>
-          <td>${t.timestamp}</td>
-          <td>${t.status}</td>
-          <td>${t.accessCode}</td>
-          <td>${t.password || ""}</td>
-          <td>
-            <button onclick="update(${i},'Approved')">Approve</button>
-            <button onclick="update(${i},'Rejected')">Reject</button>
-          </td>
-        `;
-        tbody.appendChild(row);
-      });
-    });
-}
-
-/* ---------------- UPDATE TUTOR STATUS ---------------- */
-function update(index, status) {
-  fetch(SCRIPT_URL, {
-    method: "POST",
-    body: JSON.stringify({
-      action: "updateStatus",
-      index: index,
-      status: status
-    })
+function updateStatus(index,status){
+  fetch(SCRIPT_URL,{
+    method:"POST",
+    body:JSON.stringify({action:"updateStatus",index:index,status:status})
   })
-  .then(res => res.json())
-  .then(data => {
+  .then(res=>res.json())
+  .then(data=>{
     loadTutors();
+    alert(data.message);
   });
 }
 </script>
-
 </body>
 </html>
