@@ -6,6 +6,7 @@
 <title>C&T Tutorials | Tutors Portal</title>
 
 <style>
+
 body{
 margin:0;
 font-family:Segoe UI, Arial;
@@ -34,7 +35,9 @@ background:white;
 padding:40px;
 }
 
-h2{color:#003366;}
+h2{
+color:#003366;
+}
 
 .modal{
 display:none;
@@ -78,16 +81,13 @@ padding:15px;
 margin-bottom:10px;
 }
 
-.logout{
-margin-top:20px;
-background:#990000;
-}
 </style>
 </head>
 
 <body>
 
 <header>
+
 <h1>C&T Tutorials Tutors Portal</h1>
 
 <nav>
@@ -101,6 +101,8 @@ background:#990000;
 
 <div class="main">
 
+<!-- PROSPECTIVE TUTORS CONTENT -->
+
 <div id="infoSection">
 
 <h2>Thank You for Your Interest</h2>
@@ -110,7 +112,7 @@ We sincerely appreciate your interest in joining C&T Tutorials. Our organization
 </p>
 
 <p>
-C&T Tutorials is an equal opportunity employer. Tutors are selected based on their qualifications, teaching ability, and commitment to helping students succeed academically.
+C&T Tutorials is an equal opportunity employer. We believe that diversity, fairness, and inclusion strengthen the educational experiences we provide to students. Tutors are selected based on their qualifications, teaching ability, and commitment to helping students succeed academically.
 </p>
 
 <p>
@@ -119,23 +121,30 @@ If you are passionate about helping students achieve their academic goals, we en
 
 </div>
 
+<!-- APPROVED TUTOR DASHBOARD -->
+
 <div id="dashboard" style="display:none">
 
 <h2>Welcome to the Team!</h2>
 
 <p>
-Below is the list of students who selected you.
+You are now an approved tutor at C&T Tutorials. Below is the list of students who have selected you for tutorial services.
 </p>
 
-<div id="studentsList">Loading students...</div>
+<div id="studentsList">
 
-<button class="logout" onclick="logoutTutor()">Logout</button>
+Loading students...
+
+</div>
 
 </div>
 
 </div>
+
+<!-- APPLY MODAL -->
 
 <div class="modal" id="applyModal">
+
 <form id="applyForm">
 
 <h3>Apply as Tutor</h3>
@@ -147,18 +156,16 @@ Below is the list of students who selected you.
 <input name="qualification" placeholder="Qualification" required>
 <input name="experience" placeholder="Experience">
 
-<label>
-<input type="checkbox" required>
-I have read and agree to the
-<a href="documents/Tutor-Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a>
-</label>
-
 <button type="submit">Submit Application</button>
 
 </form>
+
 </div>
 
+<!-- CREATE ACCOUNT MODAL -->
+
 <div class="modal" id="createModal">
+
 <form id="createForm">
 
 <h3>Create Tutor Account</h3>
@@ -172,9 +179,13 @@ I have read and agree to the
 <button type="submit">Create Account</button>
 
 </form>
+
 </div>
 
+<!-- LOGIN MODAL -->
+
 <div class="modal" id="loginModal">
+
 <form id="loginForm">
 
 <h3>Tutor Login</h3>
@@ -185,40 +196,24 @@ I have read and agree to the
 <button type="submit">Login</button>
 
 </form>
+
 </div>
 
 <script>
 
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycbwbcrO4DEvMFHoRNF2hTf134in0pImfBPGj-j6hXMety_sUwiz-liYeIfujAQ4s8-G_eQ/exec"
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwbcrO4DEvMFHoRNF2hTf134in0pImfBPGj-j6hXMety_sUwiz-liYeIfujAQ4s8-G_eQ/exec"
 
-function openApply(){applyModal.style.display="flex"}
-function openCreate(){createModal.style.display="flex"}
-function openLogin(){loginModal.style.display="flex"}
+function openApply(){document.getElementById("applyModal").style.display="flex"}
+function openCreate(){document.getElementById("createModal").style.display="flex"}
+function openLogin(){document.getElementById("loginModal").style.display="flex"}
 
 window.onclick=function(e){
 if(e.target.classList.contains("modal")) e.target.style.display="none"
 }
 
-/* SESSION RESTORE */
-
-window.onload=function(){
-
-const tutorEmail=localStorage.getItem("tutorEmail")
-
-if(tutorEmail){
-
-document.getElementById("infoSection").style.display="none"
-document.getElementById("dashboard").style.display="block"
-
-loadStudents(tutorEmail)
-
-}
-
-}
-
 /* APPLY */
 
-applyForm.addEventListener("submit",function(e){
+document.getElementById("applyForm").addEventListener("submit",function(e){
 
 e.preventDefault()
 
@@ -246,7 +241,7 @@ applyModal.style.display="none"
 
 /* CREATE ACCOUNT */
 
-createForm.addEventListener("submit",function(e){
+document.getElementById("createForm").addEventListener("submit",function(e){
 
 e.preventDefault()
 
@@ -271,7 +266,8 @@ password:this.password.value
 if(res.status==="account_created"){
 alert("Account created successfully. You can now login.")
 createModal.style.display="none"
-}else{
+}
+else{
 alert("Invalid access code")
 }
 
@@ -281,7 +277,7 @@ alert("Invalid access code")
 
 /* LOGIN */
 
-loginForm.addEventListener("submit",function(e){
+document.getElementById("loginForm").addEventListener("submit",function(e){
 
 e.preventDefault()
 
@@ -294,8 +290,6 @@ fetch(SCRIPT_URL+"?action=tutorLogin&email="+encodeURIComponent(email)+"&passwor
 .then(res=>{
 
 if(res.success){
-
-localStorage.setItem("tutorEmail",email)
 
 document.getElementById("infoSection").style.display="none"
 document.getElementById("dashboard").style.display="block"
@@ -313,6 +307,8 @@ alert("Invalid login credentials")
 
 })
 
+/* LOAD STUDENTS */
+
 function loadStudents(email){
 
 fetch(SCRIPT_URL+"?action=getStudentsForTutor&tutorEmail="+encodeURIComponent(email))
@@ -327,7 +323,6 @@ html="No students have selected you yet."
 }
 
 students.forEach(s=>{
-
 html+=`
 <div class="student-card">
 <b>${s.name}</b><br>
@@ -336,20 +331,11 @@ ${s.cell_number}<br>
 Service: ${s.service}
 </div>
 `
-
 })
 
-studentsList.innerHTML=html
+document.getElementById("studentsList").innerHTML=html
 
 })
-
-}
-
-function logoutTutor(){
-
-localStorage.removeItem("tutorEmail")
-
-location.reload()
 
 }
 
