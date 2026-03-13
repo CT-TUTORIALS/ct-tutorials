@@ -3,121 +3,229 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>C&T Tutorials Admin Dashboard</title>
+<title>C&T Tutorials</title>
+
 <style>
-body{font-family:Arial;background:#f4f4f4;margin:0}
-.container{max-width:900px;margin:auto;background:white;padding:40px;margin-top:30px;border-radius:10px}
-input{width:100%;padding:10px;margin-top:10px;}
-button{padding:10px 15px;background:#003366;color:white;border:none;margin-top:15px;cursor:pointer;}
-button:hover{opacity:0.9;}
-table{width:100%;border-collapse:collapse;margin-top:20px;}
-td,th{border:1px solid #ddd;padding:10px;}
-th{background:#003366;color:white;}
-#error{color:red;margin-top:10px;}
+body{
+  margin:0;
+  font-family:"Segoe UI", Arial, sans-serif;
+  background:#f4f4f4;
+  color:#333;
+  line-height:1.6;
+}
+header{
+  background:#003366;
+  height:100px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:20px;
+}
+nav{
+  display:flex;
+  justify-content:center;
+  gap:15px;
+  width:100%;
+}
+nav a{
+  color:white;
+  text-decoration:none;
+  font-weight:bold;
+  cursor:pointer;
+}
+nav a:hover{
+  text-decoration:underline;
+}
+.main-content{
+  max-width:1100px;
+  margin:auto;
+  padding:50px 40px;
+  background:white;
+}
+h2{
+  color:#003366;
+  border-bottom:2px solid #003366;
+  padding-bottom:8px;
+  margin-bottom:25px;
+}
+button.floating-btn{
+  position:fixed;
+  bottom:25px;
+  right:25px;
+  background:#003366;
+  color:white;
+  padding:15px 22px;
+  border:none;
+  border-radius:40px;
+  font-size:16px;
+  cursor:pointer;
+  box-shadow:0 4px 6px rgba(0,0,0,0.3);
+}
+#adminModal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.7);
+  justify-content:center;
+  align-items:center;
+  z-index:1000;
+}
+#adminModal form{
+  background:white;
+  padding:25px;
+  width:90%;
+  max-width:400px;
+  border-radius:10px;
+  position:relative;
+}
+.close{
+  position:absolute;
+  right:15px;
+  top:10px;
+  font-size:22px;
+  cursor:pointer;
+  border:none;
+  background:none;
+}
+label{
+  display:block;
+  margin-top:12px;
+  font-weight:500;
+}
+input{
+  width:100%;
+  padding:10px;
+  margin-top:5px;
+  border-radius:5px;
+  border:1px solid #ccc;
+  box-sizing:border-box;
+}
+.submit-btn{
+  margin-top:20px;
+  width:100%;
+  padding:12px;
+  background:#003366;
+  color:white;
+  border:none;
+  cursor:pointer;
+  border-radius:5px;
+  font-size:16px;
+}
+.submit-btn:hover{
+  background:#00509e;
+}
+footer{
+  background:#003366;
+  color:white;
+  text-align:center;
+  padding:25px;
+}
+.footer-disclaimer{
+  font-size:12px;
+  max-width:900px;
+  margin:auto;
+  line-height:1.6;
+}
 </style>
 </head>
+
 <body>
 
-<div class="container" id="loginPage">
-<h2>Admin Login</h2>
-<input id="user" placeholder="Username">
-<input id="pass" type="password" placeholder="Password">
-<button onclick="login()">Login</button>
-<p id="error"></p>
+<header>
+  <nav>
+    <a href="#about">Home</a>
+    <a href="#services">Services</a>
+    <a href="#resources">Resources</a>
+    <a href="#contact">Contact</a>
+    <a onclick="openForm()">Register Now</a>
+    <a onclick="openAdmin()">Admins Portal</a>
+  </nav>
+</header>
+
+<div class="main-content">
+<section id="about">
+<h2>About C&T Tutorials</h2>
+<p>C&T Tutorials provides academic support to enhance student performance through personalized tutoring.</p>
+</section>
+
+<section id="services">
+<h2>Our Services</h2>
+<p>Academic Writing, Group Learning, Assignment Support, and Public Speaking Coaching.</p>
+</section>
+
+<section id="resources">
+<h2>Resources</h2>
+<ul>
+<li><a href="documents/Business-Policies.pdf" target="_blank">Business Policies</a></li>
+<li><a href="documents/Student-form-for-offline-application.pdf" target="_blank">Offline Application Form</a></li>
+</ul>
+</section>
+
+<section id="contact">
+<h2>Contact</h2>
+<p>Email: <a href="mailto:ct0tutorials@gmail.com">ct0tutorials@gmail.com</a></p>
+<p>Phone: +264 815 621 879 / +264 818 479 958</p>
+</section>
 </div>
 
-<div class="container" id="dashboard" style="display:none">
-<h2>Tutor Applications</h2>
-<table id="table">
-<thead>
-<tr>
-<th>Full Name</th>
-<th>Email</th>
-<th>Phone</th>
-<th>Subjects</th>
-<th>Qualification</th>
-<th>Experience</th>
-<th>Timestamp</th>
-<th>Status</th>
-<th>AccessCode</th>
-<th>Password</th>
-<th>Action</th>
-</tr>
-</thead>
-<tbody></tbody>
-</table>
+<!-- ADMIN LOGIN MODAL -->
+<div id="adminModal">
+<form onsubmit="adminLogin(event)">
+  <button type="button" class="close" onclick="closeAdmin()">×</button>
+  <h2>Admin Login</h2>
+  <label>Username
+    <input type="text" id="adminUser" required>
+  </label>
+  <label>Password
+    <input type="password" id="adminPass" required>
+  </label>
+  <button type="submit" class="submit-btn">Login</button>
+  <p id="adminError" style="color:red;margin-top:10px;"></p>
+</form>
 </div>
+
+<footer>
+<div class="footer-disclaimer">
+<strong>Disclaimer:</strong><br>
+C&T Tutorials operates independently and is not affiliated with any university or academic institution.
+</div>
+</footer>
 
 <script>
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxsXkwPLpdTK9oiBayEl_-TkN_T2x3SubSrjk-0TIC3eYbwbgD1-coQjNk0PqDmJDd35w/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxsXkwPLpdTK9oiBayEl_-TkN_T2x3SubSrjk-0TIC3eYbwbgD1-coQjNk0PqDmJDd35w/exec";
 
-// Admin Login
-function login(){
+/* MODAL OPEN/CLOSE */
+function openForm(){ alert("Student registration handled on main registration modal."); } // Keep original student modal
+function closeForm(){}
+function openAdmin(){ document.getElementById("adminModal").style.display="flex"; }
+function closeAdmin(){ document.getElementById("adminModal").style.display="none"; }
+
+/* ADMIN LOGIN - redirect on success */
+function adminLogin(e){
+  e.preventDefault();
+  const user = document.getElementById("adminUser").value;
+  const pass = document.getElementById("adminPass").value;
+
   fetch(SCRIPT_URL,{
     method:"POST",
     body:JSON.stringify({
-      type:"adminLogin",
-      user:document.getElementById("user").value,
-      pass:document.getElementById("pass").value
+      action:"adminLogin",
+      user:user,
+      pass:pass
     })
   })
-  .then(res=>res.json())
-  .then(data=>{
+  .then(res => res.json())
+  .then(data => {
     if(data.success){
-      document.getElementById("loginPage").style.display="none";
-      document.getElementById("dashboard").style.display="block";
-      loadTutors();
+      window.location.href = "admin.html"; // Redirect to admin dashboard
     } else {
-      document.getElementById("error").innerText="Invalid login credentials.";
+      document.getElementById("adminError").innerText = "Invalid username or password.";
     }
   });
 }
-
-// Load all tutors
-function loadTutors(){
-  fetch(SCRIPT_URL+"?action=getAllTutors")
-  .then(res=>res.json())
-  .then(tutors=>{
-    const tbody=document.querySelector("#table tbody");
-    tbody.innerHTML="";
-    tutors.forEach((t,i)=>{
-      const row=document.createElement("tr");
-      row.innerHTML=`
-        <td>${t.name}</td>
-        <td>${t.email}</td>
-        <td>${t.phone}</td>
-        <td>${t.subjects}</td>
-        <td>${t.qualification}</td>
-        <td>${t.experience}</td>
-        <td>${t.timestamp}</td>
-        <td>${t.status}</td>
-        <td>${t.accessCode}</td>
-        <td>${t.password}</td>
-        <td>
-          <button onclick="update(${i},'Approved')">Approve</button>
-          <button onclick="update(${i},'Rejected')">Reject</button>
-        </td>
-      `;
-      tbody.appendChild(row);
-    });
-  });
-}
-
-// Approve/Reject
-function update(index,status){
-  fetch(SCRIPT_URL,{
-    method:"POST",
-    body:JSON.stringify({
-      type:"updateStatus",
-      index:index,
-      status:status
-    })
-  })
-  .then(res=>res.json())
-  .then(data=>{
-    loadTutors(); // refresh table
-  });
-}
 </script>
+
 </body>
 </html>
