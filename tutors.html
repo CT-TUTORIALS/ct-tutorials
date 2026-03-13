@@ -6,130 +6,37 @@
 <title>C&T Tutorials Tutors Portal</title>
 
 <style>
-body{
-  margin:0;
-  font-family:"Segoe UI", Arial, sans-serif;
-  background:#f4f4f4;
-  color:#333;
-  line-height:1.6;
-}
-header{
-  background:#003366;
-  height:100px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-  padding:20px;
-}
-nav{
-  display:flex;
-  justify-content:center;
-  gap:15px;
-  width:100%;
-}
-nav a{
-  color:white;
-  text-decoration:none;
-  font-weight:bold;
-  cursor:pointer;
-}
-nav a:hover{
-  text-decoration:underline;
-}
-.main-content{
-  max-width:1100px;
-  margin:auto;
-  padding:50px 40px;
-  background:white;
-}
-h2{
-  color:#003366;
-  border-bottom:2px solid #003366;
-  padding-bottom:8px;
-  margin-bottom:25px;
-}
-.tutor-card{
-  border:1px solid #ddd;
-  padding:20px;
-  border-radius:8px;
-  margin-bottom:20px;
-}
-.tutor-card h3{
-  margin:0 0 10px 0;
-  color:#00509e;
-}
-.tutor-card p{
-  margin:4px 0;
-}
-footer{
-  background:#003366;
-  color:white;
-  text-align:center;
-  padding:25px;
-}
-.footer-disclaimer{
-  font-size:12px;
-  max-width:900px;
-  margin:auto;
-  line-height:1.6;
-}
-#loginBox{
-  max-width:400px;
-  margin:auto;
-  margin-top:50px;
-  padding:30px;
-  background:white;
-  border-radius:8px;
-  border:1px solid #ddd;
-}
-#loginBox input{
-  width:100%;
-  padding:10px;
-  margin-top:10px;
-}
-#loginBox button{
-  width:100%;
-  padding:10px;
-  margin-top:15px;
-  background:#003366;
-  color:white;
-  border:none;
-}
-#loginError{
-  color:red;
-  margin-top:10px;
-}
+body{margin:0;font-family:"Segoe UI", Arial, sans-serif;background:#f4f4f4;color:#333;line-height:1.6;}
+header{background:#003366;height:100px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px;}
+nav{display:flex;justify-content:center;gap:15px;width:100%;}
+nav a{color:white;text-decoration:none;font-weight:bold;cursor:pointer;}
+nav a:hover{text-decoration:underline;}
+.main-content{max-width:1100px;margin:auto;padding:50px 40px;background:white;}
+h2{color:#003366;border-bottom:2px solid #003366;padding-bottom:8px;margin-bottom:25px;}
+.tutor-card{border:1px solid #ddd;padding:20px;border-radius:8px;margin-bottom:20px;}
+.tutor-card h3{margin:0 0 10px 0;color:#00509e;}
+.tutor-card p{margin:4px 0;}
+footer{background:#003366;color:white;text-align:center;padding:25px;}
+.footer-disclaimer{font-size:12px;max-width:900px;margin:auto;line-height:1.6;}
 </style>
 </head>
-
 <body>
 
 <header>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="index.html#register">Register Now</a>
-    <a href="tutorCreateAccount.html">Create Account</a>
-    <a href="tutorLogin.html">Login</a>
-  </nav>
+<nav>
+<a href="index.html#about">Home</a>
+<a href="index.html#services">Apply</a>
+<a href="index.html#resources">Resources</a>
+<a href="index.html#contact">Contact</a>
+<a href="#" onclick="logoutTutor()">Logout</a>
+</nav>
 </header>
 
 <div class="main-content">
-
-<div id="loginBox">
-<h2>Tutor Login</h2>
-<input type="email" id="email" placeholder="Email">
-<input type="password" id="password" placeholder="Password">
-<button onclick="loginTutor()">Login</button>
-<p id="loginError"></p>
-</div>
-
-<div id="tutorsList" style="display:none;">
+<section id="tutorsSection">
 <h2>Approved Tutors</h2>
-<p>Loading tutors...</p>
-</div>
-
+<div id="tutorsList"><p>Loading tutors...</p></div>
+</section>
 </div>
 
 <footer>
@@ -140,50 +47,44 @@ C&T Tutorials operates independently and is not affiliated with any university o
 </footer>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxsXkwPLpdTK9oiBayEl_-TkN_T2x3SubSrjk-0TIC3eYbwbgD1-coQjNk0PqDmJDd35w/exec";
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxsXkwPLpdTK9oiBayEl_-TkN_T2x3SubSrjk-0TIC3eYbwbgD1-coQjNk0PqDmJDd35w/exec";
 
-function loginTutor(){
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
-  document.getElementById("loginError").innerText = "";
-
-  if(!email || !password){
-    document.getElementById("loginError").innerText = "Please enter email and password.";
-    return;
-  }
-
-  fetch(SCRIPT_URL+"?action=getAllTutors")
+/* Load tutors - only approved ones */
+function loadTutors(){
+  fetch(SCRIPT_URL+"?action=getApprovedTutors")
     .then(res=>res.json())
     .then(tutors=>{
-      const tutor = tutors.find(t => t.email === email && t.password === password && t.status === "Approved");
-      if(tutor){
-        document.getElementById("loginBox").style.display = "none";
-        const container = document.getElementById("tutorsList");
-        container.style.display = "block";
-        container.innerHTML = "";
-        tutors.forEach(t=>{
-          if(t.status==="Approved"){
-            const card = document.createElement("div");
-            card.className="tutor-card";
-            card.innerHTML=`
-              <h3>${t.name}</h3>
-              <p><strong>Email:</strong> ${t.email}</p>
-              <p><strong>Phone:</strong> ${t.phone}</p>
-              <p><strong>Subjects:</strong> ${t.subjects}</p>
-              <p><strong>Qualification:</strong> ${t.qualification}</p>
-              <p><strong>Experience:</strong> ${t.experience}</p>
-              <p><strong>Access Code:</strong> ${t.accessCode}</p>
-            `;
-            container.appendChild(card);
-          }
-        });
-      } else {
-        document.getElementById("loginError").innerText = "Invalid credentials or not approved yet.";
-      }
+      const container=document.getElementById("tutorsList");
+      container.innerHTML="";
+      if(tutors.length===0){container.innerHTML="<p>No approved tutors at the moment.</p>";return;}
+      tutors.forEach(t=>{
+        const card=document.createElement("div");
+        card.className="tutor-card";
+        card.innerHTML=`
+          <h3>${t.name}</h3>
+          <p><strong>Email:</strong> ${t.email}</p>
+          <p><strong>Phone:</strong> ${t.phone}</p>
+          <p><strong>Subjects:</strong> ${t.subjects}</p>
+          <p><strong>Qualification:</strong> ${t.qualification}</p>
+          <p><strong>Experience:</strong> ${t.experience}</p>
+        `;
+        container.appendChild(card);
+      });
     });
 }
 
-// Optionally load tutors automatically if you want to keep a "remember me" functionality
+/* Tutor Logout */
+function logoutTutor(){
+  alert("You have been logged out.");
+  window.location.href="index.html";
+}
+
+// Check tutor session on page load
+window.onload=function(){
+  const loggedIn=localStorage.getItem("tutorLoggedIn");
+  if(!loggedIn){window.location.href="index.html";}
+  else{loadTutors();}
+}
 </script>
 
 </body>
