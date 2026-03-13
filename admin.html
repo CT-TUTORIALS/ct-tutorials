@@ -9,162 +9,79 @@
 body{margin:0;font-family:Segoe UI, Arial;background:#f4f4f4;}
 header{background:#003366;color:white;padding:20px;text-align:center;}
 nav a{color:white;margin:0 15px;text-decoration:none;font-weight:bold;cursor:pointer;}
-.main{max-width:1000px;margin:auto;background:white;padding:40px;min-height:calc(100vh - 160px);}
+.main{max-width:1000px;margin:auto;background:white;padding:40px;}
 h2{color:#003366;}
-table{width:100%;border-collapse:collapse;margin-bottom:20px;}
-th,td{border:1px solid #ddd;padding:8px;text-align:left;}
-th{background:#003366;color:white;}
 .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);justify-content:center;align-items:center;}
-.modal form{background:white;padding:25px;width:90%;max-width:500px;border-radius:10px;position:relative;}
-.close{position:absolute;right:15px;top:10px;font-size:22px;cursor:pointer;border:none;background:none;}
-label{display:block;margin-top:12px;font-weight:500;}
-input{width:100%;padding:10px;margin-top:5px;border-radius:5px;border:1px solid #ccc;box-sizing:border-box;}
-button{background:#003366;color:white;border:none;padding:10px;cursor:pointer;width:100%;border-radius:5px;}
-footer{background:#003366;color:white;text-align:center;padding:25px;position:relative;bottom:0;width:100%;}
+.modal form{background:white;padding:25px;width:90%;max-width:450px;border-radius:8px;position:relative;}
+.close{position:absolute;right:15px;top:10px;font-size:22px;cursor:pointer;}
+.logout{margin-top:20px;background:#990000;color:white;padding:10px;border:none;cursor:pointer;}
+footer{background:#003366;color:white;text-align:center;padding:25px;position:fixed;bottom:0;width:100%;}
+.footer-disclaimer{font-size:12px;max-width:900px;margin:auto;line-height:1.6;}
 </style>
-
 </head>
 <body>
 
 <header>
-<h1>Admins Portal</h1>
+<h1>C&T Tutorials Admins Portal</h1>
 <nav>
 <a href="index.html">Home</a>
-<a onclick="loadTutorApplications()">Tutors' List</a>
-<a onclick="loadStudentRegistrations()">Students' List</a>
+<a onclick="openLogin()">Tutors' List</a>
+<a onclick="openLogin()">Students' List</a>
 </nav>
 </header>
 
 <div class="main">
-<div id="content">
-<!-- Content populated after admin login -->
-</div>
+<h2>Admin Dashboard</h2>
+<p>Login required. Click one of the lists above to view data.</p>
+<div id="contentSection"></div>
 </div>
 
 <!-- LOGIN MODAL -->
 <div class="modal" id="loginModal">
-<form>
-<button type="button" class="close" onclick="closeLogin()">×</button>
+<form id="loginForm">
+<button type="button" class="close" onclick="loginModal.style.display='none'">×</button>
 <h3>Admin Login</h3>
-<label>Username
-<input type="text" id="adminUser" required>
-</label>
-<label>Password
-<input type="password" id="adminPass" required>
-</label>
-<button type="submit" onclick="adminLogin(event)">Login</button>
+<label>Username<input name="username" type="text" required></label>
+<label>Password<input name="password" type="password" required></label>
+<button type="submit">Login</button>
 </form>
 </div>
 
 <footer>
-<strong>Disclaimer:</strong> Admins must handle tutor and student data responsibly and follow all guidelines as outlined in the C&T Tutorials Disclosure Agreement.
+<div class="footer-disclaimer">
+<strong>Disclaimer:</strong> All tutor and student data is confidential and must be handled according to C&T Tutorials’ policies.
+</div>
 </footer>
 
 <script>
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycbyprzZlwHhWkoAA8suvmTU0_alu22iJOf5SEcFmen1Efh-WMjBIoA67gzxMvZobMNh9HQ/exec";
-
-/* MODAL */
-function openLogin(){document.getElementById("loginModal").style.display="flex";}
-function closeLogin(){document.getElementById("loginModal").style.display="none";}
-
-/* ADMIN CREDENTIALS */
-const admins = [
-  {user:"admin1",pass:"3545Sh@kes"},
-  {user:"admin2",pass:"Partner2Pass"},
-  {user:"admin3",pass:"Partner3Pass"}
-];
-let adminLoggedIn=false;
-
-/* SESSION RESTORE */
-window.onload = function(){
-  const sessionAdmin = localStorage.getItem("adminUser");
-  if(sessionAdmin){
-    adminLoggedIn=true;
-    document.getElementById("loginModal").style.display="none";
-    document.getElementById("content").innerHTML="<p>Loading previous view...</p>";
-  }
-}
+function openLogin(){loginModal.style.display="flex";}
+window.onclick=function(e){if(e.target.classList.contains("modal")) e.target.style.display="none";}
 
 /* ADMIN LOGIN */
-function adminLogin(e){
-  e.preventDefault();
-  const u=document.getElementById("adminUser").value;
-  const p=document.getElementById("adminPass").value;
-  if(admins.some(a=>a.user===u && a.pass===p)){
-    adminLoggedIn=true;
-    localStorage.setItem("adminUser",u);
-    closeLogin();
-    alert("Login successful!");
-    document.getElementById("content").innerHTML="<p>Select a list above to view tutors or students.</p>";
-  } else{
-    alert("Invalid credentials");
-  }
-}
+loginForm.addEventListener("submit",function(e){
+e.preventDefault();
+const username=this.username.value;
+const password=this.password.value;
 
-/* FETCH TUTOR APPLICATIONS */
-function loadTutorApplications(){
-  if(!adminLoggedIn){openLogin(); return;}
-  fetch(SCRIPT_URL+"?action=getTutorApplications")
-    .then(r=>r.json())
-    .then(data=>{
-      let html="<h3>Tutor Applications</h3><table><tr><th>Full Name</th><th>Email</th><th>Phone</th><th>Subjects</th><th>Qualification</th><th>Experience</th><th>Status</th><th>Action</th></tr>";
-      data.forEach((d,i)=>{
-        html+=`<tr>
-        <td>${d.name}</td>
-        <td>${d.email}</td>
-        <td>${d.phone}</td>
-        <td>${d.subjects}</td>
-        <td>${d.qualification}</td>
-        <td>${d.experience}</td>
-        <td>${d.status}</td>
-        <td>
-          ${d.status==="Pending"?`<button onclick="approveTutor(${i})">Approve</button> <button onclick="rejectTutor(${i})">Reject</button>`:""}
-        </td>
-        </tr>`;
-      });
-      html+="</table>";
-      document.getElementById("content").innerHTML=html;
-    });
-}
+/* Hardcoded admin credentials */
+const admins=[
+{name:"admin1",password:"3545Sh@kes"},
+{name:"admin2",password:"Partner2Pass"},
+{name:"admin3",password:"Partner3Pass"}
+];
 
-/* FETCH STUDENT REGISTRATIONS */
-function loadStudentRegistrations(){
-  if(!adminLoggedIn){openLogin(); return;}
-  fetch(SCRIPT_URL+"?action=getStudentRegistrations")
-    .then(r=>r.json())
-    .then(data=>{
-      let html="<h3>Registered Students</h3><table><tr><th>Full Name</th><th>Email</th><th>Cell Number</th><th>Service</th><th>Tutor</th></tr>";
-      data.forEach(d=>{
-        html+=`<tr><td>${d.name}</td><td>${d.email}</td><td>${d.cell_number}</td><td>${d.service}</td><td>${d.tutor}</td></tr>`;
-      });
-      html+="</table>";
-      document.getElementById("content").innerHTML=html;
-    });
-}
+const auth=admins.find(a=>a.name===username && a.password===password);
+if(auth){
+localStorage.setItem("adminLoggedIn",username);
+loginModal.style.display="none";
+alert("Login successful. Now you can view the lists.");
+document.getElementById("contentSection").innerHTML="Select Tutors' or Students' list above.";
+}else{alert("Invalid credentials.");}
+});
 
-/* APPROVE / REJECT FUNCTIONS */
-function approveTutor(index){
-  if(!confirm("Approve this tutor?")) return;
-  fetch(SCRIPT_URL, {
-    method:"POST",
-    body: JSON.stringify({type:"approveTutor",index:index})
-  }).then(()=>loadTutorApplications());
-}
-
-function rejectTutor(index){
-  if(!confirm("Reject this tutor?")) return;
-  fetch(SCRIPT_URL, {
-    method:"POST",
-    body: JSON.stringify({type:"rejectTutor",index:index})
-  }).then(()=>loadTutorApplications());
-}
-
-/* LOGOUT */
-function logoutAdmin(){
-  localStorage.removeItem("adminUser");
-  adminLoggedIn=false;
-  alert("Logged out successfully!");
-  document.getElementById("content").innerHTML="";
+/* LOGOUT & SESSION CHECK */
+window.onload=function(){
+if(localStorage.getItem("adminLoggedIn")){document.getElementById("contentSection").innerHTML="Select Tutors' or Students' list above.";}
 }
 </script>
 
