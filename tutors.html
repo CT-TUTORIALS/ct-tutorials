@@ -12,7 +12,7 @@
   <nav>
     <a href="index.html">Home</a>
     <a href="#tutors-section">Tutors</a>
-    <a href="#contact">Contact</a>
+    <a href="admin.html">Admin</a>
   </nav>
 </div>
 
@@ -22,10 +22,10 @@
 </section>
 
 <script>
-const STUDENT_SCRIPT_URL = "https://script.google.com/macros/s/.../exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/.../exec";
 
 function fetchTutors() {
-  fetch(`${STUDENT_SCRIPT_URL}?action=getTutors`)
+  fetch(`${SCRIPT_URL}?action=getTutors`)
     .then(res => res.json())
     .then(tutors => {
       const grid = document.getElementById("tutorsGrid");
