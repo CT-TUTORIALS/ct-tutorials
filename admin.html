@@ -6,152 +6,295 @@
 <title>C&T Tutorials | Admins Portal</title>
 
 <style>
-body{margin:0;font-family:Segoe UI, Arial;background:#f4f4f4;}
-header{background:#003366;color:white;padding:20px;text-align:center;display:flex;justify-content:center;align-items:center;}
-nav{display:flex;flex-wrap:wrap;justify-content:center;gap:15px;width:100%;}
-nav a{color:white;text-decoration:none;font-weight:bold;white-space:nowrap;cursor:pointer;}
-nav a:hover{text-decoration:underline;}
-.main{max-width:1100px;margin:auto;padding:40px;background:white;}
+body{
+  margin:0;
+  font-family:Segoe UI, Arial;
+  background:#f4f4f4;
+}
+
+header{
+  background:#003366;
+  color:white;
+  padding:15px 20px;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  z-index:1000;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+nav{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:10px;
+  width:100%;
+}
+
+nav a{
+  color:white;
+  text-decoration:none;
+  font-weight:bold;
+  white-space:nowrap;
+  padding:8px 12px;
+}
+
+nav a:hover{
+  text-decoration:underline;
+}
+
+.main{
+  max-width:1200px;
+  margin:100px auto 40px auto; /* leave space for fixed header */
+  background:white;
+  padding:30px 40px;
+}
+
 h2{color:#003366;}
-table{width:100%;border-collapse:collapse;margin-top:15px;}
-th,td{border:1px solid #ddd;padding:8px;text-align:left;}
-th{background:#003366;color:white;}
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);justify-content:center;align-items:center;z-index:1000;}
-.modal form{background:white;padding:25px;width:90%;max-width:500px;border-radius:10px;position:relative;}
-.close{position:absolute;right:15px;top:10px;font-size:22px;cursor:pointer;border:none;background:none;}
-button{background:#003366;color:white;border:none;padding:10px;cursor:pointer;margin-top:10px;}
-.logout{background:#990000;margin-top:20px;}
+
+.modal{
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.6);
+  justify-content:center;
+  align-items:center;
+}
+
+.modal form{
+  background:white;
+  padding:25px;
+  width:90%;
+  max-width:450px;
+  border-radius:8px;
+  position:relative;
+}
+
+.close{
+  position:absolute;
+  right:15px;
+  top:10px;
+  font-size:22px;
+  cursor:pointer;
+  border:none;
+  background:none;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:20px;
+}
+
+th, td{
+  border:1px solid #ddd;
+  padding:10px;
+  text-align:left;
+}
+
+th{
+  background:#003366;
+  color:white;
+}
+
+button{
+  cursor:pointer;
+  border:none;
+  padding:8px 12px;
+  border-radius:4px;
+  color:white;
+  background:#003366;
+}
+
+button:hover{
+  background:#00509e;
+}
+
+footer{
+  background:#003366;
+  color:white;
+  padding:20px;
+  text-align:center;
+  margin-top:40px;
+  line-height:1.6;
+}
+@media(max-width:768px){
+  nav{
+    gap:5px;
+  }
+  .main{
+    padding:20px 15px;
+    margin-top:120px;
+  }
+}
 </style>
 </head>
+
 <body>
 
 <header>
 <nav>
-<a onclick="showTutors()">Tutors' List</a>
-<a onclick="showStudents()">Students' List</a>
-<a onclick="openLogin()">Admin Login</a>
 <a href="index.html">Home</a>
+<a onclick="showLogin()">Tutors' List</a>
+<a onclick="showLogin()">Students' List</a>
 </nav>
 </header>
 
 <div class="main">
 
-<div id="dashboard" style="display:none">
-<h2>Welcome, Admin!</h2>
-<p>Select a link above to view tutor applications or registered students.</p>
+<h2>Admins Dashboard</h2>
 
-<div id="dataSection">
-<p>Select a list above to view the data.</p>
+<div id="dashboardSection">
+<p>Use the links above to view tutor applications or student registrations. Click on any link to login.</p>
 </div>
 
-<button class="logout" onclick="logoutAdmin()">Logout</button>
+<!-- TUTOR LIST -->
+<div id="tutorList" style="display:none">
+<h2>Tutor Applications</h2>
+<table id="tutorsTable">
+<tr>
+<th>Full Name</th>
+<th>Phone</th>
+<th>Email</th>
+<th>Subjects</th>
+<th>Qualification</th>
+<th>Experience</th>
+<th>Status</th>
+<th>Access Code</th>
+<th>Actions</th>
+</tr>
+<tr><td colspan="9">Loading tutor applications...</td></tr>
+</table>
+</div>
+
+<!-- STUDENT LIST -->
+<div id="studentList" style="display:none">
+<h2>Registered Students</h2>
+<table id="studentsTable">
+<tr>
+<th>Timestamp</th>
+<th>Full Name</th>
+<th>Email</th>
+<th>Cell Number</th>
+<th>Service</th>
+<th>Tutor</th>
+</tr>
+<tr><td colspan="6">Loading student registrations...</td></tr>
+</table>
 </div>
 
 </div>
 
-<!-- ADMIN LOGIN MODAL -->
+<!-- LOGIN MODAL -->
 <div class="modal" id="loginModal">
-<form id="loginForm">
-<button type="button" class="close" onclick="loginModal.style.display='none'">×</button>
+<form id="adminLoginForm">
+<button type="button" class="close" onclick="closeLogin()">×</button>
 <h3>Admin Login</h3>
 <label>Username
-<input type="text" name="username" required>
+<input type="text" id="adminUser" required>
 </label>
 <label>Password
-<input type="password" name="password" required>
+<input type="password" id="adminPass" required>
 </label>
 <button type="submit">Login</button>
 </form>
 </div>
 
 <footer>
-<p><strong>Disclaimer:</strong> Admins must manage tutor approvals responsibly. All tutor and student data is confidential and for internal use only. Misuse can result in removal of admin access.</p>
+<strong>Disclaimer:</strong> Admin access is restricted. Data shown here is confidential and must be used in accordance with C&T Tutorials policies.
 </footer>
 
 <script>
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycbyprzZlwHhWkoAA8suvmTU0_alu22iJOf5SEcFmen1Efh-WMjBIoA67gzxMvZobMNh9HQ/exec";
+const WEB_APP_URL="https://script.google.com/macros/s/AKfycbyprzZlwHhWkoAA8suvmTU0_alu22iJOf5SEcFmen1Efh-WMjBIoA67gzxMvZobMNh9HQ/exec";
 
-// --- Admin Credentials ---
-const admins = [
-  {username:"admin1", password:"3545Sh@kes"},
-  {username:"partner1", password:"Partner1Pass"},
-  {username:"partner2", password:"Partner2Pass"}
-];
+function showLogin(){loginModal.style.display="flex";}
+function closeLogin(){loginModal.style.display="none";}
 
-let currentAdmin = localStorage.getItem("adminUser");
-
-// --- MODAL ---
-function openLogin(){loginModal.style.display="flex";}
-window.onclick=function(e){if(e.target.classList.contains("modal")) e.target.style.display="none";}
-
-// --- LOGIN ---
-loginForm.addEventListener("submit",function(e){
-e.preventDefault();
-const user=this.username.value;
-const pass=this.password.value;
-const valid = admins.find(a=>a.username===user && a.password===pass);
-if(valid){
-localStorage.setItem("adminUser", user);
-currentAdmin = user;
-loginModal.style.display="none";
-showDashboard();
-}else{
-alert("Invalid credentials");
+/* CLOSE MODAL ON OUTSIDE CLICK */
+window.onclick=function(e){
+  if(e.target==loginModal) closeLogin();
 }
+
+/* LOGIN */
+adminLoginForm.addEventListener("submit", function(e){
+  e.preventDefault();
+  const username = document.getElementById("adminUser").value;
+  const password = document.getElementById("adminPass").value;
+
+  // Hardcoded admin credentials (example)
+  const admins = [
+    {user:"admin1", pass:"3545Sh@kes"},
+    {user:"admin2", pass:"P@rtner123"},
+    {user:"admin3", pass:"C&TAdmin!2026"}
+  ];
+
+  const match = admins.find(a => a.user===username && a.pass===password);
+
+  if(match){
+    closeLogin();
+    dashboardSection.style.display="none";
+    tutorList.style.display="table";
+    studentList.style.display="table";
+    fetchTutors();
+    fetchStudents();
+  } else {
+    alert("Invalid login credentials");
+  }
 });
 
-// --- LOGOUT ---
-function logoutAdmin(){
-localStorage.removeItem("adminUser");
-currentAdmin=null;
-location.reload();
+/* FETCH TUTORS */
+function fetchTutors(){
+  fetch(`${WEB_APP_URL}?action=getTutorApplications`)
+    .then(res=>res.json())
+    .then(data=>{
+      const table = document.getElementById("tutorsTable");
+      table.innerHTML='<tr><th>Full Name</th><th>Phone</th><th>Email</th><th>Subjects</th><th>Qualification</th><th>Experience</th><th>Status</th><th>Access Code</th><th>Actions</th></tr>';
+      data.forEach((t,i)=>{
+        const row = table.insertRow();
+        row.innerHTML=`<td>${t.name}</td>
+        <td>${t.phone}</td>
+        <td>${t.email}</td>
+        <td>${t.subjects}</td>
+        <td>${t.qualification}</td>
+        <td>${t.experience}</td>
+        <td>${t.status}</td>
+        <td>${t.accessCode || ""}</td>
+        <td>
+        <button onclick="approveTutor(${i})">Approve</button>
+        <button onclick="rejectTutor(${i})">Reject</button>
+        </td>`;
+      });
+    });
 }
 
-// --- SHOW DASHBOARD ---
-function showDashboard(){
-document.querySelector(".main").style.display="block";
-document.getElementById("dashboard").style.display="block";
-document.getElementById("dataSection").innerHTML="<p>Select a list above to view the data.</p>";
+/* FETCH STUDENTS */
+function fetchStudents(){
+  fetch(`${WEB_APP_URL}?action=getStudents`)
+    .then(res=>res.json())
+    .then(data=>{
+      const table = document.getElementById("studentsTable");
+      table.innerHTML='<tr><th>Timestamp</th><th>Full Name</th><th>Email</th><th>Cell Number</th><th>Service</th><th>Tutor</th></tr>';
+      data.forEach(s=>{
+        const row = table.insertRow();
+        row.innerHTML=`<td>${s.timestamp}</td>
+        <td>${s.name}</td>
+        <td>${s.email}</td>
+        <td>${s.cell_number}</td>
+        <td>${s.service}</td>
+        <td>${s.tutor}</td>`;
+      });
+    });
 }
 
-// --- SESSION RESTORE ---
-window.onload=function(){
-if(currentAdmin){
-showDashboard();
-}
-}
-
-// --- SHOW TUTORS ---
-function showTutors(){
-if(!currentAdmin){openLogin(); return;}
-fetch(SCRIPT_URL+"?action=getTutorApplications")
-.then(res=>res.json())
-.then(data=>{
-let html="<h3>Tutor Applications</h3>";
-if(data.length===0){html+="<p>No tutor applications yet.</p>";}else{
-html+='<table><tr><th>Name</th><th>Email</th><th>Phone</th><th>Subjects</th><th>Qualification</th><th>Experience</th><th>Status</th></tr>';
-data.forEach(t=>{
-html+=`<tr><td>${t.name}</td><td>${t.email}</td><td>${t.phone}</td><td>${t.subjects}</td><td>${t.qualification}</td><td>${t.experience}</td><td>${t.status}</td></tr>`;
-});
-html+="</table>";}
-document.getElementById("dataSection").innerHTML=html;
-});
-
-// --- SHOW STUDENTS ---
-function showStudents(){
-if(!currentAdmin){openLogin(); return;}
-fetch(SCRIPT_URL+"?action=getStudentRegistrations")
-.then(res=>res.json())
-.then(data=>{
-let html="<h3>Registered Students</h3>";
-if(data.length===0){html+="<p>No students registered yet.</p>";}else{
-html+='<table><tr><th>Name</th><th>Email</th><th>Cell Number</th><th>Service</th><th>Tutor</th></tr>';
-data.forEach(s=>{
-html+=`<tr><td>${s.name}</td><td>${s.email}</td><td>${s.cell_number}</td><td>${s.service}</td><td>${s.tutor}</td></tr>`;
-});
-html+="</table>";}
-document.getElementById("dataSection").innerHTML=html;
-}
+/* PLACEHOLDER: Approve / Reject functions can call your Apps Script POST endpoints */
+function approveTutor(index){alert("Approve tutor at row "+index);}
+function rejectTutor(index){alert("Reject tutor at row "+index);}
 </script>
 
 </body>
