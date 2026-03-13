@@ -1,16 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>C&T Tutorials Admin Dashboard</title>
+<title>C&T Tutorials Admin</title>
 <style>
-body{font-family:Arial;background:#f4f4f4;margin:0;padding:0;}
-.container{max-width:1000px;margin:30px auto;background:white;padding:30px;border-radius:8px;}
+body{font-family:Arial;background:#f4f4f4}
+.container{max-width:1200px;margin:auto;background:white;padding:40px;}
 input{width:100%;padding:10px;margin-top:10px;}
 button{padding:10px 15px;background:#003366;color:white;border:none;margin-top:15px;cursor:pointer;}
-button:hover{background:#00509e;}
 table{width:100%;border-collapse:collapse;margin-top:20px;}
-td,th{border:1px solid #ddd;padding:10px;text-align:center;}
+td,th{border:1px solid #ddd;padding:10px;}
 th{background:#003366;color:white;}
 </style>
 </head>
@@ -38,6 +36,7 @@ th{background:#003366;color:white;}
 <th>Timestamp</th>
 <th>Status</th>
 <th>AccessCode</th>
+<th>Password</th>
 <th>Action</th>
 </tr>
 </thead>
@@ -46,64 +45,65 @@ th{background:#003366;color:white;}
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec";
-
-// Simple hardcoded admin login
-const ADMIN_USER = "admin";
-const ADMIN_PASS = "3545Sh@kes";
+const SCRIPT_URL="YOUR_DEPLOYMENT_URL_HERE"; // replace with your Apps Script Web App URL
 
 function login(){
-  const u = document.getElementById("user").value;
-  const p = document.getElementById("pass").value;
-
-  if(u === ADMIN_USER && p === ADMIN_PASS){
-    document.getElementById("loginPage").style.display="none";
-    document.getElementById("dashboard").style.display="block";
-    loadTutors();
-  }else{
-    document.getElementById("error").innerText="Invalid login";
-  }
-}
-
-// Load all tutors
-function loadTutors(){
-  fetch(SCRIPT_URL+"?action=getAllTutors")
-  .then(res=>res.json())
-  .then(tutors=>{
-    const tbody = document.querySelector("#table tbody");
-    tbody.innerHTML = "";
-    tutors.forEach((t,i)=>{
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td>${t.name}</td>
-        <td>${t.email}</td>
-        <td>${t.phone}</td>
-        <td>${t.subjects}</td>
-        <td>${t.qualification}</td>
-        <td>${t.experience}</td>
-        <td>${t.timestamp}</td>
-        <td>${t.status}</td>
-        <td>${t.accessCode || ""}</td>
-        <td>
-          <button onclick="updateStatus(${i},'Approved')">Approve</button>
-          <button onclick="updateStatus(${i},'Rejected')">Reject</button>
-        </td>
-      `;
-      tbody.appendChild(row);
-    });
-  });
-}
-
-// Update tutor status
-function updateStatus(index,status){
   fetch(SCRIPT_URL,{
     method:"POST",
-    body: JSON.stringify({action:"updateStatus",index:index,status:status})
+    body:JSON.stringify({
+      action:"adminLogin",
+      user:document.getElementById("user").value,
+      pass:document.getElementById("pass").value
+    })
   })
   .then(res=>res.json())
   .then(data=>{
-    loadTutors();
+    if(data.success){
+      document.getElementById("loginPage").style.display="none";
+      document.getElementById("dashboard").style.display="block";
+      loadTutors();
+    }else{
+      document.getElementById("error").innerText="Invalid login";
+    }
   });
+}
+
+function loadTutors(){
+  fetch(SCRIPT_URL+"?action=getAllTutors")
+    .then(res=>res.json())
+    .then(tutors=>{
+      const tbody=document.querySelector("#table tbody");
+      tbody.innerHTML="";
+      tutors.forEach((t,i)=>{
+        const row=document.createElement("tr");
+        row.innerHTML=`
+          <td>${t.name}</td>
+          <td>${t.email}</td>
+          <td>${t.phone}</td>
+          <td>${t.subjects}</td>
+          <td>${t.qualification}</td>
+          <td>${t.experience}</td>
+          <td>${t.timestamp}</td>
+          <td>${t.status}</td>
+          <td>${t.accessCode}</td>
+          <td>${t.password}</td>
+          <td>
+            <button onclick="update(${i},'Approved')">Approve</button>
+            <button onclick="update(${i},'Rejected')">Reject</button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    });
+}
+
+function update(index,status){
+  fetch(SCRIPT_URL,{
+    method:"POST",
+    body:JSON.stringify({action:"updateStatus",index:index,status:status})
+  })
+  .then(res=>res.json())
+  .then(data=>{loadTutors();});
 }
 </script>
 </body>
