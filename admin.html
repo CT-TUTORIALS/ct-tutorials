@@ -3,177 +3,106 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>C&T Tutorials | Admin Portal</title>
-
+<title>C&T Tutorials | Admins Portal</title>
 <style>
-body{
-  margin:0;
-  font-family:Segoe UI, Arial;
-  background:#f4f4f4;
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-}
-header{
-  background:#003366;
-  color:white;
-  padding:20px;
-  text-align:center;
-}
-nav a{
-  color:white;
-  margin:0 15px;
-  text-decoration:none;
-  font-weight:bold;
-  cursor:pointer;
-}
-.main{
-  max-width:1100px;
-  margin:auto;
-  background:white;
-  padding:40px;
-  flex:1;
-}
+body{margin:0;font-family:Segoe UI, Arial;background:#f4f4f4;}
+header{background:#003366;color:white;padding:20px;text-align:center;}
+nav a{color:white;margin:0 15px;text-decoration:none;font-weight:bold;cursor:pointer;}
+.main{max-width:1000px;margin:auto;background:white;padding:40px;min-height:calc(100vh - 160px);}
 h2{color:#003366;}
-.card{
-  border:1px solid #ddd;
-  padding:15px;
-  margin-bottom:10px;
-}
-.modal{
-  display:none;
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.6);
-  justify-content:center;
-  align-items:center;
-}
-.modal form{
-  background:white;
-  padding:25px;
-  width:90%;
-  max-width:450px;
-  border-radius:8px;
-}
-input{
-  width:100%;
-  padding:10px;
-  margin-top:5px;
-  margin-bottom:15px;
-}
-button{
-  background:#003366;
-  color:white;
-  border:none;
-  padding:10px;
-  cursor:pointer;
-  width:100%;
-}
-
-/* ===================== FOOTER ===================== */
-footer{
-  background:#003366;
-  color:white;
-  text-align:center;
-  padding:25px;
-  font-size:12px;
-}
+table{width:100%;border-collapse:collapse;margin-bottom:20px;}
+th,td{border:1px solid #ddd;padding:8px;text-align:left;}
+th{background:#003366;color:white;}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);justify-content:center;align-items:center;}
+.modal form{background:white;padding:25px;width:90%;max-width:600px;border-radius:8px;position:relative;}
+.close{position:absolute;right:15px;top:10px;font-size:22px;cursor:pointer;border:none;background:none;}
+button{background:#003366;color:white;border:none;padding:10px;cursor:pointer;}
+footer{background:#003366;color:white;text-align:center;padding:25px;position:relative;bottom:0;width:100%;}
 </style>
 </head>
-
 <body>
 
 <header>
-<h1>C&T Tutorials Admin Portal</h1>
+<h1>Admins Portal</h1>
 <nav>
-<a onclick="openLogin()">Login</a>
-<a onclick="showTutors()">Tutors' List</a>
-<a onclick="showStudents()">Students' List</a>
 <a href="index.html">Home</a>
+<a onclick="openLogin()">Login</a>
+<a onclick="loadTutorApplications()">Tutors' List</a>
+<a onclick="loadStudentRegistrations()">Students' List</a>
 </nav>
 </header>
 
 <div class="main">
-<h2>Tutor Applications</h2>
-<div id="tutorList">Loading tutor applications...</div>
-
-<h2>Registered Students</h2>
-<div id="studentList">Loading student registrations...</div>
+<h2>Admin Dashboard</h2>
+<div id="content">
+<p>Select a list above to view tutor applications or student registrations. Login required.</p>
+</div>
 </div>
 
+<!-- LOGIN MODAL -->
 <div class="modal" id="loginModal">
 <form>
 <button type="button" class="close" onclick="closeLogin()">×</button>
-<h2>Admin Login</h2>
-<label>Username
-<input type="text" id="adminUsername" required>
-</label>
-<label>Password
-<input type="password" id="adminPassword" required>
-</label>
-<button type="submit" class="submit-btn">Login</button>
+<h3>Admin Login</h3>
+<label>Username<input type="text" id="adminUser" required></label>
+<label>Password<input type="password" id="adminPass" required></label>
+<button type="submit" onclick="adminLogin(event)">Login</button>
 </form>
 </div>
 
 <footer>
-<strong>Disclaimer:</strong>
-<p>
-C&T Tutorials Admin Portal – Manage tutor approvals and student registrations. 
-Contact: <a href="mailto:ct0tutorials@gmail.com" style="color:white;text-decoration:underline;">ct0tutorials@gmail.com</a>
-</p>
+<strong>Disclaimer:</strong> Admins must handle all tutor and student data responsibly and follow all guidelines as outlined in C&T Tutorials Disclosure Agreement.
 </footer>
 
 <script>
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycbyprzZlwHhWkoAA8suvmTU0_alu22iJOf5SEcFmen1Efh-WMjBIoA67gzxMvZobMNh9HQ/exec"
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbyprzZlwHhWkoAA8suvmTU0_alu22iJOf5SEcFmen1Efh-WMjBIoA67gzxMvZobMNh9HQ/exec";
 
-function openLogin(){loginModal.style.display="flex"}
-function closeLogin(){loginModal.style.display="none"}
-window.onclick=function(e){if(e.target.classList.contains("modal")) e.target.style.display="none"}
+/* MODAL */
+function openLogin(){loginModal.style.display="flex";}
+function closeLogin(){loginModal.style.display="none";}
 
-/* ADMIN LOGIN */
-loginModal.querySelector("form").addEventListener("submit",function(e){
-e.preventDefault()
-const username=document.getElementById("adminUsername").value
-const password=document.getElementById("adminPassword").value
-if(username==="admin" && password==="3545Sh@kes"){
-alert("Login successful!")
-closeLogin()
-loadTutors()
-loadStudents()
-}else{alert("Invalid credentials")}
-})
+/* ADMIN CREDENTIALS */
+const admins = [
+  {user:"admin1",pass:"3545Sh@kes"},
+  {user:"admin2",pass:"Partner2Pass"},
+  {user:"admin3",pass:"Partner3Pass"}
+];
+let adminLoggedIn=false;
 
-/* SHOW LISTS */
-function showTutors(){openLogin()}
-function showStudents(){openLogin()}
-
-function loadTutors(){
-fetch(SCRIPT_URL+"?action=getTutorApplications")
-.then(r=>r.json())
-.then(data=>{
-let html=""
-data.forEach(t=>{
-html+=`<div class="card"><b>${t.name}</b> - ${t.email} - ${t.phone} - ${t.subjects} - ${t.qualification} - ${t.experience} - ${t.status}</div>`
-})
-tutorList.innerHTML=html
-})
+function adminLogin(e){
+  e.preventDefault();
+  const u=document.getElementById("adminUser").value;
+  const p=document.getElementById("adminPass").value;
+  if(admins.some(a=>a.user===u && a.pass===p)){
+    adminLoggedIn=true;closeLogin();alert("Login successful!");
+  } else{alert("Invalid credentials");}
 }
 
-function loadStudents(){
-fetch(SCRIPT_URL+"?action=getStudentRegistrations")
-.then(r=>r.json())
-.then(data=>{
-let html=""
-data.forEach(s=>{
-html+=`<div class="card"><b>${s.name}</b> - ${s.email} - ${s.cell_number} - ${s.service} - ${s.tutor}</div>`
-})
-studentList.innerHTML=html
-})
+/* FETCH TUTOR APPLICATIONS */
+function loadTutorApplications(){
+  if(!adminLoggedIn){openLogin(); return;}
+  fetch(SCRIPT_URL+"?action=getTutorApplications")
+    .then(r=>r.json())
+    .then(data=>{
+      let html="<h3>Tutor Applications</h3><table><tr><th>Full Name</th><th>Email</th><th>Phone</th><th>Subjects</th><th>Qualification</th><th>Experience</th><th>Status</th></tr>";
+      data.forEach(d=>{html+=`<tr><td>${d.name}</td><td>${d.email}</td><td>${d.phone}</td><td>${d.subjects}</td><td>${d.qualification}</td><td>${d.experience}</td><td>${d.status}</td></tr>`;});
+      html+="</table>";
+      document.getElementById("content").innerHTML=html;
+    });
+}
+
+/* FETCH STUDENT REGISTRATIONS */
+function loadStudentRegistrations(){
+  if(!adminLoggedIn){openLogin(); return;}
+  fetch(SCRIPT_URL+"?action=getStudentRegistrations")
+    .then(r=>r.json())
+    .then(data=>{
+      let html="<h3>Registered Students</h3><table><tr><th>Full Name</th><th>Email</th><th>Cell Number</th><th>Service</th><th>Tutor</th></tr>";
+      data.forEach(d=>{html+=`<tr><td>${d.name}</td><td>${d.email}</td><td>${d.cell_number}</td><td>${d.service}</td><td>${d.tutor}</td></tr>`;});
+      html+="</table>";
+      document.getElementById("content").innerHTML=html;
+    });
 }
 </script>
-
 </body>
 </html>
