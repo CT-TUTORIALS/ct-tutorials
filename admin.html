@@ -37,7 +37,7 @@ footer{background:#003366;color:white;text-align:center;padding:25px;position:re
 
 <div class="main">
 <div id="content">
-<!-- Populated after admin login -->
+<!-- Content populated after admin login -->
 </div>
 </div>
 
@@ -57,7 +57,7 @@ footer{background:#003366;color:white;text-align:center;padding:25px;position:re
 </div>
 
 <footer>
-<strong>Disclaimer:</strong> Admins must handle all tutor and student data responsibly and follow all guidelines as outlined in C&T Tutorials Disclosure Agreement.
+<strong>Disclaimer:</strong> Admins must handle tutor and student data responsibly and follow all guidelines as outlined in the C&T Tutorials Disclosure Agreement.
 </footer>
 
 <script>
@@ -75,13 +75,30 @@ const admins = [
 ];
 let adminLoggedIn=false;
 
+/* SESSION RESTORE */
+window.onload = function(){
+  const sessionAdmin = localStorage.getItem("adminUser");
+  if(sessionAdmin){
+    adminLoggedIn=true;
+    document.getElementById("loginModal").style.display="none";
+    document.getElementById("content").innerHTML="<p>Loading previous view...</p>";
+  }
+}
+
+/* ADMIN LOGIN */
 function adminLogin(e){
   e.preventDefault();
   const u=document.getElementById("adminUser").value;
   const p=document.getElementById("adminPass").value;
   if(admins.some(a=>a.user===u && a.pass===p)){
-    adminLoggedIn=true;closeLogin();alert("Login successful!");
-  } else{alert("Invalid credentials");}
+    adminLoggedIn=true;
+    localStorage.setItem("adminUser",u);
+    closeLogin();
+    alert("Login successful!");
+    document.getElementById("content").innerHTML="<p>Select a list above to view tutors or students.</p>";
+  } else{
+    alert("Invalid credentials");
+  }
 }
 
 /* FETCH TUTOR APPLICATIONS */
@@ -90,8 +107,21 @@ function loadTutorApplications(){
   fetch(SCRIPT_URL+"?action=getTutorApplications")
     .then(r=>r.json())
     .then(data=>{
-      let html="<h3>Tutor Applications</h3><table><tr><th>Full Name</th><th>Email</th><th>Phone</th><th>Subjects</th><th>Qualification</th><th>Experience</th><th>Status</th></tr>";
-      data.forEach(d=>{html+=`<tr><td>${d.name}</td><td>${d.email}</td><td>${d.phone}</td><td>${d.subjects}</td><td>${d.qualification}</td><td>${d.experience}</td><td>${d.status}</td></tr>`;});
+      let html="<h3>Tutor Applications</h3><table><tr><th>Full Name</th><th>Email</th><th>Phone</th><th>Subjects</th><th>Qualification</th><th>Experience</th><th>Status</th><th>Action</th></tr>";
+      data.forEach((d,i)=>{
+        html+=`<tr>
+        <td>${d.name}</td>
+        <td>${d.email}</td>
+        <td>${d.phone}</td>
+        <td>${d.subjects}</td>
+        <td>${d.qualification}</td>
+        <td>${d.experience}</td>
+        <td>${d.status}</td>
+        <td>
+          ${d.status==="Pending"?`<button onclick="approveTutor(${i})">Approve</button> <button onclick="rejectTutor(${i})">Reject</button>`:""}
+        </td>
+        </tr>`;
+      });
       html+="</table>";
       document.getElementById("content").innerHTML=html;
     });
@@ -104,11 +134,39 @@ function loadStudentRegistrations(){
     .then(r=>r.json())
     .then(data=>{
       let html="<h3>Registered Students</h3><table><tr><th>Full Name</th><th>Email</th><th>Cell Number</th><th>Service</th><th>Tutor</th></tr>";
-      data.forEach(d=>{html+=`<tr><td>${d.name}</td><td>${d.email}</td><td>${d.cell_number}</td><td>${d.service}</td><td>${d.tutor}</td></tr>`;});
+      data.forEach(d=>{
+        html+=`<tr><td>${d.name}</td><td>${d.email}</td><td>${d.cell_number}</td><td>${d.service}</td><td>${d.tutor}</td></tr>`;
+      });
       html+="</table>";
       document.getElementById("content").innerHTML=html;
     });
 }
+
+/* APPROVE / REJECT FUNCTIONS */
+function approveTutor(index){
+  if(!confirm("Approve this tutor?")) return;
+  fetch(SCRIPT_URL, {
+    method:"POST",
+    body: JSON.stringify({type:"approveTutor",index:index})
+  }).then(()=>loadTutorApplications());
+}
+
+function rejectTutor(index){
+  if(!confirm("Reject this tutor?")) return;
+  fetch(SCRIPT_URL, {
+    method:"POST",
+    body: JSON.stringify({type:"rejectTutor",index:index})
+  }).then(()=>loadTutorApplications());
+}
+
+/* LOGOUT */
+function logoutAdmin(){
+  localStorage.removeItem("adminUser");
+  adminLoggedIn=false;
+  alert("Logged out successfully!");
+  document.getElementById("content").innerHTML="";
+}
 </script>
+
 </body>
 </html>
