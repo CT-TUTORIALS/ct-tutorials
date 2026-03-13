@@ -3,123 +3,164 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>C&T Tutorials – Tutor Login</title>
+<title>C&T Tutorials – Tutors</title>
 <style>
-body{font-family:Arial, sans-serif; background:#f4f4f4; margin:0;}
-header, footer{background:#003366; color:white; text-align:center; padding:15px;}
-.container{max-width:500px; margin:auto; background:white; padding:30px; margin-top:20px; border-radius:8px;}
-input, button{padding:10px; margin-top:10px; width:100%; box-sizing:border-box;}
-button{background:#003366; color:white; border:none; cursor:pointer;}
-button:hover{background:#00509e;}
-p{margin-top:10px;}
-.success{color:green;}
-.error{color:red;}
+body{margin:0;font-family:"Segoe UI",Arial,sans-serif;background:#f4f4f4;color:#333;}
+header{background:#003366;color:white;text-align:center;padding:15px;}
+nav{display:flex;justify-content:center;gap:15px;margin-bottom:15px;}
+nav a{color:white;text-decoration:none;font-weight:bold;}
+nav a:hover{text-decoration:underline;}
+.main-content{max-width:1100px;margin:auto;padding:50px 40px;background:white;}
+h2{color:#003366;border-bottom:2px solid #003366;padding-bottom:8px;margin-bottom:25px;}
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:25px;margin-top:20px;}
+.service-card{background:#f7f7f7;padding:20px;border-radius:8px;box-shadow:0 3px 6px rgba(0,0,0,0.1);}
+.service-card h3{margin-top:0;}
+.resource-link{color:#00509e;font-weight:bold;text-decoration:none;}
+.resource-link:hover{text-decoration:underline;}
+.contact-box{background:#f7f7f7;padding:20px;border-radius:8px;}
+.floating-btn{position:fixed;bottom:25px;right:25px;background:#003366;color:white;padding:15px 22px;border:none;border-radius:40px;font-size:16px;cursor:pointer;box-shadow:0 4px 6px rgba(0,0,0,0.3);}
+footer{background:#003366;color:white;text-align:center;padding:25px;}
+.footer-disclaimer{font-size:12px;max-width:900px;margin:auto;line-height:1.6;}
 </style>
 </head>
 <body>
 
 <header>
-<h1>C&T Tutorials – Tutor Portal</h1>
+<h1>C&T Tutorials</h1>
+<nav>
+<a href="#about">About</a>
+<a href="#services">Services</a>
+<a href="#resources">Resources</a>
+<a href="#contact">Contact</a>
+<a onclick="openForm()">Register Now</a>
+<a onclick="openAdmin()">Admins Portal</a>
+</nav>
 </header>
 
-<div class="container" id="loginPage">
-<h2>Tutor Login</h2>
-<input id="accessCode" placeholder="Access Code">
-<input id="password" type="password" placeholder="Password">
-<button onclick="login()">Login</button>
-<p id="loginError" class="error"></p>
-<p>New? <button onclick="showRegister()">Register</button></p>
-</div>
+<div class="main-content">
+<section id="about">
+<h2>About C&T Tutorials</h2>
+<p>C&T Tutorials is an independent academic support service committed to enhancing students’ academic performance through structured guidance in academic writing, research, and communication skills.</p>
+</section>
 
-<div class="container" id="registerPage" style="display:none;">
-<h2>Tutor Registration</h2>
-<input id="regAccessCode" placeholder="Access Code">
-<input id="regPassword" type="password" placeholder="Set Your Password">
-<button onclick="register()">Register</button>
-<p id="regError" class="error"></p>
-<p>Already registered? <button onclick="showLogin()">Back to Login</button></p>
+<section id="services">
+<h2>Our Services</h2>
+<div class="services-grid">
+<div class="service-card">
+<h3>Academic Writing Tutorials</h3>
+<p>Structured sessions covering academic writing principles, essay development, and research techniques.</p>
 </div>
+<div class="service-card">
+<h3>Group Learning Sessions</h3>
+<p>Collaborative sessions designed to support multiple students working on similar academic challenges.</p>
+</div>
+<div class="service-card">
+<h3>Assignment Support</h3>
+<p>Professional assistance with editing, proofreading, and improving assignment structure and clarity.</p>
+</div>
+<div class="service-card">
+<h3>Public Speaking Support</h3>
+<p>Coaching sessions designed to strengthen presentation and communication skills for academic purposes.</p>
+</div>
+</div>
+</section>
 
-<div class="container" id="dashboardPage" style="display:none;">
-<h2>Welcome, <span id="tutorName"></span></h2>
-<p>This is your dashboard. You can see your approved status and subjects.</p>
+<section id="resources">
+<h2>Resources</h2>
 <ul>
-<li><strong>Subjects:</strong> <span id="tutorSubjects"></span></li>
-<li><strong>Status:</strong> <span id="tutorStatus"></span></li>
+<li><a class="resource-link" href="documents/Business-Policies.pdf" target="_blank">Business Policies</a></li>
+<li><a class="resource-link" href="documents/Student-form-for-offline-application.pdf" target="_blank">Offline Application Form</a></li>
 </ul>
-<button onclick="logout()">Logout</button>
+</section>
+
+<section id="contact">
+<h2>Contact</h2>
+<div class="contact-box">
+<p>Email: <a href="mailto:ct0tutorials@gmail.com">ct0tutorials@gmail.com</a></p>
+<p>Phone: +264 815 621 879 / +264 818 479 958</p>
+</div>
+</section>
+
+<button class="floating-btn" onclick="openForm()">Register Now</button>
 </div>
 
 <footer>
-<p>© 2026 C&T Tutorials | Independent Academic Support Service</p>
+<div class="footer-disclaimer">
+<strong>Disclaimer:</strong><br>
+C&T Tutorials operates independently and is not affiliated with, endorsed by, or formally connected to any university, college, examination body, or academic institution. All services are supplementary and intended to support independent learning.
+</div>
 </footer>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxsXkwPLpdTK9oiBayEl_-TkN_T2x3SubSrjk-0TIC3eYbwbgD1-coQjNk0PqDmJDd35w/exec";
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxsXkwPLpdTK9oiBayEl_-TkN_T2x3SubSrjk-0TIC3eYbwbgD1-coQjNk0PqDmJDd35w/exec";
 
-function showRegister(){
-  document.getElementById("loginPage").style.display = "none";
-  document.getElementById("registerPage").style.display = "block";
+/* MODALS (Student Registration) */
+function openForm(){document.getElementById("modal").style.display="flex";}
+function closeForm(){document.getElementById("modal").style.display="none";}
+function openAdmin(){window.location.href="admin.html";}
+
+/* TUTOR FETCH FOR REGISTRATION */
+function fetchTutors() {
+  fetch(`${SCRIPT_URL}?action=getApprovedTutors`)
+    .then(res => res.json())
+    .then(tutors => {
+      const select = document.getElementById("tutorSelect");
+      select.innerHTML = '<option value="">Select a tutor</option>';
+      tutors.forEach(t => {
+        const opt = document.createElement("option");
+        opt.value = t.name;
+        opt.textContent = `${t.name} (${t.subject})`;
+        select.appendChild(opt);
+      });
+    });
 }
-function showLogin(){
-  document.getElementById("registerPage").style.display = "none";
-  document.getElementById("loginPage").style.display = "block";
-}
 
-function register(){
-  const code = document.getElementById("regAccessCode").value.trim();
-  const password = document.getElementById("regPassword").value.trim();
-  if(!code || !password){ document.getElementById("regError").innerText="Enter all fields"; return; }
+document.getElementById("serviceSelect").addEventListener("change",function(){
+  const tutorLabel = document.getElementById("tutorLabel");
+  if(this.value!==""){
+    tutorLabel.style.display="block";
+    fetchTutors();
+  } else {
+    tutorLabel.style.display="none";
+  }
+});
 
-  fetch(SCRIPT_URL,{
-    method:"POST",
-    body: JSON.stringify({
-      type:"createTutorAccount",
-      code: code,
-      password: password
-    })
-  })
+/* REGISTRATION SUBMIT */
+document.getElementById("studentRegisterForm").addEventListener("submit",function(e){
+  e.preventDefault();
+  const data={name:this.name.value,email:this.email.value,cell_number:this.cell_number.value,service:this.service.value,tutor:this.tutor.value,type:"studentRegistration"};
+  fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify(data)})
   .then(res=>res.json())
-  .then(data=>{
-    if(data.status==="account_created"){
-      document.getElementById("regError").innerText="";
-      alert("Registration successful! Use your password to login.");
-      showLogin();
-    } else {
-      document.getElementById("regError").innerText="Invalid Access Code";
-    }
-  });
-}
-
-function login(){
-  const code = document.getElementById("accessCode").value.trim();
-  const password = document.getElementById("password").value.trim();
-  if(!code || !password){ document.getElementById("loginError").innerText="Enter all fields"; return; }
-
-  fetch(SCRIPT_URL+"?action=getAllTutors")
-  .then(res=>res.json())
-  .then(tutors=>{
-    const tutor = tutors.find(t=>t.accessCode===code && t.password===password);
-    if(tutor){
-      document.getElementById("loginPage").style.display="none";
-      document.getElementById("dashboardPage").style.display="block";
-      document.getElementById("tutorName").innerText = tutor.name;
-      document.getElementById("tutorSubjects").innerText = tutor.subjects;
-      document.getElementById("tutorStatus").innerText = tutor.status;
-    } else {
-      document.getElementById("loginError").innerText="Invalid Access Code or Password";
-    }
-  });
-}
-
-function logout(){
-  document.getElementById("dashboardPage").style.display="none";
-  document.getElementById("loginPage").style.display="block";
-  document.getElementById("accessCode").value="";
-  document.getElementById("password").value="";
-  document.getElementById("loginError").innerText="";
-}
+  .then(()=>{alert("Registration submitted!"); this.reset(); closeForm(); document.getElementById("tutorLabel").style.display="none";});
+});
 </script>
 
-</body>
-</html>
+<!-- MODAL HTML -->
+<div id="modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);justify-content:center;align-items:center;z-index:1000;">
+<form id="studentRegisterForm" style="background:white;padding:25px;width:90%;max-width:500px;border-radius:10px;position:relative;">
+  <button type="button" class="close" onclick="closeForm()">×</button>
+  <h2>Service Registration</h2>
+  <label>Full Name <input type="text" name="name" required></label>
+  <label>Email <input type="email" name="email" required></label>
+  <label>Cellphone Number <input type="tel" name="cell_number" required></label>
+  <label>Select Service
+    <select name="service" id="serviceSelect" required>
+      <option value="">Select a service</option>
+      <option value="Intro to Academic Writing">Introduction to Academic Writing (4 sessions) – N$150</option>
+      <option value="Topic Specific">Topic Specific Sessions – N$40</option>
+      <option value="Hourly Rate">Hourly Rate – N$40</option>
+      <option value="Group Sessions">Group Sessions – N$200 to N$600</option>
+      <option value="Draft Editing">Draft Editing – N$15 per page</option>
+      <option value="Proofreading">Proofreading – N$10 per page</option>
+    </select>
+  </label>
+  <label id="tutorLabel" style="display:none;">Select Tutor
+    <select name="tutor" id="tutorSelect"><option value="">Select a tutor</option></select>
+  </label>
+  <label>
+    <input type="checkbox" required>
+    I agree to the <a href="documents/Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a>
+  </label>
+  <button type="submit" class="submit-btn">Submit Registration</button>
+</form>
+</div>
