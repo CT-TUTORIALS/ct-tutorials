@@ -3,164 +3,157 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>C&T Tutorials – Tutors</title>
+<title>C&T Tutorials Tutors Portal</title>
+
 <style>
-body{margin:0;font-family:"Segoe UI",Arial,sans-serif;background:#f4f4f4;color:#333;}
-header{background:#003366;color:white;text-align:center;padding:15px;}
-nav{display:flex;justify-content:center;gap:15px;margin-bottom:15px;}
-nav a{color:white;text-decoration:none;font-weight:bold;}
-nav a:hover{text-decoration:underline;}
-.main-content{max-width:1100px;margin:auto;padding:50px 40px;background:white;}
-h2{color:#003366;border-bottom:2px solid #003366;padding-bottom:8px;margin-bottom:25px;}
-.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:25px;margin-top:20px;}
-.service-card{background:#f7f7f7;padding:20px;border-radius:8px;box-shadow:0 3px 6px rgba(0,0,0,0.1);}
-.service-card h3{margin-top:0;}
-.resource-link{color:#00509e;font-weight:bold;text-decoration:none;}
-.resource-link:hover{text-decoration:underline;}
-.contact-box{background:#f7f7f7;padding:20px;border-radius:8px;}
-.floating-btn{position:fixed;bottom:25px;right:25px;background:#003366;color:white;padding:15px 22px;border:none;border-radius:40px;font-size:16px;cursor:pointer;box-shadow:0 4px 6px rgba(0,0,0,0.3);}
-footer{background:#003366;color:white;text-align:center;padding:25px;}
-.footer-disclaimer{font-size:12px;max-width:900px;margin:auto;line-height:1.6;}
+body{
+  margin:0;
+  font-family:"Segoe UI", Arial, sans-serif;
+  background:#f4f4f4;
+  color:#333;
+  line-height:1.6;
+}
+header{
+  background:#003366;
+  height:100px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:20px;
+}
+nav{
+  display:flex;
+  justify-content:center;
+  gap:15px;
+  width:100%;
+}
+nav a{
+  color:white;
+  text-decoration:none;
+  font-weight:bold;
+  cursor:pointer;
+}
+nav a:hover{
+  text-decoration:underline;
+}
+.main-content{
+  max-width:1100px;
+  margin:auto;
+  padding:50px 40px;
+  background:white;
+}
+h2{
+  color:#003366;
+  border-bottom:2px solid #003366;
+  padding-bottom:8px;
+  margin-bottom:25px;
+}
+.tutor-card{
+  border:1px solid #ddd;
+  padding:20px;
+  border-radius:8px;
+  margin-bottom:20px;
+}
+.tutor-card h3{
+  margin:0 0 10px 0;
+  color:#00509e;
+}
+.tutor-card p{
+  margin:4px 0;
+}
+footer{
+  background:#003366;
+  color:white;
+  text-align:center;
+  padding:25px;
+}
+.footer-disclaimer{
+  font-size:12px;
+  max-width:900px;
+  margin:auto;
+  line-height:1.6;
+}
 </style>
 </head>
+
 <body>
 
 <header>
-<h1>C&T Tutorials</h1>
-<nav>
-<a href="#about">About</a>
-<a href="#services">Services</a>
-<a href="#resources">Resources</a>
-<a href="#contact">Contact</a>
-<a onclick="openForm()">Register Now</a>
-<a onclick="openAdmin()">Admins Portal</a>
-</nav>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="tutors.html#apply">Apply</a>
+    <a href="create-account.html">Create Account</a>
+    <a href="login.html">Login</a>
+  </nav>
 </header>
 
 <div class="main-content">
 <section id="about">
 <h2>About C&T Tutorials</h2>
-<p>C&T Tutorials is an independent academic support service committed to enhancing students’ academic performance through structured guidance in academic writing, research, and communication skills.</p>
+<p>C&T Tutorials provides academic support to enhance student performance through personalized tutoring.</p>
 </section>
 
 <section id="services">
 <h2>Our Services</h2>
-<div class="services-grid">
-<div class="service-card">
-<h3>Academic Writing Tutorials</h3>
-<p>Structured sessions covering academic writing principles, essay development, and research techniques.</p>
-</div>
-<div class="service-card">
-<h3>Group Learning Sessions</h3>
-<p>Collaborative sessions designed to support multiple students working on similar academic challenges.</p>
-</div>
-<div class="service-card">
-<h3>Assignment Support</h3>
-<p>Professional assistance with editing, proofreading, and improving assignment structure and clarity.</p>
-</div>
-<div class="service-card">
-<h3>Public Speaking Support</h3>
-<p>Coaching sessions designed to strengthen presentation and communication skills for academic purposes.</p>
-</div>
-</div>
+<p>Academic Writing, Group Learning, Assignment Support, and Public Speaking Coaching.</p>
 </section>
 
 <section id="resources">
-<h2>Resources</h2>
-<ul>
-<li><a class="resource-link" href="documents/Business-Policies.pdf" target="_blank">Business Policies</a></li>
-<li><a class="resource-link" href="documents/Student-form-for-offline-application.pdf" target="_blank">Offline Application Form</a></li>
-</ul>
+<h2>Approved Tutors</h2>
+<div id="tutorsList">
+<p>Loading tutors...</p>
+</div>
 </section>
 
 <section id="contact">
 <h2>Contact</h2>
-<div class="contact-box">
 <p>Email: <a href="mailto:ct0tutorials@gmail.com">ct0tutorials@gmail.com</a></p>
 <p>Phone: +264 815 621 879 / +264 818 479 958</p>
-</div>
 </section>
-
-<button class="floating-btn" onclick="openForm()">Register Now</button>
 </div>
 
 <footer>
 <div class="footer-disclaimer">
 <strong>Disclaimer:</strong><br>
-C&T Tutorials operates independently and is not affiliated with, endorsed by, or formally connected to any university, college, examination body, or academic institution. All services are supplementary and intended to support independent learning.
+C&T Tutorials operates independently and is not affiliated with any university or academic institution.
 </div>
 </footer>
 
 <script>
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxsXkwPLpdTK9oiBayEl_-TkN_T2x3SubSrjk-0TIC3eYbwbgD1-coQjNk0PqDmJDd35w/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxsXkwPLpdTK9oiBayEl_-TkN_T2x3SubSrjk-0TIC3eYbwbgD1-coQjNk0PqDmJDd35w/exec";
 
-/* MODALS (Student Registration) */
-function openForm(){document.getElementById("modal").style.display="flex";}
-function closeForm(){document.getElementById("modal").style.display="none";}
-function openAdmin(){window.location.href="admin.html";}
-
-/* TUTOR FETCH FOR REGISTRATION */
-function fetchTutors() {
-  fetch(`${SCRIPT_URL}?action=getApprovedTutors`)
+function loadTutors() {
+  fetch(SCRIPT_URL + "?action=getApprovedTutors")
     .then(res => res.json())
     .then(tutors => {
-      const select = document.getElementById("tutorSelect");
-      select.innerHTML = '<option value="">Select a tutor</option>';
+      const container = document.getElementById("tutorsList");
+      container.innerHTML = "";
+      if(tutors.length === 0){
+        container.innerHTML = "<p>No approved tutors at the moment.</p>";
+        return;
+      }
       tutors.forEach(t => {
-        const opt = document.createElement("option");
-        opt.value = t.name;
-        opt.textContent = `${t.name} (${t.subject})`;
-        select.appendChild(opt);
+        const card = document.createElement("div");
+        card.className = "tutor-card";
+        card.innerHTML = `
+          <h3>${t.name}</h3>
+          <p><strong>Email:</strong> ${t.email}</p>
+          <p><strong>Phone:</strong> ${t.phone}</p>
+          <p><strong>Subjects:</strong> ${t.subjects}</p>
+          <p><strong>Qualification:</strong> ${t.qualification}</p>
+          <p><strong>Experience:</strong> ${t.experience}</p>
+          <p><strong>Access Code:</strong> ${t.accessCode}</p>
+        `;
+        container.appendChild(card);
       });
     });
 }
 
-document.getElementById("serviceSelect").addEventListener("change",function(){
-  const tutorLabel = document.getElementById("tutorLabel");
-  if(this.value!==""){
-    tutorLabel.style.display="block";
-    fetchTutors();
-  } else {
-    tutorLabel.style.display="none";
-  }
-});
-
-/* REGISTRATION SUBMIT */
-document.getElementById("studentRegisterForm").addEventListener("submit",function(e){
-  e.preventDefault();
-  const data={name:this.name.value,email:this.email.value,cell_number:this.cell_number.value,service:this.service.value,tutor:this.tutor.value,type:"studentRegistration"};
-  fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify(data)})
-  .then(res=>res.json())
-  .then(()=>{alert("Registration submitted!"); this.reset(); closeForm(); document.getElementById("tutorLabel").style.display="none";});
-});
+// Load tutors on page load
+window.onload = loadTutors;
 </script>
 
-<!-- MODAL HTML -->
-<div id="modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);justify-content:center;align-items:center;z-index:1000;">
-<form id="studentRegisterForm" style="background:white;padding:25px;width:90%;max-width:500px;border-radius:10px;position:relative;">
-  <button type="button" class="close" onclick="closeForm()">×</button>
-  <h2>Service Registration</h2>
-  <label>Full Name <input type="text" name="name" required></label>
-  <label>Email <input type="email" name="email" required></label>
-  <label>Cellphone Number <input type="tel" name="cell_number" required></label>
-  <label>Select Service
-    <select name="service" id="serviceSelect" required>
-      <option value="">Select a service</option>
-      <option value="Intro to Academic Writing">Introduction to Academic Writing (4 sessions) – N$150</option>
-      <option value="Topic Specific">Topic Specific Sessions – N$40</option>
-      <option value="Hourly Rate">Hourly Rate – N$40</option>
-      <option value="Group Sessions">Group Sessions – N$200 to N$600</option>
-      <option value="Draft Editing">Draft Editing – N$15 per page</option>
-      <option value="Proofreading">Proofreading – N$10 per page</option>
-    </select>
-  </label>
-  <label id="tutorLabel" style="display:none;">Select Tutor
-    <select name="tutor" id="tutorSelect"><option value="">Select a tutor</option></select>
-  </label>
-  <label>
-    <input type="checkbox" required>
-    I agree to the <a href="documents/Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a>
-  </label>
-  <button type="submit" class="submit-btn">Submit Registration</button>
-</form>
-</div>
+</body>
+</html>
