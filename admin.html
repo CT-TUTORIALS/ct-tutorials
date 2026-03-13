@@ -2,10 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>C&T Tutorials Admin Portal</title>
 
 <style>
-body{font-family:Arial;margin:0;background:#f4f4f4}
+
+body{
+margin:0;
+font-family:Arial;
+background:#f4f4f4;
+}
 
 header{
 background:#003366;
@@ -14,11 +20,37 @@ padding:20px;
 text-align:center;
 }
 
+nav{
+margin-top:10px;
+}
+
+nav a{
+color:white;
+margin:0 15px;
+text-decoration:none;
+font-weight:bold;
+cursor:pointer;
+}
+
+nav a:hover{
+text-decoration:underline;
+}
+
 .main{
-max-width:1000px;
+max-width:1100px;
 margin:auto;
 background:white;
 padding:40px;
+}
+
+.section{
+margin-bottom:60px;
+}
+
+h2{
+color:#003366;
+border-bottom:2px solid #003366;
+padding-bottom:8px;
 }
 
 button{
@@ -27,44 +59,92 @@ border:none;
 background:#003366;
 color:white;
 cursor:pointer;
+margin-top:8px;
 }
 
-.approve{background:#2e7d32}
-.logout{background:#990000;margin-top:20px}
+.approve{
+background:#2e7d32;
+}
 
-.tutor-card{
+.logout{
+background:#990000;
+margin-top:30px;
+}
+
+.card{
 border:1px solid #ddd;
 padding:15px;
-margin-bottom:10px;
+margin-bottom:12px;
+border-radius:6px;
+background:#fafafa;
 }
+
 </style>
 </head>
 
 <body>
 
 <header>
-<h1>Admin Dashboard</h1>
-<a href="index.html" style="color:white">Home</a>
+
+<h1>C&T Tutorials Admin Dashboard</h1>
+
+<nav>
+
+<a href="index.html">Home</a>
+
+<a href="#tutorsSection">Tutors' List</a>
+
+<a href="#studentsSection">Students' List</a>
+
+</nav>
+
 </header>
 
+
 <div class="main">
+
+<!-- LOGIN SECTION -->
 
 <div id="loginSection">
 
 <h2>Admin Login</h2>
 
 <input id="adminUser" placeholder="Username">
+
 <input id="adminPass" type="password" placeholder="Password">
 
 <button onclick="adminLogin()">Login</button>
 
 </div>
 
+
+<!-- DASHBOARD -->
+
 <div id="dashboard" style="display:none">
+
+
+<!-- TUTORS SECTION -->
+
+<div class="section" id="tutorsSection">
 
 <h2>Tutor Applications</h2>
 
-<div id="tutorList">Loading...</div>
+<div id="tutorList">Loading tutor applications...</div>
+
+</div>
+
+
+
+<!-- STUDENTS SECTION -->
+
+<div class="section" id="studentsSection">
+
+<h2>Registered Students</h2>
+
+<div id="studentsList">Loading student registrations...</div>
+
+</div>
+
 
 <button class="logout" onclick="logoutAdmin()">Logout</button>
 
@@ -72,9 +152,13 @@ margin-bottom:10px;
 
 </div>
 
+
 <script>
 
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbwbcrO4DEvMFHoRNF2hTf134in0pImfBPGj-j6hXMety_sUwiz-liYeIfujAQ4s8-G_eQ/exec"
+
+
+/* Restore admin session after refresh */
 
 window.onload=function(){
 
@@ -84,10 +168,14 @@ loginSection.style.display="none"
 dashboard.style.display="block"
 
 loadTutors()
+loadStudents()
 
 }
 
 }
+
+
+/* ADMIN LOGIN */
 
 function adminLogin(){
 
@@ -102,8 +190,11 @@ loginSection.style.display="none"
 dashboard.style.display="block"
 
 loadTutors()
+loadStudents()
 
-}else{
+}
+
+else{
 
 alert("Invalid admin credentials")
 
@@ -111,24 +202,47 @@ alert("Invalid admin credentials")
 
 }
 
+
+/* LOAD TUTOR APPLICATIONS */
+
 function loadTutors(){
 
 fetch(SCRIPT_URL+"?action=getTutorApplications")
 
 .then(r=>r.json())
+
 .then(tutors=>{
 
 let html=""
 
+if(tutors.length===0){
+
+html="No tutor applications found."
+
+}
+
 tutors.forEach(t=>{
 
 html+=`
-<div class="tutor-card">
+
+<div class="card">
+
 <b>${t.name}</b><br>
-${t.email}<br>
+
+Email: ${t.email}<br>
+
+Phone: ${t.phone}<br>
+
 Subjects: ${t.subjects}<br>
+
+Qualification: ${t.qualification}<br>
+
+Experience: ${t.experience}<br>
+
 <button class="approve" onclick="approveTutor('${t.email}')">Approve</button>
+
 </div>
+
 `
 
 })
@@ -139,18 +253,78 @@ tutorList.innerHTML=html
 
 }
 
+
+/* APPROVE TUTOR */
+
 function approveTutor(email){
 
 fetch(SCRIPT_URL,{
+
 method:"POST",
+
 body:JSON.stringify({
+
 type:"approveTutor",
+
 email:email
+
 })
+
 })
+
 .then(()=>loadTutors())
 
 }
+
+
+/* LOAD STUDENTS */
+
+function loadStudents(){
+
+fetch(SCRIPT_URL+"?action=getStudents")
+
+.then(r=>r.json())
+
+.then(students=>{
+
+let html=""
+
+if(students.length===0){
+
+html="No student registrations found."
+
+}
+
+students.forEach(s=>{
+
+html+=`
+
+<div class="card">
+
+<b>${s.name}</b><br>
+
+Email: ${s.email}<br>
+
+Cell: ${s.cell_number}<br>
+
+Service: ${s.service}<br>
+
+Tutor Selected: ${s.tutor}
+
+</div>
+
+`
+
+})
+
+studentsList.innerHTML=html
+
+})
+
+}
+
+
+/* LOGOUT */
 
 function logoutAdmin(){
 
@@ -163,4 +337,5 @@ location.reload()
 </script>
 
 </body>
+
 </html>
