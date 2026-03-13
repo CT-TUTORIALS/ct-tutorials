@@ -3,342 +3,122 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>C&T Tutorials | Tutors Portal</title>
-
+<title>C&T Tutorials – Tutor Login</title>
 <style>
-
-body{
-margin:0;
-font-family:Segoe UI, Arial;
-background:#f4f4f4;
-}
-
-header{
-background:#003366;
-color:white;
-padding:20px;
-text-align:center;
-}
-
-nav a{
-color:white;
-margin:0 15px;
-text-decoration:none;
-font-weight:bold;
-cursor:pointer;
-}
-
-.main{
-max-width:1000px;
-margin:auto;
-background:white;
-padding:40px;
-}
-
-h2{
-color:#003366;
-}
-
-.modal{
-display:none;
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.6);
-justify-content:center;
-align-items:center;
-}
-
-.modal form{
-background:white;
-padding:25px;
-width:90%;
-max-width:450px;
-border-radius:8px;
-}
-
-input{
-width:100%;
-padding:10px;
-margin-top:5px;
-margin-bottom:15px;
-}
-
-button{
-background:#003366;
-color:white;
-border:none;
-padding:10px;
-cursor:pointer;
-width:100%;
-}
-
-.student-card{
-border:1px solid #ddd;
-padding:15px;
-margin-bottom:10px;
-}
-
+body{font-family:Arial, sans-serif; background:#f4f4f4; margin:0;}
+header, footer{background:#003366; color:white; text-align:center; padding:15px;}
+.container{max-width:500px; margin:auto; background:white; padding:30px; margin-top:20px; border-radius:8px;}
+input, button{padding:10px; margin-top:10px; width:100%; box-sizing:border-box;}
+button{background:#003366; color:white; border:none; cursor:pointer;}
+button:hover{background:#00509e;}
+p{margin-top:10px;}
+.success{color:green;}
+.error{color:red;}
 </style>
 </head>
-
 <body>
 
 <header>
-
-<h1>C&T Tutorials Tutors Portal</h1>
-
-<nav>
-<a href="index.html">Home</a>
-<a onclick="openApply()">Apply</a>
-<a onclick="openCreate()">Create Account</a>
-<a onclick="openLogin()">Login</a>
-</nav>
-
+<h1>C&T Tutorials – Tutor Portal</h1>
 </header>
 
-<div class="main">
-
-<!-- PROSPECTIVE TUTORS CONTENT -->
-
-<div id="infoSection">
-
-<h2>Thank You for Your Interest</h2>
-
-<p>
-We sincerely appreciate your interest in joining C&T Tutorials. Our organization is committed to providing high-quality academic support while creating a professional and supportive environment for tutors.
-</p>
-
-<p>
-C&T Tutorials is an equal opportunity employer. We believe that diversity, fairness, and inclusion strengthen the educational experiences we provide to students. Tutors are selected based on their qualifications, teaching ability, and commitment to helping students succeed academically.
-</p>
-
-<p>
-If you are passionate about helping students achieve their academic goals, we encourage you to apply to become part of our tutoring team.
-</p>
-
+<div class="container" id="loginPage">
+<h2>Tutor Login</h2>
+<input id="accessCode" placeholder="Access Code">
+<input id="password" type="password" placeholder="Password">
+<button onclick="login()">Login</button>
+<p id="loginError" class="error"></p>
+<p>New? <button onclick="showRegister()">Register</button></p>
 </div>
 
-<!-- APPROVED TUTOR DASHBOARD -->
-
-<div id="dashboard" style="display:none">
-
-<h2>Welcome to the Team!</h2>
-
-<p>
-You are now an approved tutor at C&T Tutorials. Below is the list of students who have selected you for tutorial services.
-</p>
-
-<div id="studentsList">
-
-Loading students...
-
+<div class="container" id="registerPage" style="display:none;">
+<h2>Tutor Registration</h2>
+<input id="regAccessCode" placeholder="Access Code">
+<input id="regPassword" type="password" placeholder="Set Your Password">
+<button onclick="register()">Register</button>
+<p id="regError" class="error"></p>
+<p>Already registered? <button onclick="showLogin()">Back to Login</button></p>
 </div>
 
+<div class="container" id="dashboardPage" style="display:none;">
+<h2>Welcome, <span id="tutorName"></span></h2>
+<p>This is your dashboard. You can see your approved status and subjects.</p>
+<ul>
+<li><strong>Subjects:</strong> <span id="tutorSubjects"></span></li>
+<li><strong>Status:</strong> <span id="tutorStatus"></span></li>
+</ul>
+<button onclick="logout()">Logout</button>
 </div>
 
-</div>
-
-<!-- APPLY MODAL -->
-
-<div class="modal" id="applyModal">
-
-<form id="applyForm">
-
-<h3>Apply as Tutor</h3>
-
-<input name="name" placeholder="Full Name" required>
-<input name="email" placeholder="Email" required>
-<input name="phone" placeholder="Phone" required>
-<input name="subjects" placeholder="Subjects" required>
-<input name="qualification" placeholder="Qualification" required>
-<input name="experience" placeholder="Experience">
-
-<button type="submit">Submit Application</button>
-
-</form>
-
-</div>
-
-<!-- CREATE ACCOUNT MODAL -->
-
-<div class="modal" id="createModal">
-
-<form id="createForm">
-
-<h3>Create Tutor Account</h3>
-
-<input name="email" placeholder="Email" required>
-<input name="code" placeholder="Access Code" required>
-
-<input type="password" name="password" placeholder="Password" required>
-<input type="password" name="confirm" placeholder="Confirm Password" required>
-
-<button type="submit">Create Account</button>
-
-</form>
-
-</div>
-
-<!-- LOGIN MODAL -->
-
-<div class="modal" id="loginModal">
-
-<form id="loginForm">
-
-<h3>Tutor Login</h3>
-
-<input name="email" placeholder="Email" required>
-<input type="password" name="password" placeholder="Password" required>
-
-<button type="submit">Login</button>
-
-</form>
-
-</div>
+<footer>
+<p>© 2026 C&T Tutorials | Independent Academic Support Service</p>
+</footer>
 
 <script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxsXkwPLpdTK9oiBayEl_-TkN_T2x3SubSrjk-0TIC3eYbwbgD1-coQjNk0PqDmJDd35w/exec";
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwbcrO4DEvMFHoRNF2hTf134in0pImfBPGj-j6hXMety_sUwiz-liYeIfujAQ4s8-G_eQ/exec"
-
-function openApply(){document.getElementById("applyModal").style.display="flex"}
-function openCreate(){document.getElementById("createModal").style.display="flex"}
-function openLogin(){document.getElementById("loginModal").style.display="flex"}
-
-window.onclick=function(e){
-if(e.target.classList.contains("modal")) e.target.style.display="none"
+function showRegister(){
+  document.getElementById("loginPage").style.display = "none";
+  document.getElementById("registerPage").style.display = "block";
+}
+function showLogin(){
+  document.getElementById("registerPage").style.display = "none";
+  document.getElementById("loginPage").style.display = "block";
 }
 
-/* APPLY */
+function register(){
+  const code = document.getElementById("regAccessCode").value.trim();
+  const password = document.getElementById("regPassword").value.trim();
+  if(!code || !password){ document.getElementById("regError").innerText="Enter all fields"; return; }
 
-document.getElementById("applyForm").addEventListener("submit",function(e){
-
-e.preventDefault()
-
-fetch(SCRIPT_URL,{
-method:"POST",
-body:JSON.stringify({
-type:"tutorApplication",
-name:this.name.value,
-email:this.email.value,
-phone:this.phone.value,
-subjects:this.subjects.value,
-qualification:this.qualification.value,
-experience:this.experience.value
-})
-})
-
-.then(r=>r.json())
-.then(()=>{
-alert("Application submitted successfully")
-this.reset()
-applyModal.style.display="none"
-})
-
-})
-
-/* CREATE ACCOUNT */
-
-document.getElementById("createForm").addEventListener("submit",function(e){
-
-e.preventDefault()
-
-if(this.password.value!==this.confirm.value){
-alert("Passwords do not match")
-return
+  fetch(SCRIPT_URL,{
+    method:"POST",
+    body: JSON.stringify({
+      type:"createTutorAccount",
+      code: code,
+      password: password
+    })
+  })
+  .then(res=>res.json())
+  .then(data=>{
+    if(data.status==="account_created"){
+      document.getElementById("regError").innerText="";
+      alert("Registration successful! Use your password to login.");
+      showLogin();
+    } else {
+      document.getElementById("regError").innerText="Invalid Access Code";
+    }
+  });
 }
 
-fetch(SCRIPT_URL,{
-method:"POST",
-body:JSON.stringify({
-type:"createTutorAccount",
-email:this.email.value,
-code:this.code.value,
-password:this.password.value
-})
-})
+function login(){
+  const code = document.getElementById("accessCode").value.trim();
+  const password = document.getElementById("password").value.trim();
+  if(!code || !password){ document.getElementById("loginError").innerText="Enter all fields"; return; }
 
-.then(r=>r.json())
-.then(res=>{
-
-if(res.status==="account_created"){
-alert("Account created successfully. You can now login.")
-createModal.style.display="none"
-}
-else{
-alert("Invalid access code")
-}
-
-})
-
-})
-
-/* LOGIN */
-
-document.getElementById("loginForm").addEventListener("submit",function(e){
-
-e.preventDefault()
-
-const email=this.email.value
-const password=this.password.value
-
-fetch(SCRIPT_URL+"?action=tutorLogin&email="+encodeURIComponent(email)+"&password="+encodeURIComponent(password))
-
-.then(r=>r.json())
-.then(res=>{
-
-if(res.success){
-
-document.getElementById("infoSection").style.display="none"
-document.getElementById("dashboard").style.display="block"
-
-loadStudents(email)
-
-loginModal.style.display="none"
-
-}
-else{
-alert("Invalid login credentials")
+  fetch(SCRIPT_URL+"?action=getAllTutors")
+  .then(res=>res.json())
+  .then(tutors=>{
+    const tutor = tutors.find(t=>t.accessCode===code && t.password===password);
+    if(tutor){
+      document.getElementById("loginPage").style.display="none";
+      document.getElementById("dashboardPage").style.display="block";
+      document.getElementById("tutorName").innerText = tutor.name;
+      document.getElementById("tutorSubjects").innerText = tutor.subjects;
+      document.getElementById("tutorStatus").innerText = tutor.status;
+    } else {
+      document.getElementById("loginError").innerText="Invalid Access Code or Password";
+    }
+  });
 }
 
-})
-
-})
-
-/* LOAD STUDENTS */
-
-function loadStudents(email){
-
-fetch(SCRIPT_URL+"?action=getStudentsForTutor&tutorEmail="+encodeURIComponent(email))
-
-.then(r=>r.json())
-.then(students=>{
-
-let html=""
-
-if(students.length===0){
-html="No students have selected you yet."
+function logout(){
+  document.getElementById("dashboardPage").style.display="none";
+  document.getElementById("loginPage").style.display="block";
+  document.getElementById("accessCode").value="";
+  document.getElementById("password").value="";
+  document.getElementById("loginError").innerText="";
 }
-
-students.forEach(s=>{
-html+=`
-<div class="student-card">
-<b>${s.name}</b><br>
-${s.email}<br>
-${s.cell_number}<br>
-Service: ${s.service}
-</div>
-`
-})
-
-document.getElementById("studentsList").innerHTML=html
-
-})
-
-}
-
 </script>
 
 </body>
