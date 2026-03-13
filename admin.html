@@ -3,130 +3,105 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>C&T Tutorials Admin Dashboard</title>
-
+<title>C&T Tutorials | Admin Dashboard</title>
 <style>
-body{font-family:Arial, sans-serif;background:#f4f4f4;margin:0;}
-.container{max-width:1200px;margin:auto;background:white;padding:40px;}
-input{width:100%;padding:10px;margin-top:10px;}
-button{padding:10px 15px;background:#003366;color:white;border:none;margin-top:10px;cursor:pointer;}
-button:hover{background:#00509e;}
-table{width:100%;border-collapse:collapse;margin-top:20px;}
-td,th{border:1px solid #ddd;padding:10px;text-align:left;}
+body{margin:0;font-family:"Segoe UI", Arial,sans-serif;background:#f4f4f4;color:#333;}
+header{background:#003366;color:white;padding:20px;text-align:center;}
+h2{color:#003366;margin-bottom:20px;}
+table{width:100%;border-collapse:collapse;margin-bottom:50px;}
+th,td{border:1px solid #ccc;padding:10px;text-align:left;}
 th{background:#003366;color:white;}
+button{padding:6px 12px;margin-right:5px;border:none;color:white;cursor:pointer;border-radius:4px;}
+button.approve{background:#28a745;}
+button.reject{background:#dc3545;}
 </style>
 </head>
 <body>
 
-<div class="container" id="loginPage">
-<h2>Admin Login</h2>
-<input id="user" placeholder="Username">
-<input id="pass" type="password" placeholder="Password">
-<button onclick="login()">Login</button>
-<p id="error" style="color:red"></p>
-</div>
+<header>
+<h1>C&T Tutorials Admin Dashboard</h1>
+</header>
 
-<div class="container" id="dashboard" style="display:none">
+<div class="main" style="max-width:1200px;margin:30px auto;background:white;padding:30px;border-radius:8px;">
 <h2>Tutor Applications</h2>
-<table id="table">
+
+<table id="tutorsTable">
 <thead>
 <tr>
-<th>Full Name</th>
+<th>Name</th>
 <th>Email</th>
 <th>Phone</th>
 <th>Subjects</th>
 <th>Qualification</th>
 <th>Experience</th>
-<th>Timestamp</th>
 <th>Status</th>
-<th>AccessCode</th>
-<th>Password</th>
-<th>Action</th>
+<th>Actions</th>
 </tr>
 </thead>
-<tbody></tbody>
+<tbody>
+<tr><td colspan="8">Loading tutors...</td></tr>
+</tbody>
 </table>
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxsXkwPLpdTK9oiBayEl_-TkN_T2x3SubSrjk-0TIC3eYbwbgD1-coQjNk0PqDmJDd35w/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwbcrO4DEvMFHoRNF2hTf134in0pImfBPGj-j6hXMety_sUwiz-liYeIfujAQ4s8-G_eQ/exec";
 
-/* =========================
-   ADMIN LOGIN
-========================= */
-function login(){
-  const user = document.getElementById("user").value;
-  const pass = document.getElementById("pass").value;
-
-  fetch(SCRIPT_URL,{
-    method:"POST",
-    body:JSON.stringify({
-      action:"adminLogin",
-      user:user,
-      pass:pass
-    })
-  })
-  .then(res => res.json())
-  .then(data => {
-    if(data.success){
-      document.getElementById("loginPage").style.display="none";
-      document.getElementById("dashboard").style.display="block";
-      loadTutors();
-    } else {
-      document.getElementById("error").innerText="Invalid login";
-    }
-  });
-}
-
-/* =========================
-   LOAD TUTOR APPLICATIONS
-========================= */
+// Load all tutors
 function loadTutors(){
-  fetch(SCRIPT_URL+"?action=getAllTutors")
+    fetch(SCRIPT_URL+"?action=getAllTutors")
     .then(res => res.json())
     .then(tutors => {
-      const tbody = document.querySelector("#table tbody");
-      tbody.innerHTML = "";
-      tutors.forEach((t, i) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${t.name}</td>
-          <td>${t.email}</td>
-          <td>${t.phone}</td>
-          <td>${t.subjects}</td>
-          <td>${t.qualification}</td>
-          <td>${t.experience}</td>
-          <td>${t.timestamp}</td>
-          <td>${t.status}</td>
-          <td>${t.accessCode || ""}</td>
-          <td>${t.password || ""}</td>
-          <td>
-            <button onclick="updateStatus(${i},'Approved')">Approve</button>
-            <button onclick="updateStatus(${i},'Rejected')">Reject</button>
-          </td>
-        `;
-        tbody.appendChild(row);
-      });
+        const tbody = document.querySelector("#tutorsTable tbody");
+        if(tutors.length===0){
+            tbody.innerHTML='<tr><td colspan="8">No tutor applications yet.</td></tr>';
+            return;
+        }
+        tbody.innerHTML="";
+        tutors.forEach((t,i)=>{
+            const tr = document.createElement("tr");
+            tr.innerHTML=`
+                <td>${t.name}</td>
+                <td>${t.email}</td>
+                <td>${t.phone}</td>
+                <td>${t.subjects}</td>
+                <td>${t.qualification}</td>
+                <td>${t.experience}</td>
+                <td>${t.status}</td>
+                <td>
+                  ${t.status!=="Approved" ? `<button class="approve" onclick="updateStatus(${i},'Approved')">Approve</button>` : ""}
+                  ${t.status!=="Rejected" ? `<button class="reject" onclick="updateStatus(${i},'Rejected')">Reject</button>` : ""}
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
     });
 }
 
-/* =========================
-   APPROVE / REJECT TUTOR
-========================= */
+// Approve or reject tutor
 function updateStatus(index,status){
-  fetch(SCRIPT_URL,{
-    method:"POST",
-    body:JSON.stringify({
-      action:"updateStatus",
-      index:index,
-      status:status
+    if(!confirm(`Are you sure you want to ${status} this tutor?`)) return;
+    fetch(SCRIPT_URL, {
+        method:"POST",
+        body: JSON.stringify({
+            type:"updateStatus",
+            index:index,
+            status:status
+        })
     })
-  })
-  .then(res => res.json())
-  .then(data => {
-    loadTutors();
-  });
+    .then(res => res.json())
+    .then(data => {
+        if(data.status==="success"){
+            alert(`Tutor ${status} successfully.`);
+            loadTutors(); // refresh table
+        } else {
+            alert("Error updating status.");
+        }
+    });
 }
+
+// Initial load
+loadTutors();
 </script>
 
 </body>
