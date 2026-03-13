@@ -4,114 +4,35 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>C&T Tutorials Tutors Portal</title>
-
 <style>
-body{
-  margin:0;
-  font-family:"Segoe UI", Arial, sans-serif;
-  background:#f4f4f4;
-  color:#333;
-  line-height:1.6;
-}
-header{
-  background:#003366;
-  height:100px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-  padding:20px;
-}
-nav{
-  display:flex;
-  justify-content:center;
-  gap:15px;
-  width:100%;
-}
-nav a{
-  color:white;
-  text-decoration:none;
-  font-weight:bold;
-  cursor:pointer;
-}
-nav a:hover{
-  text-decoration:underline;
-}
-.main-content{
-  max-width:1100px;
-  margin:auto;
-  padding:50px 40px;
-  background:white;
-}
-h2{
-  color:#003366;
-  border-bottom:2px solid #003366;
-  padding-bottom:8px;
-  margin-bottom:25px;
-}
-.tutor-card{
-  border:1px solid #ddd;
-  padding:20px;
-  border-radius:8px;
-  margin-bottom:20px;
-}
-.tutor-card h3{
-  margin:0 0 10px 0;
-  color:#00509e;
-}
-.tutor-card p{
-  margin:4px 0;
-}
-footer{
-  background:#003366;
-  color:white;
-  text-align:center;
-  padding:25px;
-}
-.footer-disclaimer{
-  font-size:12px;
-  max-width:900px;
-  margin:auto;
-  line-height:1.6;
-}
+body{margin:0;font-family:"Segoe UI", Arial,sans-serif;background:#f4f4f4;color:#333;line-height:1.6}
+header{background:#003366;height:100px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px}
+nav{display:flex;justify-content:center;gap:15px;width:100%}
+nav a{color:white;text-decoration:none;font-weight:bold;cursor:pointer}
+nav a:hover{text-decoration:underline}
+.main-content{max-width:1100px;margin:auto;padding:50px 40px;background:white}
+h2{color:#003366;border-bottom:2px solid #003366;padding-bottom:8px;margin-bottom:25px}
+.tutor-card{border:1px solid #ddd;padding:20px;border-radius:8px;margin-bottom:20px}
+.tutor-card h3{margin:0 0 10px 0;color:#00509e}
+.tutor-card p{margin:4px 0}
+footer{background:#003366;color:white;text-align:center;padding:25px}
+.footer-disclaimer{font-size:12px;max-width:900px;margin:auto;line-height:1.6}
 </style>
 </head>
-
 <body>
 
 <header>
   <nav>
     <a href="index.html">Home</a>
-    <a href="tutors.html#apply">Apply</a>
+    <a href="index.html#register">Apply</a>
     <a href="create-account.html">Create Account</a>
     <a href="login.html">Login</a>
   </nav>
 </header>
 
 <div class="main-content">
-<section id="about">
-<h2>About C&T Tutorials</h2>
-<p>C&T Tutorials provides academic support to enhance student performance through personalized tutoring.</p>
-</section>
-
-<section id="services">
-<h2>Our Services</h2>
-<p>Academic Writing, Group Learning, Assignment Support, and Public Speaking Coaching.</p>
-</section>
-
-<section id="resources">
-<h2>Approved Tutors</h2>
-<div id="tutorsList">
-<p>Loading tutors...</p>
-</div>
-</section>
-
-<section id="contact">
-<h2>Contact</h2>
-<p>Email: <a href="mailto:ct0tutorials@gmail.com">ct0tutorials@gmail.com</a></p>
-<p>Phone: +264 815 621 879 / +264 818 479 958</p>
-</section>
+<h2>Welcome to the Tutors Portal</h2>
+<div id="tutorsList"></div>
 </div>
 
 <footer>
@@ -125,35 +46,28 @@ C&T Tutorials operates independently and is not affiliated with any university o
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxsXkwPLpdTK9oiBayEl_-TkN_T2x3SubSrjk-0TIC3eYbwbgD1-coQjNk0PqDmJDd35w/exec";
 
 function loadTutors() {
-  fetch(SCRIPT_URL + "?action=getApprovedTutors")
-    .then(res => res.json())
-    .then(tutors => {
-      const container = document.getElementById("tutorsList");
-      container.innerHTML = "";
-      if(tutors.length === 0){
-        container.innerHTML = "<p>No approved tutors at the moment.</p>";
-        return;
-      }
-      tutors.forEach(t => {
-        const card = document.createElement("div");
-        card.className = "tutor-card";
-        card.innerHTML = `
-          <h3>${t.name}</h3>
-          <p><strong>Email:</strong> ${t.email}</p>
-          <p><strong>Phone:</strong> ${t.phone}</p>
-          <p><strong>Subjects:</strong> ${t.subjects}</p>
-          <p><strong>Qualification:</strong> ${t.qualification}</p>
-          <p><strong>Experience:</strong> ${t.experience}</p>
-          <p><strong>Access Code:</strong> ${t.accessCode}</p>
-        `;
-        container.appendChild(card);
-      });
-    });
+  const tutorData = JSON.parse(localStorage.getItem("tutorData"));
+  const container = document.getElementById("tutorsList");
+
+  if(!tutorData){
+    container.innerHTML="<p>You must be logged in to view this page.</p>";
+    return;
+  }
+
+  container.innerHTML=`
+    <div class="tutor-card">
+      <h3>${tutorData.name}</h3>
+      <p><strong>Email:</strong> ${tutorData.email}</p>
+      <p><strong>Phone:</strong> ${tutorData.phone}</p>
+      <p><strong>Subjects:</strong> ${tutorData.subjects}</p>
+      <p><strong>Qualification:</strong> ${tutorData.qualification}</p>
+      <p><strong>Experience:</strong> ${tutorData.experience}</p>
+      <p><strong>Access Code:</strong> ${tutorData.accessCode}</p>
+    </div>
+  `;
 }
 
-// Load tutors on page load
 window.onload = loadTutors;
 </script>
-
 </body>
 </html>
