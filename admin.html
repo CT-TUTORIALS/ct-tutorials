@@ -53,6 +53,14 @@ border-bottom:2px solid #003366;
 padding-bottom:8px;
 }
 
+.card{
+border:1px solid #ddd;
+padding:15px;
+margin-bottom:12px;
+border-radius:6px;
+background:#fafafa;
+}
+
 button{
 padding:8px 12px;
 border:none;
@@ -71,12 +79,41 @@ background:#990000;
 margin-top:30px;
 }
 
-.card{
-border:1px solid #ddd;
-padding:15px;
-margin-bottom:12px;
-border-radius:6px;
-background:#fafafa;
+/* LOGIN MODAL */
+
+.modal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.7);
+justify-content:center;
+align-items:center;
+z-index:999;
+}
+
+.modal-content{
+background:white;
+padding:30px;
+border-radius:8px;
+width:90%;
+max-width:400px;
+text-align:center;
+}
+
+.modal input{
+width:100%;
+padding:10px;
+margin-top:10px;
+margin-bottom:15px;
+}
+
+.close{
+float:right;
+cursor:pointer;
+font-size:20px;
 }
 
 </style>
@@ -89,39 +126,15 @@ background:#fafafa;
 <h1>C&T Tutorials Admin Dashboard</h1>
 
 <nav>
-
 <a href="index.html">Home</a>
-
 <a href="#tutorsSection">Tutors' List</a>
-
 <a href="#studentsSection">Students' List</a>
-
 </nav>
 
 </header>
 
 
-<div class="main">
-
-<!-- LOGIN SECTION -->
-
-<div id="loginSection">
-
-<h2>Admin Login</h2>
-
-<input id="adminUser" placeholder="Username">
-
-<input id="adminPass" type="password" placeholder="Password">
-
-<button onclick="adminLogin()">Login</button>
-
-</div>
-
-
-<!-- DASHBOARD -->
-
-<div id="dashboard" style="display:none">
-
+<div class="main" id="dashboard" style="display:none">
 
 <!-- TUTORS SECTION -->
 
@@ -132,7 +145,6 @@ background:#fafafa;
 <div id="tutorList">Loading tutor applications...</div>
 
 </div>
-
 
 
 <!-- STUDENTS SECTION -->
@@ -150,6 +162,26 @@ background:#fafafa;
 
 </div>
 
+
+
+<!-- LOGIN MODAL -->
+
+<div id="loginModal" class="modal">
+
+<div class="modal-content">
+
+<span class="close" onclick="closeModal()">&times;</span>
+
+<h2>Admin Login</h2>
+
+<input id="adminUser" placeholder="Username">
+
+<input id="adminPass" type="password" placeholder="Password">
+
+<button onclick="adminLogin()">Login</button>
+
+</div>
+
 </div>
 
 
@@ -158,19 +190,35 @@ background:#fafafa;
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbwbcrO4DEvMFHoRNF2hTf134in0pImfBPGj-j6hXMety_sUwiz-liYeIfujAQ4s8-G_eQ/exec"
 
 
-/* Restore admin session after refresh */
+/* PAGE LOAD */
 
 window.onload=function(){
 
 if(localStorage.getItem("adminLoggedIn")){
 
-loginSection.style.display="none"
-dashboard.style.display="block"
-
-loadTutors()
-loadStudents()
+showDashboard()
 
 }
+else{
+
+openModal()
+
+}
+
+}
+
+
+/* MODAL FUNCTIONS */
+
+function openModal(){
+
+document.getElementById("loginModal").style.display="flex"
+
+}
+
+function closeModal(){
+
+document.getElementById("loginModal").style.display="none"
 
 }
 
@@ -186,19 +234,28 @@ if(user==="admin" && pass==="3545Sh@kes"){
 
 localStorage.setItem("adminLoggedIn","true")
 
-loginSection.style.display="none"
-dashboard.style.display="block"
+closeModal()
 
-loadTutors()
-loadStudents()
+showDashboard()
 
 }
-
 else{
 
 alert("Invalid admin credentials")
 
 }
+
+}
+
+
+/* SHOW DASHBOARD */
+
+function showDashboard(){
+
+document.getElementById("dashboard").style.display="block"
+
+loadTutors()
+loadStudents()
 
 }
 
@@ -247,7 +304,7 @@ Experience: ${t.experience}<br>
 
 })
 
-tutorList.innerHTML=html
+document.getElementById("tutorList").innerHTML=html
 
 })
 
@@ -317,7 +374,7 @@ Tutor Selected: ${s.tutor}
 
 })
 
-studentsList.innerHTML=html
+document.getElementById("studentsList").innerHTML=html
 
 })
 
@@ -337,5 +394,4 @@ location.reload()
 </script>
 
 </body>
-
 </html>
