@@ -2,96 +2,40 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>C&T Tutorials | Admin Dashboard</title>
+<title>C&T Tutorials Admin Portal</title>
 
 <style>
-body{
-  margin:0;
-  font-family:"Segoe UI", Arial, sans-serif;
-  background:#f4f4f4;
-  color:#333;
-}
+body{font-family:Arial;margin:0;background:#f4f4f4}
+
 header{
-  background:#003366;
-  color:white;
-  padding:20px;
-  text-align:center;
+background:#003366;
+color:white;
+padding:20px;
+text-align:center;
 }
-nav a{
-  color:white;
-  margin:0 15px;
-  text-decoration:none;
-  font-weight:bold;
-}
-nav a:hover{
-  text-decoration:underline;
-  cursor:pointer;
-}
+
 .main{
-  max-width:1100px;
-  margin:auto;
-  padding:40px;
-  background:white;
+max-width:1000px;
+margin:auto;
+background:white;
+padding:40px;
 }
-h2{
-  color:#003366;
-  margin-bottom:15px;
+
+button{
+padding:8px 12px;
+border:none;
+background:#003366;
+color:white;
+cursor:pointer;
 }
-table{
-  width:100%;
-  border-collapse:collapse;
-  margin-top:20px;
-}
-table th, table td{
-  border:1px solid #ddd;
-  padding:10px;
-  text-align:left;
-}
-table th{
-  background:#003366;
-  color:white;
-}
-button.approve, button.reject{
-  padding:6px 12px;
-  margin-right:5px;
-  border:none;
-  border-radius:4px;
-  cursor:pointer;
-}
-button.approve{background:#28a745;color:white;}
-button.reject{background:#dc3545;color:white;}
-.modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.7);
-  justify-content:center;
-  align-items:center;
-}
-.modal form{
-  background:white;
-  padding:25px;
-  width:90%;
-  max-width:400px;
-  border-radius:8px;
-}
-input{
-  width:100%;
-  padding:10px;
-  margin:10px 0;
-}
-button.submit-btn{
-  width:100%;
-  background:#003366;
-  color:white;
-  padding:12px;
-  border:none;
-  border-radius:5px;
-  cursor:pointer;
-}
-button.submit-btn:hover{
-  background:#00509e;
+
+.approve{background:#2e7d32}
+.logout{background:#990000;margin-top:20px}
+
+.tutor-card{
+border:1px solid #ddd;
+padding:15px;
+margin-bottom:10px;
 }
 </style>
 </head>
@@ -99,128 +43,121 @@ button.submit-btn:hover{
 <body>
 
 <header>
-<h1>C&T Tutorials Admin Dashboard</h1>
-<nav>
-<a href="index.html">Home</a>
-</nav>
+<h1>Admin Dashboard</h1>
+<a href="index.html" style="color:white">Home</a>
 </header>
 
 <div class="main">
 
-<!-- LOGIN MODAL -->
-<div class="modal" id="loginModal">
-<form id="loginForm">
+<div id="loginSection">
+
 <h2>Admin Login</h2>
-<label>Username
-  <input type="text" name="username" required>
-</label>
-<label>Password
-  <input type="password" name="password" required>
-</label>
-<button type="submit" class="submit-btn">Login</button>
-</form>
+
+<input id="adminUser" placeholder="Username">
+<input id="adminPass" type="password" placeholder="Password">
+
+<button onclick="adminLogin()">Login</button>
+
 </div>
 
-<!-- TUTOR MANAGEMENT TABLE -->
-<div id="dashboard" style="display:none;">
-<h2>Pending Tutor Applications</h2>
-<table id="tutorTable">
-<thead>
-<tr>
-<th>#</th>
-<th>Full Name</th>
-<th>Email</th>
-<th>Phone</th>
-<th>Subjects</th>
-<th>Qualification</th>
-<th>Experience</th>
-<th>Status</th>
-<th>Actions</th>
-</tr>
-</thead>
-<tbody>
-<tr><td colspan="9">Loading tutors...</td></tr>
-</tbody>
-</table>
+<div id="dashboard" style="display:none">
+
+<h2>Tutor Applications</h2>
+
+<div id="tutorList">Loading...</div>
+
+<button class="logout" onclick="logoutAdmin()">Logout</button>
+
 </div>
 
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwbcrO4DEvMFHoRNF2hTf134in0pImfBPGj-j6hXMety_sUwiz-liYeIfujAQ4s8-G_eQ/exec";
 
-/* Admin credentials */
-const admins = [
-  {username:"admin", password:"3545Sh@kes"},
-  {username:"partner1", password:"Partner1Pass"},
-  {username:"partner2", password:"Partner2Pass"}
-];
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbwbcrO4DEvMFHoRNF2hTf134in0pImfBPGj-j6hXMety_sUwiz-liYeIfujAQ4s8-G_eQ/exec"
 
-const loginModal = document.getElementById("loginModal");
-const dashboard = document.getElementById("dashboard");
+window.onload=function(){
 
-/* SHOW LOGIN MODAL ON PAGE LOAD */
-loginModal.style.display="flex";
+if(localStorage.getItem("adminLoggedIn")){
 
-/* LOGIN HANDLER */
-document.getElementById("loginForm").addEventListener("submit", function(e){
-  e.preventDefault();
-  const username = this.username.value;
-  const password = this.password.value;
+loginSection.style.display="none"
+dashboard.style.display="block"
 
-  const valid = admins.some(admin => admin.username === username && admin.password === password);
-  if(valid){
-    loginModal.style.display="none";
-    dashboard.style.display="block";
-    loadTutors();
-  } else {
-    alert("Invalid credentials");
-  }
-});
+loadTutors()
 
-/* FETCH TUTORS */
-function loadTutors(){
-  fetch(SCRIPT_URL+"?action=getAllTutors")
-  .then(res=>res.json())
-  .then(tutors=>{
-    const tbody = document.querySelector("#tutorTable tbody");
-    tbody.innerHTML="";
-    tutors.forEach((t, idx)=>{
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-      <td>${idx+1}</td>
-      <td>${t.name}</td>
-      <td>${t.email}</td>
-      <td>${t.phone}</td>
-      <td>${t.subjects}</td>
-      <td>${t.qualification}</td>
-      <td>${t.experience}</td>
-      <td>${t.status}</td>
-      <td>
-        ${t.status==="Pending"?`<button class="approve" onclick="updateStatus(${idx},'Approved')">Approve</button>
-        <button class="reject" onclick="updateStatus(${idx},'Rejected')">Reject</button>`:""}
-      </td>
-      `;
-      tbody.appendChild(tr);
-    });
-  });
 }
 
-/* APPROVE / REJECT HANDLER */
-function updateStatus(index, status){
-  fetch(SCRIPT_URL,{
-    method:"POST",
-    body: JSON.stringify({
-      type:"updateStatus",
-      index:index,
-      status:status
-    })
-  })
-  .then(res=>res.json())
-  .then(r=>{
-    alert("Tutor status updated to "+status);
-    loadTutors();
-  });
+}
+
+function adminLogin(){
+
+const user=document.getElementById("adminUser").value
+const pass=document.getElementById("adminPass").value
+
+if(user==="admin" && pass==="3545Sh@kes"){
+
+localStorage.setItem("adminLoggedIn","true")
+
+loginSection.style.display="none"
+dashboard.style.display="block"
+
+loadTutors()
+
+}else{
+
+alert("Invalid admin credentials")
+
+}
+
+}
+
+function loadTutors(){
+
+fetch(SCRIPT_URL+"?action=getTutorApplications")
+
+.then(r=>r.json())
+.then(tutors=>{
+
+let html=""
+
+tutors.forEach(t=>{
+
+html+=`
+<div class="tutor-card">
+<b>${t.name}</b><br>
+${t.email}<br>
+Subjects: ${t.subjects}<br>
+<button class="approve" onclick="approveTutor('${t.email}')">Approve</button>
+</div>
+`
+
+})
+
+tutorList.innerHTML=html
+
+})
+
+}
+
+function approveTutor(email){
+
+fetch(SCRIPT_URL,{
+method:"POST",
+body:JSON.stringify({
+type:"approveTutor",
+email:email
+})
+})
+.then(()=>loadTutors())
+
+}
+
+function logoutAdmin(){
+
+localStorage.removeItem("adminLoggedIn")
+
+location.reload()
+
 }
 
 </script>
