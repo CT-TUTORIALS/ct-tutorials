@@ -16,7 +16,6 @@ body{
   color:#333;
   line-height:1.6;
 }
-
 /* ---------------- HERO BANNER ---------------- */
 header{
   background-image:url("images/banner.jpg");
@@ -45,7 +44,6 @@ header.scrolled{
   z-index:999;
   justify-content:center;
 }
-
 /* Navigation */
 nav{
   display:flex;
@@ -93,7 +91,6 @@ h2{
 h3{
   color:#00509e;
 }
-
 /* ---------------- SERVICES ---------------- */
 .services-grid{
   display:grid;
@@ -110,7 +107,6 @@ h3{
 .service-card h3{
   margin-top:0;
 }
-
 /* ---------------- RESOURCES ---------------- */
 .resource-link{
   color:#00509e;
@@ -120,14 +116,12 @@ h3{
 .resource-link:hover{
   text-decoration:underline;
 }
-
 /* ---------------- CONTACT ---------------- */
 .contact-box{
   background:#f7f7f7;
   padding:20px;
   border-radius:8px;
 }
-
 /* ---------------- BUTTON ---------------- */
 .floating-btn{
   position:fixed;
@@ -142,9 +136,9 @@ h3{
   cursor:pointer;
   box-shadow:0 4px 6px rgba(0,0,0,0.3);
 }
-
 /* ---------------- MODALS ---------------- */
-#modal{
+#modal,
+#adminModal{
   display:none;
   position:fixed;
   inset:0;
@@ -153,7 +147,8 @@ h3{
   align-items:center;
   z-index:1000;
 }
-#modal form{
+#modal form,
+#adminModal form{
   background:white;
   padding:25px;
   width:90%;
@@ -197,7 +192,6 @@ input,select{
 .submit-btn:hover{
   background:#00509e;
 }
-
 /* ---------------- FOOTER ---------------- */
 footer{
   background:#003366;
@@ -211,7 +205,6 @@ footer{
   margin:auto;
   line-height:1.6;
 }
-
 /* ---------------- RESPONSIVE ---------------- */
 @media(max-width:768px){
   header{
@@ -231,18 +224,16 @@ footer{
 
 <header>
 <nav>
-  <a href="#about">About</a>
-  <a href="#services">Services</a>
-  <a href="#resources">Resources</a>
-  <a href="#contact">Contact</a>
-  <!-- Admins Portal now goes to a separate page -->
-  <a href="admin.html">Admins Portal</a>
-  <a href="tutors.html" class="portal-link">Tutors' Portal</a>
+<a href="#about">About</a>
+<a href="#services">Services</a>
+<a href="#resources">Resources</a>
+<a href="#contact">Contact</a>
+<a onclick="openAdmin()">Admins Portal</a>
+<a href="tutors.html" class="portal-link">Tutors' Portal</a>
 </nav>
 </header>
 
 <div class="main-content">
-
 <section id="about">
 <h2>About C&T Tutorials</h2>
 <p>C&T Tutorials is an independent academic support service committed to enhancing students’ academic performance through structured guidance in academic writing, research, and communication skills.</p>
@@ -317,6 +308,7 @@ footer{
       <option value="Group Sessions">Group Sessions – N$200 to N$600</option>
       <option value="Draft Editing">Draft Editing – N$15 per page</option>
       <option value="Proofreading">Proofreading – N$10 per page</option>
+      <option value="Secondary School Subjects">Secondary School Subjects – N$35 per session</option>
     </select>
   </label>
 
@@ -336,6 +328,21 @@ footer{
 </form>
 </div>
 
+<!-- ADMIN LOGIN POPUP -->
+<div id="adminModal">
+<form>
+  <button type="button" class="close" onclick="closeAdmin()">×</button>
+  <h2>Admin Login</h2>
+  <label>Username
+    <input type="text" required>
+  </label>
+  <label>Password
+    <input type="password" required>
+  </label>
+  <button class="submit-btn">Login</button>
+</form>
+</div>
+
 <footer>
 <div class="footer-disclaimer">
 <strong>Disclaimer:</strong><br>
@@ -349,10 +356,13 @@ const STUDENT_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzoXVTRhe05P
 /* MODAL OPEN/CLOSE */
 function openForm(){document.getElementById("modal").style.display="flex";}
 function closeForm(){document.getElementById("modal").style.display="none";}
+function openAdmin(){document.getElementById("adminModal").style.display="flex";}
+function closeAdmin(){document.getElementById("adminModal").style.display="none";}
 
 /* CLOSE WHEN CLICKING OUTSIDE */
 window.onclick=function(event){
   if(event.target==document.getElementById("modal")) closeForm();
+  if(event.target==document.getElementById("adminModal")) closeAdmin();
 }
 
 /* SMOOTH HEADER COLLAPSE */
