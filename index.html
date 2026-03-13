@@ -5,34 +5,231 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>C&T Tutorials</title>
 
+<meta name="google-site-verification" content="aSucaMc_aX_kQpRFNvVRgTX0pEeCD1c48mTuirk4qwY" />
+
 <style>
-body{margin:0;font-family:"Segoe UI", Arial, sans-serif;background:#f4f4f4;color:#333;line-height:1.6;}
-header{background:#003366;height:100px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px;}
-nav{display:flex;justify-content:center;gap:15px;width:100%;}
-nav a{color:white;text-decoration:none;font-weight:bold;cursor:pointer;}
-nav a:hover{text-decoration:underline;}
-.main-content{max-width:1100px;margin:auto;padding:50px 40px;background:white;}
-h2{color:#003366;border-bottom:2px solid #003366;padding-bottom:8px;margin-bottom:25px;}
-button.floating-btn{position:fixed;bottom:25px;right:25px;background:#003366;color:white;padding:15px 22px;border:none;border-radius:40px;font-size:16px;cursor:pointer;box-shadow:0 4px 6px rgba(0,0,0,0.3);}
-#adminModal,#tutorLoginModal,#studentModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);justify-content:center;align-items:center;z-index:1000;}
-#adminModal form,#tutorLoginModal form,#studentModal form{background:white;padding:25px;width:90%;max-width:500px;border-radius:10px;position:relative;}
-.close{position:absolute;right:15px;top:10px;font-size:22px;cursor:pointer;border:none;background:none;}
-label{display:block;margin-top:12px;font-weight:500;}
-input,select{width:100%;padding:10px;margin-top:5px;border-radius:5px;border:1px solid #ccc;box-sizing:border-box;}
-.submit-btn{margin-top:20px;width:100%;padding:12px;background:#003366;color:white;border:none;cursor:pointer;border-radius:5px;font-size:16px;}
-.submit-btn:hover{background:#00509e;}
-footer{background:#003366;color:white;text-align:center;padding:25px;}
-.footer-disclaimer{font-size:12px;max-width:900px;margin:auto;line-height:1.6;}
+/* ---------------- GENERAL ---------------- */
+body{
+  margin:0;
+  font-family:"Segoe UI", Arial, sans-serif;
+  background:#f4f4f4;
+  color:#333;
+  line-height:1.6;
+}
+/* ---------------- HERO BANNER ---------------- */
+header{
+  background-image:url("images/banner.jpg");
+  background-position:center;
+  background-repeat:no-repeat;
+  background-size:cover;
+  background-color:#003366;
+  height:420px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  align-items:center;
+  text-align:center;
+  padding:20px;
+  position:relative;
+  transition:all 0.3s ease;
+}
+header.scrolled{
+  background:#003366;
+  background-image:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:70px;
+  z-index:999;
+  justify-content:center;
+}
+/* Navigation */
+nav{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:15px;
+  width:100%;
+}
+nav a{
+  color:white;
+  text-decoration:none;
+  font-weight:bold;
+  white-space:nowrap;
+  cursor:pointer;
+}
+nav a:hover{
+  text-decoration:underline;
+}
+
+/* Tutors portal pushed right */
+nav a.portal-link{
+  margin-left:auto;
+}
+
+/* ---------------- CONTENT ---------------- */
+.main-content{
+  max-width:1100px;
+  margin:auto;
+  padding:50px 40px;
+  background:white;
+  transition:margin-top 0.3s ease;
+}
+header.scrolled + .main-content{
+  margin-top:70px;
+}
+section{
+  margin-bottom:60px;
+}
+h2{
+  color:#003366;
+  border-bottom:2px solid #003366;
+  padding-bottom:8px;
+  margin-bottom:25px;
+}
+h3{
+  color:#00509e;
+}
+/* ---------------- SERVICES ---------------- */
+.services-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:25px;
+  margin-top:20px;
+}
+.service-card{
+  background:#f7f7f7;
+  padding:20px;
+  border-radius:8px;
+  box-shadow:0 3px 6px rgba(0,0,0,0.1);
+}
+.service-card h3{
+  margin-top:0;
+}
+/* ---------------- RESOURCES ---------------- */
+.resource-link{
+  color:#00509e;
+  font-weight:bold;
+  text-decoration:none;
+}
+.resource-link:hover{
+  text-decoration:underline;
+}
+/* ---------------- CONTACT ---------------- */
+.contact-box{
+  background:#f7f7f7;
+  padding:20px;
+  border-radius:8px;
+}
+/* ---------------- BUTTON ---------------- */
+.floating-btn{
+  position:fixed;
+  bottom:25px;
+  right:25px;
+  background:#003366;
+  color:white;
+  padding:15px 22px;
+  border:none;
+  border-radius:40px;
+  font-size:16px;
+  cursor:pointer;
+  box-shadow:0 4px 6px rgba(0,0,0,0.3);
+}
+/* ---------------- MODALS ---------------- */
+#modal,
+#adminModal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.7);
+  justify-content:center;
+  align-items:center;
+  z-index:1000;
+}
+#modal form,
+#adminModal form{
+  background:white;
+  padding:25px;
+  width:90%;
+  max-width:500px;
+  border-radius:10px;
+  position:relative;
+}
+.close{
+  position:absolute;
+  right:15px;
+  top:10px;
+  font-size:22px;
+  cursor:pointer;
+  border:none;
+  background:none;
+}
+label{
+  display:block;
+  margin-top:12px;
+  font-weight:500;
+}
+input,select{
+  width:100%;
+  padding:10px;
+  margin-top:5px;
+  border-radius:5px;
+  border:1px solid #ccc;
+  box-sizing:border-box;
+}
+.submit-btn{
+  margin-top:20px;
+  width:100%;
+  padding:12px;
+  background:#003366;
+  color:white;
+  border:none;
+  cursor:pointer;
+  border-radius:5px;
+  font-size:16px;
+}
+.submit-btn:hover{
+  background:#00509e;
+}
+/* ---------------- FOOTER ---------------- */
+footer{
+  background:#003366;
+  color:white;
+  text-align:center;
+  padding:25px;
+}
+.footer-disclaimer{
+  font-size:12px;
+  max-width:900px;
+  margin:auto;
+  line-height:1.6;
+}
+/* ---------------- RESPONSIVE ---------------- */
+@media(max-width:768px){
+  header{
+    height:300px;
+  }
+  .main-content{
+    padding:30px 20px;
+  }
+  nav{
+    gap:10px;
+  }
+}
 </style>
 </head>
+
 <body>
 
 <header>
 <nav>
-<a href="#about">Home</a>
-<a href="#services">Apply</a>
-<a href="#resources" onclick="openTutorLogin()">Tutors Login</a>
-<a href="#contact" onclick="openAdmin()">Admins Portal</a>
+<a href="#about">About</a>
+<a href="#services">Services</a>
+<a href="#resources">Resources</a>
+<a href="#contact">Contact</a>
+<a onclick="openAdmin()">Admins Portal</a>
+<a href="tutors.html" class="portal-link">Tutors' Portal</a>
 </nav>
 </header>
 
@@ -50,8 +247,8 @@ footer{background:#003366;color:white;text-align:center;padding:25px;}
 <section id="resources">
 <h2>Resources</h2>
 <ul>
-<li><a href="documents/Business-Policies.pdf" target="_blank">Business Policies</a></li>
-<li><a href="documents/Student-form-for-offline-application.pdf" target="_blank">Offline Application Form</a></li>
+<li><a class="resource-link" href="documents/Business-Policies.pdf" target="_blank">Business Policies</a></li>
+<li><a class="resource-link" href="documents/Student-form-for-offline-application.pdf" target="_blank">Offline Application Form</a></li>
 </ul>
 </section>
 
@@ -62,6 +259,30 @@ footer{background:#003366;color:white;text-align:center;padding:25px;}
 </section>
 </div>
 
+<!-- STUDENT REGISTRATION MODAL -->
+<div id="modal">
+<form id="studentRegisterForm">
+  <button type="button" class="close" onclick="closeForm()">×</button>
+  <h2>Service Registration</h2>
+  <!-- form fields here -->
+</form>
+</div>
+
+<!-- ADMIN LOGIN MODAL -->
+<div id="adminModal">
+<form id="adminForm">
+  <button type="button" class="close" onclick="closeAdmin()">×</button>
+  <h2>Admin Login</h2>
+  <label>Username
+    <input type="text" name="username" required>
+  </label>
+  <label>Password
+    <input type="password" name="password" required>
+  </label>
+  <button type="submit" class="submit-btn">Login</button>
+</form>
+</div>
+
 <footer>
 <div class="footer-disclaimer">
 <strong>Disclaimer:</strong><br>
@@ -69,110 +290,51 @@ C&T Tutorials operates independently and is not affiliated with any university o
 </div>
 </footer>
 
-<!-- Modals -->
-<div id="adminModal">
-<form>
-  <button type="button" class="close" onclick="closeAdmin()">×</button>
-  <h2>Admin Login</h2>
-  <label>Username<input id="adminUser" type="text"></label>
-  <label>Password<input id="adminPass" type="password"></label>
-  <button type="button" class="submit-btn" onclick="adminLogin()">Login</button>
-  <p id="adminError" style="color:red;"></p>
-</form>
-</div>
-
-<div id="tutorLoginModal">
-<form>
-  <button type="button" class="close" onclick="closeTutorLogin()">×</button>
-  <h2>Tutor Login</h2>
-  <label>Access Code<input id="tutorCode" type="text"></label>
-  <label>Password<input id="tutorPass" type="password"></label>
-  <button type="button" class="submit-btn" onclick="tutorLogin()">Login</button>
-  <p id="tutorError" style="color:red;"></p>
-</form>
-</div>
-
-<div id="studentModal">
-<form>
-  <button type="button" class="close" onclick="closeStudentModal()">×</button>
-  <h2>Register Now</h2>
-  <label>Full Name<input type="text" id="studentName"></label>
-  <label>Email<input type="email" id="studentEmail"></label>
-  <label>Cellphone Number<input type="tel" id="studentPhone"></label>
-  <label>Select Service
-    <select id="studentService">
-      <option value="">Select a service</option>
-      <option value="Intro to Academic Writing">Introduction to Academic Writing (4 sessions) – N$150</option>
-      <option value="Topic Specific">Topic Specific Sessions – N$40</option>
-      <option value="Hourly Rate">Hourly Rate – N$40</option>
-      <option value="Group Sessions">Group Sessions – N$200 to N$600</option>
-      <option value="Draft Editing">Draft Editing – N$15 per page</option>
-      <option value="Proofreading">Proofreading – N$10 per page</option>
-    </select>
-  </label>
-  <button type="button" class="submit-btn" onclick="submitStudent()">Submit</button>
-</form>
-</div>
-
-<button class="floating-btn" onclick="openStudentModal()">Register Now</button>
-
 <script>
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxsXkwPLpdTK9oiBayEl_-TkN_T2x3SubSrjk-0TIC3eYbwbgD1-coQjNk0PqDmJDd35w/exec";
+const STUDENT_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwbcrO4DEvMFHoRNF2hTf134in0pImfBPGj-j6hXMety_sUwiz-liYeIfujAQ4s8-G_eQ/exec";
 
-/* Modal Functions */
+/* MODAL OPEN/CLOSE */
+function openForm(){document.getElementById("modal").style.display="flex";}
+function closeForm(){document.getElementById("modal").style.display="none";}
 function openAdmin(){document.getElementById("adminModal").style.display="flex";}
 function closeAdmin(){document.getElementById("adminModal").style.display="none";}
-function openTutorLogin(){document.getElementById("tutorLoginModal").style.display="flex";}
-function closeTutorLogin(){document.getElementById("tutorLoginModal").style.display="none";}
-function openStudentModal(){document.getElementById("studentModal").style.display="flex";}
-function closeStudentModal(){document.getElementById("studentModal").style.display="none";}
 
-/* Admin Login */
-function adminLogin(){
-  fetch(SCRIPT_URL,{
+/* CLOSE WHEN CLICKING OUTSIDE */
+window.onclick=function(event){
+  if(event.target==document.getElementById("modal")) closeForm();
+  if(event.target==document.getElementById("adminModal")) closeAdmin();
+}
+
+/* ---------------- ADMIN LOGIN ---------------- */
+document.getElementById("adminForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  const username = this.username.value;
+  const password = this.password.value;
+
+  fetch(STUDENT_SCRIPT_URL, {
     method:"POST",
-    body:JSON.stringify({
+    body: JSON.stringify({
       type:"adminLogin",
-      user:document.getElementById("adminUser").value,
-      pass:document.getElementById("adminPass").value
+      user: username,
+      pass: password
     })
-  }).then(res=>res.json()).then(data=>{
-    if(data.success){window.location.href="admin.html";}
-    else{document.getElementById("adminError").innerText="Invalid login";}
+  })
+  .then(res => res.json())
+  .then(data => {
+    if(data.success){
+      window.location.href = "admin.html"; // <-- redirect to your admin dashboard page
+    } else {
+      alert("Invalid admin credentials");
+    }
   });
-}
+});
 
-/* Tutor Login */
-function tutorLogin(){
-  fetch(SCRIPT_URL,{
-    method:"POST",
-    body:JSON.stringify({
-      type:"tutorLogin",
-      code:document.getElementById("tutorCode").value,
-      password:document.getElementById("tutorPass").value
-    })
-  }).then(res=>res.json()).then(data=>{
-    if(data.success){window.location.href="tutors.html";}
-    else{document.getElementById("tutorError").innerText="Invalid credentials";}
-  });
-}
-
-/* Student Registration */
-function submitStudent(){
-  fetch(SCRIPT_URL,{
-    method:"POST",
-    body:JSON.stringify({
-      type:"studentRegistration",
-      name:document.getElementById("studentName").value,
-      email:document.getElementById("studentEmail").value,
-      cell_number:document.getElementById("studentPhone").value,
-      service:document.getElementById("studentService").value
-    })
-  }).then(res=>res.json()).then(data=>{
-    alert("Registration submitted successfully!");
-    closeStudentModal();
-  });
-}
+/* SMOOTH HEADER COLLAPSE */
+let header=document.querySelector("header");
+window.addEventListener("scroll",function(){
+  if(window.scrollY>120) header.classList.add("scrolled");
+  else header.classList.remove("scrolled");
+});
 </script>
 
 </body>
