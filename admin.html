@@ -216,18 +216,16 @@ const WEB_APP_URL="https://script.google.com/macros/s/AKfycbyprzZlwHhWkoAA8suvmT
 function showLogin(){loginModal.style.display="flex";}
 function closeLogin(){loginModal.style.display="none";}
 
-/* CLOSE MODAL ON OUTSIDE CLICK */
 window.onclick=function(e){
   if(e.target==loginModal) closeLogin();
 }
 
-/* LOGIN */
+/* ADMIN LOGIN */
 adminLoginForm.addEventListener("submit", function(e){
   e.preventDefault();
   const username = document.getElementById("adminUser").value;
   const password = document.getElementById("adminPass").value;
 
-  // Hardcoded admin credentials (example)
   const admins = [
     {user:"admin1", pass:"3545Sh@kes"},
     {user:"admin2", pass:"P@rtner123"},
@@ -266,8 +264,8 @@ function fetchTutors(){
         <td>${t.status}</td>
         <td>${t.accessCode || ""}</td>
         <td>
-        <button onclick="approveTutor(${i})">Approve</button>
-        <button onclick="rejectTutor(${i})">Reject</button>
+        ${t.status === "Pending" ? `<button onclick="approveTutor(${i})">Approve</button>
+        <button onclick="rejectTutor(${i})">Reject</button>` : ""}
         </td>`;
       });
     });
@@ -292,10 +290,31 @@ function fetchStudents(){
     });
 }
 
-/* PLACEHOLDER: Approve / Reject functions can call your Apps Script POST endpoints */
-function approveTutor(index){alert("Approve tutor at row "+index);}
-function rejectTutor(index){alert("Reject tutor at row "+index);}
-</script>
+/* APPROVE TUTOR */
+function approveTutor(index){
+  fetch(`${WEB_APP_URL}`, {
+    method: "POST",
+    body: JSON.stringify({ type:"approveTutor", index:index })
+  })
+  .then(r=>r.json())
+  .then(resp=>{
+    alert("Tutor Approved and Email sent!");
+    fetchTutors(); // refresh the list
+  });
+}
 
+/* REJECT TUTOR */
+function rejectTutor(index){
+  fetch(`${WEB_APP_URL}`, {
+    method: "POST",
+    body: JSON.stringify({ type:"rejectTutor", index:index })
+  })
+  .then(r=>r.json())
+  .then(resp=>{
+    alert("Tutor Rejected.");
+    fetchTutors(); // refresh the list
+  });
+}
+</script>
 </body>
 </html>
