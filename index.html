@@ -388,10 +388,7 @@ const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxIShwbw27ViNIHCShqkhJ
 
 function openForm(){modal.style.display="flex"}
 function closeForm(){modal.style.display="none"}
-
-function openAdmin(){
-window.location.href="admin.html";
-}
+function openAdmin(){window.location.href="admin.html";}
 
 function fetchTutors(){
 
@@ -417,6 +414,11 @@ tutorSelect.appendChild(opt)
 
 })
 
+.catch(err=>{
+console.error("Tutor loading error:",err)
+alert("Unable to load tutors at the moment. Please try again later.")
+})
+
 }
 
 serviceSelect.addEventListener("change",function(){
@@ -424,7 +426,6 @@ serviceSelect.addEventListener("change",function(){
 if(this.value!==""){
 
 tutorLabel.style.display="block"
-
 fetchTutors()
 
 }else{
