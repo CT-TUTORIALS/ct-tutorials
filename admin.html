@@ -10,16 +10,23 @@ body{
 font-family:Arial;
 background:#f4f4f4;
 margin:0;
+}
+
+header{
+background:#003366;
+color:white;
+padding:20px;
+}
+
+nav a{
+color:white;
+margin-right:20px;
+font-weight:bold;
+text-decoration:none;
+}
+
+.container{
 padding:40px;
-}
-
-h1{
-color:#003366;
-}
-
-h2{
-color:#003366;
-margin-top:40px;
 }
 
 .card{
@@ -30,172 +37,55 @@ border-radius:8px;
 box-shadow:0 2px 6px rgba(0,0,0,0.1);
 }
 
-button{
-padding:10px 15px;
-border:none;
-border-radius:5px;
-cursor:pointer;
-margin-top:10px;
-}
-
-.approve{background:green;color:white;}
-.reject{background:red;color:white;}
-.reassign{background:#003366;color:white;}
-
 </style>
 </head>
 
 <body>
 
+<header>
+
 <h1>C&T Tutorials Admin Dashboard</h1>
 
-<h2>Platform Statistics</h2>
+<nav>
+
+<a href="index.html">Home</a>
+<a onclick="showSection('tutorApps')">Tutor Applications</a>
+<a onclick="showSection('approvedTutors')">Approved Tutors</a>
+<a onclick="showSection('studentsList')">Student Bookings</a>
+
+</nav>
+
+</header>
+
+<div class="container">
 
 <div id="stats"></div>
 
 <h2>Tutor Applications</h2>
+<div id="tutorApps"></div>
 
-<div id="tutorApps">Loading...</div>
+<h2>Approved Tutors</h2>
+<div id="approvedTutors"></div>
 
-<h2>Registered Students</h2>
+<h2>Student Bookings</h2>
+<div id="studentsList"></div>
 
-<div id="studentsList">Loading...</div>
+</div>
 
 <script>
 
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxIShwbw27ViNIHCShqkhJv4WaQ0igIE9AQ44FGT9RL1ik4rqeOzi01liVl4vjCFhNqQw/exec"
 
-loadStats()
 loadTutorApps()
 loadStudents()
 
-function loadStats(){
+function showSection(id){
 
-fetch(SCRIPT_URL+"?action=getAdminStats")
-.then(r=>r.json())
-.then(data=>{
+document.getElementById("tutorApps").style.display="none"
+document.getElementById("approvedTutors").style.display="none"
+document.getElementById("studentsList").style.display="none"
 
-stats.innerHTML=`
-<div class="card">
-Total Tutors: ${data.totalTutors}<br>
-Approved Tutors: ${data.approvedTutors}<br>
-Pending Tutors: ${data.pendingTutors}<br>
-Total Students: ${data.totalStudents}
-</div>
-`
-
-})
-
-}
-
-function loadTutorApps(){
-
-fetch(SCRIPT_URL+"?action=getTutorApplications")
-.then(r=>r.json())
-.then(data=>{
-
-let html=""
-
-data.forEach((t,index)=>{
-
-html+=`
-<div class="card">
-
-<b>${t.name}</b><br>
-${t.email}<br>
-${t.phone}<br>
-Subjects: ${t.subjects}<br>
-Qualification: ${t.qualification}<br>
-
-<button class="approve" onclick="approveTutor(${index})">Approve</button>
-
-<button class="reject" onclick="rejectTutor(${index})">Reject</button>
-
-</div>
-`
-
-})
-
-tutorApps.innerHTML=html
-
-})
-
-}
-
-function loadStudents(){
-
-fetch(SCRIPT_URL+"?action=getStudents")
-.then(r=>r.json())
-.then(students=>{
-
-let html=""
-
-students.forEach(s=>{
-
-html+=`
-
-<div class="card">
-
-<b>${s.name}</b><br>
-${s.email}<br>
-${s.cell}<br>
-Service: ${s.service}<br>
-Tutor: ${s.tutor}
-
-<br><br>
-
-<input id="tutor${s.index}" placeholder="New Tutor">
-
-<button class="reassign" onclick="reassign(${s.index})">Reassign Tutor</button>
-
-</div>
-
-`
-
-})
-
-studentsList.innerHTML=html
-
-})
-
-}
-
-function approveTutor(index){
-
-fetch(SCRIPT_URL,{
-method:"POST",
-body:JSON.stringify({
-type:"approveTutor",
-index:index
-})
-}).then(()=>loadTutorApps())
-
-}
-
-function rejectTutor(index){
-
-fetch(SCRIPT_URL,{
-method:"POST",
-body:JSON.stringify({
-type:"rejectTutor",
-index:index
-})
-}).then(()=>loadTutorApps())
-
-}
-
-function reassign(index){
-
-const tutor=document.getElementById("tutor"+index).value
-
-fetch(SCRIPT_URL,{
-method:"POST",
-body:JSON.stringify({
-type:"reassignStudentTutor",
-index:index,
-tutor:tutor
-})
-}).then(()=>loadStudents())
+document.getElementById(id).style.display="block"
 
 }
 
