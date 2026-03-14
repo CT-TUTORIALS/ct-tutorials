@@ -8,8 +8,12 @@
 
 <style>
 
-html{scroll-behavior:smooth;}
+/* smooth scrolling */
+html{
+scroll-behavior:smooth;
+}
 
+/* ---------------- GENERAL ---------------- */
 body{
 margin:0;
 font-family:"Segoe UI", Arial, sans-serif;
@@ -18,49 +22,53 @@ color:#333;
 line-height:1.6;
 }
 
-.top-bar{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-background:#003366;
-z-index:1000;
+/* ---------------- FIXED TOP NAV BAR ---------------- */
+.top-bar {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+background: #003366;
+z-index: 1000;
 }
 
-.top-bar nav{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-gap:15px;
-padding:12px 10px;
+.top-bar nav {
+display: flex;
+flex-wrap: wrap;
+justify-content: center;
+gap: 15px;
+padding: 12px 10px;
 }
 
-.top-bar nav a{
-color:white;
-text-decoration:none;
-font-weight:bold;
-white-space:nowrap;
+.top-bar nav a {
+color: white;
+text-decoration: none;
+font-weight: bold;
+white-space: nowrap;
 }
 
-.top-bar nav a:hover{
-text-decoration:underline;
+.top-bar nav a:hover {
+text-decoration: underline;
 }
 
-.hero-banner{
-background-image:url("images/banner.jpg");
-background-position:center;
-background-repeat:no-repeat;
-background-size:cover;
-height:420px;
-margin-top:50px;
+/* ---------------- HERO BANNER ---------------- */
+.hero-banner {
+background-image: url("images/banner.jpg");
+background-position: center;
+background-repeat: no-repeat;
+background-size: cover;
+height: 420px;
+margin-top: 50px;
 }
 
-.main-content{
-max-width:1100px;
-margin:auto;
-padding:50px 40px;
+/* ---------------- MAIN CONTENT ---------------- */
+.main-content {
+max-width: 1100px;
+margin: auto;
+padding: 50px 40px;
 }
 
+/* anchor offset fix */
 section{
 margin-bottom:60px;
 scroll-margin-top:80px;
@@ -73,8 +81,11 @@ padding-bottom:8px;
 margin-bottom:25px;
 }
 
-h3{color:#00509e;}
+h3{
+color:#00509e;
+}
 
+/* ---------------- SERVICES ---------------- */
 .services-grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
@@ -89,18 +100,29 @@ border-radius:8px;
 box-shadow:0 3px 6px rgba(0,0,0,0.1);
 }
 
+.service-card h3{
+margin-top:0;
+}
+
+/* ---------------- RESOURCES ---------------- */
 .resource-link{
 color:#00509e;
 font-weight:bold;
 text-decoration:none;
 }
 
+.resource-link:hover{
+text-decoration:underline;
+}
+
+/* ---------------- CONTACT ---------------- */
 .contact-box{
 background:#f7f7f7;
 padding:20px;
 border-radius:8px;
 }
 
+/* ---------------- BUTTON ---------------- */
 .floating-btn{
 position:fixed;
 bottom:25px;
@@ -115,6 +137,70 @@ cursor:pointer;
 box-shadow:0 4px 6px rgba(0,0,0,0.3);
 }
 
+/* ---------------- MODALS ---------------- */
+#modal,
+#adminModal{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.7);
+justify-content:center;
+align-items:center;
+z-index:1000;
+}
+
+#modal form,
+#adminModal form{
+background:white;
+padding:25px;
+width:90%;
+max-width:500px;
+border-radius:10px;
+position:relative;
+}
+
+.close{
+position:absolute;
+right:15px;
+top:10px;
+font-size:22px;
+cursor:pointer;
+border:none;
+background:none;
+}
+
+label{
+display:block;
+margin-top:12px;
+font-weight:500;
+}
+
+input,select{
+width:100%;
+padding:10px;
+margin-top:5px;
+border-radius:5px;
+border:1px solid #ccc;
+box-sizing:border-box;
+}
+
+.submit-btn{
+margin-top:20px;
+width:100%;
+padding:12px;
+background:#003366;
+color:white;
+border:none;
+cursor:pointer;
+border-radius:5px;
+font-size:16px;
+}
+
+.submit-btn:hover{
+background:#00509e;
+}
+
+/* ---------------- FOOTER ---------------- */
 footer{
 background:#003366;
 color:white;
@@ -129,6 +215,13 @@ margin:auto;
 line-height:1.6;
 }
 
+/* ---------------- RESPONSIVE ---------------- */
+@media(max-width:768px){
+.hero-banner{height:300px;}
+.main-content{padding:30px 20px;}
+.top-bar nav{justify-content:center;gap:8px;}
+}
+
 </style>
 </head>
 
@@ -141,7 +234,7 @@ line-height:1.6;
 <a href="#resources">Resources</a>
 <a href="#contact">Contact</a>
 <a href="admin.html">Admins Portal</a>
-<a href="tutors.html">Tutors' Portal</a>
+<a href="tutors.html" class="portal-link">Tutors' Portal</a>
 </nav>
 </div>
 
@@ -157,7 +250,6 @@ line-height:1.6;
 
 <section id="services">
 <h2>Our Services</h2>
-
 <div class="services-grid">
 
 <div class="service-card">
@@ -199,14 +291,43 @@ line-height:1.6;
 </div>
 </section>
 
+<button class="floating-btn" onclick="openForm()">Register Now</button>
+
 </div>
 
-<footer>
-<div class="footer-disclaimer">
-<strong>Disclaimer:</strong><br>
-C&T Tutorials operates independently and is not affiliated with, endorsed by, or formally connected to any university or academic institution.
-</div>
-</footer>
+<!-- STUDENT REGISTRATION MODAL -->
+<div id="modal">
+<form id="studentRegisterForm">
+<button type="button" class="close" onclick="closeForm()">×</button>
 
-</body>
-</html>
+<h2>Service Registration</h2>
+
+<label>Full Name
+<input type="text" name="name" required>
+</label>
+
+<label>Email
+<input type="email" name="email" required>
+</label>
+
+<label>Cellphone Number
+<input type="tel" name="cell_number" required>
+</label>
+
+<label>Select Service
+<select name="service" id="serviceSelect" required>
+<option value="">Select a service</option>
+<option value="Intro to Academic Writing">Introduction to Academic Writing (4 sessions) – N$150</option>
+<option value="Topic Specific">Topic Specific Sessions – N$40</option>
+<option value="Hourly Rate">Hourly Rate – N$40</option>
+<option value="Group Sessions">Group Sessions – N$200 to N$600</option>
+<option value="Draft Editing">Draft Editing – N$15 per page</option>
+<option value="Proofreading">Proofreading – N$10 per page</option>
+</select>
+</label>
+
+<label id="tutorLabel" style="display:none;">Select Tutor
+<select name="tutor" id="tutorSelect">
+<option value="">Select a tutor</option>
+</select>
+</label>
