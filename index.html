@@ -9,9 +9,7 @@
 
 <style>
 
-/* ---------------- GENERAL ---------------- */
-
-html{scroll-behavior:smooth;}
+/* GENERAL */
 
 body{
 margin:0;
@@ -21,55 +19,78 @@ color:#333;
 line-height:1.6;
 }
 
-/* ---------------- FIXED TOP NAV BAR ---------------- */
+/* HERO */
 
-.top-bar{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-background:#003366;
-z-index:1000;
-}
-
-.top-bar nav{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-gap:15px;
-padding:12px 10px;
-}
-
-.top-bar nav a{
-color:white;
-text-decoration:none;
-font-weight:bold;
-}
-
-.top-bar nav a:hover{text-decoration:underline;}
-
-/* ---------------- HERO BANNER ---------------- */
-
-.hero-banner{
+header{
 background-image:url("images/banner.jpg");
 background-position:center;
 background-repeat:no-repeat;
 background-size:cover;
+background-color:#003366;
 height:420px;
-margin-top:50px;
+display:flex;
+flex-direction:column;
+justify-content:flex-end;
+align-items:center;
+text-align:center;
+padding:20px;
+position:relative;
+transition:all 0.3s ease;
 }
 
-/* ---------------- MAIN CONTENT ---------------- */
+header.scrolled{
+background:#003366;
+background-image:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:70px;
+z-index:999;
+justify-content:center;
+}
+
+/* NAV */
+
+nav{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:15px;
+width:100%;
+}
+
+nav a{
+color:white;
+text-decoration:none;
+font-weight:bold;
+white-space:nowrap;
+cursor:pointer;
+}
+
+nav a:hover{
+text-decoration:underline;
+}
+
+nav a.portal-link{
+margin-left:auto;
+}
+
+/* CONTENT */
 
 .main-content{
 max-width:1100px;
 margin:auto;
 padding:50px 40px;
+background:white;
+}
+
+header.scrolled + .main-content{
+margin-top:70px;
 }
 
 section{
 margin-bottom:60px;
-scroll-margin-top:80px;
 }
 
 h2{
@@ -79,15 +100,16 @@ padding-bottom:8px;
 margin-bottom:25px;
 }
 
-h3{color:#00509e;}
+h3{
+color:#00509e;
+}
 
-/* ---------------- SERVICES ---------------- */
+/* SERVICES */
 
 .services-grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
 gap:25px;
-margin-top:20px;
 }
 
 .service-card{
@@ -95,19 +117,29 @@ background:#f7f7f7;
 padding:20px;
 border-radius:8px;
 box-shadow:0 3px 6px rgba(0,0,0,0.1);
+transition:transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* ---------------- RESOURCES ---------------- */
+.service-card:hover{
+transform:translateY(-4px);
+box-shadow:0 6px 12px rgba(0,0,0,0.15);
+}
 
-.resource-link{
-color:#00509e;
+.service-link{
+display:inline-block;
+margin-top:12px;
+color:#003366;
 font-weight:bold;
-text-decoration:none;
+cursor:pointer;
+transition:opacity 0.2s ease;
 }
 
-.resource-link:hover{text-decoration:underline;}
+.service-link:hover{
+text-decoration:underline;
+opacity:0.8;
+}
 
-/* ---------------- CONTACT ---------------- */
+/* CONTACT */
 
 .contact-box{
 background:#f7f7f7;
@@ -115,7 +147,7 @@ padding:20px;
 border-radius:8px;
 }
 
-/* ---------------- REGISTER BUTTON ---------------- */
+/* BUTTON */
 
 .floating-btn{
 position:fixed;
@@ -131,9 +163,10 @@ cursor:pointer;
 box-shadow:0 4px 6px rgba(0,0,0,0.3);
 }
 
-/* ---------------- MODAL ---------------- */
+/* MODALS */
 
-#modal{
+#modal,
+#pricingModal{
 display:none;
 position:fixed;
 inset:0;
@@ -141,15 +174,28 @@ background:rgba(0,0,0,0.7);
 justify-content:center;
 align-items:center;
 z-index:1000;
+animation:fadeIn 0.25s ease;
 }
 
-#modal form{
+#modal form,
+#pricingContent{
 background:white;
 padding:25px;
 width:90%;
 max-width:500px;
 border-radius:10px;
 position:relative;
+animation:scaleIn 0.25s ease;
+}
+
+@keyframes fadeIn{
+from{opacity:0}
+to{opacity:1}
+}
+
+@keyframes scaleIn{
+from{transform:scale(0.95)}
+to{transform:scale(1)}
 }
 
 .close{
@@ -174,6 +220,7 @@ padding:10px;
 margin-top:5px;
 border-radius:5px;
 border:1px solid #ccc;
+box-sizing:border-box;
 }
 
 .submit-btn{
@@ -183,13 +230,16 @@ padding:12px;
 background:#003366;
 color:white;
 border:none;
-border-radius:5px;
 cursor:pointer;
+border-radius:5px;
+font-size:16px;
 }
 
-.submit-btn:hover{background:#00509e;}
+.submit-btn:hover{
+background:#00509e;
+}
 
-/* ---------------- FOOTER ---------------- */
+/* FOOTER */
 
 footer{
 background:#003366;
@@ -205,41 +255,28 @@ margin:auto;
 line-height:1.6;
 }
 
-@media(max-width:768px){
-
-.hero-banner{height:300px;}
-
-.main-content{padding:30px 20px;}
-
-}
-
 </style>
 </head>
 
 <body>
 
-<div class="top-bar">
+<header>
+
 <nav>
 <a href="#about">About</a>
 <a href="#services">Services</a>
-<a href="#resources">Resources</a>
 <a href="#contact">Contact</a>
-<a href="admin.html">Admins Portal</a>
-<a href="tutors.html">Tutors' Portal</a>
+<a href="tutors.html" class="portal-link">Tutors' Portal</a>
 </nav>
-</div>
 
-<div class="hero-banner"></div>
+</header>
 
 <div class="main-content">
 
 <section id="about">
 <h2>About C&T Tutorials</h2>
-
 <p>C&T Tutorials is an independent academic support service committed to enhancing students’ academic performance through structured guidance in academic writing, research, and communication skills.</p>
-
 <p>Our services provide focused and student-centred academic support through personalised tutorials, collaborative group learning, and assignment-based guidance.</p>
-
 </section>
 
 <section id="services">
@@ -251,43 +288,40 @@ line-height:1.6;
 <div class="service-card">
 <h3>Academic Writing Tutorials</h3>
 <p>Structured sessions covering academic writing principles, essay development, and research techniques.</p>
+<span class="service-link" onclick="openPricing('writing')">View Pricing</span>
 </div>
 
 <div class="service-card">
 <h3>Group Learning Sessions</h3>
 <p>Collaborative sessions designed to support multiple students working on similar academic challenges.</p>
+<span class="service-link" onclick="openPricing('group')">View Pricing</span>
 </div>
 
 <div class="service-card">
 <h3>Assignment Support</h3>
 <p>Professional assistance with referencing, editing, proofreading, improving assignment structure and clarity.</p>
+<span class="service-link" onclick="openPricing('assignment')">View Pricing</span>
 </div>
 
 <div class="service-card">
 <h3>Public Speaking Support</h3>
 <p>Coaching sessions designed to strengthen presentation and communication skills for academic purposes.</p>
+<span class="service-link" onclick="openPricing('speaking')">View Pricing</span>
 </div>
 
 </div>
-
-</section>
-
-<section id="resources">
-<h2>Resources</h2>
-
-<ul>
-<li><a class="resource-link" href="documents/Business-Policies.pdf" target="_blank">Business Policies</a></li>
-<li><a class="resource-link" href="documents/Student-form-for-offline-application.pdf" target="_blank">Offline Application Form</a></li>
-</ul>
 
 </section>
 
 <section id="contact">
+
 <h2>Contact</h2>
 
 <div class="contact-box">
+
 <p>Email: <a href="mailto:ct0tutorials@gmail.com">ct0tutorials@gmail.com</a></p>
 <p>Phone: +264 815 621 879 / +264 818 479 958</p>
+
 </div>
 
 </section>
@@ -296,7 +330,7 @@ line-height:1.6;
 
 </div>
 
-<!-- STUDENT REGISTRATION MODAL -->
+<!-- REGISTRATION MODAL -->
 
 <div id="modal">
 
@@ -323,38 +357,17 @@ line-height:1.6;
 <select name="service" id="serviceSelect" required>
 
 <option value="">Select a service</option>
-
-<option value="Intro Academic Writing">Introduction to Academic Writing – N$150</option>
-
+<option value="Intro to Academic Writing">Introduction to Academic Writing (4 sessions) – N$150</option>
+<option value="Topic Specific">Topic Specific Sessions – N$40</option>
+<option value="Hourly Rate">Hourly Rate – N$40</option>
+<option value="Group Sessions">Group Sessions – N$200 to N$600</option>
+<option value="Draft Editing">Draft Editing – N$15 per page</option>
+<option value="Proofreading">Proofreading – N$10 per page</option>
+<option value="Referencing Assistance">Referencing Assistance – N$20</option>
 <option value="Secondary School Subjects">Secondary School Subjects – N$35 per session</option>
 
-<option value="Topic Specific">Topic Specific Sessions – N$40</option>
-
-<option value="Hourly Rate">Hourly Rate – N$40</option>
-
-<option value="Group Sessions">Group Sessions – N$200 to N$600</option>
-
-<option value="Draft Editing">Draft Editing – N$15 per page</option>
-
-<option value="Proofreading">Proofreading – N$10 per page</option>
-
-<option value="Referencing Assistance">Referencing Assistance – N$20</option>
-
 </select>
 
-</label>
-
-<label id="tutorLabel" style="display:none;">Select Tutor
-
-<select name="tutor" id="tutorSelect">
-<option value="">Select a tutor</option>
-</select>
-
-</label>
-
-<label>
-<input type="checkbox" required>
-I agree to the <a href="documents/Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a>
 </label>
 
 <button type="submit" class="submit-btn">Submit Registration</button>
@@ -363,12 +376,39 @@ I agree to the <a href="documents/Disclosure-Agreement.pdf" target="_blank">Disc
 
 </div>
 
+<!-- PRICING MODAL -->
+
+<div id="pricingModal">
+
+<div id="pricingContent">
+
+<h3 id="pricingTitle"></h3>
+
+<div id="pricingDetails"></div>
+
+<button class="submit-btn" onclick="bookService()">Book This Service</button>
+
+</div>
+
+</div>
+
 <footer>
 
 <div class="footer-disclaimer">
 
 <strong>Disclaimer:</strong><br>
-C&T Tutorials operates independently and is not affiliated with, endorsed by, or formally connected to any university, college, examination body, or academic institution. All services are supplementary and intended to support independent learning.
+
+C&T Tutorials operates independently and is not affiliated with, endorsed by, or formally connected to any university, college, examination body, or academic institution.
+
+<br><br>
+
+<strong>Contact Information:</strong><br>
+Email: ct0tutorials@gmail.com<br>
+Phone: +264 815 621 879 / +264 818 479 958
+
+<br><br>
+
+© 2026 C&T Tutorials. All rights reserved.
 
 </div>
 
@@ -376,79 +416,74 @@ C&T Tutorials operates independently and is not affiliated with, endorsed by, or
 
 <script>
 
-const STUDENT_SCRIPT_URL="YOUR_SCRIPT_URL";
+const pricingModal=document.getElementById("pricingModal")
+const pricingTitle=document.getElementById("pricingTitle")
+const pricingDetails=document.getElementById("pricingDetails")
+const serviceSelect=document.getElementById("serviceSelect")
 
-/* MODAL */
+let selectedService=""
 
-function openForm(){document.getElementById("modal").style.display="flex";}
-function closeForm(){document.getElementById("modal").style.display="none";}
+function openPricing(service){
 
-/* TUTOR SERVICES */
+selectedService=service
+pricingModal.style.display="flex"
 
-const tutorialServices=[
-"Intro Academic Writing",
-"Secondary School Subjects",
-"Topic Specific",
-"Hourly Rate",
-"Group Sessions"
-];
+if(service==="writing"){
+pricingTitle.innerText="Academic Writing Tutorials"
+pricingDetails.innerHTML=`
+<p>Introduction to Academic Writing (4 sessions) – <b>N$150</b></p>
+<p>Topic Specific Sessions – <b>N$40</b></p>
+<p>Hourly Rate – <b>N$40</b></p>`
+}
 
-/* LOAD TUTORS */
+if(service==="group"){
+pricingTitle.innerText="Group Learning Sessions"
+pricingDetails.innerHTML=`
+<p>2 – 5 People – <b>N$200</b></p>
+<p>6 – 14 People – <b>N$450</b></p>
+<p>More than 14 People – <b>N$600</b></p>`
+}
 
-function fetchTutors(){
+if(service==="assignment"){
+pricingTitle.innerText="Assignment Support"
+pricingDetails.innerHTML=`
+<p>Draft Editing – <b>N$15 per page</b></p>
+<p>Proofreading – <b>N$10 per page</b></p>
+<p>Referencing Assistance – <b>N$20</b></p>`
+}
 
-fetch(`${STUDENT_SCRIPT_URL}?action=getTutors`)
-.then(res=>res.json())
-.then(tutors=>{
-
-const tutorSelect=document.getElementById("tutorSelect");
-tutorSelect.innerHTML='<option value="">Select a tutor</option>';
-
-tutors.forEach(t=>{
-const opt=document.createElement("option");
-opt.value=t.name;
-opt.textContent=`${t.name} (${t.subject})`;
-tutorSelect.appendChild(opt);
-});
-
-});
+if(service==="speaking"){
+pricingTitle.innerText="Public Speaking Support"
+pricingDetails.innerHTML=`<p>Coaching Session – <b>N$40</b></p>`
+}
 
 }
 
-/* SHOW TUTOR WHEN REQUIRED */
+function bookService(){
 
-document.getElementById("serviceSelect").addEventListener("change",function(){
-
-const tutorLabel=document.getElementById("tutorLabel");
-
-if(tutorialServices.includes(this.value)){
-
-tutorLabel.style.display="block";
-fetchTutors();
-
-}else{
-
-tutorLabel.style.display="none";
+pricingModal.style.display="none"
+openForm()
+serviceSelect.value=selectedService
 
 }
 
-});
+window.addEventListener("click",function(e){
 
-/* FORM VALIDATION */
-
-document.getElementById("studentRegisterForm").addEventListener("submit",function(e){
-
-const service=document.getElementById("serviceSelect").value;
-const tutor=document.getElementById("tutorSelect").value;
-
-if(tutorialServices.includes(service) && tutor===""){
-alert("Please select a tutor for this tutorial service.");
-e.preventDefault();
+if(e.target===pricingModal){
+pricingModal.style.display="none"
 }
 
-});
+})
+
+function openForm(){
+modal.style.display="flex"
+}
+
+function closeForm(){
+modal.style.display="none"
+}
 
 </script>
 
 </body>
-  </html>
+                                               </html>
