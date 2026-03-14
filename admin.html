@@ -1,40 +1,112 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>C&T Admin Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C&T Tutorials Admin Dashboard</title>
 
 <style>
 
 body{
+margin:0;
 font-family:Arial;
 background:#f4f4f4;
-margin:0;
+padding-bottom:70px;
 }
+
+/* HEADER */
 
 header{
 background:#003366;
 color:white;
-padding:20px;
-}
-
-nav a{
-color:white;
-margin-right:20px;
+padding:15px;
+text-align:center;
 font-weight:bold;
-text-decoration:none;
 }
 
-.container{
+/* DASHBOARD */
+
+#dashboard{
+display:none;
 padding:40px;
+}
+
+.dashboard-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:25px;
+margin-top:20px;
 }
 
 .card{
 background:white;
-padding:20px;
-margin:15px 0;
+padding:25px;
 border-radius:8px;
-box-shadow:0 2px 6px rgba(0,0,0,0.1);
+box-shadow:0 3px 6px rgba(0,0,0,0.1);
+text-align:center;
+}
+
+.card h3{
+margin:0;
+color:#003366;
+}
+
+.stat{
+font-size:28px;
+font-weight:bold;
+margin-top:10px;
+}
+
+/* LOGIN MODAL */
+
+#loginModal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.7);
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:1000;
+}
+
+#loginModal form{
+background:white;
+padding:30px;
+width:320px;
+border-radius:8px;
+}
+
+input{
+width:100%;
+padding:10px;
+margin-top:10px;
+border-radius:5px;
+border:1px solid #ccc;
+}
+
+button{
+margin-top:15px;
+padding:10px;
+width:100%;
+border:none;
+background:#003366;
+color:white;
+border-radius:5px;
+cursor:pointer;
+}
+
+/* FOOTER */
+
+footer{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+background:#003366;
+color:white;
+text-align:center;
+padding:12px;
+font-size:13px;
 }
 
 </style>
@@ -43,51 +115,91 @@ box-shadow:0 2px 6px rgba(0,0,0,0.1);
 <body>
 
 <header>
-
-<h1>C&T Tutorials Admin Dashboard</h1>
-
-<nav>
-
-<a href="index.html">Home</a>
-<a onclick="showSection('tutorApps')">Tutor Applications</a>
-<a onclick="showSection('approvedTutors')">Approved Tutors</a>
-<a onclick="showSection('studentsList')">Student Bookings</a>
-
-</nav>
-
+C&T Tutorials Admin Dashboard
 </header>
 
-<div class="container">
+<div id="loginModal">
 
-<div id="stats"></div>
+<form id="loginForm">
 
-<h2>Tutor Applications</h2>
-<div id="tutorApps"></div>
+<h2>Admin Login</h2>
 
-<h2>Approved Tutors</h2>
-<div id="approvedTutors"></div>
+<label>Username</label>
+<input type="text" id="username" required>
 
-<h2>Student Bookings</h2>
-<div id="studentsList"></div>
+<label>Password</label>
+<input type="password" id="password" required>
+
+<button type="submit">Login</button>
+
+</form>
 
 </div>
 
+<div id="dashboard">
+
+<h1>Platform Overview</h1>
+
+<div class="dashboard-grid">
+
+<div class="card">
+<h3>Registered Students</h3>
+<div class="stat">--</div>
+</div>
+
+<div class="card">
+<h3>Approved Tutors</h3>
+<div class="stat">--</div>
+</div>
+
+<div class="card">
+<h3>Pending Tutor Applications</h3>
+<div class="stat">--</div>
+</div>
+
+<div class="card">
+<h3>Sessions Scheduled</h3>
+<div class="stat">--</div>
+</div>
+
+</div>
+
+</div>
+
+<footer>
+
+<strong>C&T Tutorials Administration System</strong><br>
+
+Email: ct0tutorials@gmail.com | Phone: +264 815 621 879 / +264 818 479 958<br>
+
+© 2026 C&T Tutorials
+
+</footer>
+
 <script>
 
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxIShwbw27ViNIHCShqkhJv4WaQ0igIE9AQ44FGT9RL1ik4rqeOzi01liVl4vjCFhNqQw/exec"
+document.getElementById("loginForm").addEventListener("submit",function(e){
 
-loadTutorApps()
-loadStudents()
+e.preventDefault()
 
-function showSection(id){
+const user=document.getElementById("username").value
+const pass=document.getElementById("password").value
 
-document.getElementById("tutorApps").style.display="none"
-document.getElementById("approvedTutors").style.display="none"
-document.getElementById("studentsList").style.display="none"
+if(
+(user==="Admin_Tangeni" && pass==="3545Sh@kes") ||
+(user==="Admin_Cindy" && pass==="CTsecure984")
+){
 
-document.getElementById(id).style.display="block"
+document.getElementById("loginModal").style.display="none"
+document.getElementById("dashboard").style.display="block"
+
+}else{
+
+alert("Invalid login credentials")
 
 }
+
+})
 
 </script>
 
