@@ -389,6 +389,10 @@ const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxIShwbw27ViNIHCShqkhJ
 function openForm(){modal.style.display="flex"}
 function closeForm(){modal.style.display="none"}
 
+function openAdmin(){
+window.location.href="admin.html";
+}
+
 function fetchTutors(){
 
 fetch(SCRIPT_URL+"?action=getTutors")
