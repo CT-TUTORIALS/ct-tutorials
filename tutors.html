@@ -83,8 +83,6 @@ margin-top:20px;
 background:#990000;
 }
 
-/* FOOTER */
-
 footer{
 background:#003366;
 color:white;
@@ -208,7 +206,8 @@ I have read and agree to the
 
 <div class="footer-disclaimer">
 
-<strong>Tutor Portal Disclaimer:</strong><br>
+<strong>Disclaimer:</strong><br>
+
 This portal is intended for individuals applying to become tutors or approved to provide tutoring services through C&T Tutorials. Submission of a tutor application does not guarantee selection, as applications are reviewed based on qualifications, subject expertise, and suitability for the tutoring program.
 
 <br><br>
@@ -241,8 +240,6 @@ window.onclick=function(e){
 if(e.target.classList.contains("modal")) e.target.style.display="none"
 }
 
-/* SESSION RESTORE */
-
 window.onload=function(){
 
 const tutorEmail=localStorage.getItem("tutorEmail")
@@ -257,8 +254,6 @@ loadStudents(tutorEmail)
 }
 
 }
-
-/* APPLY */
 
 applyForm.addEventListener("submit",function(e){
 
@@ -285,8 +280,6 @@ applyModal.style.display="none"
 })
 
 })
-
-/* CREATE ACCOUNT */
 
 createForm.addEventListener("submit",function(e){
 
@@ -320,8 +313,6 @@ alert("Invalid access code")
 })
 
 })
-
-/* LOGIN */
 
 loginForm.addEventListener("submit",function(e){
 
