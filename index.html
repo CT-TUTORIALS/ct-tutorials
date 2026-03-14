@@ -4,16 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>C&T Tutorials</title>
+
 <meta name="google-site-verification" content="aSucaMc_aX_kQpRFNvVRgTX0pEeCD1c48mTuirk4qwY" />
 
 <style>
 
-/* smooth scrolling */
-html{
-scroll-behavior:smooth;
-}
-
 /* ---------------- GENERAL ---------------- */
+
+html{scroll-behavior:smooth;}
+
 body{
 margin:0;
 font-family:"Segoe UI", Arial, sans-serif;
@@ -23,52 +22,51 @@ line-height:1.6;
 }
 
 /* ---------------- FIXED TOP NAV BAR ---------------- */
-.top-bar {
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
-background: #003366;
-z-index: 1000;
+
+.top-bar{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+background:#003366;
+z-index:1000;
 }
 
-.top-bar nav {
-display: flex;
-flex-wrap: wrap;
-justify-content: center;
-gap: 15px;
-padding: 12px 10px;
+.top-bar nav{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:15px;
+padding:12px 10px;
 }
 
-.top-bar nav a {
-color: white;
-text-decoration: none;
-font-weight: bold;
-white-space: nowrap;
+.top-bar nav a{
+color:white;
+text-decoration:none;
+font-weight:bold;
 }
 
-.top-bar nav a:hover {
-text-decoration: underline;
-}
+.top-bar nav a:hover{text-decoration:underline;}
 
 /* ---------------- HERO BANNER ---------------- */
-.hero-banner {
-background-image: url("images/banner.jpg");
-background-position: center;
-background-repeat: no-repeat;
-background-size: cover;
-height: 420px;
-margin-top: 50px;
+
+.hero-banner{
+background-image:url("images/banner.jpg");
+background-position:center;
+background-repeat:no-repeat;
+background-size:cover;
+height:420px;
+margin-top:50px;
 }
 
 /* ---------------- MAIN CONTENT ---------------- */
-.main-content {
-max-width: 1100px;
-margin: auto;
-padding: 50px 40px;
+
+.main-content{
+max-width:1100px;
+margin:auto;
+padding:50px 40px;
 }
 
-/* anchor offset fix */
 section{
 margin-bottom:60px;
 scroll-margin-top:80px;
@@ -81,11 +79,10 @@ padding-bottom:8px;
 margin-bottom:25px;
 }
 
-h3{
-color:#00509e;
-}
+h3{color:#00509e;}
 
 /* ---------------- SERVICES ---------------- */
+
 .services-grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
@@ -100,29 +97,26 @@ border-radius:8px;
 box-shadow:0 3px 6px rgba(0,0,0,0.1);
 }
 
-.service-card h3{
-margin-top:0;
-}
-
 /* ---------------- RESOURCES ---------------- */
+
 .resource-link{
 color:#00509e;
 font-weight:bold;
 text-decoration:none;
 }
 
-.resource-link:hover{
-text-decoration:underline;
-}
+.resource-link:hover{text-decoration:underline;}
 
 /* ---------------- CONTACT ---------------- */
+
 .contact-box{
 background:#f7f7f7;
 padding:20px;
 border-radius:8px;
 }
 
-/* ---------------- BUTTON ---------------- */
+/* ---------------- REGISTER BUTTON ---------------- */
+
 .floating-btn{
 position:fixed;
 bottom:25px;
@@ -137,9 +131,9 @@ cursor:pointer;
 box-shadow:0 4px 6px rgba(0,0,0,0.3);
 }
 
-/* ---------------- MODALS ---------------- */
-#modal,
-#adminModal{
+/* ---------------- MODAL ---------------- */
+
+#modal{
 display:none;
 position:fixed;
 inset:0;
@@ -149,8 +143,7 @@ align-items:center;
 z-index:1000;
 }
 
-#modal form,
-#adminModal form{
+#modal form{
 background:white;
 padding:25px;
 width:90%;
@@ -181,7 +174,6 @@ padding:10px;
 margin-top:5px;
 border-radius:5px;
 border:1px solid #ccc;
-box-sizing:border-box;
 }
 
 .submit-btn{
@@ -191,16 +183,14 @@ padding:12px;
 background:#003366;
 color:white;
 border:none;
-cursor:pointer;
 border-radius:5px;
-font-size:16px;
+cursor:pointer;
 }
 
-.submit-btn:hover{
-background:#00509e;
-}
+.submit-btn:hover{background:#00509e;}
 
 /* ---------------- FOOTER ---------------- */
+
 footer{
 background:#003366;
 color:white;
@@ -215,11 +205,12 @@ margin:auto;
 line-height:1.6;
 }
 
-/* ---------------- RESPONSIVE ---------------- */
 @media(max-width:768px){
+
 .hero-banner{height:300px;}
+
 .main-content{padding:30px 20px;}
-.top-bar nav{justify-content:center;gap:8px;}
+
 }
 
 </style>
@@ -234,7 +225,7 @@ line-height:1.6;
 <a href="#resources">Resources</a>
 <a href="#contact">Contact</a>
 <a href="admin.html">Admins Portal</a>
-<a href="tutors.html" class="portal-link">Tutors' Portal</a>
+<a href="tutors.html">Tutors' Portal</a>
 </nav>
 </div>
 
@@ -244,12 +235,17 @@ line-height:1.6;
 
 <section id="about">
 <h2>About C&T Tutorials</h2>
+
 <p>C&T Tutorials is an independent academic support service committed to enhancing students’ academic performance through structured guidance in academic writing, research, and communication skills.</p>
+
 <p>Our services provide focused and student-centred academic support through personalised tutorials, collaborative group learning, and assignment-based guidance.</p>
+
 </section>
 
 <section id="services">
+
 <h2>Our Services</h2>
+
 <div class="services-grid">
 
 <div class="service-card">
@@ -264,7 +260,7 @@ line-height:1.6;
 
 <div class="service-card">
 <h3>Assignment Support</h3>
-<p>Professional assistance with editing, proofreading, and improving assignment structure and clarity.</p>
+<p>Professional assistance with editing, proofreading, improving assignment structure and clarity, referencing assistance.</p>
 </div>
 
 <div class="service-card">
@@ -273,22 +269,27 @@ line-height:1.6;
 </div>
 
 </div>
+
 </section>
 
 <section id="resources">
 <h2>Resources</h2>
+
 <ul>
 <li><a class="resource-link" href="documents/Business-Policies.pdf" target="_blank">Business Policies</a></li>
 <li><a class="resource-link" href="documents/Student-form-for-offline-application.pdf" target="_blank">Offline Application Form</a></li>
 </ul>
+
 </section>
 
 <section id="contact">
 <h2>Contact</h2>
+
 <div class="contact-box">
 <p>Email: <a href="mailto:ct0tutorials@gmail.com">ct0tutorials@gmail.com</a></p>
 <p>Phone: +264 815 621 879 / +264 818 479 958</p>
 </div>
+
 </section>
 
 <button class="floating-btn" onclick="openForm()">Register Now</button>
@@ -296,8 +297,11 @@ line-height:1.6;
 </div>
 
 <!-- STUDENT REGISTRATION MODAL -->
+
 <div id="modal">
+
 <form id="studentRegisterForm">
+
 <button type="button" class="close" onclick="closeForm()">×</button>
 
 <h2>Service Registration</h2>
@@ -315,19 +319,136 @@ line-height:1.6;
 </label>
 
 <label>Select Service
+
 <select name="service" id="serviceSelect" required>
+
 <option value="">Select a service</option>
-<option value="Intro to Academic Writing">Introduction to Academic Writing (4 sessions) – N$150</option>
+
+<option value="Intro Academic Writing">Introduction to Academic Writing – N$150</option>
+
+<option value="Secondary School Subjects">Secondary School Subjects – N$35 per session</option>
+
 <option value="Topic Specific">Topic Specific Sessions – N$40</option>
+
 <option value="Hourly Rate">Hourly Rate – N$40</option>
+
 <option value="Group Sessions">Group Sessions – N$200 to N$600</option>
+
 <option value="Draft Editing">Draft Editing – N$15 per page</option>
+
 <option value="Proofreading">Proofreading – N$10 per page</option>
+
+<option value="Referencing Assistance">Referencing Assistance – N$20</option>
+
 </select>
+
 </label>
 
 <label id="tutorLabel" style="display:none;">Select Tutor
+
 <select name="tutor" id="tutorSelect">
 <option value="">Select a tutor</option>
 </select>
+
 </label>
+
+<label>
+<input type="checkbox" required>
+I agree to the <a href="documents/Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a>
+</label>
+
+<button type="submit" class="submit-btn">Submit Registration</button>
+
+</form>
+
+</div>
+
+<footer>
+
+<div class="footer-disclaimer">
+
+<strong>Disclaimer:</strong><br>
+C&T Tutorials operates independently and is not affiliated with, endorsed by, or formally connected to any university, college, examination body, or academic institution. All services are supplementary and intended to support independent learning.
+
+</div>
+
+</footer>
+
+<script>
+
+const STUDENT_SCRIPT_URL="YOUR_SCRIPT_URL";
+
+/* MODAL */
+
+function openForm(){document.getElementById("modal").style.display="flex";}
+function closeForm(){document.getElementById("modal").style.display="none";}
+
+/* TUTOR SERVICES */
+
+const tutorialServices=[
+"Intro Academic Writing",
+"Secondary School Subjects",
+"Topic Specific",
+"Hourly Rate",
+"Group Sessions"
+];
+
+/* LOAD TUTORS */
+
+function fetchTutors(){
+
+fetch(`${STUDENT_SCRIPT_URL}?action=getTutors`)
+.then(res=>res.json())
+.then(tutors=>{
+
+const tutorSelect=document.getElementById("tutorSelect");
+tutorSelect.innerHTML='<option value="">Select a tutor</option>';
+
+tutors.forEach(t=>{
+const opt=document.createElement("option");
+opt.value=t.name;
+opt.textContent=`${t.name} (${t.subject})`;
+tutorSelect.appendChild(opt);
+});
+
+});
+
+}
+
+/* SHOW TUTOR WHEN REQUIRED */
+
+document.getElementById("serviceSelect").addEventListener("change",function(){
+
+const tutorLabel=document.getElementById("tutorLabel");
+
+if(tutorialServices.includes(this.value)){
+
+tutorLabel.style.display="block";
+fetchTutors();
+
+}else{
+
+tutorLabel.style.display="none";
+
+}
+
+});
+
+/* FORM VALIDATION */
+
+document.getElementById("studentRegisterForm").addEventListener("submit",function(e){
+
+const service=document.getElementById("serviceSelect").value;
+const tutor=document.getElementById("tutorSelect").value;
+
+if(tutorialServices.includes(service) && tutor===""){
+alert("Please select a tutor for this tutorial service.");
+e.preventDefault();
+}
+
+});
+
+</script>
+
+</body>
+  </html>
