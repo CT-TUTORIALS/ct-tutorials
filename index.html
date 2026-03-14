@@ -1,64 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>C&T Tutorials</title>
 
-<meta name="google-site-verification" content="aSucaMc_aX_kQpRFNvVRgTX0pEeCD1c48mTuirk4qwY" />
+<meta name="google-site-verification" content="aSucaMc_aX_kQpRFNvVRgTX0pEeCD1c48mTuirk4qwY"/>
 
 <style>
 
-/* ---------------- GENERAL ---------------- */
+/* GENERAL */
 
 body{
 margin:0;
-font-family:"Segoe UI", Arial, sans-serif;
+font-family:"Segoe UI",Arial;
 background:#f4f4f4;
 color:#333;
 line-height:1.6;
-scroll-behavior:smooth;
 }
 
-/* ---------------- HERO BANNER ---------------- */
-
-header{
-background-image:url("images/banner.jpg");
-background-position:center;
-background-repeat:no-repeat;
-background-size:cover;
-background-color:#003366;
-height:420px;
-display:flex;
-flex-direction:column;
-justify-content:flex-end;
-align-items:center;
-text-align:center;
-padding:20px;
-position:relative;
-}
-
-/* ---------------- NAVIGATION BAR ---------------- */
+/* NAVBAR */
 
 nav{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-gap:15px;
-width:100%;
-background:#003366;
 position:fixed;
 top:0;
 left:0;
-z-index:1000;
-padding:15px 10px;
+width:100%;
+background:#003366;
+padding:15px;
+display:flex;
+justify-content:center;
+gap:20px;
+z-index:999;
 }
 
 nav a{
 color:white;
-text-decoration:none;
 font-weight:bold;
-white-space:nowrap;
+text-decoration:none;
 cursor:pointer;
 }
 
@@ -66,17 +47,22 @@ nav a:hover{
 text-decoration:underline;
 }
 
-nav a.portal-link{
-margin-left:auto;
+/* BANNER */
+
+header{
+background-image:url("images/banner.jpg");
+background-size:cover;
+background-position:center;
+height:420px;
 }
 
-/* ---------------- CONTENT ---------------- */
+/* CONTENT */
 
 .main-content{
 max-width:1100px;
 margin:auto;
-padding:120px 40px 50px 40px;
 background:white;
+padding:120px 40px 50px 40px;
 }
 
 section{
@@ -87,20 +73,18 @@ h2{
 color:#003366;
 border-bottom:2px solid #003366;
 padding-bottom:8px;
-margin-bottom:25px;
 }
 
 h3{
 color:#00509e;
 }
 
-/* ---------------- SERVICES ---------------- */
+/* SERVICES */
 
 .services-grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
 gap:25px;
-margin-top:20px;
 }
 
 .service-card{
@@ -110,7 +94,7 @@ border-radius:8px;
 box-shadow:0 3px 6px rgba(0,0,0,0.1);
 }
 
-/* ---------------- CONTACT ---------------- */
+/* CONTACT */
 
 .contact-box{
 background:#f7f7f7;
@@ -118,7 +102,7 @@ padding:20px;
 border-radius:8px;
 }
 
-/* ---------------- BUTTON ---------------- */
+/* BUTTON */
 
 .floating-btn{
 position:fixed;
@@ -129,15 +113,12 @@ color:white;
 padding:15px 22px;
 border:none;
 border-radius:40px;
-font-size:16px;
 cursor:pointer;
-box-shadow:0 4px 6px rgba(0,0,0,0.3);
 }
 
-/* ---------------- MODALS ---------------- */
+/* MODALS */
 
-#modal,
-#adminModal{
+#modal,#adminModal{
 display:none;
 position:fixed;
 inset:0;
@@ -147,8 +128,7 @@ align-items:center;
 z-index:1000;
 }
 
-#modal form,
-#adminModal form{
+#modal form,#adminModal form{
 background:white;
 padding:25px;
 width:90%;
@@ -162,43 +142,30 @@ position:absolute;
 right:15px;
 top:10px;
 font-size:22px;
-cursor:pointer;
 border:none;
 background:none;
-}
-
-label{
-display:block;
-margin-top:12px;
-font-weight:500;
+cursor:pointer;
 }
 
 input,select{
 width:100%;
 padding:10px;
-margin-top:5px;
+margin-top:6px;
 border-radius:5px;
 border:1px solid #ccc;
-box-sizing:border-box;
 }
 
 .submit-btn{
 margin-top:20px;
-width:100%;
 padding:12px;
 background:#003366;
 color:white;
 border:none;
 cursor:pointer;
-border-radius:5px;
-font-size:16px;
+width:100%;
 }
 
-.submit-btn:hover{
-background:#00509e;
-}
-
-/* ---------------- FOOTER ---------------- */
+/* FOOTER */
 
 footer{
 background:#003366;
@@ -207,16 +174,13 @@ text-align:center;
 padding:25px;
 }
 
-.footer-disclaimer{
-font-size:12px;
-max-width:900px;
-margin:auto;
-line-height:1.6;
+/* MOBILE */
+
+@media(max-width:768px){
+
+header{
+height:280px;
 }
-
-/* ---------------- MOBILE ---------------- */
-
-@media(max-width:700px){
 
 nav{
 flex-wrap:wrap;
@@ -224,63 +188,67 @@ gap:10px;
 }
 
 .main-content{
-padding:120px 20px 40px 20px;
+padding:110px 20px;
 }
 
 }
 
 </style>
+
 </head>
 
 <body>
 
-<header>
-
 <nav>
+
 <a href="#about">About</a>
 <a href="#services">Services</a>
-<a href="#resources">Resources</a>
 <a href="#contact">Contact</a>
-<a onclick="openAdmin()">Admins Portal</a>
-<a href="tutors.html" class="portal-link">Tutors' Portal</a>
+<a onclick="openAdminModal()">Admins Portal</a>
+<a href="tutors.html">Tutors Portal</a>
+
 </nav>
 
-</header>
+<header></header>
 
 <div class="main-content">
 
 <section id="about">
+
 <h2>About C&T Tutorials</h2>
-<p>C&T Tutorials is an independent academic support service committed to enhancing students’ academic performance through structured guidance in academic writing, research, and communication skills.</p>
-<p>Our services provide focused and student-centred academic support through personalised tutorials, collaborative group learning, and assignment-based guidance.</p>
+
+<p>C&T Tutorials is an independent academic support service providing structured support in academic writing, research, and communication skills.</p>
+
 </section>
 
 <section id="services">
+
 <h2>Our Services</h2>
 
 <div class="services-grid">
 
 <div class="service-card">
 <h3>Academic Writing Tutorials</h3>
-<p>Structured sessions covering academic writing principles, essay development, and research techniques.</p>
+<p>Structured sessions covering academic writing principles.</p>
 </div>
 
 <div class="service-card">
 <h3>Group Learning Sessions</h3>
-<p>Collaborative sessions designed to support multiple students working on similar academic challenges.</p>
+<p>Collaborative sessions designed to support multiple students.</p>
 </div>
 
 <div class="service-card">
 <h3>Assignment Support</h3>
-<p>Professional assistance with editing, proofreading, and improving assignment structure and clarity.</p>
+<p>Editing and proofreading assistance.</p>
 </div>
 
 <div class="service-card">
 <h3>Public Speaking Support</h3>
-<p>Coaching sessions designed to strengthen presentation and communication skills for academic purposes.</p>
+<p>Presentation and communication coaching.</p>
 </div>
 
 </div>
+
 </section>
 
 <section id="contact">
@@ -289,7 +257,7 @@ padding:120px 20px 40px 20px;
 
 <div class="contact-box">
 
-<p>Email: <a href="mailto:ct0tutorials@gmail.com">ct0tutorials@gmail.com</a></p>
+<p>Email: ct0tutorials@gmail.com</p>
 <p>Phone: +264 815 621 879 / +264 818 479 958</p>
 
 </div>
@@ -297,6 +265,40 @@ padding:120px 20px 40px 20px;
 </section>
 
 <button class="floating-btn" onclick="openForm()">Register Now</button>
+
+</div>
+
+<!-- STUDENT REGISTRATION MODAL -->
+
+<div id="modal">
+
+<form id="studentRegisterForm">
+
+<button type="button" class="close" onclick="closeForm()">×</button>
+
+<h2>Service Registration</h2>
+
+<input name="name" placeholder="Full Name" required>
+<input name="email" placeholder="Email" required>
+<input name="cell_number" placeholder="Cellphone" required>
+
+<select name="service" required>
+
+<option value="">Select service</option>
+
+<option>Intro to Academic Writing</option>
+<option>Topic Specific Session</option>
+<option>Hourly Rate</option>
+
+</select>
+
+<select name="tutor">
+<option value="">Auto assign tutor</option>
+</select>
+
+<button class="submit-btn">Submit</button>
+
+</form>
 
 </div>
 
@@ -310,15 +312,10 @@ padding:120px 20px 40px 20px;
 
 <h2>Admin Login</h2>
 
-<label>Username
-<input type="text" id="adminUser" required>
-</label>
+<input name="username" placeholder="Username" required>
+<input name="password" type="password" placeholder="Password" required>
 
-<label>Password
-<input type="password" id="adminPass" required>
-</label>
-
-<button type="submit" class="submit-btn">Login</button>
+<button class="submit-btn">Login</button>
 
 </form>
 
@@ -326,44 +323,74 @@ padding:120px 20px 40px 20px;
 
 <footer>
 
-<div class="footer-disclaimer">
-
-<strong>Disclaimer:</strong><br>
-
-C&T Tutorials operates independently and is not affiliated with, endorsed by, or formally connected to any university, college, examination body, or academic institution.
-
-</div>
+C&T Tutorials operates independently and is not affiliated with any university.
 
 </footer>
 
 <script>
 
-function openAdmin(){
-adminModal.style.display="flex"
-}
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxIShwbw27ViNIHCShqkhJv4WaQ0igIE9AQ44FGT9RL1ik4rqeOzi01liVl4vjCFhNqQw/exec"
 
-function closeAdmin(){
-adminModal.style.display="none"
-}
+/* STUDENT MODAL */
+
+function openForm(){modal.style.display="flex"}
+function closeForm(){modal.style.display="none"}
+
+/* ADMIN MODAL */
+
+function openAdminModal(){adminModal.style.display="flex"}
+function closeAdmin(){adminModal.style.display="none"}
+
+/* ADMIN LOGIN */
 
 adminLoginForm.addEventListener("submit",function(e){
 
 e.preventDefault()
 
-const user=document.getElementById("adminUser").value
-const pass=document.getElementById("adminPass").value
+fetch(SCRIPT_URL+"?action=adminLogin&username="+
+encodeURIComponent(this.username.value)+
+"&password="+
+encodeURIComponent(this.password.value))
 
-if(user==="cindy_admin" && pass==="3545Sh@kes"){
+.then(r=>r.json())
+.then(res=>{
+
+if(res.success){
 window.location.href="admin.html"
-return
-}
-
-if(user==="partner_admin" && pass==="CTTutorials#842"){
-window.location.href="admin.html"
-return
-}
-
+}else{
 alert("Invalid admin credentials")
+}
+
+})
+
+})
+
+/* STUDENT REGISTRATION */
+
+studentRegisterForm.addEventListener("submit",function(e){
+
+e.preventDefault()
+
+fetch(SCRIPT_URL,{
+method:"POST",
+body:JSON.stringify({
+
+type:"studentRegistration",
+
+name:this.name.value,
+email:this.email.value,
+cell_number:this.cell_number.value,
+service:this.service.value,
+tutor:this.tutor.value
+
+})
+})
+
+.then(r=>r.json())
+.then(()=>{
+alert("Registration submitted")
+closeForm()
+})
 
 })
 
