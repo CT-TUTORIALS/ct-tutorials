@@ -8,229 +8,225 @@
 <meta name="google-site-verification" content="aSucaMc_aX_kQpRFNvVRgTX0pEeCD1c48mTuirk4qwY" />
 
 <style>
+
 /* ---------------- GENERAL ---------------- */
+
 body{
-  margin:0;
-  font-family:"Segoe UI", Arial, sans-serif;
-  background:#f4f4f4;
-  color:#333;
-  line-height:1.6;
+margin:0;
+font-family:"Segoe UI", Arial, sans-serif;
+background:#f4f4f4;
+color:#333;
+line-height:1.6;
+scroll-behavior:smooth;
 }
 
 /* ---------------- HERO BANNER ---------------- */
+
 header{
-  background-image:url("images/banner.jpg");
-  background-position:center;
-  background-repeat:no-repeat;
-  background-size:cover;
-  background-color:#003366;
-  height:420px;
-  display:flex;
-  flex-direction:column;
-  justify-content:flex-end;
-  align-items:center;
-  text-align:center;
-  padding:20px;
-  position:relative;
-  transition:all 0.3s ease;
+background-image:url("images/banner.jpg");
+background-position:center;
+background-repeat:no-repeat;
+background-size:cover;
+background-color:#003366;
+height:420px;
+display:flex;
+flex-direction:column;
+justify-content:flex-end;
+align-items:center;
+text-align:center;
+padding:20px;
+position:relative;
 }
 
-header.scrolled{
-  background:#003366;
-  background-image:none;
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:70px;
-  z-index:999;
-  justify-content:center;
-}
+/* ---------------- NAVIGATION BAR ---------------- */
 
-/* Navigation */
 nav{
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:15px;
-  width:100%;
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:15px;
+width:100%;
+background:#003366;
+position:fixed;
+top:0;
+left:0;
+z-index:1000;
+padding:15px 10px;
 }
 
 nav a{
-  color:white;
-  text-decoration:none;
-  font-weight:bold;
-  white-space:nowrap;
-  cursor:pointer;
+color:white;
+text-decoration:none;
+font-weight:bold;
+white-space:nowrap;
+cursor:pointer;
 }
 
 nav a:hover{
-  text-decoration:underline;
+text-decoration:underline;
 }
 
 nav a.portal-link{
-  margin-left:auto;
+margin-left:auto;
 }
 
 /* ---------------- CONTENT ---------------- */
 
 .main-content{
-  max-width:1100px;
-  margin:auto;
-  padding:50px 40px;
-  background:white;
-  transition:margin-top 0.3s ease;
-}
-
-header.scrolled + .main-content{
-  margin-top:70px;
+max-width:1100px;
+margin:auto;
+padding:120px 40px 50px 40px;
+background:white;
 }
 
 section{
-  margin-bottom:60px;
+margin-bottom:60px;
 }
 
 h2{
-  color:#003366;
-  border-bottom:2px solid #003366;
-  padding-bottom:8px;
-  margin-bottom:25px;
+color:#003366;
+border-bottom:2px solid #003366;
+padding-bottom:8px;
+margin-bottom:25px;
 }
 
 h3{
-  color:#00509e;
+color:#00509e;
 }
 
 /* ---------------- SERVICES ---------------- */
 
 .services-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:25px;
-  margin-top:20px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:25px;
+margin-top:20px;
 }
 
 .service-card{
-  background:#f7f7f7;
-  padding:20px;
-  border-radius:8px;
-  box-shadow:0 3px 6px rgba(0,0,0,0.1);
-}
-
-/* ---------------- RESOURCES ---------------- */
-
-.resource-link{
-  color:#00509e;
-  font-weight:bold;
-  text-decoration:none;
-}
-
-.resource-link:hover{
-  text-decoration:underline;
+background:#f7f7f7;
+padding:20px;
+border-radius:8px;
+box-shadow:0 3px 6px rgba(0,0,0,0.1);
 }
 
 /* ---------------- CONTACT ---------------- */
 
 .contact-box{
-  background:#f7f7f7;
-  padding:20px;
-  border-radius:8px;
+background:#f7f7f7;
+padding:20px;
+border-radius:8px;
 }
 
 /* ---------------- BUTTON ---------------- */
 
 .floating-btn{
-  position:fixed;
-  bottom:25px;
-  right:25px;
-  background:#003366;
-  color:white;
-  padding:15px 22px;
-  border:none;
-  border-radius:40px;
-  font-size:16px;
-  cursor:pointer;
-  box-shadow:0 4px 6px rgba(0,0,0,0.3);
+position:fixed;
+bottom:25px;
+right:25px;
+background:#003366;
+color:white;
+padding:15px 22px;
+border:none;
+border-radius:40px;
+font-size:16px;
+cursor:pointer;
+box-shadow:0 4px 6px rgba(0,0,0,0.3);
 }
 
 /* ---------------- MODALS ---------------- */
 
 #modal,
 #adminModal{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.7);
-  justify-content:center;
-  align-items:center;
-  z-index:1000;
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.7);
+justify-content:center;
+align-items:center;
+z-index:1000;
 }
 
 #modal form,
 #adminModal form{
-  background:white;
-  padding:25px;
-  width:90%;
-  max-width:500px;
-  border-radius:10px;
-  position:relative;
+background:white;
+padding:25px;
+width:90%;
+max-width:500px;
+border-radius:10px;
+position:relative;
 }
 
 .close{
-  position:absolute;
-  right:15px;
-  top:10px;
-  font-size:22px;
-  cursor:pointer;
-  border:none;
-  background:none;
+position:absolute;
+right:15px;
+top:10px;
+font-size:22px;
+cursor:pointer;
+border:none;
+background:none;
 }
 
 label{
-  display:block;
-  margin-top:12px;
-  font-weight:500;
+display:block;
+margin-top:12px;
+font-weight:500;
 }
 
 input,select{
-  width:100%;
-  padding:10px;
-  margin-top:5px;
-  border-radius:5px;
-  border:1px solid #ccc;
-  box-sizing:border-box;
+width:100%;
+padding:10px;
+margin-top:5px;
+border-radius:5px;
+border:1px solid #ccc;
+box-sizing:border-box;
 }
 
 .submit-btn{
-  margin-top:20px;
-  width:100%;
-  padding:12px;
-  background:#003366;
-  color:white;
-  border:none;
-  cursor:pointer;
-  border-radius:5px;
-  font-size:16px;
+margin-top:20px;
+width:100%;
+padding:12px;
+background:#003366;
+color:white;
+border:none;
+cursor:pointer;
+border-radius:5px;
+font-size:16px;
 }
 
 .submit-btn:hover{
-  background:#00509e;
+background:#00509e;
 }
 
 /* ---------------- FOOTER ---------------- */
 
 footer{
-  background:#003366;
-  color:white;
-  text-align:center;
-  padding:25px;
+background:#003366;
+color:white;
+text-align:center;
+padding:25px;
 }
 
 .footer-disclaimer{
-  font-size:12px;
-  max-width:900px;
-  margin:auto;
-  line-height:1.6;
+font-size:12px;
+max-width:900px;
+margin:auto;
+line-height:1.6;
+}
+
+/* ---------------- MOBILE ---------------- */
+
+@media(max-width:700px){
+
+nav{
+flex-wrap:wrap;
+gap:10px;
+}
+
+.main-content{
+padding:120px 20px 40px 20px;
+}
+
 }
 
 </style>
@@ -304,67 +300,25 @@ footer{
 
 </div>
 
-<!-- STUDENT MODAL -->
+<!-- ADMIN LOGIN MODAL -->
 
-<div id="modal">
+<div id="adminModal">
 
-<form id="studentRegisterForm">
+<form id="adminLoginForm">
 
-<button type="button" class="close" onclick="closeForm()">×</button>
+<button type="button" class="close" onclick="closeAdmin()">×</button>
 
-<h2>Service Registration</h2>
+<h2>Admin Login</h2>
 
-<label>Full Name
-<input type="text" name="name" required>
+<label>Username
+<input type="text" id="adminUser" required>
 </label>
 
-<label>Email
-<input type="email" name="email" required>
+<label>Password
+<input type="password" id="adminPass" required>
 </label>
 
-<label>Cellphone Number
-<input type="tel" name="cell_number" required>
-</label>
-
-<label>Select Service
-
-<select name="service" id="serviceSelect" required>
-
-<option value="">Select a service</option>
-
-<option value="Intro to Academic Writing">Introduction to Academic Writing (4 sessions) – N$150</option>
-
-<option value="Topic Specific">Topic Specific Sessions – N$40</option>
-
-<option value="Hourly Rate">Hourly Rate – N$40</option>
-
-<option value="Group Sessions">Group Sessions – N$200 to N$600</option>
-
-<option value="Draft Editing">Draft Editing – N$15 per page</option>
-
-<option value="Proofreading">Proofreading – N$10 per page</option>
-
-<option value="Secondary School Subjects">Secondary School Subjects – N$35 per session</option>
-
-</select>
-
-</label>
-
-<label id="tutorLabel" style="display:none;">Select Tutor
-
-<select name="tutor" id="tutorSelect">
-<option value="">Select a tutor</option>
-</select>
-
-</label>
-
-<label>
-<input type="checkbox" required>
-I agree to the
-<a href="documents/Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a>
-</label>
-
-<button type="submit" class="submit-btn">Submit Registration</button>
+<button type="submit" class="submit-btn">Login</button>
 
 </form>
 
@@ -384,83 +338,32 @@ C&T Tutorials operates independently and is not affiliated with, endorsed by, or
 
 <script>
 
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxIShwbw27ViNIHCShqkhJv4WaQ0igIE9AQ44FGT9RL1ik4rqeOzi01liVl4vjCFhNqQw/exec";
-
-function openForm(){modal.style.display="flex"}
-function closeForm(){modal.style.display="none"}
-function openAdmin(){window.location.href="admin.html";}
-
-function fetchTutors(){
-
-fetch(SCRIPT_URL+"?action=getTutors")
-
-.then(res=>res.json())
-
-.then(tutors=>{
-
-tutorSelect.innerHTML='<option value="">Select a tutor</option>';
-
-tutors.forEach(t=>{
-
-const opt=document.createElement("option")
-
-opt.value=t.name
-
-opt.textContent=t.name+" ("+t.subject+")"
-
-tutorSelect.appendChild(opt)
-
-})
-
-})
-
-.catch(err=>{
-console.error("Tutor loading error:",err)
-alert("Unable to load tutors at the moment. Please try again later.")
-})
-
+function openAdmin(){
+adminModal.style.display="flex"
 }
 
-serviceSelect.addEventListener("change",function(){
-
-if(this.value!==""){
-
-tutorLabel.style.display="block"
-fetchTutors()
-
-}else{
-
-tutorLabel.style.display="none"
-
+function closeAdmin(){
+adminModal.style.display="none"
 }
 
-})
-
-studentRegisterForm.addEventListener("submit",function(e){
+adminLoginForm.addEventListener("submit",function(e){
 
 e.preventDefault()
 
-fetch(SCRIPT_URL,{
-method:"POST",
-body:JSON.stringify({
+const user=document.getElementById("adminUser").value
+const pass=document.getElementById("adminPass").value
 
-type:"studentRegistration",
+if(user==="cindy_admin" && pass==="3545Sh@kes"){
+window.location.href="admin.html"
+return
+}
 
-name:this.name.value,
-email:this.email.value,
-cell_number:this.cell_number.value,
-service:this.service.value,
-tutor:this.tutor.value
+if(user==="partner_admin" && pass==="CTTutorials#842"){
+window.location.href="admin.html"
+return
+}
 
-})
-})
-.then(r=>r.json())
-.then(()=>{
-alert("Registration submitted successfully!")
-this.reset()
-closeForm()
-tutorLabel.style.display="none"
-})
+alert("Invalid admin credentials")
 
 })
 
