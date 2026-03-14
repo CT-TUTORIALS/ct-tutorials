@@ -1,214 +1,152 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>C&T Tutorials Admin Portal</title>
+<title>C&T Admin Dashboard</title>
 
 <style>
 
 body{
 font-family:Arial;
-margin:0;
 background:#f4f4f4;
-}
-
-header{
-background:#003366;
-color:white;
-padding:20px;
-text-align:center;
-}
-
-.main{
-max-width:1100px;
-margin:auto;
-background:white;
+margin:0;
 padding:40px;
 }
 
-.stats{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:20px;
-margin-bottom:40px;
+h1{
+color:#003366;
 }
 
-.stat-box{
-background:#003366;
-color:white;
+h2{
+color:#003366;
+margin-top:40px;
+}
+
+.card{
+background:white;
 padding:20px;
-text-align:center;
-font-size:18px;
-border-radius:6px;
+margin:15px 0;
+border-radius:8px;
+box-shadow:0 2px 6px rgba(0,0,0,0.1);
 }
 
 button{
-padding:8px 12px;
+padding:10px 15px;
 border:none;
-color:white;
+border-radius:5px;
 cursor:pointer;
+margin-top:10px;
 }
 
-.approve{background:#2e7d32;}
-.reject{background:#b71c1c;}
-.logout{background:#990000;margin-top:20px;}
-
-.tutor-card{
-border:1px solid #ddd;
-padding:15px;
-margin-bottom:10px;
-}
+.approve{background:green;color:white;}
+.reject{background:red;color:white;}
+.reassign{background:#003366;color:white;}
 
 </style>
 </head>
 
 <body>
 
-<header>
-<h1>Admin Dashboard</h1>
-<a href="index.html" style="color:white">Home</a>
-</header>
+<h1>C&T Tutorials Admin Dashboard</h1>
 
-<div class="main">
+<h2>Platform Statistics</h2>
 
-<div id="loginSection">
-
-<h2>Admin Login</h2>
-
-<input id="adminUser" placeholder="Username">
-<input id="adminPass" type="password" placeholder="Password">
-
-<button onclick="adminLogin()">Login</button>
-
-</div>
-
-
-<div id="dashboard" style="display:none">
-
-<h2>System Statistics</h2>
-
-<div class="stats">
-
-<div class="stat-box">
-Total Tutors<br>
-<span id="totalTutors">0</span>
-</div>
-
-<div class="stat-box">
-Approved Tutors<br>
-<span id="approvedTutors">0</span>
-</div>
-
-<div class="stat-box">
-Pending Applications<br>
-<span id="pendingTutors">0</span>
-</div>
-
-<div class="stat-box">
-Total Students<br>
-<span id="totalStudents">0</span>
-</div>
-
-</div>
-
+<div id="stats"></div>
 
 <h2>Tutor Applications</h2>
 
-<div id="tutorList">Loading...</div>
+<div id="tutorApps">Loading...</div>
 
-<button class="logout" onclick="logoutAdmin()">Logout</button>
+<h2>Registered Students</h2>
 
-</div>
-
-</div>
+<div id="studentsList">Loading...</div>
 
 <script>
 
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxIShwbw27ViNIHCShqkhJv4WaQ0igIE9AQ44FGT9RL1ik4rqeOzi01liVl4vjCFhNqQw/exec"
 
-
-window.onload=function(){
-
-if(localStorage.getItem("adminLoggedIn")){
-
-loginSection.style.display="none"
-dashboard.style.display="block"
-
 loadStats()
-loadTutors()
-
-}
-
-}
-
-
-
-function adminLogin(){
-
-const user=document.getElementById("adminUser").value
-const pass=document.getElementById("adminPass").value
-
-if(user==="admin" && pass==="3545Sh@kes"){
-
-localStorage.setItem("adminLoggedIn","true")
-
-loginSection.style.display="none"
-dashboard.style.display="block"
-
-loadStats()
-loadTutors()
-
-}
-else{
-alert("Invalid admin credentials")
-}
-
-}
-
-
+loadTutorApps()
+loadStudents()
 
 function loadStats(){
 
 fetch(SCRIPT_URL+"?action=getAdminStats")
-
 .then(r=>r.json())
+.then(data=>{
 
-.then(stats=>{
-
-totalTutors.innerText=stats.totalTutors
-approvedTutors.innerText=stats.approvedTutors
-pendingTutors.innerText=stats.pendingTutors
-totalStudents.innerText=stats.totalStudents
+stats.innerHTML=`
+<div class="card">
+Total Tutors: ${data.totalTutors}<br>
+Approved Tutors: ${data.approvedTutors}<br>
+Pending Tutors: ${data.pendingTutors}<br>
+Total Students: ${data.totalStudents}
+</div>
+`
 
 })
 
 }
 
-
-
-function loadTutors(){
+function loadTutorApps(){
 
 fetch(SCRIPT_URL+"?action=getTutorApplications")
-
 .then(r=>r.json())
-
-.then(tutors=>{
+.then(data=>{
 
 let html=""
 
-tutors.forEach((t,i)=>{
+data.forEach((t,index)=>{
 
 html+=`
-
-<div class="tutor-card">
+<div class="card">
 
 <b>${t.name}</b><br>
 ${t.email}<br>
-Subjects: ${t.subjects}<br><br>
+${t.phone}<br>
+Subjects: ${t.subjects}<br>
+Qualification: ${t.qualification}<br>
 
-<button class="approve" onclick="approveTutor(${i})">Approve</button>
+<button class="approve" onclick="approveTutor(${index})">Approve</button>
 
-<button class="reject" onclick="rejectTutor(${i})">Reject</button>
+<button class="reject" onclick="rejectTutor(${index})">Reject</button>
+
+</div>
+`
+
+})
+
+tutorApps.innerHTML=html
+
+})
+
+}
+
+function loadStudents(){
+
+fetch(SCRIPT_URL+"?action=getStudents")
+.then(r=>r.json())
+.then(students=>{
+
+let html=""
+
+students.forEach(s=>{
+
+html+=`
+
+<div class="card">
+
+<b>${s.name}</b><br>
+${s.email}<br>
+${s.cell}<br>
+Service: ${s.service}<br>
+Tutor: ${s.tutor}
+
+<br><br>
+
+<input id="tutor${s.index}" placeholder="New Tutor">
+
+<button class="reassign" onclick="reassign(${s.index})">Reassign Tutor</button>
 
 </div>
 
@@ -216,13 +154,11 @@ Subjects: ${t.subjects}<br><br>
 
 })
 
-tutorList.innerHTML=html
+studentsList.innerHTML=html
 
 })
 
 }
-
-
 
 function approveTutor(index){
 
@@ -232,17 +168,9 @@ body:JSON.stringify({
 type:"approveTutor",
 index:index
 })
-})
-.then(()=>{
-
-loadStats()
-loadTutors()
-
-})
+}).then(()=>loadTutorApps())
 
 }
-
-
 
 function rejectTutor(index){
 
@@ -252,23 +180,22 @@ body:JSON.stringify({
 type:"rejectTutor",
 index:index
 })
-})
-.then(()=>{
-
-loadStats()
-loadTutors()
-
-})
+}).then(()=>loadTutorApps())
 
 }
 
+function reassign(index){
 
+const tutor=document.getElementById("tutor"+index).value
 
-function logoutAdmin(){
-
-localStorage.removeItem("adminLoggedIn")
-
-location.reload()
+fetch(SCRIPT_URL,{
+method:"POST",
+body:JSON.stringify({
+type:"reassignStudentTutor",
+index:index,
+tutor:tutor
+})
+}).then(()=>loadStudents())
 
 }
 
