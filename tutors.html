@@ -232,9 +232,9 @@ Phone: +264 815 621 879 / +264 818 479 958
 
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbwbcrO4DEvMFHoRNF2hTf134in0pImfBPGj-j6hXMety_sUwiz-liYeIfujAQ4s8-G_eQ/exec"
 
-function openApply(){applyModal.style.display="flex"}
-function openCreate(){createModal.style.display="flex"}
-function openLogin(){loginModal.style.display="flex"}
+function openApply(){document.getElementById("applyModal").style.display="flex"}
+function openCreate(){document.getElementById("createModal").style.display="flex"}
+function openLogin(){document.getElementById("loginModal").style.display="flex"}
 
 window.onclick=function(e){
 if(e.target.classList.contains("modal")) e.target.style.display="none"
@@ -307,7 +307,7 @@ if(res.status==="account_created"){
 alert("Account created successfully. You can now login.")
 createModal.style.display="none"
 }else{
-alert("Invalid access code")
+alert("Invalid access code or tutor not yet approved.")
 }
 
 })
@@ -365,7 +365,7 @@ html+=`
 <div class="student-card">
 <b>${s.name}</b><br>
 ${s.email}<br>
-${s.cell_number}<br>
+${s.phone}<br>
 Service: ${s.service}
 </div>
 `
