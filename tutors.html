@@ -154,6 +154,8 @@ Below is the list of students who selected you.
 
 </div>
 
+<!-- APPLY MODAL -->
+
 <div class="modal" id="applyModal">
 <form id="applyForm">
 
@@ -168,7 +170,7 @@ Below is the list of students who selected you.
 
 <label>
 <input type="checkbox" required>
-I have read and agree to the
+I agree to the
 <a href="documents/Tutor-Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a>
 </label>
 
@@ -177,6 +179,8 @@ I have read and agree to the
 </form>
 </div>
 
+<!-- CREATE ACCOUNT -->
+
 <div class="modal" id="createModal">
 <form id="createForm">
 
@@ -184,7 +188,6 @@ I have read and agree to the
 
 <input name="email" placeholder="Email" required>
 <input name="code" placeholder="Access Code" required>
-
 <input type="password" name="password" placeholder="Password" required>
 <input type="password" name="confirm" placeholder="Confirm Password" required>
 
@@ -192,6 +195,8 @@ I have read and agree to the
 
 </form>
 </div>
+
+<!-- LOGIN -->
 
 <div class="modal" id="loginModal">
 <form id="loginForm">
@@ -212,7 +217,7 @@ I have read and agree to the
 
 <strong>Disclaimer:</strong><br>
 
-This portal is intended for individuals applying to become tutors or approved to provide tutoring services through C&T Tutorials. Submission of a tutor application does not guarantee selection, as applications are reviewed based on qualifications, subject expertise, and suitability for the tutoring program.
+This portal is intended for individuals applying to become tutors or approved to provide tutoring services through C&T Tutorials. Submission of a tutor application does not guarantee selection.
 
 <br><br>
 
@@ -244,48 +249,34 @@ function openApply(){document.getElementById("applyModal").style.display="flex"}
 function openCreate(){document.getElementById("createModal").style.display="flex"}
 function openLogin(){document.getElementById("loginModal").style.display="flex"}
 
+function closeModals(){
+document.querySelectorAll(".modal").forEach(m=>m.style.display="none")
+}
+
 window.onclick=function(e){
 if(e.target.classList.contains("modal")) e.target.style.display="none"
 }
 
-/* VALIDATOR */
+/* VALIDATION */
 
 function validateApplyForm(form){
 
 let valid=true
-
 form.querySelectorAll("input").forEach(i=>i.classList.remove("error"))
 
-if(form.name.value.trim().length<3){
-form.name.classList.add("error")
-valid=false
-}
+if(form.name.value.trim().length<3){form.name.classList.add("error");valid=false}
 
 let emailPattern=/^[^\s@]+@[^\s@]+\.[^\s@]+$/
-if(!emailPattern.test(form.email.value)){
-form.email.classList.add("error")
-valid=false
-}
+if(!emailPattern.test(form.email.value)){form.email.classList.add("error");valid=false}
 
 let phonePattern=/^[0-9+\s]+$/
-if(!phonePattern.test(form.phone.value)){
-form.phone.classList.add("error")
-valid=false
-}
+if(!phonePattern.test(form.phone.value)){form.phone.classList.add("error");valid=false}
 
-if(form.subjects.value.trim().length<2){
-form.subjects.classList.add("error")
-valid=false
-}
+if(form.subjects.value.trim().length<2){form.subjects.classList.add("error");valid=false}
 
-if(form.qualification.value.trim().length<2){
-form.qualification.classList.add("error")
-valid=false
-}
+if(form.qualification.value.trim().length<2){form.qualification.classList.add("error");valid=false}
 
-if(!valid){
-alert("Please correct the highlighted fields before submitting.")
-}
+if(!valid){alert("Please correct the highlighted fields.")}
 
 return valid
 }
@@ -315,7 +306,7 @@ experience:this.experience.value
 .then(()=>{
 alert("Application submitted successfully")
 this.reset()
-document.getElementById("applyModal").style.display="none"
+closeModals()
 })
 
 })
@@ -331,23 +322,49 @@ alert("Passwords do not match")
 return
 }
 
+const email=this.email.value
+const password=this.password.value
+
 fetch(SCRIPT_URL,{
 method:"POST",
 headers:{"Content-Type":"application/json"},
 body:JSON.stringify({
 type:"createTutorAccount",
-email:this.email.value,
+email:email,
 code:this.code.value,
-password:this.password.value
+password:password
 })
 })
 .then(r=>r.json())
 .then(res=>{
 
 if(res.status==="account_created"){
-alert("Account created successfully.")
-document.getElementById("createModal").style.display="none"
-}else{
+
+alert("Account created successfully. Logging you in...")
+
+/* AUTO LOGIN */
+
+fetch(SCRIPT_URL+"?action=tutorLogin&email="+encodeURIComponent(email)+"&password="+encodeURIComponent(password))
+.then(r=>r.json())
+.then(login=>{
+
+if(login.success){
+
+localStorage.setItem("tutorToken",login.token)
+
+document.getElementById("infoSection").style.display="none"
+document.getElementById("dashboard").style.display="block"
+
+loadStudents(login.token)
+
+closeModals()
+
+}
+
+})
+
+}
+else{
 alert("Invalid access code.")
 }
 
@@ -377,7 +394,7 @@ document.getElementById("dashboard").style.display="block"
 
 loadStudents(res.token)
 
-document.getElementById("loginModal").style.display="none"
+closeModals()
 
 }
 else{
