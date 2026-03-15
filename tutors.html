@@ -63,6 +63,10 @@ margin-top:5px;
 margin-bottom:15px;
 }
 
+input.error{
+border:2px solid red;
+}
+
 button{
 background:#003366;
 color:white;
@@ -244,11 +248,55 @@ window.onclick=function(e){
 if(e.target.classList.contains("modal")) e.target.style.display="none"
 }
 
+/* VALIDATOR */
+
+function validateApplyForm(form){
+
+let valid=true
+
+form.querySelectorAll("input").forEach(i=>i.classList.remove("error"))
+
+if(form.name.value.trim().length<3){
+form.name.classList.add("error")
+valid=false
+}
+
+let emailPattern=/^[^\s@]+@[^\s@]+\.[^\s@]+$/
+if(!emailPattern.test(form.email.value)){
+form.email.classList.add("error")
+valid=false
+}
+
+let phonePattern=/^[0-9+\s]+$/
+if(!phonePattern.test(form.phone.value)){
+form.phone.classList.add("error")
+valid=false
+}
+
+if(form.subjects.value.trim().length<2){
+form.subjects.classList.add("error")
+valid=false
+}
+
+if(form.qualification.value.trim().length<2){
+form.qualification.classList.add("error")
+valid=false
+}
+
+if(!valid){
+alert("Please correct the highlighted fields before submitting.")
+}
+
+return valid
+}
+
 /* APPLY */
 
 applyForm.addEventListener("submit",function(e){
 
 e.preventDefault()
+
+if(!validateApplyForm(this)) return
 
 fetch(SCRIPT_URL,{
 method:"POST",
