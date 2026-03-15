@@ -371,28 +371,12 @@ I agree to the <a href="documents/Disclosure-Agreement.pdf" target="_blank">Disc
 
 </div>
 
-<!-- PRICING MODAL -->
-
-<div id="pricingModal">
-
-<div id="pricingContent">
-
-<h3 id="pricingTitle"></h3>
-
-<div id="pricingDetails"></div>
-
-<button class="submit-btn" onclick="bookService()">Book This Service</button>
-
-</div>
-
-</div>
-
 <footer>
 
 <div class="footer-disclaimer">
 
 <strong>Disclaimer:</strong><br>
-C&T Tutorials operates independently and is not affiliated with, endorsed by, or formally connected to any university, college, examination body, or academic institution. All services are supplementary and intended to support independent learning.
+C&T Tutorials operates independently and is not affiliated with, endorsed by, or formally connected to any university, college, examination body, or academic institution.
 
 <br><br>
 
@@ -411,41 +395,46 @@ const STUDENT_SCRIPT_URL="https://script.google.com/macros/s/AKfycbwbcrO4DEvMFHo
 function openForm(){document.getElementById("modal").style.display="flex";}
 function closeForm(){document.getElementById("modal").style.display="none";}
 
-/* LOAD TUTORS */
+/* SERVICE CHANGE → LOAD MATCHING TUTORS */
 
-function loadTutors(){
+document.getElementById("serviceSelect").addEventListener("change",function(){
 
-fetch(STUDENT_SCRIPT_URL+"?action=getTutors")
+const service=this.value
+const tutorLabel=document.getElementById("tutorLabel")
+const tutorSelect=document.getElementById("tutorSelect")
+
+tutorSelect.innerHTML='<option value="">Select a tutor</option>'
+
+const tutorialServices=[
+"Secondary School Subjects",
+"Topic Specific",
+"Hourly Rate",
+"Group Sessions"
+]
+
+if(tutorialServices.some(s=>service.includes(s))){
+
+tutorLabel.style.display="block"
+
+fetch(STUDENT_SCRIPT_URL+"?action=getTutorsByService&service="+encodeURIComponent(service))
 .then(r=>r.json())
 .then(tutors=>{
-
-const select=document.getElementById("tutorSelect")
 
 tutors.forEach(t=>{
 
 let opt=document.createElement("option")
 opt.value=t.name
 opt.textContent=t.name+" ("+t.subject+")"
-select.appendChild(opt)
+tutorSelect.appendChild(opt)
 
 })
 
 })
 
-}
-
-loadTutors()
-
-/* SHOW TUTOR OPTION WHEN NEEDED */
-
-document.getElementById("serviceSelect").addEventListener("change",function(){
-
-const tutorLabel=document.getElementById("tutorLabel")
-
-if(this.value.includes("Subjects") || this.value.includes("Sessions")){
-tutorLabel.style.display="block"
 }else{
+
 tutorLabel.style.display="none"
+
 }
 
 })
@@ -477,61 +466,6 @@ closeForm()
 })
 
 })
-
-/* PRICING MODAL */
-
-const pricingModal=document.getElementById("pricingModal");
-const pricingTitle=document.getElementById("pricingTitle");
-const pricingDetails=document.getElementById("pricingDetails");
-
-function openPricing(type){
-
-pricingModal.style.display="flex";
-
-if(type==="writing"){
-pricingTitle.innerText="Academic Writing Tutorials";
-pricingDetails.innerHTML=`
-<p>Introduction to Academic Writing – N$150</p>
-<p>Topic Specific Sessions – N$40</p>
-<p>Hourly Rate – N$40</p>`;
-}
-
-if(type==="group"){
-pricingTitle.innerText="Group Sessions";
-pricingDetails.innerHTML=`
-<p>2–5 People – N$200</p>
-<p>6–14 People – N$450</p>
-<p>More than 14 People – N$600</p>`;
-}
-
-if(type==="assignment"){
-pricingTitle.innerText="Assignment Support";
-pricingDetails.innerHTML=`
-<p>Draft Editing – N$15 per page</p>
-<p>Proofreading – N$10 per page</p>
-<p>Referencing Assistance – N$20</p>`;
-}
-
-if(type==="speaking"){
-pricingTitle.innerText="Public Speaking Support";
-pricingDetails.innerHTML=`<p>Session – N$40</p>`;
-}
-
-}
-
-function bookService(){
-
-pricingModal.style.display="none";
-openForm();
-
-}
-
-window.onclick=function(e){
-
-if(e.target===pricingModal)
-pricingModal.style.display="none";
-
-}
 
 </script>
 
