@@ -1,68 +1,100 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Admin Dashboard</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C&T Tutorials Admin Panel</title>
 
 <style>
 
 body{
+font-family:"Segoe UI", Arial, sans-serif;
 margin:0;
-font-family:Arial;
 background:#f4f4f4;
-padding-bottom:70px;
 }
 
-header{
+/* HEADER */
+
+.admin-header{
 background:#003366;
 color:white;
 padding:15px;
-text-align:center;
+position:sticky;
+top:0;
+z-index:1000;
 }
 
-#dashboard{
-display:none;
-padding:40px;
-}
-
-#loginModal{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,0.7);
+.admin-nav{
 display:flex;
+gap:20px;
 justify-content:center;
-align-items:center;
+flex-wrap:wrap;
 }
 
-#loginModal form{
-background:white;
-padding:25px;
-border-radius:8px;
-width:300px;
+.admin-nav a{
+color:white;
+text-decoration:none;
+font-weight:bold;
 }
 
-input{
+.admin-nav a:hover{
+text-decoration:underline;
+}
+
+/* CONTENT */
+
+.container{
+max-width:1200px;
+margin:auto;
+padding:40px 25px;
+}
+
+section{
+margin-bottom:70px;
+}
+
+h2{
+color:#003366;
+border-bottom:2px solid #003366;
+padding-bottom:8px;
+}
+
+/* TABLES */
+
+table{
 width:100%;
+border-collapse:collapse;
+margin-top:20px;
+background:white;
+}
+
+th,td{
 padding:10px;
-margin-top:10px;
+border:1px solid #ddd;
+text-align:left;
+font-size:14px;
+}
+
+th{
+background:#003366;
+color:white;
 }
 
 button{
-margin-top:15px;
-width:100%;
-padding:10px;
-background:#003366;
-color:white;
+padding:6px 10px;
 border:none;
+cursor:pointer;
+border-radius:4px;
 }
 
-footer{
-position:fixed;
-bottom:0;
-width:100%;
-background:#003366;
+.approve{
+background:#2e7d32;
 color:white;
-text-align:center;
-padding:10px;
+}
+
+.reject{
+background:#c62828;
+color:white;
 }
 
 </style>
@@ -70,56 +102,276 @@ padding:10px;
 
 <body>
 
-<header>
-C&T Tutorials Admin Dashboard
-</header>
-
-<div id="loginModal">
-<form id="loginForm">
-
-<h2>Admin Login</h2>
-
-<input type="text" id="username" placeholder="Username" required>
-<input type="password" id="password" placeholder="Password" required>
-
-<button type="submit">Login</button>
-
-</form>
+<div class="admin-header">
+<div class="admin-nav">
+<a href="#applications">Tutors' Applications</a>
+<a href="#approvedTutors">Approved Tutors</a>
+<a href="#students">Students' Registrations</a>
+<a href="#clients">Other Clients</a>
+</div>
 </div>
 
-<div id="dashboard">
-<h2>Welcome Admin</h2>
-<p>Dashboard content will appear here.</p>
-</div>
+<div class="container">
 
-<footer>
-C&T Tutorials Administration | ct0tutorials@gmail.com
-</footer>
+<section id="applications">
+
+<h2>Tutors' Applications</h2>
+
+<table id="applicationsTable">
+
+<thead>
+<tr>
+<th>Name</th>
+<th>Email</th>
+<th>Phone</th>
+<th>Subjects</th>
+<th>Qualification</th>
+<th>Experience</th>
+<th>Status</th>
+<th>Approve</th>
+<th>Reject</th>
+</tr>
+</thead>
+
+<tbody></tbody>
+
+</table>
+
+</section>
+
+
+<section id="approvedTutors">
+
+<h2>Approved Tutors</h2>
+
+<table id="approvedTable">
+
+<thead>
+<tr>
+<th>Name</th>
+<th>Email</th>
+<th>Phone</th>
+<th>Subjects</th>
+<th>Qualification</th>
+<th>Experience</th>
+</tr>
+</thead>
+
+<tbody></tbody>
+
+</table>
+
+</section>
+
+
+<section id="students">
+
+<h2>Students' Registrations</h2>
+
+<table id="studentsTable">
+
+<thead>
+<tr>
+<th>Name</th>
+<th>Email</th>
+<th>Phone</th>
+<th>Service</th>
+<th>Tutor</th>
+<th>Timestamp</th>
+</tr>
+</thead>
+
+<tbody></tbody>
+
+</table>
+
+</section>
+
+
+<section id="clients">
+
+<h2>Other Clients</h2>
+
+<table id="clientsTable">
+
+<thead>
+<tr>
+<th>Name</th>
+<th>Email</th>
+<th>Phone</th>
+<th>Service</th>
+<th>Timestamp</th>
+</tr>
+</thead>
+
+<tbody></tbody>
+
+</table>
+
+</section>
+
+</div>
 
 <script>
 
-document.getElementById("loginForm").addEventListener("submit",function(e){
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbwbcrO4DEvMFHoRNF2hTf134in0pImfBPGj-j6hXMety_sUwiz-liYeIfujAQ4s8-G_eQ/exec"
 
-e.preventDefault()
 
-const u=document.getElementById("username").value
-const p=document.getElementById("password").value
+function loadAdminData(){
 
-if(
-(u==="Admin_Tangeni" && p==="3545Sh@kes") ||
-(u==="Admin_Cindy" && p==="CTsecure984")
-){
+fetch(SCRIPT_URL+"?action=getAdminData")
+.then(res=>res.json())
+.then(data=>{
 
-document.getElementById("loginModal").style.display="none"
-document.getElementById("dashboard").style.display="block"
+populateApplications(data.tutors)
+populateApproved(data.tutors)
+populateStudents(data.students)
+populateClients(data.clients)
 
-}else{
+})
 
-alert("Invalid login")
+}
+
+
+function populateApplications(tutors){
+
+const tbody=document.querySelector("#applicationsTable tbody")
+tbody.innerHTML=""
+
+tutors.forEach(t=>{
+
+if(t.status==="Pending"){
+
+let row=document.createElement("tr")
+
+row.innerHTML=`
+<td>${t.name}</td>
+<td>${t.email}</td>
+<td>${t.phone}</td>
+<td>${t.subjects}</td>
+<td>${t.qualification}</td>
+<td>${t.experience}</td>
+<td>${t.status}</td>
+<td><button class="approve" onclick="approveTutor('${t.email}')">Approve</button></td>
+<td><button class="reject" onclick="rejectTutor('${t.email}')">Reject</button></td>
+`
+
+tbody.appendChild(row)
 
 }
 
 })
+
+}
+
+
+function populateApproved(tutors){
+
+const tbody=document.querySelector("#approvedTable tbody")
+tbody.innerHTML=""
+
+tutors.forEach(t=>{
+
+if(t.status==="Approved"){
+
+let row=document.createElement("tr")
+
+row.innerHTML=`
+<td>${t.name}</td>
+<td>${t.email}</td>
+<td>${t.phone}</td>
+<td>${t.subjects}</td>
+<td>${t.qualification}</td>
+<td>${t.experience}</td>
+`
+
+tbody.appendChild(row)
+
+}
+
+})
+
+}
+
+
+function populateStudents(students){
+
+const tbody=document.querySelector("#studentsTable tbody")
+tbody.innerHTML=""
+
+students.forEach(s=>{
+
+let row=document.createElement("tr")
+
+row.innerHTML=`
+<td>${s.name}</td>
+<td>${s.email}</td>
+<td>${s.phone}</td>
+<td>${s.service}</td>
+<td>${s.tutor}</td>
+<td>${s.timestamp}</td>
+`
+
+tbody.appendChild(row)
+
+})
+
+}
+
+
+function populateClients(clients){
+
+const tbody=document.querySelector("#clientsTable tbody")
+tbody.innerHTML=""
+
+clients.forEach(c=>{
+
+let row=document.createElement("tr")
+
+row.innerHTML=`
+<td>${c.name}</td>
+<td>${c.email}</td>
+<td>${c.phone}</td>
+<td>${c.service}</td>
+<td>${c.timestamp}</td>
+`
+
+tbody.appendChild(row)
+
+})
+
+}
+
+
+function approveTutor(email){
+
+fetch(SCRIPT_URL,{
+method:"POST",
+body:JSON.stringify({
+action:"approveTutor",
+email:email
+})
+})
+.then(()=>loadAdminData())
+
+}
+
+
+function rejectTutor(email){
+
+fetch(SCRIPT_URL,{
+method:"POST",
+body:JSON.stringify({
+action:"rejectTutor",
+email:email
+})
+})
+.then(()=>loadAdminData())
+
+}
+
+
+loadAdminData()
 
 </script>
 
