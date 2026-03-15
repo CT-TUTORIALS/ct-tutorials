@@ -411,6 +411,73 @@ const STUDENT_SCRIPT_URL="https://script.google.com/macros/s/AKfycbwbcrO4DEvMFHo
 function openForm(){document.getElementById("modal").style.display="flex";}
 function closeForm(){document.getElementById("modal").style.display="none";}
 
+/* LOAD TUTORS */
+
+function loadTutors(){
+
+fetch(STUDENT_SCRIPT_URL+"?action=getTutors")
+.then(r=>r.json())
+.then(tutors=>{
+
+const select=document.getElementById("tutorSelect")
+
+tutors.forEach(t=>{
+
+let opt=document.createElement("option")
+opt.value=t.name
+opt.textContent=t.name+" ("+t.subject+")"
+select.appendChild(opt)
+
+})
+
+})
+
+}
+
+loadTutors()
+
+/* SHOW TUTOR OPTION WHEN NEEDED */
+
+document.getElementById("serviceSelect").addEventListener("change",function(){
+
+const tutorLabel=document.getElementById("tutorLabel")
+
+if(this.value.includes("Subjects") || this.value.includes("Sessions")){
+tutorLabel.style.display="block"
+}else{
+tutorLabel.style.display="none"
+}
+
+})
+
+/* STUDENT REGISTRATION */
+
+document.getElementById("studentRegisterForm").addEventListener("submit",function(e){
+
+e.preventDefault()
+
+const formData=new FormData(this)
+
+fetch(STUDENT_SCRIPT_URL,{
+method:"POST",
+body:JSON.stringify({
+type:"studentRegistration",
+name:formData.get("name"),
+email:formData.get("email"),
+cell_number:formData.get("cell_number"),
+service:formData.get("service"),
+tutor:formData.get("tutor")
+})
+})
+.then(r=>r.json())
+.then(()=>{
+alert("Registration successful")
+this.reset()
+closeForm()
+})
+
+})
+
 /* PRICING MODAL */
 
 const pricingModal=document.getElementById("pricingModal");
