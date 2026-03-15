@@ -312,8 +312,6 @@ line-height:1.6;
 
 </div>
 
-<!-- STUDENT REGISTRATION MODAL -->
-
 <div id="modal">
 
 <form id="studentRegisterForm">
@@ -390,12 +388,8 @@ C&T Tutorials operates independently and is not affiliated with, endorsed by, or
 
 const STUDENT_SCRIPT_URL="https://script.google.com/macros/s/AKfycbwbcrO4DEvMFHoRNF2hTf134in0pImfBPGj-j6hXMety_sUwiz-liYeIfujAQ4s8-G_eQ/exec"
 
-/* MODAL */
-
 function openForm(){document.getElementById("modal").style.display="flex";}
 function closeForm(){document.getElementById("modal").style.display="none";}
-
-/* SERVICE CHANGE → LOAD MATCHING TUTORS */
 
 document.getElementById("serviceSelect").addEventListener("change",function(){
 
@@ -423,10 +417,25 @@ fetch(STUDENT_SCRIPT_URL+"?action=getTutorsByService&service="+encodeURIComponen
 
 tutors.forEach(t=>{
 
+if(service==="Topic Specific" || service==="Group Sessions" || service==="Hourly Rate"){
+
 let opt=document.createElement("option")
 opt.value=t.name
 opt.textContent=t.name+" ("+t.subject+")"
 tutorSelect.appendChild(opt)
+
+}else{
+
+if(t.subject && service.includes(t.subject)){
+
+let opt=document.createElement("option")
+opt.value=t.name
+opt.textContent=t.name+" ("+t.subject+")"
+tutorSelect.appendChild(opt)
+
+}
+
+}
 
 })
 
@@ -439,8 +448,6 @@ tutorLabel.style.display="none"
 }
 
 })
-
-/* STUDENT REGISTRATION */
 
 document.getElementById("studentRegisterForm").addEventListener("submit",function(e){
 
