@@ -479,7 +479,9 @@ function bookService(){
 pricingModal.style.display="none";
 openForm();
 
-/* automatically select correct service */
+/* wait for form to open then set service */
+
+setTimeout(function(){
 
 if(selectedService==="writing"){
 serviceSelect.value="Intro Academic Writing";
@@ -496,6 +498,8 @@ serviceSelect.value="Draft Editing";
 if(selectedService==="speaking"){
 serviceSelect.value="Public Speaking Support";
 }
+
+},100);
 
 }
   
