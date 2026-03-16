@@ -58,14 +58,18 @@ font-weight:bold;
 /* HERO BANNER */
 
 .hero-banner{
-background-image:url("images/banner.jpg");
-background-position:center center;
-background-repeat:no-repeat;
-background-size:contain;
-background-color:#0b2d5c;
-height:45vh;
-min-height:260px;
 margin-top:50px;
+display:flex;
+justify-content:center;
+align-items:center;
+background:#0b2d5c;
+}
+
+.hero-banner img{
+width:100%;
+max-width:1400px;
+height:auto;
+display:block;
 }
   
 @media(max-width:768px){
@@ -243,7 +247,9 @@ line-height:1.6;
 </nav>
 </div>
 
-<div class="hero-banner"></div>
+<div class="hero-banner">
+<img src="images/banner.jpg" alt="C&T Tutorials Banner">
+</div>
 
 <div class="main-content">
 
