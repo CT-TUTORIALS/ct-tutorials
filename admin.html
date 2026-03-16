@@ -20,6 +20,9 @@ background:#003366;
 color:white;
 padding:15px;
 display:none;
+position:sticky;
+top:0;
+z-index:1000;
 }
 
 .admin-nav{
@@ -27,6 +30,7 @@ display:flex;
 justify-content:center;
 gap:25px;
 flex-wrap:wrap;
+align-items:center;
 }
 
 .admin-nav a{
@@ -63,6 +67,34 @@ padding-bottom:6px;
 
 section{
 margin-bottom:70px;
+}
+
+/* DASHBOARD CARDS */
+
+.dashboard{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:20px;
+margin-bottom:40px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:8px;
+box-shadow:0 3px 6px rgba(0,0,0,.1);
+text-align:center;
+}
+
+.card h3{
+margin:0;
+color:#003366;
+}
+
+.card p{
+font-size:22px;
+margin:10px 0 0;
+font-weight:bold;
 }
 
 /* TABLES */
@@ -160,15 +192,16 @@ font-size:13px;
 </div>
 </div>
 
+
 <div class="admin-header" id="adminHeader">
 
 <div class="admin-nav">
 
 <a href="index.html">Home</a>
-<a href="#applications">Tutor Applications</a>
+<a href="#applications">Applications</a>
 <a href="#approved">Approved Tutors</a>
-<a href="#students">Students</a>
-<a href="#clients">Clients</a>
+<a href="#students">Students' Bookings</a>
+<a href="#clients">Other Clients</a>
 
 <span class="logout" onclick="logout()">Logout</span>
 
@@ -176,7 +209,33 @@ font-size:13px;
 
 </div>
 
+
 <div class="container" id="adminContent">
+
+<div class="dashboard">
+
+<div class="card">
+<h3>Tutor Applications</h3>
+<p id="applicationsCount">0</p>
+</div>
+
+<div class="card">
+<h3>Approved Tutors</h3>
+<p id="approvedCount">0</p>
+</div>
+
+<div class="card">
+<h3>Students' Bookings</h3>
+<p id="studentsCount">0</p>
+</div>
+
+<div class="card">
+<h3>Other Clients</h3>
+<p id="clientsCount">0</p>
+</div>
+
+</div>
+
 
 <section id="applications">
 
@@ -231,9 +290,10 @@ font-size:13px;
 
 <section id="students">
 
-<h2>Students</h2>
+<h2>Students' Bookings</h2>
 
 <table id="studentsTable">
+
 <thead>
 <tr>
 <th>Name</th>
@@ -243,7 +303,9 @@ font-size:13px;
 <th>Tutor</th>
 </tr>
 </thead>
+
 <tbody></tbody>
+
 </table>
 
 </section>
@@ -272,9 +334,11 @@ font-size:13px;
 
 </div>
 
+
 <script>
 
 const SCRIPT_URL="PASTE_YOUR_SCRIPT_URL_HERE"
+
 
 function adminLogin(){
 
@@ -296,12 +360,15 @@ document.getElementById("adminContent").style.display="block"
 loadAdminData()
 
 }else{
+
 document.getElementById("error").style.display="block"
+
 }
 
 })
 
 }
+
 
 function logout(){
 
@@ -309,6 +376,7 @@ localStorage.removeItem("adminToken")
 location.reload()
 
 }
+
 
 function loadAdminData(){
 
@@ -322,6 +390,171 @@ populateStudents(data.students)
 populateClients(data.clients)
 
 })
+
+}
+
+
+/* APPLICATIONS */
+
+function populateApplications(tutors){
+
+const tbody=document.querySelector("#applicationsTable tbody")
+tbody.innerHTML=""
+
+let count=0
+
+tutors.forEach(t=>{
+
+if(t.status!=="Pending") return
+
+count++
+
+const row=document.createElement("tr")
+
+row.innerHTML=`
+<td>${t.name}</td>
+<td>${t.email}</td>
+<td>${t.phone}</td>
+<td>${t.subjects}</td>
+<td>${t.qualification}</td>
+<td>${t.experience}</td>
+<td>${t.status}</td>
+<td><button class="approve" onclick="approveTutor('${t.email}')">Approve</button></td>
+<td><button class="reject" onclick="rejectTutor('${t.email}')">Reject</button></td>
+`
+
+tbody.appendChild(row)
+
+})
+
+document.getElementById("applicationsCount").innerText=count
+
+}
+
+
+/* APPROVED TUTORS */
+
+function populateApproved(tutors){
+
+const tbody=document.querySelector("#approvedTable tbody")
+tbody.innerHTML=""
+
+let count=0
+
+tutors.forEach(t=>{
+
+if(t.status!=="Approved") return
+
+count++
+
+const row=document.createElement("tr")
+
+row.innerHTML=`
+<td>${t.name}</td>
+<td>${t.email}</td>
+<td>${t.phone}</td>
+<td>${t.subjects}</td>
+<td>${t.qualification}</td>
+<td>${t.experience}</td>
+`
+
+tbody.appendChild(row)
+
+})
+
+document.getElementById("approvedCount").innerText=count
+
+}
+
+
+/* STUDENTS */
+
+function populateStudents(students){
+
+const tbody=document.querySelector("#studentsTable tbody")
+tbody.innerHTML=""
+
+students.forEach(s=>{
+
+const row=document.createElement("tr")
+
+row.innerHTML=`
+<td>${s.name}</td>
+<td>${s.email}</td>
+<td>${s.phone}</td>
+<td>${s.service}</td>
+<td>${s.tutor}</td>
+`
+
+tbody.appendChild(row)
+
+})
+
+document.getElementById("studentsCount").innerText=students.length
+
+}
+
+
+/* CLIENTS */
+
+function populateClients(clients){
+
+const tbody=document.querySelector("#clientsTable tbody")
+tbody.innerHTML=""
+
+clients.forEach(c=>{
+
+const row=document.createElement("tr")
+
+row.innerHTML=`
+<td>${c.name}</td>
+<td>${c.email}</td>
+<td>${c.phone}</td>
+<td>${c.service}</td>
+`
+
+tbody.appendChild(row)
+
+})
+
+document.getElementById("clientsCount").innerText=clients.length
+
+}
+
+
+/* APPROVE */
+
+function approveTutor(email){
+
+fetch(`${SCRIPT_URL}?action=approveTutor&email=${email}`)
+.then(()=>loadAdminData())
+
+}
+
+
+/* REJECT */
+
+function rejectTutor(email){
+
+fetch(`${SCRIPT_URL}?action=rejectTutor&email=${email}`)
+.then(()=>loadAdminData())
+
+}
+
+
+/* AUTO LOGIN */
+
+window.onload=function(){
+
+const token=localStorage.getItem("adminToken")
+
+if(!token) return
+
+document.getElementById("loginOverlay").style.display="none"
+document.getElementById("adminHeader").style.display="block"
+document.getElementById("adminContent").style.display="block"
+
+loadAdminData()
 
 }
 
