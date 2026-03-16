@@ -420,6 +420,14 @@ window.tutors=data;
 }
 
 loadTutors();
+  
+/* PRICING MODAL FUNCTION */
+
+function openPricing(service){
+
+alert("Pricing information for "+service+" will be displayed here.");
+
+}
 
 /* SERVICE CHANGE */
 
@@ -427,7 +435,11 @@ serviceSelect.addEventListener("change",function(){
 
 const service=this.value;
 
-if(window.tutors && window.tutors[service]){
+if(!window.tutors){
+return;
+}
+
+if(window.tutors[service]){
 
 tutorLabel.style.display="block";
 tutorSelect.innerHTML='<option value="">Select a tutor</option>';
