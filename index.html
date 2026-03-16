@@ -422,9 +422,9 @@ Phone: +264 815 621 879 / +264 818 479 958
   
 <script>
 
-/* INSERT YOUR GOOGLE APPS SCRIPT WEB APP URL BELOW */
+/* GOOGLE APPS SCRIPT URL */
 
-https://script.google.com/macros/s/AKfycbxIShwbw27ViNIHCShqkhJv4WaQ0igIE9AQ44FGT9RL1ik4rqeOzi01liVl4vjCFhNqQw/exec
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxIShwbw27ViNIHCShqkhJv4WaQ0igIE9AQ44FGT9RL1ik4rqeOzi01liVl4vjCFhNqQw/exec";
 
 /* MODAL */
 
@@ -561,25 +561,6 @@ tutorLabel.style.display="block";
 tutorSelect.innerHTML='<option value="">Select a tutor</option>';
 
 window.tutors[tutorCategory].forEach(function(t){
-
-const option=document.createElement("option");
-option.value=t;
-option.textContent=t;
-tutorSelect.appendChild(option);
-
-});
-
-}else{
-
-tutorLabel.style.display="none";
-
-}
-
-});
-tutorLabel.style.display="block";
-tutorSelect.innerHTML='<option value="">Select a tutor</option>';
-
-window.tutors[service].forEach(function(t){
 
 const option=document.createElement("option");
 option.value=t;
