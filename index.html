@@ -402,6 +402,24 @@ Phone: +264 815 621 879 / +264 818 479 958
 
 </footer>
 
+<!-- PRICING MODAL -->
+
+<div id="pricingModal">
+
+<div id="pricingContent">
+
+<button class="close" onclick="pricingModal.style.display='none'">×</button>
+
+<h3 id="pricingTitle"></h3>
+
+<div id="pricingDetails"></div>
+
+<button class="submit-btn" onclick="bookService()">Book This Service</button>
+
+</div>
+
+</div>
+  
 <script>
 
 /* INSERT YOUR GOOGLE APPS SCRIPT WEB APP URL BELOW */
@@ -411,10 +429,58 @@ const SCRIPT_URL="PASTE_YOUR_GOOGLE_SCRIPT_URL_HERE";
 /* MODAL */
 
 const modal=document.getElementById("modal");
+const pricingModal=document.getElementById("pricingModal");
+const pricingTitle=document.getElementById("pricingTitle");
+const pricingDetails=document.getElementById("pricingDetails");
+
+let selectedService="";
 const serviceSelect=document.getElementById("serviceSelect");
 const tutorSelect=document.getElementById("tutorSelect");
 const tutorLabel=document.getElementById("tutorLabel");
+  
+function openPricing(service){
 
+selectedService=service;
+pricingModal.style.display="flex";
+
+if(service==="writing"){
+pricingTitle.innerText="Academic Writing Tutorials";
+pricingDetails.innerHTML=`
+<p>Introduction to Academic Writing (4 sessions) – <b>N$150</b></p>
+<p>Topic Specific Sessions – <b>N$40</b></p>
+<p>Hourly Rate – <b>N$40</b></p>`;
+}
+
+if(service==="group"){
+pricingTitle.innerText="Group Learning Sessions";
+pricingDetails.innerHTML=`
+<p>2 – 5 People – <b>N$200</b></p>
+<p>6 – 14 People – <b>N$450</b></p>
+<p>More than 14 People – <b>N$600</b></p>`;
+}
+
+if(service==="assignment"){
+pricingTitle.innerText="Assignment Support";
+pricingDetails.innerHTML=`
+<p>Draft Editing – <b>N$15 per page</b></p>
+<p>Proofreading – <b>N$10 per page</b></p>
+<p>Referencing Assistance – <b>N$20</b></p>`;
+}
+
+if(service==="speaking"){
+pricingTitle.innerText="Public Speaking Support";
+pricingDetails.innerHTML=`<p>Coaching Session – <b>N$40</b></p>`;
+}
+
+}
+
+function bookService(){
+
+pricingModal.style.display="none";
+openForm();
+
+}
+  
 function openForm(){modal.style.display="flex";}
 function closeForm(){modal.style.display="none";}
 
@@ -495,7 +561,15 @@ closeForm();
 /* CLOSE OUTSIDE MODAL */
 
 window.onclick=function(e){
-if(e.target===modal){closeForm();}
+
+if(e.target===modal){
+closeForm();
+}
+
+if(e.target===pricingModal){
+pricingModal.style.display="none";
+}
+
 }
 
 </script>
