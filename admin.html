@@ -19,7 +19,6 @@ background:#f4f4f4;
 background:#003366;
 color:white;
 padding:15px;
-display:none;
 position:sticky;
 top:0;
 z-index:1000;
@@ -172,8 +171,22 @@ font-size:13px;
 }
 
 </style>
+
+  .admin-footer{
+background:#003366;
+color:white;
+text-align:center;
+padding:20px;
+margin-top:40px;
+font-size:13px;
+}
+  
 </head>
 
+  <footer class="admin-footer">
+© 2026 C&T Tutorials — Admin System
+  </footer>
+  
 <body>
 
 <div class="login-overlay" id="loginOverlay">
@@ -198,12 +211,17 @@ font-size:13px;
 <div class="admin-nav">
 
 <a href="index.html">Home</a>
+
+<span id="adminLinks" style="display:none;">
+
 <a href="#applications">Applications</a>
 <a href="#approved">Approved Tutors</a>
 <a href="#students">Students' Bookings</a>
 <a href="#clients">Other Clients</a>
 
 <span class="logout" onclick="logout()">Logout</span>
+
+</span>
 
 </div>
 
@@ -343,8 +361,9 @@ const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxIShwbw27ViNIHCShqkhJ
 
 function adminLogin(){
 
-let u=document.getElementById("username").value
-let p=document.getElementById("password").value
+document.getElementById("loginOverlay").style.display="none"
+document.getElementById("adminContent").style.display="block"
+document.getElementById("adminLinks").style.display="flex"
 
 fetch(`${SCRIPT_URL}?action=adminLogin&username=${u}&password=${p}`)
 .then(r=>r.json())
