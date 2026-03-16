@@ -479,6 +479,24 @@ function bookService(){
 pricingModal.style.display="none";
 openForm();
 
+/* automatically select correct service */
+
+if(selectedService==="writing"){
+serviceSelect.value="Intro Academic Writing";
+}
+
+if(selectedService==="group"){
+serviceSelect.value="Group Sessions";
+}
+
+if(selectedService==="assignment"){
+serviceSelect.value="Draft Editing";
+}
+
+if(selectedService==="speaking"){
+serviceSelect.value="Public Speaking Support";
+}
+
 }
   
 function openForm(){modal.style.display="flex";}
