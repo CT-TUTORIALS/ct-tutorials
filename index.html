@@ -523,14 +523,59 @@ loadTutors();
 
 serviceSelect.addEventListener("change",function(){
 
-const service=this.value;
-
 if(!window.tutors){
 return;
 }
 
-if(window.tutors[service]){
+let tutorCategory="";
 
+const service=this.value;
+
+/* map services to tutor categories */
+
+if(service==="Intro Academic Writing" || service==="Topic Specific" || service==="Hourly Rate"){
+tutorCategory="writing";
+}
+
+if(service==="Group Sessions"){
+tutorCategory="group";
+}
+
+if(service==="Draft Editing" || service==="Proofreading" || service==="Referencing Assistance"){
+tutorCategory="assignment";
+}
+
+if(service==="Public Speaking Support"){
+tutorCategory="speaking";
+}
+
+if(service==="Secondary School Subjects"){
+tutorCategory="secondary";
+}
+
+/* populate tutors */
+
+if(window.tutors[tutorCategory]){
+
+tutorLabel.style.display="block";
+tutorSelect.innerHTML='<option value="">Select a tutor</option>';
+
+window.tutors[tutorCategory].forEach(function(t){
+
+const option=document.createElement("option");
+option.value=t;
+option.textContent=t;
+tutorSelect.appendChild(option);
+
+});
+
+}else{
+
+tutorLabel.style.display="none";
+
+}
+
+});
 tutorLabel.style.display="block";
 tutorSelect.innerHTML='<option value="">Select a tutor</option>';
 
