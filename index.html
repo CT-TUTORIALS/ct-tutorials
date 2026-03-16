@@ -16,7 +16,7 @@
 
 <style>
 
-/* ---------------- GENERAL ---------------- */
+/* GENERAL */
 
 html{scroll-behavior:smooth;}
 
@@ -28,7 +28,7 @@ color:#333;
 line-height:1.6;
 }
 
-/* ---------------- FIXED TOP NAV BAR ---------------- */
+/* NAV BAR */
 
 .top-bar{
 position:fixed;
@@ -55,18 +55,30 @@ font-weight:bold;
 
 .top-bar nav a:hover{text-decoration:underline;}
 
-/* ---------------- HERO BANNER ---------------- */
+/* HERO BANNER */
 
 .hero-banner{
 background-image:url("images/banner.jpg");
 background-position:center;
 background-repeat:no-repeat;
 background-size:cover;
-height:420px;
+height:45vh;
+min-height:300px;
 margin-top:50px;
 }
 
-/* ---------------- MAIN CONTENT ---------------- */
+@media(max-width:768px){
+
+.hero-banner{
+height:30vh;
+min-height:220px;
+}
+
+.main-content{padding:30px 20px;}
+
+}
+
+/* MAIN */
 
 .main-content{
 max-width:1100px;
@@ -88,7 +100,7 @@ margin-bottom:25px;
 
 h3{color:#00509e;}
 
-/* ---------------- SERVICES ---------------- */
+/* SERVICES */
 
 .services-grid{
 display:grid;
@@ -114,17 +126,7 @@ cursor:pointer;
 
 .service-link:hover{text-decoration:underline;}
 
-/* ---------------- RESOURCES ---------------- */
-
-.resource-link{
-color:#00509e;
-font-weight:bold;
-text-decoration:none;
-}
-
-.resource-link:hover{text-decoration:underline;}
-
-/* ---------------- CONTACT ---------------- */
+/* CONTACT */
 
 .contact-box{
 background:#f7f7f7;
@@ -132,7 +134,7 @@ padding:20px;
 border-radius:8px;
 }
 
-/* ---------------- REGISTER BUTTON ---------------- */
+/* FLOAT BUTTON */
 
 .floating-btn{
 position:fixed;
@@ -148,7 +150,7 @@ cursor:pointer;
 box-shadow:0 4px 6px rgba(0,0,0,0.3);
 }
 
-/* ---------------- MODALS ---------------- */
+/* MODALS */
 
 #modal,
 #pricingModal{
@@ -208,7 +210,7 @@ cursor:pointer;
 
 .submit-btn:hover{background:#00509e;}
 
-/* ---------------- FOOTER ---------------- */
+/* FOOTER */
 
 footer{
 background:#003366;
@@ -222,14 +224,6 @@ font-size:12px;
 max-width:900px;
 margin:auto;
 line-height:1.6;
-}
-
-@media(max-width:768px){
-
-.hero-banner{height:300px;}
-
-.main-content{padding:30px 20px;}
-
 }
 
 </style>
@@ -295,15 +289,6 @@ line-height:1.6;
 
 </section>
 
-<section id="resources">
-<h2>Resources</h2>
-
-<ul>
-<li><a class="resource-link" href="documents/Business-Policies.pdf" target="_blank">Business Policies</a></li>
-<li><a class="resource-link" href="documents/Student-form-for-offline-application.pdf" target="_blank">Offline Application Form</a></li>
-</ul>
-
-</section>
 
 <section id="contact">
 <h2>Contact</h2>
@@ -338,7 +323,7 @@ line-height:1.6;
 </label>
 
 <label>Cellphone Number
-<input type="tel" name="cell_number" required>
+<input type="tel" name="cellphone_number" required>
 </label>
 
 <label>Select Service
@@ -346,14 +331,15 @@ line-height:1.6;
 <select name="service" id="serviceSelect" required>
 
 <option value="">Select a service</option>
-<option value="Intro Academic Writing">Introduction to Academic Writing – N$150</option>
-<option value="Secondary School Subjects">Secondary School Subjects – N$35 per session</option>
-<option value="Topic Specific">Topic Specific Sessions – N$40</option>
-<option value="Hourly Rate">Hourly Rate – N$40</option>
-<option value="Group Sessions">Group Sessions – N$200 to N$600</option>
-<option value="Draft Editing">Draft Editing – N$15 per page</option>
-<option value="Proofreading">Proofreading – N$10 per page</option>
-<option value="Referencing Assistance">Referencing Assistance – N$20</option>
+<option value="Intro Academic Writing">Introduction to Academic Writing</option>
+<option value="Secondary School Subjects">Secondary School Subjects</option>
+<option value="Topic Specific">Topic Specific Sessions</option>
+<option value="Hourly Rate">Hourly Rate</option>
+<option value="Group Sessions">Group Sessions</option>
+<option value="Public Speaking Support">Public Speaking Support</option>
+<option value="Draft Editing">Draft Editing</option>
+<option value="Proofreading">Proofreading</option>
+<option value="Referencing Assistance">Referencing Assistance</option>
 
 </select>
 
@@ -375,22 +361,6 @@ I agree to the <a href="documents/Disclosure-Agreement.pdf" target="_blank">Disc
 <button type="submit" class="submit-btn">Submit Registration</button>
 
 </form>
-
-</div>
-
-<!-- PRICING MODAL -->
-
-<div id="pricingModal">
-
-<div id="pricingContent">
-
-<h3 id="pricingTitle"></h3>
-
-<div id="pricingDetails"></div>
-
-<button class="submit-btn" onclick="bookService()">Book This Service</button>
-
-</div>
 
 </div>
 
@@ -417,62 +387,86 @@ Phone: +264 815 621 879 / +264 818 479 958
 
 <script>
 
-const STUDENT_SCRIPT_URL="YOUR_SCRIPT_URL";
+/* INSERT YOUR GOOGLE APPS SCRIPT WEB APP URL BELOW */
+
+const SCRIPT_URL="PASTE_YOUR_GOOGLE_SCRIPT_URL_HERE";
 
 /* MODAL */
 
-function openForm(){document.getElementById("modal").style.display="flex";}
-function closeForm(){document.getElementById("modal").style.display="none";}
+const modal=document.getElementById("modal");
+const serviceSelect=document.getElementById("serviceSelect");
+const tutorSelect=document.getElementById("tutorSelect");
+const tutorLabel=document.getElementById("tutorLabel");
 
-/* PRICING MODAL */
+function openForm(){modal.style.display="flex";}
+function closeForm(){modal.style.display="none";}
 
-const pricingModal=document.getElementById("pricingModal");
-const pricingTitle=document.getElementById("pricingTitle");
-const pricingDetails=document.getElementById("pricingDetails");
+/* FETCH TUTORS FROM GOOGLE SHEETS */
 
-function openPricing(type){
+async function loadTutors(){
 
-pricingModal.style.display="flex";
+const response=await fetch(SCRIPT_URL+"?action=getTutors");
+const data=await response.json();
 
-if(type==="writing"){
-pricingTitle.innerText="Academic Writing Tutorials";
-pricingDetails.innerHTML=`
-<p>Introduction to Academic Writing – N$150</p>
-<p>Topic Specific Sessions – N$40</p>
-<p>Hourly Rate – N$40</p>`;
-}
-
-if(type==="group"){
-pricingTitle.innerText="Group Sessions";
-pricingDetails.innerHTML=`
-<p>2–5 People – N$200</p>
-<p>6–14 People – N$450</p>
-<p>More than 14 People – N$600</p>`;
-}
-
-if(type==="assignment"){
-pricingTitle.innerText="Assignment Support";
-pricingDetails.innerHTML=`
-<p>Draft Editing – N$15 per page</p>
-<p>Proofreading – N$10 per page</p>
-<p>Referencing Assistance – N$20</p>`;
-}
-
-if(type==="speaking"){
-pricingTitle.innerText="Public Speaking Support";
-pricingDetails.innerHTML=`<p>Session – N$40</p>`;
-}
+window.tutors=data;
 
 }
 
-function bookService(){
-pricingModal.style.display="none";
-openForm();
+loadTutors();
+
+/* SERVICE CHANGE */
+
+serviceSelect.addEventListener("change",function(){
+
+const service=this.value;
+
+if(window.tutors && window.tutors[service]){
+
+tutorLabel.style.display="block";
+tutorSelect.innerHTML='<option value="">Select a tutor</option>';
+
+window.tutors[service].forEach(function(t){
+
+const option=document.createElement("option");
+option.value=t;
+option.textContent=t;
+tutorSelect.appendChild(option);
+
+});
+
+}else{
+
+tutorLabel.style.display="none";
+
 }
+
+});
+
+/* FORM SUBMISSION */
+
+document.getElementById("studentRegisterForm").addEventListener("submit",function(e){
+
+e.preventDefault();
+
+fetch(SCRIPT_URL,{
+method:"POST",
+body:new FormData(this)
+})
+.then(()=>{
+
+alert("Registration submitted successfully.");
+this.reset();
+closeForm();
+
+})
+.catch(()=>alert("Submission error. Please try again."));
+
+});
+
+/* CLOSE OUTSIDE MODAL */
 
 window.onclick=function(e){
-if(e.target===pricingModal)
-pricingModal.style.display="none";
+if(e.target===modal){closeForm();}
 }
 
 </script>
