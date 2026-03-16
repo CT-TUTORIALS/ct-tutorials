@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ct-tutorials.github.io/ct-tutorials/sitemap.xml
