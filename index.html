@@ -471,7 +471,13 @@ const serviceSelect=document.getElementById("serviceSelect");
 const tutorSelect=document.getElementById("tutorSelect");
 const tutorLabel=document.getElementById("tutorLabel");
 
-function openForm(){ modal.style.display="flex"; }
+function openForm(){ 
+modal.style.display="flex";
+tutorLabel.style.display="none";
+tutorSelect.innerHTML='<option value="">Select a tutor</option>';
+serviceSelect.value="";
+}
+
 function closeForm(){ modal.style.display="none"; }
 
 function openPricing(service){
@@ -533,6 +539,12 @@ loadTutors();
 
 serviceSelect.addEventListener("change",function(){
 
+if(!this.value){
+tutorLabel.style.display="none";
+tutorSelect.innerHTML='<option value="">Select a tutor</option>';
+return;
+}
+
 let category="";
 
 if(this.value==="Intro Academic Writing" || this.value==="Topic Specific" || this.value==="Hourly Rate") category="writing";
@@ -543,7 +555,7 @@ else if(this.value==="Secondary School Subjects") category="secondary";
 
 if(tutorsData[category]){
 tutorLabel.style.display="block";
-tutorSelect.innerHTML='<option>Select tutor</option>';
+tutorSelect.innerHTML='<option value="">Select a tutor</option>';
 tutorsData[category].forEach(t=>{
 let opt=document.createElement("option");
 opt.value=t;
@@ -576,6 +588,8 @@ alert("You have already submitted this request.");
 }else if(res.status==="success"){
 alert("Submitted");
 this.reset();
+tutorLabel.style.display="none";
+tutorSelect.innerHTML='<option value="">Select a tutor</option>';
 closeForm();
 }else{
 alert("Submission failed. Please try again.");
