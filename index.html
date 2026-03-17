@@ -443,11 +443,7 @@ Phone: +264 815 621 879 / +264 818 479 958
   
 <script>
 
-/* GOOGLE APPS SCRIPT URL */
-
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxIShwbw27ViNIHCShqkhJv4WaQ0igIE9AQ44FGT9RL1ik4rqeOzi01liVl4vjCFhNqQw/exec";
-
-/* MODAL */
 
 const modal=document.getElementById("modal");
 const pricingModal=document.getElementById("pricingModal");
@@ -459,7 +455,31 @@ const serviceSelect=document.getElementById("serviceSelect");
 const tutorSelect=document.getElementById("tutorSelect");
 const tutorLabel=document.getElementById("tutorLabel");
 
-/* ===== FIXED TUTOR LOADING ===== */
+/* FIXED FUNCTIONS */
+
+function openForm(){ modal.style.display="flex"; }
+function closeForm(){ modal.style.display="none"; }
+
+function openPricing(type){
+pricingModal.style.display="flex";
+selectedService=type;
+pricingTitle.textContent=type.toUpperCase()+" SERVICE";
+pricingDetails.innerHTML="<p>Contact for pricing details.</p>";
+}
+
+function bookService(){
+pricingModal.style.display="none";
+
+if(selectedService==="writing") serviceSelect.value="Intro Academic Writing";
+if(selectedService==="group") serviceSelect.value="Group Sessions";
+if(selectedService==="assignment") serviceSelect.value="Draft Editing";
+if(selectedService==="speaking") serviceSelect.value="Public Speaking Support";
+
+serviceSelect.dispatchEvent(new Event("change"));
+openForm();
+}
+
+/* EXISTING LOGIC UNCHANGED */
 
 let tutorsData={};
 
@@ -467,15 +487,12 @@ async function loadTutors(){
 try{
 const response=await fetch(SCRIPT_URL+"?action=getTutors");
 tutorsData=await response.json();
-window.tutors=tutorsData;
 }catch(err){
-console.error("Tutor load failed",err);
+console.error(err);
 }
 }
 
 loadTutors();
-
-/* SERVICE CHANGE */
 
 serviceSelect.addEventListener("change",function(){
 
@@ -484,34 +501,21 @@ if(!tutorsData) return;
 let tutorCategory="";
 const service=this.value;
 
-if(service==="Intro Academic Writing" || service==="Topic Specific" || service==="Hourly Rate"){
-tutorCategory="writing";
-}
-else if(service==="Group Sessions"){
-tutorCategory="group";
-}
-else if(service==="Draft Editing" || service==="Proofreading" || service==="Referencing Assistance"){
-tutorCategory="assignment";
-}
-else if(service==="Public Speaking Support"){
-tutorCategory="speaking";
-}
-else if(service==="Secondary School Subjects"){
-tutorCategory="secondary";
-}
+if(service==="Intro Academic Writing" || service==="Topic Specific" || service==="Hourly Rate") tutorCategory="writing";
+else if(service==="Group Sessions") tutorCategory="group";
+else if(service==="Draft Editing" || service==="Proofreading" || service==="Referencing Assistance") tutorCategory="assignment";
+else if(service==="Public Speaking Support") tutorCategory="speaking";
+else if(service==="Secondary School Subjects") tutorCategory="secondary";
 
 if(tutorsData[tutorCategory]){
-
 tutorLabel.style.display="block";
 tutorSelect.innerHTML='<option value="">Select a tutor</option>';
 
 tutorsData[tutorCategory].forEach(function(t){
-
 const option=document.createElement("option");
 option.value=t.trim();
 option.textContent=t.trim();
 tutorSelect.appendChild(option);
-
 });
 
 }else{
@@ -519,8 +523,6 @@ tutorLabel.style.display="none";
 }
 
 });
-
-/* FORM SUBMISSION */
 
 document.getElementById("studentRegisterForm").addEventListener("submit",function(e){
 
@@ -539,19 +541,10 @@ closeForm();
 
 });
 
-/* CLOSE OUTSIDE MODAL */
-
 window.onclick=function(e){
-
-if(e.target===modal){
-closeForm();
-}
-
-if(e.target===pricingModal){
-pricingModal.style.display="none";
-}
-
-}
+if(e.target===modal) closeForm();
+if(e.target===pricingModal) pricingModal.style.display="none";
+};
 
 </script>
 
