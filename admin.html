@@ -11,6 +11,7 @@ body{
 font-family:"Segoe UI",Arial;
 margin:0;
 background:#f4f4f4;
+padding-bottom:60px;
 }
 
 /* HEADER */
@@ -18,7 +19,7 @@ background:#f4f4f4;
 .admin-header{
 background:#003366;
 color:white;
-padding:15px;
+padding:12px 10px;
 position:sticky;
 top:0;
 z-index:1000;
@@ -27,22 +28,25 @@ z-index:1000;
 .admin-nav{
 display:flex;
 justify-content:center;
-gap:25px;
+gap:15px;
 flex-wrap:wrap;
 align-items:center;
+text-align:center;
 }
 
 .admin-nav a{
 color:white;
 text-decoration:none;
 font-weight:bold;
+font-size:14px;
 }
 
-.logout{
+.signout{
 background:#c62828;
 padding:6px 12px;
 border-radius:4px;
 cursor:pointer;
+display:inline-block;
 }
 
 /* CONTENT */
@@ -138,6 +142,21 @@ display:none;
 font-size:13px;
 }
 
+/* FOOTER */
+
+.footer{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+background:#003366;
+color:white;
+text-align:center;
+padding:12px 10px;
+font-size:14px;
+z-index:1000;
+}
+
 </style>
 </head>
 
@@ -166,7 +185,7 @@ font-size:13px;
 <a href="#applications">Applications</a>
 <a href="#approved">Approved Tutors</a>
 <a href="#students">Students</a>
-<span class="logout" onclick="logout()">Logout</span>
+<a href="#" class="signout" onclick="logout()">Sign Out</a>
 </span>
 </div>
 </div>
@@ -203,6 +222,10 @@ font-size:13px;
 </table>
 </section>
 
+</div>
+
+<div class="footer">
+© 2026 C&T Tutorials | Admin Panel • All Rights Reserved
 </div>
 
 <script>
