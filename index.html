@@ -331,8 +331,6 @@ object-position:center 75%;
 
 </div>
 
-<!-- STUDENT REGISTRATION MODAL -->
-
 <div id="modal">
 <form id="studentRegisterForm">
 
@@ -375,6 +373,10 @@ object-position:center 75%;
 </select>
 </label>
 
+<!-- SECURITY ADDITIONS -->
+<input type="hidden" name="token" id="tokenField">
+<input type="text" name="company" style="display:none">
+
 <label>
 <input type="checkbox" required>
 I agree to the <a href="documents/Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a>
@@ -408,6 +410,11 @@ Phone: +264 815 621 879 / +264 818 479 958<br><br>
 </footer>
 
 <script>
+
+/* TOKEN GENERATION */
+function generateToken(){
+return btoa(Date.now()+Math.random().toString()).substring(0,20);
+}
 
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxIShwbw27ViNIHCShqkhJv4WaQ0igIE9AQ44FGT9RL1ik4rqeOzi01liVl4vjCFhNqQw/exec";
 
@@ -511,6 +518,14 @@ tutorLabel.style.display="none";
 
 document.getElementById("studentRegisterForm").addEventListener("submit",function(e){
 e.preventDefault();
+
+/* BOT BLOCK */
+if(this.company.value!==""){
+return;
+}
+
+/* TOKEN ATTACH */
+document.getElementById("tokenField").value=generateToken();
 
 fetch(SCRIPT_URL,{
 method:"POST",
