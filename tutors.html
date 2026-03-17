@@ -57,6 +57,9 @@ border-radius:8px;
 padding:20px;
 box-shadow:0 2px 6px rgba(0,0,0,0.1);
 transition:0.3s;
+text-decoration:none;
+color:inherit;
+display:block;
 }
 
 .service-card:hover{
@@ -66,6 +69,17 @@ transform:translateY(-5px);
 .service-card h3{
 margin-top:0;
 color:#003366;
+}
+
+/* links inside cards (for phone numbers) */
+.service-card a{
+color:#003366;
+text-decoration:none;
+font-weight:500;
+}
+
+.service-card a:hover{
+text-decoration:underline;
 }
 
 /* MODALS */
@@ -121,6 +135,12 @@ margin-top:20px;
 background:#990000;
 }
 
+/* CONTACT SECTION */
+
+#contactSection{
+margin-top:40px;
+}
+
 /* FOOTER */
 
 footer{
@@ -173,18 +193,27 @@ C&T Tutorials is an equal opportunity employer. Tutors are selected based on the
 If you are passionate about helping students achieve their academic goals, we encourage you to apply to become part of our tutoring team.
 </p>
 
+</div>
+
+<!-- CONTACT SECTION -->
+
+<div id="contactSection">
+
 <h2>Contact Us</h2>
 
 <div class="card-container">
 
-<div class="service-card">
-<h3>Email</h3>
+<a href="mailto:ct0tutorials@gmail.com" class="service-card">
+<h3>📧 Email</h3>
 <p>ct0tutorials@gmail.com</p>
-</div>
+</a>
 
 <div class="service-card">
-<h3>Phone</h3>
-<p>+264 815 621 879<br>+264 818 479 958</p>
+<h3>📞 Phone</h3>
+<p>
+<a href="tel:+264815621879">+264 815 621 879</a><br>
+<a href="tel:+264818479958">+264 818 479 958</a>
+</p>
 </div>
 
 </div>
@@ -407,73 +436,4 @@ alert("Invalid access code.")
 
 /* LOGIN */
 
-loginForm.addEventListener("submit",function(e){
-
-e.preventDefault()
-
-const email=this.email.value
-const password=this.password.value
-
-fetch(SCRIPT_URL+"?action=tutorLogin&email="+encodeURIComponent(email)+"&password="+encodeURIComponent(password))
-.then(r=>r.json())
-.then(res=>{
-
-if(res.success){
-
-localStorage.setItem("tutorToken",res.token)
-
-document.getElementById("infoSection").style.display="none"
-document.getElementById("dashboard").style.display="block"
-
-loadStudents(res.token)
-
-closeModals()
-
-}
-else{
-alert("Invalid login credentials")
-}
-
-})
-
-})
-
-function loadStudents(token){
-
-fetch(SCRIPT_URL+"?action=getStudentsForTutor&token="+token)
-.then(r=>r.json())
-.then(students=>{
-
-let html=""
-
-if(!Array.isArray(students) || students.length===0){
-html="No students have selected you yet."
-}else{
-
-students.forEach(s=>{
-html+=`
-<div class="student-card">
-<b>${s.name}</b><br>
-${s.email}<br>
-${s.phone}<br>
-Service: ${s.service}
-</div>`
-})
-
-}
-
-document.getElementById("studentsList").innerHTML=html
-
-})
-
-}
-
-function logoutTutor(){
-localStorage.removeItem("tutorToken")
-location.reload()
-}
-
-</script>
-
-</body>
-</html>
+loginForm.addEventListener("submit",
