@@ -373,7 +373,6 @@ object-position:center 75%;
 </select>
 </label>
 
-<!-- SECURITY ADDITIONS -->
 <input type="hidden" name="token" id="tokenField">
 <input type="text" name="company" style="display:none">
 
@@ -386,8 +385,6 @@ I agree to the <a href="documents/Disclosure-Agreement.pdf" target="_blank">Disc
 
 </form>
 </div>
-
-<!-- PRICING MODAL -->
 
 <div id="pricingModal">
 <div id="pricingContent">
@@ -411,7 +408,6 @@ Phone: +264 815 621 879 / +264 818 479 958<br><br>
 
 <script>
 
-/* TOKEN GENERATION */
 function generateToken(){
 return btoa(Date.now()+Math.random().toString()).substring(0,20);
 }
@@ -480,8 +476,6 @@ serviceSelect.dispatchEvent(new Event("change"));
 },100);
 }
 
-/* tutors + submission unchanged */
-
 let tutorsData={};
 
 async function loadTutors(){
@@ -519,21 +513,30 @@ tutorLabel.style.display="none";
 document.getElementById("studentRegisterForm").addEventListener("submit",function(e){
 e.preventDefault();
 
-/* BOT BLOCK */
 if(this.company.value!==""){
 return;
 }
 
-/* TOKEN ATTACH */
 document.getElementById("tokenField").value=generateToken();
 
 fetch(SCRIPT_URL,{
 method:"POST",
 body:new FormData(this)
-}).then(()=>{
+})
+.then(res=>res.json())
+.then(res=>{
+if(res.status==="duplicate_detected"){
+alert("You have already submitted this request.");
+}else if(res.status==="success"){
 alert("Submitted");
 this.reset();
 closeForm();
+}else{
+alert("Submission failed. Please try again.");
+}
+})
+.catch(()=>{
+alert("Network error. Please try again.");
 });
 
 });
