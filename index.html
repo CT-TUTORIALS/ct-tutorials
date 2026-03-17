@@ -231,14 +231,15 @@ margin:auto;
 line-height:1.6;
 }
 
-/* ===== DESKTOP BANNER FIX (FOR YOUR CURRENT CODE) ===== */
+/* ===== RESPONSIVE / DYNAMIC BANNER (DESKTOP ONLY) ===== */
 
 @media (min-width: 1024px){
 
 .hero-banner{
 width:100%;
-min-height:420px; /* controls desktop height */
-height:auto;
+height:45vh; /* scales with screen height */
+min-height:280px; /* prevents it from being too small */
+max-height:600px; /* prevents it from being too tall */
 overflow:hidden;
 }
 
@@ -246,19 +247,13 @@ overflow:hidden;
 width:100%;
 height:100%;
 object-fit:cover;
-object-position:center center; /* prevents awkward cropping */
+object-position:center center;
 display:block;
 }
 
-/* ensure full-width stretch */
-.hero-banner{
-margin-left:0;
-margin-right:0;
 }
 
-}
-
-/* ===== KEEP MOBILE EXACTLY AS IS ===== */
+/* ===== MOBILE REMAINS UNCHANGED ===== */
 </style>
 </head>
 
