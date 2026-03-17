@@ -15,56 +15,243 @@
 <meta name="google-site-verification" content="aSucaMc_aX_kQpRFNvVRgTX0pEeCD1c48mTuirk4qwY" />
 
 <style>
-html{scroll-behavior:smooth;}
-body{margin:0;font-family:"Segoe UI", Arial, sans-serif;background:#f4f4f4;color:#333;line-height:1.6;}
 
-.top-bar{position:fixed;top:0;left:0;width:100%;background:#003366;z-index:1000;}
-.top-bar nav{display:flex;flex-wrap:wrap;justify-content:center;gap:15px;padding:12px 10px;}
-.top-bar nav a{color:white;text-decoration:none;font-weight:bold;}
+/* GENERAL */
+
+html{scroll-behavior:smooth;}
+
+body{
+margin:0;
+font-family:"Segoe UI", Arial, sans-serif;
+background:#f4f4f4;
+color:#333;
+line-height:1.6;
+}
+
+/* NAV BAR */
+
+.top-bar{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+background:#003366;
+z-index:1000;
+}
+
+.top-bar nav{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:15px;
+padding:12px 10px;
+}
+
+.top-bar nav a{
+color:white;
+text-decoration:none;
+font-weight:bold;
+}
+
 .top-bar nav a:hover{text-decoration:underline;}
 
-.hero-banner{margin-top:50px;width:100%;height:200px;overflow:hidden;}
-.hero-banner img{width:100%;height:100%;object-fit:cover;object-position:center 100%;display:block;}
+/* HERO BANNER */
 
-@media(max-width:768px){
-.hero-banner{height:32vh;min-height:200px;}
-.main-content{padding:30px 20px;}
+.hero-banner{
+margin-top:50px;
+width:100%;
+height:200px;
+overflow:hidden;
 }
 
-.main-content{max-width:1100px;margin:auto;padding:50px 40px;}
-section{margin-bottom:60px;scroll-margin-top:80px;}
+.hero-banner img{
+width:100%;
+height:100%;
+object-fit:cover;
+object-position:center 100%;
+display:block;
+}
+  
+@media(max-width:768px){
 
-h2{color:#003366;border-bottom:2px solid #003366;padding-bottom:8px;margin-bottom:25px;}
+.hero-banner{
+height:32vh;
+min-height:200px;
+}
+
+.main-content{padding:30px 20px;}
+
+}
+
+/* MAIN */
+
+.main-content{
+max-width:1100px;
+margin:auto;
+padding:50px 40px;
+}
+
+section{
+margin-bottom:60px;
+scroll-margin-top:80px;
+}
+
+h2{
+color:#003366;
+border-bottom:2px solid #003366;
+padding-bottom:8px;
+margin-bottom:25px;
+}
+
 h3{color:#00509e;}
 
-.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:25px;margin-top:20px;}
-.service-card{background:#f7f7f7;padding:20px;border-radius:8px;box-shadow:0 3px 6px rgba(0,0,0,0.1);}
+/* SERVICES */
 
-.service-link{display:inline-block;margin-top:12px;font-weight:bold;color:#003366;cursor:pointer;}
+.services-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:25px;
+margin-top:20px;
+}
+
+.service-card{
+background:#f7f7f7;
+padding:20px;
+border-radius:8px;
+box-shadow:0 3px 6px rgba(0,0,0,0.1);
+}
+
+.service-link{
+display:inline-block;
+margin-top:12px;
+font-weight:bold;
+color:#003366;
+cursor:pointer;
+}
+
 .service-link:hover{text-decoration:underline;}
 
-.contact-box{background:#f7f7f7;padding:20px;border-radius:8px;}
+/* CONTACT */
 
-.floating-btn{position:fixed;bottom:25px;right:25px;background:#003366;color:white;padding:15px 22px;border:none;border-radius:40px;font-size:16px;cursor:pointer;box-shadow:0 4px 6px rgba(0,0,0,0.3);}
+.contact-box{
+background:#f7f7f7;
+padding:20px;
+border-radius:8px;
+}
 
-#modal,#pricingModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);justify-content:center;align-items:center;z-index:1000;}
-#modal form,#pricingContent{background:white;padding:25px;width:90%;max-width:500px;border-radius:10px;position:relative;}
+/* FLOAT BUTTON */
 
-.close{position:absolute;right:15px;top:10px;font-size:22px;cursor:pointer;border:none;background:none;}
+.floating-btn{
+position:fixed;
+bottom:25px;
+right:25px;
+background:#003366;
+color:white;
+padding:15px 22px;
+border:none;
+border-radius:40px;
+font-size:16px;
+cursor:pointer;
+box-shadow:0 4px 6px rgba(0,0,0,0.3);
+}
 
-label{display:block;margin-top:12px;font-weight:500;}
-input,select{width:100%;padding:10px;margin-top:5px;border-radius:5px;border:1px solid #ccc;}
+/* MODALS */
 
-.submit-btn{margin-top:20px;width:100%;padding:12px;background:#003366;color:white;border:none;border-radius:5px;cursor:pointer;}
+#modal,
+#pricingModal{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.7);
+justify-content:center;
+align-items:center;
+z-index:1000;
+}
+
+#modal form,
+#pricingContent{
+background:white;
+padding:25px;
+width:90%;
+max-width:500px;
+border-radius:10px;
+position:relative;
+}
+
+.close{
+position:absolute;
+right:15px;
+top:10px;
+font-size:22px;
+cursor:pointer;
+border:none;
+background:none;
+}
+
+label{
+display:block;
+margin-top:12px;
+font-weight:500;
+}
+
+input,select{
+width:100%;
+padding:10px;
+margin-top:5px;
+border-radius:5px;
+border:1px solid #ccc;
+}
+
+.submit-btn{
+margin-top:20px;
+width:100%;
+padding:12px;
+background:#003366;
+color:white;
+border:none;
+border-radius:5px;
+cursor:pointer;
+}
+
 .submit-btn:hover{background:#00509e;}
 
-footer{background:#003366;color:white;text-align:center;padding:25px;}
-.footer-disclaimer{font-size:12px;max-width:900px;margin:auto;line-height:1.6;}
+/* FOOTER */
 
-@media (min-width:1024px){
-.hero-banner{height:45vh;min-height:280px;max-height:600px;}
-.hero-banner img{object-position:center 75%;}
+footer{
+background:#003366;
+color:white;
+text-align:center;
+padding:25px;
 }
+
+.footer-disclaimer{
+font-size:12px;
+max-width:900px;
+margin:auto;
+line-height:1.6;
+}
+
+/* ===== RESPONSIVE / DYNAMIC BANNER (DESKTOP ONLY) ===== */
+
+@media (min-width: 1024px){
+
+.hero-banner{
+height:45vh;
+min-height:280px;
+max-height:600px;
+overflow:hidden;
+}
+
+.hero-banner img{
+width:100%;
+height:100%;
+object-fit:cover;
+object-position:center 75%;
+}
+
+}
+
+/* ===== MOBILE REMAINS UNCHANGED ===== */
 </style>
 </head>
 
@@ -89,11 +276,15 @@ footer{background:#003366;color:white;text-align:center;padding:25px;}
 
 <section id="about">
 <h2>About C&T Tutorials</h2>
+
 <p>C&T Tutorials is an independent academic support service committed to enhancing students’ academic performance through structured guidance in academic writing, research, and communication skills.</p>
+
 <p>Our services provide focused and student-centred academic support through personalised tutorials, collaborative group learning, and assignment-based guidance.</p>
+
 </section>
 
 <section id="services">
+
 <h2>Our Services</h2>
 
 <div class="services-grid">
@@ -123,31 +314,40 @@ footer{background:#003366;color:white;text-align:center;padding:25px;}
 </div>
 
 </div>
+
 </section>
 
 <section id="resources">
 <h2>Resources</h2>
+
 <ul>
-<li><a href="documents/Business-Policies.pdf" target="_blank">Business Policies</a></li>
-<li><a href="documents/Student-form-for-offline-application.pdf" target="_blank">Offline Application Form</a></li>
+<li><a class="resource-link" href="documents/Business-Policies.pdf" target="_blank">Business Policies</a></li>
+<li><a class="resource-link" href="documents/Student-form-for-offline-application.pdf" target="_blank">Offline Application Form</a></li>
 </ul>
+
 </section>
+
 
 <section id="contact">
 <h2>Contact</h2>
+
 <div class="contact-box">
 <p>Email: <a href="mailto:ct0tutorials@gmail.com">ct0tutorials@gmail.com</a></p>
 <p>Phone: +264 815 621 879 / +264 818 479 958</p>
 </div>
+
 </section>
 
 <button class="floating-btn" onclick="openForm()">Register Now</button>
 
 </div>
 
-<!-- STUDENT MODAL -->
+<!-- STUDENT REGISTRATION MODAL -->
+
 <div id="modal">
+
 <form id="studentRegisterForm">
+
 <button type="button" class="close" onclick="closeForm()">×</button>
 
 <h2>Service Registration</h2>
@@ -165,7 +365,9 @@ footer{background:#003366;color:white;text-align:center;padding:25px;}
 </label>
 
 <label>Select Service
+
 <select name="service" id="serviceSelect" required>
+
 <option value="">Select a service</option>
 <option value="Intro Academic Writing">Introduction to Academic Writing</option>
 <option value="Secondary School Subjects">Secondary School Subjects</option>
@@ -176,13 +378,17 @@ footer{background:#003366;color:white;text-align:center;padding:25px;}
 <option value="Draft Editing">Draft Editing</option>
 <option value="Proofreading">Proofreading</option>
 <option value="Referencing Assistance">Referencing Assistance</option>
+
 </select>
+
 </label>
 
 <label id="tutorLabel" style="display:none;">Select Tutor
+
 <select name="tutor" id="tutorSelect">
 <option value="">Select a tutor</option>
 </select>
+
 </label>
 
 <label>
@@ -191,31 +397,57 @@ I agree to the <a href="documents/Disclosure-Agreement.pdf" target="_blank">Disc
 </label>
 
 <button type="submit" class="submit-btn">Submit Registration</button>
-</form>
-</div>
 
-<!-- PRICING MODAL -->
-<div id="pricingModal">
-<div id="pricingContent">
-<button class="close" onclick="pricingModal.style.display='none'">×</button>
-<h3 id="pricingTitle"></h3>
-<div id="pricingDetails"></div>
-<button class="submit-btn" onclick="bookService()">Book This Service</button>
-</div>
+</form>
+
 </div>
 
 <footer>
+
 <div class="footer-disclaimer">
+
 <strong>Disclaimer:</strong><br>
-C&T Tutorials operates independently and is not affiliated with, endorsed by, or formally connected to any institution.
+C&T Tutorials operates independently and is not affiliated with, endorsed by, or formally connected to any university, college, examination body, or academic institution. All services are supplementary and intended to support independent learning.
+
 <br><br>
-© 2026 C&T Tutorials
+
+<strong>Contact Information:</strong><br>
+Email: ct0tutorials@gmail.com<br>
+Phone: +264 815 621 879 / +264 818 479 958
+
+<br><br>
+
+© 2026 C&T Tutorials. All rights reserved.
+
 </div>
+
 </footer>
 
+<!-- PRICING MODAL -->
+
+<div id="pricingModal">
+
+<div id="pricingContent">
+
+<button class="close" onclick="pricingModal.style.display='none'">×</button>
+
+<h3 id="pricingTitle"></h3>
+
+<div id="pricingDetails"></div>
+
+<button class="submit-btn" onclick="bookService()">Book This Service</button>
+
+</div>
+
+</div>
+  
 <script>
 
+/* GOOGLE APPS SCRIPT URL */
+
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxIShwbw27ViNIHCShqkhJv4WaQ0igIE9AQ44FGT9RL1ik4rqeOzi01liVl4vjCFhNqQw/exec";
+
+/* MODAL */
 
 const modal=document.getElementById("modal");
 const pricingModal=document.getElementById("pricingModal");
@@ -227,118 +459,99 @@ const serviceSelect=document.getElementById("serviceSelect");
 const tutorSelect=document.getElementById("tutorSelect");
 const tutorLabel=document.getElementById("tutorLabel");
 
-function openForm(){modal.style.display="flex";}
-function closeForm(){modal.style.display="none";}
+/* ===== FIXED TUTOR LOADING ===== */
 
-function openPricing(service){
-pricingModal.style.display="flex";
-selectedService=service;
-
-if(service==="writing"){
-pricingTitle.innerText="Academic Writing Tutorials";
-pricingDetails.innerHTML=`
-<p>Introduction to Academic Writing (4 sessions) – <b>N$150</b></p>
-<p>Topic Specific Sessions – <b>N$40</b></p>
-<p>Hourly Rate – <b>N$40</b></p>`;
-}
-
-if(service==="group"){
-pricingTitle.innerText="Group Learning Sessions";
-pricingDetails.innerHTML=`
-<p>2 – 5 People – <b>N$200</b></p>
-<p>6 – 14 People – <b>N$450</b></p>
-<p>More than 14 People – <b>N$600</b></p>`;
-}
-
-if(service==="assignment"){
-pricingTitle.innerText="Assignment Support";
-pricingDetails.innerHTML=`
-<p>Draft Editing – <b>N$15 per page</b></p>
-<p>Proofreading – <b>N$10 per page</b></p>
-<p>Referencing Assistance – <b>N$20</b></p>`;
-}
-
-if(service==="speaking"){
-pricingTitle.innerText="Public Speaking Support";
-pricingDetails.innerHTML=`<p>Coaching Session – <b>N$40</b></p>`;
-}
-}
-
-function bookService(){
-pricingModal.style.display="none";
-
-if(selectedService==="writing") serviceSelect.value="Intro Academic Writing";
-if(selectedService==="group") serviceSelect.value="Group Sessions";
-if(selectedService==="assignment") serviceSelect.value="Draft Editing";
-if(selectedService==="speaking") serviceSelect.value="Public Speaking Support";
-
-serviceSelect.dispatchEvent(new Event("change"));
-openForm();
-}
-
-/* tutors */
 let tutorsData={};
 
 async function loadTutors(){
-const res=await fetch(SCRIPT_URL+"?action=getTutors");
-tutorsData=await res.json();
+try{
+const response=await fetch(SCRIPT_URL+"?action=getTutors");
+tutorsData=await response.json();
+window.tutors=tutorsData;
+}catch(err){
+console.error("Tutor load failed",err);
 }
+}
+
 loadTutors();
+
+/* SERVICE CHANGE */
 
 serviceSelect.addEventListener("change",function(){
 
-let category="";
-const s=this.value;
+if(!tutorsData) return;
 
-if(s==="Intro Academic Writing"||s==="Topic Specific"||s==="Hourly Rate") category="writing";
-else if(s==="Group Sessions") category="group";
-else if(s==="Draft Editing"||s==="Proofreading"||s==="Referencing Assistance") category="assignment";
-else if(s==="Public Speaking Support") category="speaking";
-else if(s==="Secondary School Subjects") category="secondary";
+let tutorCategory="";
+const service=this.value;
 
-if(tutorsData[category]){
+if(service==="Intro Academic Writing" || service==="Topic Specific" || service==="Hourly Rate"){
+tutorCategory="writing";
+}
+else if(service==="Group Sessions"){
+tutorCategory="group";
+}
+else if(service==="Draft Editing" || service==="Proofreading" || service==="Referencing Assistance"){
+tutorCategory="assignment";
+}
+else if(service==="Public Speaking Support"){
+tutorCategory="speaking";
+}
+else if(service==="Secondary School Subjects"){
+tutorCategory="secondary";
+}
+
+if(tutorsData[tutorCategory]){
+
 tutorLabel.style.display="block";
 tutorSelect.innerHTML='<option value="">Select a tutor</option>';
 
-tutorsData[category].forEach(t=>{
-let o=document.createElement("option");
-o.value=t;
-o.textContent=t;
-tutorSelect.appendChild(o);
+tutorsData[tutorCategory].forEach(function(t){
+
+const option=document.createElement("option");
+option.value=t.trim();
+option.textContent=t.trim();
+tutorSelect.appendChild(option);
+
 });
+
 }else{
 tutorLabel.style.display="none";
 }
 
 });
 
-/* submit */
+/* FORM SUBMISSION */
+
 document.getElementById("studentRegisterForm").addEventListener("submit",function(e){
+
 e.preventDefault();
 
 fetch(SCRIPT_URL,{
 method:"POST",
-body:JSON.stringify({
-type:"studentRegistration",
-name:this.name.value,
-email:this.email.value,
-phone:this.cellphone_number.value,
-service:this.service.value,
-tutor:this.tutor.value
-})
+body:new FormData(this)
 })
 .then(()=>{
 alert("Registration submitted successfully.");
 this.reset();
 closeForm();
 })
-.catch(()=>alert("Submission error"));
+.catch(()=>alert("Submission error. Please try again."));
+
 });
 
+/* CLOSE OUTSIDE MODAL */
+
 window.onclick=function(e){
-if(e.target===modal) closeForm();
-if(e.target===pricingModal) pricingModal.style.display="none";
-};
+
+if(e.target===modal){
+closeForm();
+}
+
+if(e.target===pricingModal){
+pricingModal.style.display="none";
+}
+
+}
 
 </script>
 
