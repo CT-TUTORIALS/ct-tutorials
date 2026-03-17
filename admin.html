@@ -173,17 +173,17 @@ font-size:13px;
 
 <div class="container" id="adminContent">
 
-<section>
+<section id="applications">
 <h2>Tutor Applications</h2>
 <table id="applicationsTable">
 <thead><tr>
-<th>Name</th><th>Email</th><th>Phone</th><th>Subjects</th><th>Status</th><th>Approve</th>
+<th>Name</th><th>Email</th><th>Phone</th><th>Subjects</th><th>Status</th><th>Action</th>
 </tr></thead>
 <tbody></tbody>
 </table>
 </section>
 
-<section>
+<section id="approved">
 <h2>Approved Tutors</h2>
 <table id="approvedTable">
 <thead><tr>
@@ -193,7 +193,7 @@ font-size:13px;
 </table>
 </section>
 
-<section>
+<section id="students">
 <h2>Students</h2>
 <table id="studentsTable">
 <thead><tr>
@@ -209,26 +209,22 @@ font-size:13px;
 
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxIShwbw27ViNIHCShqkhJv4WaQ0igIE9AQ44FGT9RL1ik4rqeOzi01liVl4vjCFhNqQw/exec";
 
-/* LOGIN */
+/* ===== LOGIN ===== */
 
 function adminLogin(){
 
-const u=document.getElementById("username").value;
-const p=document.getElementById("password").value;
+const username=document.getElementById("username").value.trim()
+const password=document.getElementById("password").value.trim()
 
-fetch(`${SCRIPT_URL}?action=adminLogin&username=${u}&password=${p}`)
+fetch(SCRIPT_URL+"?action=adminLogin&username="+encodeURIComponent(username)+"&password="+encodeURIComponent(password))
 .then(r=>r.json())
-.then(data=>{
+.then(res=>{
 
-if(data.success){
+if(res.success){
 
-localStorage.setItem("adminToken",data.token)
+localStorage.setItem("adminToken",res.token)
 
-document.getElementById("loginOverlay").style.display="none"
-document.getElementById("adminContent").style.display="block"
-document.getElementById("adminLinks").style.display="flex"
-
-loadAdminData()
+initAdmin(res.token)
 
 }else{
 document.getElementById("error").style.display="block"
@@ -238,31 +234,150 @@ document.getElementById("error").style.display="block"
 
 }
 
-/* LOAD DATA */
+/* AUTO LOGIN */
 
-function loadAdminData(){
+window.onload=function(){
 
-fetch(`${SCRIPT_URL}?action=adminStats`)
+const token=localStorage.getItem("adminToken")
+
+if(token){
+initAdmin(token)
+}
+
+}
+
+/* INIT */
+
+function initAdmin(token){
+
+document.getElementById("loginOverlay").style.display="none"
+document.getElementById("adminContent").style.display="block"
+document.getElementById("adminLinks").style.display="inline"
+
+loadApplications(token)
+loadApprovedTutors(token)
+loadStudents(token)
+
+}
+
+/* ===== LOAD DATA ===== */
+
+function loadApplications(token){
+
+fetch(SCRIPT_URL+"?action=getTutorApplications&token="+token)
 .then(r=>r.json())
 .then(data=>{
 
-document.getElementById("applicationsTable").querySelector("tbody").innerHTML=""
-document.getElementById("approvedTable").querySelector("tbody").innerHTML=""
+const tbody=document.querySelector("#applicationsTable tbody")
+tbody.innerHTML=""
 
-alert("Admin stats loaded successfully")
+if(!Array.isArray(data)) return
+
+data.forEach(app=>{
+
+const row=`
+<tr>
+<td>${app.name||""}</td>
+<td>${app.email||""}</td>
+<td>${app.phone||""}</td>
+<td>${app.subjects||""}</td>
+<td>${app.status||"Pending"}</td>
+<td>
+<button class="approve" onclick="approve('${app.email}')">Approve</button>
+<button class="reject" onclick="reject('${app.email}')">Reject</button>
+</td>
+</tr>`
+
+tbody.innerHTML+=row
+
+})
 
 })
 
 }
 
-/* APPROVE */
+function loadApprovedTutors(token){
 
-function approveTutor(email){
+fetch(SCRIPT_URL+"?action=getApprovedTutors&token="+token)
+.then(r=>r.json())
+.then(data=>{
+
+const tbody=document.querySelector("#approvedTable tbody")
+tbody.innerHTML=""
+
+if(!Array.isArray(data)) return
+
+data.forEach(t=>{
+
+tbody.innerHTML+=`
+<tr>
+<td>${t.name||""}</td>
+<td>${t.email||""}</td>
+<td>${t.phone||""}</td>
+<td>${t.subjects||""}</td>
+</tr>`
+
+})
+
+})
+
+}
+
+function loadStudents(token){
+
+fetch(SCRIPT_URL+"?action=getAllStudents&token="+token)
+.then(r=>r.json())
+.then(data=>{
+
+const tbody=document.querySelector("#studentsTable tbody")
+tbody.innerHTML=""
+
+if(!Array.isArray(data)) return
+
+data.forEach(s=>{
+
+tbody.innerHTML+=`
+<tr>
+<td>${s.name||""}</td>
+<td>${s.email||""}</td>
+<td>${s.phone||""}</td>
+<td>${s.service||""}</td>
+<td>${s.tutor||""}</td>
+</tr>`
+
+})
+
+})
+
+}
+
+/* ===== ACTIONS ===== */
+
+function approve(email){
 
 fetch(SCRIPT_URL,{
 method:"POST",
-body:JSON.stringify({type:"approveTutor",email:email})
-}).then(()=>loadAdminData())
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+type:"approveTutor",
+email:email
+})
+})
+.then(()=>loadApplications(localStorage.getItem("adminToken")))
+
+}
+
+function reject(email){
+
+fetch(SCRIPT_URL,{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+type:"rejectTutor",
+email:email
+})
+})
+.then(()=>loadApplications(localStorage.getItem("adminToken")))
 
 }
 
