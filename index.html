@@ -15,44 +15,203 @@
 <meta name="google-site-verification" content="aSucaMc_aX_kQpRFNvVRgTX0pEeCD1c48mTuirk4qwY" />
 
 <style>
-/* (UNCHANGED — YOUR EXACT STYLES REMAIN) */
 html{scroll-behavior:smooth;}
 body{margin:0;font-family:"Segoe UI", Arial, sans-serif;background:#f4f4f4;color:#333;line-height:1.6;}
+
 .top-bar{position:fixed;top:0;left:0;width:100%;background:#003366;z-index:1000;}
 .top-bar nav{display:flex;flex-wrap:wrap;justify-content:center;gap:15px;padding:12px 10px;}
 .top-bar nav a{color:white;text-decoration:none;font-weight:bold;}
 .top-bar nav a:hover{text-decoration:underline;}
-.hero-banner{margin-top:50px;width:100%;height:auto;aspect-ratio:16/9;background:#00224d;display:flex;justify-content:center;align-items:center;overflow:hidden;}
-.hero-banner img{width:100%;height:100%;object-fit:contain;display:block;}
-@media(max-width:768px){.hero-banner{height:auto;aspect-ratio:16/9;}.main-content{padding:30px 20px;}}
+
+.hero-banner{margin-top:50px;width:100%;height:200px;overflow:hidden;}
+.hero-banner img{width:100%;height:100%;object-fit:cover;object-position:center 100%;display:block;}
+
+@media(max-width:768px){
+.hero-banner{height:32vh;min-height:200px;}
+.main-content{padding:30px 20px;}
+}
+
 .main-content{max-width:1100px;margin:auto;padding:50px 40px;}
 section{margin-bottom:60px;scroll-margin-top:80px;}
+
 h2{color:#003366;border-bottom:2px solid #003366;padding-bottom:8px;margin-bottom:25px;}
 h3{color:#00509e;}
+
 .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:25px;margin-top:20px;}
 .service-card{background:#f7f7f7;padding:20px;border-radius:8px;box-shadow:0 3px 6px rgba(0,0,0,0.1);}
+
 .service-link{display:inline-block;margin-top:12px;font-weight:bold;color:#003366;cursor:pointer;}
 .service-link:hover{text-decoration:underline;}
+
 .contact-box{background:#f7f7f7;padding:20px;border-radius:8px;}
+
 .floating-btn{position:fixed;bottom:25px;right:25px;background:#003366;color:white;padding:15px 22px;border:none;border-radius:40px;font-size:16px;cursor:pointer;box-shadow:0 4px 6px rgba(0,0,0,0.3);}
+
 #modal,#pricingModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);justify-content:center;align-items:center;z-index:1000;}
 #modal form,#pricingContent{background:white;padding:25px;width:90%;max-width:500px;border-radius:10px;position:relative;}
+
 .close{position:absolute;right:15px;top:10px;font-size:22px;cursor:pointer;border:none;background:none;}
+
 label{display:block;margin-top:12px;font-weight:500;}
 input,select{width:100%;padding:10px;margin-top:5px;border-radius:5px;border:1px solid #ccc;}
+
 .submit-btn{margin-top:20px;width:100%;padding:12px;background:#003366;color:white;border:none;border-radius:5px;cursor:pointer;}
 .submit-btn:hover{background:#00509e;}
+
 footer{background:#003366;color:white;text-align:center;padding:25px;}
 .footer-disclaimer{font-size:12px;max-width:900px;margin:auto;line-height:1.6;}
-@media (min-width:1024px){.hero-banner{height:400px;max-height:600px;}}
+
+@media (min-width:1024px){
+.hero-banner{height:45vh;min-height:280px;max-height:600px;}
+.hero-banner img{object-position:center 75%;}
+}
 </style>
 </head>
 
 <body>
 
-<!-- (UNCHANGED HTML CONTENT — EXACTLY YOURS) -->
+<div class="top-bar">
+<nav>
+<a href="#about">About</a>
+<a href="#services">Services</a>
+<a href="#resources">Resources</a>
+<a href="#contact">Contact</a>
+<a href="admin.html">Admins Portal</a>
+<a href="tutors.html">Tutors' Portal</a>
+</nav>
+</div>
 
-<!-- KEEP EVERYTHING ABOVE EXACTLY AS YOU HAD IT -->
+<div class="hero-banner">
+<img src="images/banner.jpg">
+</div>
+
+<div class="main-content">
+
+<section id="about">
+<h2>About C&T Tutorials</h2>
+<p>C&T Tutorials is an independent academic support service committed to enhancing students’ academic performance through structured guidance in academic writing, research, and communication skills.</p>
+<p>Our services provide focused and student-centred academic support through personalised tutorials, collaborative group learning, and assignment-based guidance.</p>
+</section>
+
+<section id="services">
+<h2>Our Services</h2>
+
+<div class="services-grid">
+
+<div class="service-card">
+<h3>Academic Writing Tutorials</h3>
+<p>Structured sessions covering academic writing principles, essay development, and research techniques.</p>
+<span class="service-link" onclick="openPricing('writing')">View Pricing</span>
+</div>
+
+<div class="service-card">
+<h3>Group Learning Sessions</h3>
+<p>Collaborative sessions designed to support multiple students working on similar academic challenges.</p>
+<span class="service-link" onclick="openPricing('group')">View Pricing</span>
+</div>
+
+<div class="service-card">
+<h3>Assignment Support</h3>
+<p>Professional assistance with referencing, editing, proofreading, improving assignment structure and clarity.</p>
+<span class="service-link" onclick="openPricing('assignment')">View Pricing</span>
+</div>
+
+<div class="service-card">
+<h3>Public Speaking Support</h3>
+<p>Coaching sessions designed to strengthen presentation and communication skills for academic purposes.</p>
+<span class="service-link" onclick="openPricing('speaking')">View Pricing</span>
+</div>
+
+</div>
+</section>
+
+<section id="resources">
+<h2>Resources</h2>
+<ul>
+<li><a href="documents/Business-Policies.pdf" target="_blank">Business Policies</a></li>
+<li><a href="documents/Student-form-for-offline-application.pdf" target="_blank">Offline Application Form</a></li>
+</ul>
+</section>
+
+<section id="contact">
+<h2>Contact</h2>
+<div class="contact-box">
+<p>Email: <a href="mailto:ct0tutorials@gmail.com">ct0tutorials@gmail.com</a></p>
+<p>Phone: +264 815 621 879 / +264 818 479 958</p>
+</div>
+</section>
+
+<button class="floating-btn" onclick="openForm()">Register Now</button>
+
+</div>
+
+<!-- STUDENT MODAL -->
+<div id="modal">
+<form id="studentRegisterForm">
+<button type="button" class="close" onclick="closeForm()">×</button>
+
+<h2>Service Registration</h2>
+
+<label>Full Name
+<input type="text" name="name" required>
+</label>
+
+<label>Email
+<input type="email" name="email" required>
+</label>
+
+<label>Cellphone Number
+<input type="tel" name="cellphone_number" required>
+</label>
+
+<label>Select Service
+<select name="service" id="serviceSelect" required>
+<option value="">Select a service</option>
+<option value="Intro Academic Writing">Introduction to Academic Writing</option>
+<option value="Secondary School Subjects">Secondary School Subjects</option>
+<option value="Topic Specific">Topic Specific Sessions</option>
+<option value="Hourly Rate">Hourly Rate</option>
+<option value="Group Sessions">Group Sessions</option>
+<option value="Public Speaking Support">Public Speaking Support</option>
+<option value="Draft Editing">Draft Editing</option>
+<option value="Proofreading">Proofreading</option>
+<option value="Referencing Assistance">Referencing Assistance</option>
+</select>
+</label>
+
+<label id="tutorLabel" style="display:none;">Select Tutor
+<select name="tutor" id="tutorSelect">
+<option value="">Select a tutor</option>
+</select>
+</label>
+
+<label>
+<input type="checkbox" required>
+I agree to the <a href="documents/Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a>
+</label>
+
+<button type="submit" class="submit-btn">Submit Registration</button>
+</form>
+</div>
+
+<!-- PRICING MODAL -->
+<div id="pricingModal">
+<div id="pricingContent">
+<button class="close" onclick="pricingModal.style.display='none'">×</button>
+<h3 id="pricingTitle"></h3>
+<div id="pricingDetails"></div>
+<button class="submit-btn" onclick="bookService()">Book This Service</button>
+</div>
+</div>
+
+<footer>
+<div class="footer-disclaimer">
+<strong>Disclaimer:</strong><br>
+C&T Tutorials operates independently and is not affiliated with, endorsed by, or formally connected to any institution.
+<br><br>
+© 2026 C&T Tutorials
+</div>
+</footer>
 
 <script>
 
@@ -68,15 +227,10 @@ const serviceSelect=document.getElementById("serviceSelect");
 const tutorSelect=document.getElementById("tutorSelect");
 const tutorLabel=document.getElementById("tutorLabel");
 
-/* CORE FUNCTIONS */
-
-function openForm(){ modal.style.display="flex"; }
-function closeForm(){ modal.style.display="none"; }
-
-/* PRICING (WORKING) */
+function openForm(){modal.style.display="flex";}
+function closeForm(){modal.style.display="none";}
 
 function openPricing(service){
-
 pricingModal.style.display="flex";
 selectedService=service;
 
@@ -106,10 +260,8 @@ pricingDetails.innerHTML=`
 
 if(service==="speaking"){
 pricingTitle.innerText="Public Speaking Support";
-pricingDetails.innerHTML=`
-<p>Coaching Session – <b>N$40</b></p>`;
+pricingDetails.innerHTML=`<p>Coaching Session – <b>N$40</b></p>`;
 }
-
 }
 
 function bookService(){
@@ -124,69 +276,64 @@ serviceSelect.dispatchEvent(new Event("change"));
 openForm();
 }
 
-/* ✅ RESTORED TUTOR LOGIC */
-
+/* tutors */
 let tutorsData={};
 
 async function loadTutors(){
-try{
-const response=await fetch(SCRIPT_URL+"?action=getTutors");
-tutorsData=await response.json();
-}catch(err){
-console.error(err);
+const res=await fetch(SCRIPT_URL+"?action=getTutors");
+tutorsData=await res.json();
 }
-}
-
 loadTutors();
 
 serviceSelect.addEventListener("change",function(){
 
-let tutorCategory="";
-const service=this.value;
+let category="";
+const s=this.value;
 
-if(service==="Intro Academic Writing" || service==="Topic Specific" || service==="Hourly Rate") tutorCategory="writing";
-else if(service==="Group Sessions") tutorCategory="group";
-else if(service==="Draft Editing" || service==="Proofreading" || service==="Referencing Assistance") tutorCategory="assignment";
-else if(service==="Public Speaking Support") tutorCategory="speaking";
-else if(service==="Secondary School Subjects") tutorCategory="secondary";
+if(s==="Intro Academic Writing"||s==="Topic Specific"||s==="Hourly Rate") category="writing";
+else if(s==="Group Sessions") category="group";
+else if(s==="Draft Editing"||s==="Proofreading"||s==="Referencing Assistance") category="assignment";
+else if(s==="Public Speaking Support") category="speaking";
+else if(s==="Secondary School Subjects") category="secondary";
 
-if(tutorsData[tutorCategory]){
+if(tutorsData[category]){
 tutorLabel.style.display="block";
 tutorSelect.innerHTML='<option value="">Select a tutor</option>';
 
-tutorsData[tutorCategory].forEach(function(t){
-const option=document.createElement("option");
-option.value=t.trim();
-option.textContent=t.trim();
-tutorSelect.appendChild(option);
+tutorsData[category].forEach(t=>{
+let o=document.createElement("option");
+o.value=t;
+o.textContent=t;
+tutorSelect.appendChild(o);
 });
-
 }else{
 tutorLabel.style.display="none";
 }
 
 });
 
-/* FORM SUBMIT */
-
+/* submit */
 document.getElementById("studentRegisterForm").addEventListener("submit",function(e){
-
 e.preventDefault();
 
 fetch(SCRIPT_URL,{
 method:"POST",
-body:new FormData(this)
+body:JSON.stringify({
+type:"studentRegistration",
+name:this.name.value,
+email:this.email.value,
+phone:this.cellphone_number.value,
+service:this.service.value,
+tutor:this.tutor.value
+})
 })
 .then(()=>{
 alert("Registration submitted successfully.");
 this.reset();
 closeForm();
 })
-.catch(()=>alert("Submission error. Please try again."));
-
+.catch(()=>alert("Submission error"));
 });
-
-/* MODAL CLOSE */
 
 window.onclick=function(e){
 if(e.target===modal) closeForm();
