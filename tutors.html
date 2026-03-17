@@ -257,28 +257,18 @@ window.onclick=function(e){
 if(e.target.classList.contains("modal")) e.target.style.display="none"
 }
 
-/* VALIDATION */
+/* AUTO LOGIN */
 
-function validateApplyForm(form){
+window.onload=function(){
 
-let valid=true
-form.querySelectorAll("input").forEach(i=>i.classList.remove("error"))
+const token=localStorage.getItem("tutorToken")
 
-if(form.name.value.trim().length<3){form.name.classList.add("error");valid=false}
+if(token){
+document.getElementById("infoSection").style.display="none"
+document.getElementById("dashboard").style.display="block"
+loadStudents(token)
+}
 
-let emailPattern=/^[^\s@]+@[^\s@]+\.[^\s@]+$/
-if(!emailPattern.test(form.email.value)){form.email.classList.add("error");valid=false}
-
-let phonePattern=/^[0-9+\s]+$/
-if(!phonePattern.test(form.phone.value)){form.phone.classList.add("error");valid=false}
-
-if(form.subjects.value.trim().length<2){form.subjects.classList.add("error");valid=false}
-
-if(form.qualification.value.trim().length<2){form.qualification.classList.add("error");valid=false}
-
-if(!valid){alert("Please correct the highlighted fields.")}
-
-return valid
 }
 
 /* APPLY */
@@ -286,8 +276,6 @@ return valid
 applyForm.addEventListener("submit",function(e){
 
 e.preventDefault()
-
-if(!validateApplyForm(this)) return
 
 fetch(SCRIPT_URL,{
 method:"POST",
@@ -331,7 +319,7 @@ headers:{"Content-Type":"application/json"},
 body:JSON.stringify({
 type:"createTutorAccount",
 email:email,
-code:this.code.value,
+accessCode:this.code.value,
 password:password
 })
 })
@@ -341,8 +329,6 @@ password:password
 if(res.status==="account_created"){
 
 alert("Account created successfully. Logging you in...")
-
-/* AUTO LOGIN */
 
 fetch(SCRIPT_URL+"?action=tutorLogin&email="+encodeURIComponent(email)+"&password="+encodeURIComponent(password))
 .then(r=>r.json())
@@ -413,9 +399,9 @@ fetch(SCRIPT_URL+"?action=getStudentsForTutor&token="+token)
 
 let html=""
 
-if(students.length===0){
+if(!Array.isArray(students) || students.length===0){
 html="No students have selected you yet."
-}
+}else{
 
 students.forEach(s=>{
 html+=`
@@ -426,6 +412,8 @@ ${s.phone}<br>
 Service: ${s.service}
 </div>`
 })
+
+}
 
 document.getElementById("studentsList").innerHTML=html
 
