@@ -127,7 +127,9 @@ text-decoration:none;
 font-weight:500;
 }
 
-.service-card a:hover{text-decoration:underline;}
+.service-card a:hover{
+text-decoration:underline;
+}
 
 .floating-btn{
 position:fixed;
@@ -225,6 +227,21 @@ border-top:1px solid rgba(255,255,255,0.3);
 font-size:13px;
 opacity:0.9;
 }
+
+@media (min-width: 1024px){
+.hero-banner{
+height:45vh;
+min-height:280px;
+max-height:600px;
+overflow:hidden;
+}
+.hero-banner img{
+width:100%;
+height:100%;
+object-fit:cover;
+object-position:center 75%;
+}
+}
 </style>
 </head>
 
@@ -257,81 +274,77 @@ opacity:0.9;
 
 <section id="services">
 <h2>Our Services</h2>
+
 <div class="services-grid">
+
 <div class="service-card">
 <h3>Academic Writing Tutorials</h3>
 <p>Structured sessions covering academic writing principles, essay development, and research techniques.</p>
 <span class="service-link" onclick="openPricing('writing')">View Pricing</span>
 </div>
+
 <div class="service-card">
 <h3>Group Learning Sessions</h3>
 <p>Collaborative sessions designed to support multiple students working on similar academic challenges.</p>
 <span class="service-link" onclick="openPricing('group')">View Pricing</span>
 </div>
+
 <div class="service-card">
 <h3>Assignment Support</h3>
 <p>Professional assistance with referencing, editing, proofreading, improving assignment structure and clarity.</p>
 <span class="service-link" onclick="openPricing('assignment')">View Pricing</span>
 </div>
+
 <div class="service-card">
 <h3>Public Speaking Support</h3>
 <p>Coaching sessions designed to strengthen presentation and communication skills for academic purposes.</p>
 <span class="service-link" onclick="openPricing('speaking')">View Pricing</span>
 </div>
+
 </div>
 </section>
 
 <section id="why">
 <h2>Why Choose Us</h2>
 <div class="services-grid">
-
 <div class="service-card">
 <h3>Qualified Tutors</h3>
 <p>Our tutors are knowledgeable and experienced in academic writing and student support.</p>
 </div>
-
 <div class="service-card">
 <h3>Affordable Pricing</h3>
 <p>We offer cost-effective services designed to support students without financial strain.</p>
 </div>
-
 <div class="service-card">
 <h3>Flexible Sessions</h3>
 <p>Sessions are scheduled to accommodate students’ availability and learning needs.</p>
 </div>
-
 <div class="service-card">
 <h3>Student-Focused Approach</h3>
 <p>We prioritise understanding each student’s needs to provide personalised academic support.</p>
 </div>
-
 </div>
 </section>
 
 <section id="faq">
 <h2>Frequently Asked Questions</h2>
 <div class="services-grid">
-
 <div class="service-card">
 <h3>Do you write assignments for students?</h3>
-<p>No. We do not complete assignments on behalf of students. Our role is to guide, support, and help students improve their academic work while maintaining academic integrity.</p>
+<p>No. We do not complete assignments on behalf of students. We provide guidance and support to help students improve their own work.</p>
 </div>
-
 <div class="service-card">
 <h3>How are sessions conducted?</h3>
-<p>Sessions are conducted either online or in person, depending on availability and student preference.</p>
+<p>Sessions are conducted online or in person, depending on availability and student preference.</p>
 </div>
-
 <div class="service-card">
 <h3>How does payment work?</h3>
-<p>Payment details and instructions are provided after registration. All sessions must be confirmed before they take place.</p>
+<p>Payment details are provided after registration and must be completed before sessions are confirmed.</p>
 </div>
-
 <div class="service-card">
 <h3>Can I choose my tutor?</h3>
-<p>Yes. Where possible, students may request a specific tutor based on availability.</p>
+<p>Yes, students may request a tutor based on availability.</p>
 </div>
-
 </div>
 </section>
 
@@ -345,11 +358,14 @@ opacity:0.9;
 
 <section id="contact">
 <h2>Contact</h2>
+
 <div class="services-grid">
+
 <a href="mailto:ct0tutorials@gmail.com" class="service-card">
 <h3>📧 Email</h3>
 <p>ct0tutorials@gmail.com</p>
 </a>
+
 <div class="service-card">
 <h3>📞 Phone</h3>
 <p>
@@ -357,27 +373,224 @@ opacity:0.9;
 <a href="tel:+264818479958">+264 818 479 958</a>
 </p>
 </div>
+
 </div>
+
 </section>
 
 <button class="floating-btn" onclick="openForm()">Register Now</button>
 
 </div>
 
+<div id="modal">
+<form id="studentRegisterForm">
+<button type="button" class="close" onclick="closeForm()">×</button>
+<h2>Service Registration</h2>
+
+<label>Full Name
+<input type="text" name="name" required>
+</label>
+
+<label>Email
+<input type="email" name="email" required>
+</label>
+
+<label>Cellphone Number
+<input type="tel" name="cellphone_number" required>
+</label>
+
+<label>Select Service
+<select name="service" id="serviceSelect" required>
+<option value="">Select a service</option>
+<option value="Intro Academic Writing">Introduction to Academic Writing</option>
+<option value="Secondary School Subjects">Secondary School Subjects</option>
+<option value="Topic Specific">Topic Specific Sessions</option>
+<option value="Hourly Rate">Hourly Rate</option>
+<option value="Group Sessions">Group Sessions</option>
+<option value="Public Speaking Support">Public Speaking Support</option>
+<option value="Draft Editing">Draft Editing</option>
+<option value="Proofreading">Proofreading</option>
+<option value="Referencing Assistance">Referencing Assistance</option>
+</select>
+</label>
+
+<label id="tutorLabel" style="display:none;">Select Tutor
+<select name="tutor" id="tutorSelect">
+<option value="">Select a tutor</option>
+</select>
+</label>
+
+<input type="hidden" name="token" id="tokenField">
+<input type="text" name="company" style="display:none">
+
+<label>
+<input type="checkbox" required>
+I agree to the <a href="documents/Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a>
+</label>
+
+<button type="submit" class="submit-btn">Submit Registration</button>
+</form>
+</div>
+
+<div id="pricingModal">
+<div id="pricingContent">
+<button class="close" onclick="pricingModal.style.display='none'">×</button>
+<h3 id="pricingTitle"></h3>
+<div id="pricingDetails"></div>
+<button class="submit-btn" onclick="bookService()">Book This Service</button>
+</div>
+</div>
+
 <footer>
 <div class="footer-disclaimer">
 <strong>Disclaimer:</strong><br>
-C&T Tutorials operates independently and is not affiliated with, endorsed by, or formally connected to any academic institution.
+C&T Tutorials operates independently and is not affiliated with, endorsed by, or formally connected to any university, college, examination body, or academic institution. All services are supplementary and intended to support independent learning.
 </div>
+
 <div class="footer-divider"></div>
+
 <div class="footer-copy">
 © 2026 C&T Tutorials. All rights reserved.
 </div>
 </footer>
 
 <script>
-function openForm(){document.getElementById("modal").style.display="flex";}
-function openPricing(){}
+function generateToken(){
+return btoa(Date.now()+Math.random().toString()).substring(0,20);
+}
+
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxIShwbw27ViNIHCShqkhJv4WaQ0igIE9AQ44FGT9RL1ik4rqeOzi01liVl4vjCFhNqQw/exec";
+
+const modal=document.getElementById("modal");
+const pricingModal=document.getElementById("pricingModal");
+const pricingTitle=document.getElementById("pricingTitle");
+const pricingDetails=document.getElementById("pricingDetails");
+
+let selectedService="";
+const serviceSelect=document.getElementById("serviceSelect");
+const tutorSelect=document.getElementById("tutorSelect");
+const tutorLabel=document.getElementById("tutorLabel");
+
+function openForm(){ modal.style.display="flex"; }
+function closeForm(){ modal.style.display="none"; }
+
+function openPricing(service){
+selectedService=service;
+pricingModal.style.display="flex";
+
+if(service==="writing"){
+pricingTitle.innerText="Academic Writing Tutorials";
+pricingDetails.innerHTML=`
+<p>Introduction to Academic Writing (4 sessions) – <b>N$150</b></p>
+<p>Topic Specific Sessions – <b>N$40</b></p>
+<p>Hourly Rate – <b>N$40</b></p>`;
+}
+
+if(service==="group"){
+pricingTitle.innerText="Group Learning Sessions";
+pricingDetails.innerHTML=`
+<p>2 – 5 People – <b>N$200</b></p>
+<p>6 – 14 People – <b>N$450</b></p>
+<p>More than 14 People – <b>N$600</b></p>`;
+}
+
+if(service==="assignment"){
+pricingTitle.innerText="Assignment Support";
+pricingDetails.innerHTML=`
+<p>Draft Editing – <b>N$15 per page</b></p>
+<p>Proofreading – <b>N$10 per page</b></p>
+<p>Referencing Assistance – <b>N$20</b></p>`;
+}
+
+if(service==="speaking"){
+pricingTitle.innerText="Public Speaking Support";
+pricingDetails.innerHTML=`<p>Coaching Session – <b>N$40</b></p>`;
+}
+}
+
+function bookService(){
+pricingModal.style.display="none";
+openForm();
+
+setTimeout(()=>{
+if(selectedService==="writing") serviceSelect.value="Intro Academic Writing";
+if(selectedService==="group") serviceSelect.value="Group Sessions";
+if(selectedService==="assignment") serviceSelect.value="Draft Editing";
+if(selectedService==="speaking") serviceSelect.value="Public Speaking Support";
+
+serviceSelect.dispatchEvent(new Event("change"));
+},100);
+}
+
+let tutorsData={};
+
+async function loadTutors(){
+const res=await fetch(SCRIPT_URL+"?action=getTutors");
+tutorsData=await res.json();
+}
+
+loadTutors();
+
+serviceSelect.addEventListener("change",function(){
+
+let category="";
+
+if(this.value==="Intro Academic Writing" || this.value==="Topic Specific" || this.value==="Hourly Rate") category="writing";
+else if(this.value==="Group Sessions") category="group";
+else if(this.value==="Public Speaking Support") category="speaking";
+else if(this.value==="Draft Editing" || this.value==="Proofreading" || this.value==="Referencing Assistance") category="assignment";
+else if(this.value==="Secondary School Subjects") category="secondary";
+
+if(tutorsData[category]){
+tutorLabel.style.display="block";
+tutorSelect.innerHTML='<option>Select tutor</option>';
+tutorsData[category].forEach(t=>{
+let opt=document.createElement("option");
+opt.value=t;
+opt.textContent=t;
+tutorSelect.appendChild(opt);
+});
+}else{
+tutorLabel.style.display="none";
+}
+
+});
+
+document.getElementById("studentRegisterForm").addEventListener("submit",function(e){
+e.preventDefault();
+
+if(this.company.value!==""){
+return;
+}
+
+document.getElementById("tokenField").value=generateToken();
+
+fetch(SCRIPT_URL,{
+method:"POST",
+body:new FormData(this)
+})
+.then(res=>res.json())
+.then(res=>{
+if(res.status==="duplicate_detected"){
+alert("You have already submitted this request.");
+}else if(res.status==="success"){
+alert("Submitted");
+this.reset();
+closeForm();
+}else{
+alert("Submission failed. Please try again.");
+}
+})
+.catch(()=>{
+alert("Network error. Please try again.");
+});
+
+});
+
+window.onclick=e=>{
+if(e.target===modal) closeForm();
+if(e.target===pricingModal) pricingModal.style.display="none";
+};
 </script>
 
 </body>
