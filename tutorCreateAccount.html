@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>C&T Tutorials - Tutor Account Creation</title>
+<title>Create Tutor Account</title>
 
 <style>
 body{
@@ -18,40 +18,39 @@ body{
   padding:30px;
   background:white;
   border-radius:8px;
-  border:1px solid #ddd;
 }
-input{
+input,button{
   width:100%;
   padding:10px;
   margin-top:10px;
 }
 button{
-  width:100%;
-  padding:10px;
-  margin-top:15px;
   background:#003366;
   color:white;
   border:none;
-  cursor:pointer;
 }
-#message{
-  margin-top:15px;
-  color:red;
-}
+#message{margin-top:10px;}
+.link{text-align:center;margin-top:15px;}
 </style>
 </head>
 
 <body>
 
 <div class="container">
-<h2>Create Tutor Account</h2>
+<h2>Create Account</h2>
 
-<input type="email" id="email" placeholder="Email (used in application)">
+<input type="email" id="email" placeholder="Email">
 <input type="text" id="accessCode" placeholder="Access Code">
-<input type="password" id="password" placeholder="Set Password">
-<button onclick="createAccount()">Submit</button>
+<input type="password" id="password" placeholder="Password">
+
+<button onclick="createAccount()">Create Account</button>
 
 <p id="message"></p>
+
+<div class="link">
+Already have account? <a href="tutorLogin.html">Login</a>
+</div>
+
 </div>
 
 <script>
@@ -59,57 +58,40 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxIShwbw27ViNIHCShqk
 
 async function createAccount(){
 
-  const email = document.getElementById("email").value.trim();
-  const accessCode = document.getElementById("accessCode").value.trim();
-  const password = document.getElementById("password").value.trim();
-  const msg = document.getElementById("message");
+  const email=document.getElementById("email").value.trim();
+  const accessCode=document.getElementById("accessCode").value.trim();
+  const password=document.getElementById("password").value.trim();
+  const msg=document.getElementById("message");
 
   msg.style.color="red";
 
   if(!email || !accessCode || !password){
-    msg.innerText="Please fill in all fields.";
+    msg.innerText="Fill all fields.";
     return;
   }
 
-  try{
+  const tokenRes=await fetch(`${SCRIPT_URL}?action=getToken`);
+  const tokenData=await tokenRes.json();
 
-    // ✅ get token first
-    const tokenRes = await fetch(`${SCRIPT_URL}?action=getToken`);
-    const tokenData = await tokenRes.json();
+  const res=await fetch(SCRIPT_URL,{
+    method:"POST",
+    body:JSON.stringify({
+      type:"createTutorAccount",
+      email,
+      accessCode,
+      password,
+      token:tokenData.token
+    })
+  });
 
-    const res = await fetch(SCRIPT_URL,{
-      method:"POST",
-      body: JSON.stringify({
-        type:"createTutorAccount",
-        email:email,
-        accessCode:accessCode,
-        password:password,
-        token:tokenData.token
-      })
-    });
+  const data=await res.json();
 
-    const data = await res.json();
-
-    if(data.status==="account_created"){
-      msg.style.color="green";
-      msg.innerText="Account successfully created! You can now login.";
-      setTimeout(()=>{window.location="tutorLogin.html";},2000);
-
-    } else if(data.status==="invalid_code"){
-      msg.innerText="Invalid access code.";
-
-    } else if(data.status==="not_approved"){
-      msg.innerText="Your application is not approved yet.";
-
-    } else if(data.status==="account_exists"){
-      msg.innerText="Account already exists.";
-
-    } else {
-      msg.innerText="Something went wrong, try again.";
-    }
-
-  }catch(e){
-    msg.innerText="Error connecting to server.";
+  if(data.status==="account_created"){
+    msg.style.color="green";
+    msg.innerText="Account created!";
+    setTimeout(()=>location="tutorLogin.html",1500);
+  } else {
+    msg.innerText="Failed: "+data.status;
   }
 }
 </script>
