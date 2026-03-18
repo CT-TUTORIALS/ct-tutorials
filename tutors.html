@@ -436,4 +436,69 @@ alert("Invalid access code.")
 
 /* LOGIN */
 
-loginForm.addEventListener("submit",
+loginForm.addEventListener("submit",function(e){
+
+e.preventDefault()
+
+fetch(SCRIPT_URL+"?action=tutorLogin&email="+encodeURIComponent(this.email.value)+"&password="+encodeURIComponent(this.password.value))
+.then(r=>r.json())
+.then(login=>{
+
+if(login.success){
+
+localStorage.setItem("tutorToken",login.token)
+
+document.getElementById("infoSection").style.display="none"
+document.getElementById("dashboard").style.display="block"
+
+loadStudents(login.token)
+
+closeModals()
+
+}
+else{
+alert("Invalid login credentials.")
+}
+
+})
+
+})
+
+/* LOAD STUDENTS */
+
+function loadStudents(token){
+
+fetch(SCRIPT_URL+"?action=getStudentsForTutor&token="+token)
+.then(r=>r.json())
+.then(data=>{
+
+const list=document.getElementById("studentsList")
+list.innerHTML=""
+
+data.forEach(s=>{
+
+list.innerHTML+=`
+<div class="student-card">
+<strong>${s.name}</strong><br>
+${s.email}<br>
+${s.phone}<br>
+${s.service}
+</div>`
+
+})
+
+})
+
+}
+
+/* LOGOUT */
+
+function logoutTutor(){
+localStorage.removeItem("tutorToken")
+location.reload()
+}
+
+</script>
+
+</body>
+</html>
