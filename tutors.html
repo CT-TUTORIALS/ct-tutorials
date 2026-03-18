@@ -333,12 +333,20 @@ window.onclick=function(e){
 if(e.target.classList.contains("modal")) e.target.style.display="none"
 }
 
-/* TOKEN FETCH (ADDED) */
+/* TOKEN FETCH */
 async function getToken(){
 const res = await fetch(SCRIPT_URL+"?action=getToken")
 const data = await res.json()
 return data.token
 }
+
+/* AUTO SESSION RESTORE (FIX) */
+window.addEventListener("load",function(){
+const savedToken = localStorage.getItem("tutorToken")
+if(savedToken){
+loadStudents(savedToken,true)
+}
+})
 
 /* APPLY */
 
@@ -364,12 +372,9 @@ experience:this.experience.value
 })
 .then(r=>r.json())
 .then(()=>{
-
 alert("Application submitted successfully")
-
 this.reset()
 closeModals()
-
 })
 
 })
@@ -419,7 +424,7 @@ localStorage.setItem("tutorToken",login.token)
 document.getElementById("infoSection").style.display="none"
 document.getElementById("dashboard").style.display="block"
 
-loadStudents(login.token)
+loadStudents(login.token,true)
 
 closeModals()
 
@@ -453,7 +458,7 @@ localStorage.setItem("tutorToken",login.token)
 document.getElementById("infoSection").style.display="none"
 document.getElementById("dashboard").style.display="block"
 
-loadStudents(login.token)
+loadStudents(login.token,true)
 
 closeModals()
 
@@ -466,19 +471,27 @@ alert("Invalid login credentials.")
 
 })
 
-/* LOAD STUDENTS */
+/* LOAD STUDENTS (FIXED TOKEN HANDLING) */
 
-function loadStudents(token){
+function loadStudents(token,auto=false){
 
 fetch(SCRIPT_URL+"?action=getStudentsForTutor&token="+token)
 .then(r=>r.json())
 .then(data=>{
 
+if(data.error){
+localStorage.removeItem("tutorToken")
+if(!auto) alert("Session expired. Please login again.")
+return
+}
+
+document.getElementById("infoSection").style.display="none"
+document.getElementById("dashboard").style.display="block"
+
 const list=document.getElementById("studentsList")
 list.innerHTML=""
 
 data.forEach(s=>{
-
 list.innerHTML+=`
 <div class="student-card">
 <strong>${s.name}</strong><br>
@@ -486,7 +499,6 @@ ${s.email}<br>
 ${s.phone}<br>
 ${s.service}
 </div>`
-
 })
 
 })
