@@ -40,8 +40,6 @@ flex:1;
 
 h2{color:#003366;}
 
-/* SERVICE CARDS */
-
 .card-container{
 display:flex;
 flex-wrap:wrap;
@@ -71,7 +69,6 @@ margin-top:0;
 color:#003366;
 }
 
-/* links inside cards (for phone numbers) */
 .service-card a{
 color:#003366;
 text-decoration:none;
@@ -81,8 +78,6 @@ font-weight:500;
 .service-card a:hover{
 text-decoration:underline;
 }
-
-/* MODALS */
 
 .modal{
 display:none;
@@ -111,10 +106,6 @@ margin-top:5px;
 margin-bottom:15px;
 }
 
-input.error{
-border:2px solid red;
-}
-
 button{
 background:#003366;
 color:white;
@@ -135,13 +126,9 @@ margin-top:20px;
 background:#990000;
 }
 
-/* CONTACT SECTION */
-
 #contactSection{
 margin-top:40px;
 }
-
-/* FOOTER */
 
 footer{
 background:#003366;
@@ -195,8 +182,6 @@ If you are passionate about helping students achieve their academic goals, we en
 
 </div>
 
-<!-- CONTACT SECTION -->
-
 <div id="contactSection">
 
 <h2>Contact Us</h2>
@@ -237,10 +222,8 @@ Below is the list of students who selected you.
 </div>
 
 <!-- APPLY MODAL -->
-
 <div class="modal" id="applyModal">
 <form id="applyForm">
-
 <h3>Apply as Tutor</h3>
 
 <input name="name" placeholder="Full Name" required>
@@ -257,255 +240,153 @@ I agree to the
 </label>
 
 <button type="submit">Submit Application</button>
-
 </form>
 </div>
 
-<!-- CREATE ACCOUNT -->
-
+<!-- CREATE -->
 <div class="modal" id="createModal">
 <form id="createForm">
-
 <h3>Create Tutor Account</h3>
 
-<input name="email" placeholder="Email" required>
-<input name="code" placeholder="Access Code" required>
-<input type="password" name="password" placeholder="Password" required>
-<input type="password" name="confirm" placeholder="Confirm Password" required>
+<input name="email" required placeholder="Email">
+<input name="code" required placeholder="Access Code">
+<input type="password" name="password" required placeholder="Password">
+<input type="password" name="confirm" required placeholder="Confirm Password">
 
 <button type="submit">Create Account</button>
-
 </form>
 </div>
 
 <!-- LOGIN -->
-
 <div class="modal" id="loginModal">
 <form id="loginForm">
-
 <h3>Tutor Login</h3>
 
-<input name="email" placeholder="Email" required>
-<input type="password" name="password" placeholder="Password" required>
+<input name="email" required placeholder="Email">
+<input type="password" name="password" required placeholder="Password">
 
 <button type="submit">Login</button>
-
 </form>
 </div>
 
 <footer>
-
 <div class="footer-disclaimer">
-
 <strong>Disclaimer:</strong><br>
-
-This portal is intended for individuals applying to become tutors or approved to provide tutoring services through C&T Tutorials. Submission of a tutor application does not guarantee selection.
-
+This portal is intended for individuals applying to become tutors or approved to provide tutoring services through C&T Tutorials.
 <br><br>
-
-Approved tutors are expected to maintain professional conduct, uphold academic integrity, and comply with all policies and disclosure agreements associated with tutoring activities.
-
-<br><br>
-
 © 2026 C&T Tutorials. All rights reserved.
-
 </div>
-
 </footer>
 
 <script>
 
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxIShwbw27ViNIHCShqkhJv4WaQ0igIE9AQ44FGT9RL1ik4rqeOzi01liVl4vjCFhNqQw/exec"
 
-const applyForm=document.getElementById("applyForm")
-const createForm=document.getElementById("createForm")
-const loginForm=document.getElementById("loginForm")
+function openApply(){applyModal.style.display="flex"}
+function openCreate(){createModal.style.display="flex"}
+function openLogin(){loginModal.style.display="flex"}
 
-function openApply(){document.getElementById("applyModal").style.display="flex"}
-function openCreate(){document.getElementById("createModal").style.display="flex"}
-function openLogin(){document.getElementById("loginModal").style.display="flex"}
-
-function closeModals(){
-document.querySelectorAll(".modal").forEach(m=>m.style.display="none")
-}
-
-window.onclick=function(e){
+window.onclick=e=>{
 if(e.target.classList.contains("modal")) e.target.style.display="none"
 }
 
-/* TOKEN FETCH */
 async function getToken(){
-const res = await fetch(SCRIPT_URL+"?action=getToken")
-const data = await res.json()
-return data.token
+const r=await fetch(SCRIPT_URL+"?action=getToken")
+const d=await r.json()
+return d.token
 }
-
-/* AUTO SESSION RESTORE (FIX) */
-window.addEventListener("load",function(){
-const savedToken = localStorage.getItem("tutorToken")
-if(savedToken){
-loadStudents(savedToken,true)
-}
-})
 
 /* APPLY */
-
-applyForm.addEventListener("submit",async function(e){
-
+applyForm.onsubmit=async e=>{
 e.preventDefault()
+const t=await getToken()
 
-const token = await getToken()
-
-fetch(SCRIPT_URL,{
+const res=await fetch(SCRIPT_URL,{
 method:"POST",
 headers:{"Content-Type":"application/json"},
-body:JSON.stringify({
-type:"tutorApplication",
-token:token,
-name:this.name.value,
-email:this.email.value,
-phone:this.phone.value,
-subjects:this.subjects.value,
-qualification:this.qualification.value,
-experience:this.experience.value
-})
-})
-.then(r=>r.json())
-.then(()=>{
-alert("Application submitted successfully")
-this.reset()
-closeModals()
+body:JSON.stringify({...Object.fromEntries(new FormData(applyForm)),type:"tutorApplication",token:t})
 })
 
-})
+const d=await res.json()
 
-/* CREATE ACCOUNT */
-
-createForm.addEventListener("submit",async function(e){
-
-e.preventDefault()
-
-if(this.password.value!==this.confirm.value){
-alert("Passwords do not match")
-return
+if(d.status==="success") alert("Application submitted")
+else if(d.status==="duplicate_detected") alert("Already applied")
+else alert("Error")
 }
 
-const email=this.email.value
-const password=this.password.value
+/* CREATE */
+createForm.onsubmit=async e=>{
+e.preventDefault()
 
-const token = await getToken()
+if(createForm.password.value!==createForm.confirm.value){
+alert("Passwords do not match");return;
+}
 
-fetch(SCRIPT_URL,{
+const t=await getToken()
+
+const res=await fetch(SCRIPT_URL,{
 method:"POST",
 headers:{"Content-Type":"application/json"},
 body:JSON.stringify({
 type:"createTutorAccount",
-token:token,
-email:email,
-accessCode:this.code.value,
-password:password
+token:t,
+email:createForm.email.value,
+accessCode:createForm.code.value,
+password:createForm.password.value
 })
 })
-.then(r=>r.json())
-.then(res=>{
 
-if(res.status==="account_created"){
+const d=await res.json()
 
-alert("Account created successfully. Logging you in...")
-
-fetch(SCRIPT_URL+"?action=tutorLogin&email="+encodeURIComponent(email)+"&password="+encodeURIComponent(password))
-.then(r=>r.json())
-.then(login=>{
-
-if(login.success){
-
-localStorage.setItem("tutorToken",login.token)
-
-document.getElementById("infoSection").style.display="none"
-document.getElementById("dashboard").style.display="block"
-
-loadStudents(login.token,true)
-
-closeModals()
-
+if(d.status==="account_created"){
+alert("Account created")
+openLogin()
+}else if(d.status==="not_approved"){
+alert("Not approved yet")
+}else if(d.status==="invalid_code"){
+alert("Invalid access code")
+}else{
+alert(d.status)
 }
-
-})
-
 }
-else{
-alert("Invalid access code.")
-}
-
-})
-
-})
 
 /* LOGIN */
-
-loginForm.addEventListener("submit",function(e){
-
+loginForm.onsubmit=async e=>{
 e.preventDefault()
 
-fetch(SCRIPT_URL+"?action=tutorLogin&email="+encodeURIComponent(this.email.value)+"&password="+encodeURIComponent(this.password.value))
-.then(r=>r.json())
-.then(login=>{
+const res=await fetch(`${SCRIPT_URL}?action=tutorLogin&email=${encodeURIComponent(loginForm.email.value)}&password=${encodeURIComponent(loginForm.password.value)}`)
+const d=await res.json()
 
-if(login.success){
-
-localStorage.setItem("tutorToken",login.token)
-
-document.getElementById("infoSection").style.display="none"
-document.getElementById("dashboard").style.display="block"
-
-loadStudents(login.token,true)
-
-closeModals()
-
+if(d.success){
+localStorage.setItem("tutorToken",d.token)
+loadStudents(d.token)
+}else{
+alert("Invalid login")
 }
-else{
-alert("Invalid login credentials.")
 }
 
-})
+/* LOAD */
+async function loadStudents(token){
+const res=await fetch(`${SCRIPT_URL}?action=getStudentsForTutor&token=${token}`)
+const data=await res.json()
 
-})
+if(data.error){alert("Session expired");return}
 
-/* LOAD STUDENTS (FIXED TOKEN HANDLING) */
+infoSection.style.display="none"
+dashboard.style.display="block"
 
-function loadStudents(token,auto=false){
-
-fetch(SCRIPT_URL+"?action=getStudentsForTutor&token="+token)
-.then(r=>r.json())
-.then(data=>{
-
-if(data.error){
-localStorage.removeItem("tutorToken")
-if(!auto) alert("Session expired. Please login again.")
-return
-}
-
-document.getElementById("infoSection").style.display="none"
-document.getElementById("dashboard").style.display="block"
-
-const list=document.getElementById("studentsList")
-list.innerHTML=""
-
-data.forEach(s=>{
-list.innerHTML+=`
+studentsList.innerHTML=data.map(s=>`
 <div class="student-card">
 <strong>${s.name}</strong><br>
-${s.email}<br>
-${s.phone}<br>
-${s.service}
-</div>`
-})
-
-})
-
+${s.email}<br>${s.phone}<br>${s.service}
+</div>`).join("")
 }
 
-/* LOGOUT */
+/* AUTO LOGIN */
+window.onload=()=>{
+const t=localStorage.getItem("tutorToken")
+if(t) loadStudents(t)
+}
 
 function logoutTutor(){
 localStorage.removeItem("tutorToken")
