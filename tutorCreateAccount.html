@@ -46,7 +46,7 @@ button{
 <div class="container">
 <h2>Create Tutor Account</h2>
 
-<input type="text" id="name" placeholder="Full Name">
+<input type="email" id="email" placeholder="Email (used in application)">
 <input type="text" id="accessCode" placeholder="Access Code">
 <input type="password" id="password" placeholder="Set Password">
 <button onclick="createAccount()">Submit</button>
@@ -57,42 +57,60 @@ button{
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxsXkwPLpdTK9oiBayEl_-TkN_T2x3SubSrjk-0TIC3eYbwbgD1-coQjNk0PqDmJDd35w/exec";
 
-function createAccount(){
-  const name = document.getElementById("name").value.trim();
-  const code = document.getElementById("accessCode").value.trim();
+async function createAccount(){
+
+  const email = document.getElementById("email").value.trim();
+  const accessCode = document.getElementById("accessCode").value.trim();
   const password = document.getElementById("password").value.trim();
   const msg = document.getElementById("message");
+
   msg.style.color="red";
 
-  if(!name || !code || !password){
+  if(!email || !accessCode || !password){
     msg.innerText="Please fill in all fields.";
     return;
   }
 
-  fetch(SCRIPT_URL,{
-    method:"POST",
-    body: JSON.stringify({
-      type:"createTutorAccount",
-      name:name,
-      code:code,
-      password:password
-    })
-  })
-  .then(res=>res.json())
-  .then(data=>{
+  try{
+
+    // ✅ get token first
+    const tokenRes = await fetch(`${SCRIPT_URL}?action=getToken`);
+    const tokenData = await tokenRes.json();
+
+    const res = await fetch(SCRIPT_URL,{
+      method:"POST",
+      body: JSON.stringify({
+        type:"createTutorAccount",
+        email:email,
+        accessCode:accessCode,
+        password:password,
+        token:tokenData.token
+      })
+    });
+
+    const data = await res.json();
+
     if(data.status==="account_created"){
       msg.style.color="green";
       msg.innerText="Account successfully created! You can now login.";
-      setTimeout(()=>{window.location="tutors.html";},2000);
+      setTimeout(()=>{window.location="tutorLogin.html";},2000);
+
     } else if(data.status==="invalid_code"){
-      msg.innerText="Invalid access code or account already created.";
+      msg.innerText="Invalid access code.";
+
+    } else if(data.status==="not_approved"){
+      msg.innerText="Your application is not approved yet.";
+
+    } else if(data.status==="account_exists"){
+      msg.innerText="Account already exists.";
+
     } else {
       msg.innerText="Something went wrong, try again.";
     }
-  })
-  .catch(e=>{
+
+  }catch(e){
     msg.innerText="Error connecting to server.";
-  });
+  }
 }
 </script>
 
