@@ -40,8 +40,6 @@ flex:1;
 
 h2{color:#003366;}
 
-/* SERVICE CARDS */
-
 .card-container{
 display:flex;
 flex-wrap:wrap;
@@ -71,7 +69,6 @@ margin-top:0;
 color:#003366;
 }
 
-/* links inside cards (for phone numbers) */
 .service-card a{
 color:#003366;
 text-decoration:none;
@@ -81,8 +78,6 @@ font-weight:500;
 .service-card a:hover{
 text-decoration:underline;
 }
-
-/* MODALS */
 
 .modal{
 display:none;
@@ -135,13 +130,9 @@ margin-top:20px;
 background:#990000;
 }
 
-/* CONTACT SECTION */
-
 #contactSection{
 margin-top:40px;
 }
-
-/* FOOTER */
 
 footer{
 background:#003366;
@@ -195,8 +186,6 @@ If you are passionate about helping students achieve their academic goals, we en
 
 </div>
 
-<!-- CONTACT SECTION -->
-
 <div id="contactSection">
 
 <h2>Contact Us</h2>
@@ -224,9 +213,7 @@ If you are passionate about helping students achieve their academic goals, we en
 
 <h2>Welcome to the Team!</h2>
 
-<p>
-Below is the list of students who selected you.
-</p>
+<p>Below is the list of students who selected you.</p>
 
 <div id="studentsList">Loading students...</div>
 
@@ -235,8 +222,6 @@ Below is the list of students who selected you.
 </div>
 
 </div>
-
-<!-- APPLY MODAL -->
 
 <div class="modal" id="applyModal">
 <form id="applyForm">
@@ -261,8 +246,6 @@ I agree to the
 </form>
 </div>
 
-<!-- CREATE ACCOUNT -->
-
 <div class="modal" id="createModal">
 <form id="createForm">
 
@@ -278,8 +261,6 @@ I agree to the
 </form>
 </div>
 
-<!-- LOGIN -->
-
 <div class="modal" id="loginModal">
 <form id="loginForm">
 
@@ -294,23 +275,10 @@ I agree to the
 </div>
 
 <footer>
-
 <div class="footer-disclaimer">
-
 <strong>Disclaimer:</strong><br>
-
-This portal is intended for individuals applying to become tutors or approved to provide tutoring services through C&T Tutorials. Submission of a tutor application does not guarantee selection.
-
-<br><br>
-
-Approved tutors are expected to maintain professional conduct, uphold academic integrity, and comply with all policies and disclosure agreements associated with tutoring activities.
-
-<br><br>
-
-© 2026 C&T Tutorials. All rights reserved.
-
+This portal is intended for individuals applying to become tutors...
 </div>
-
 </footer>
 
 <script>
@@ -333,31 +301,28 @@ window.onclick=function(e){
 if(e.target.classList.contains("modal")) e.target.style.display="none"
 }
 
-/* AUTO LOGIN */
+/* TOKEN FETCH */
 
-window.onload=function(){
-
-const token=localStorage.getItem("tutorToken")
-
-if(token){
-document.getElementById("infoSection").style.display="none"
-document.getElementById("dashboard").style.display="block"
-loadStudents(token)
-}
-
+async function getToken(){
+const res = await fetch(SCRIPT_URL+"?action=getToken")
+const data = await res.json()
+return data.token
 }
 
 /* APPLY */
 
-applyForm.addEventListener("submit",function(e){
+applyForm.addEventListener("submit",async function(e){
 
 e.preventDefault()
+
+const token = await getToken()
 
 fetch(SCRIPT_URL,{
 method:"POST",
 headers:{"Content-Type":"application/json"},
 body:JSON.stringify({
 type:"tutorApplication",
+token:token,
 name:this.name.value,
 email:this.email.value,
 phone:this.phone.value,
@@ -367,7 +332,8 @@ experience:this.experience.value
 })
 })
 .then(r=>r.json())
-.then(()=>{
+.then(res=>{
+if(res.error) return alert(res.error)
 alert("Application submitted successfully")
 this.reset()
 closeModals()
@@ -377,7 +343,7 @@ closeModals()
 
 /* CREATE ACCOUNT */
 
-createForm.addEventListener("submit",function(e){
+createForm.addEventListener("submit",async function(e){
 
 e.preventDefault()
 
@@ -386,50 +352,28 @@ alert("Passwords do not match")
 return
 }
 
-const email=this.email.value
-const password=this.password.value
+const token = await getToken()
 
 fetch(SCRIPT_URL,{
 method:"POST",
 headers:{"Content-Type":"application/json"},
 body:JSON.stringify({
 type:"createTutorAccount",
-email:email,
+token:token,
+email:this.email.value,
 accessCode:this.code.value,
-password:password
+password:this.password.value
 })
 })
 .then(r=>r.json())
 .then(res=>{
-
+if(res.error) return alert(res.error)
 if(res.status==="account_created"){
-
-alert("Account created successfully. Logging you in...")
-
-fetch(SCRIPT_URL+"?action=tutorLogin&email="+encodeURIComponent(email)+"&password="+encodeURIComponent(password))
-.then(r=>r.json())
-.then(login=>{
-
-if(login.success){
-
-localStorage.setItem("tutorToken",login.token)
-
-document.getElementById("infoSection").style.display="none"
-document.getElementById("dashboard").style.display="block"
-
-loadStudents(login.token)
-
+alert("Account created successfully")
 closeModals()
-
-}
-
-})
-
-}
-else{
+}else{
 alert("Invalid access code.")
 }
-
 })
 
 })
@@ -464,8 +408,6 @@ alert("Invalid login credentials.")
 
 })
 
-/* LOAD STUDENTS */
-
 function loadStudents(token){
 
 fetch(SCRIPT_URL+"?action=getStudentsForTutor&token="+token)
@@ -476,7 +418,6 @@ const list=document.getElementById("studentsList")
 list.innerHTML=""
 
 data.forEach(s=>{
-
 list.innerHTML+=`
 <div class="student-card">
 <strong>${s.name}</strong><br>
@@ -484,14 +425,11 @@ ${s.email}<br>
 ${s.phone}<br>
 ${s.service}
 </div>`
-
 })
 
 })
 
 }
-
-/* LOGOUT */
 
 function logoutTutor(){
 localStorage.removeItem("tutorToken")
