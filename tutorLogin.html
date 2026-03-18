@@ -60,6 +60,7 @@ function loginTutor(){
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
   const msg = document.getElementById("message");
+
   msg.style.color="red";
 
   if(!email || !password){
@@ -67,21 +68,26 @@ function loginTutor(){
     return;
   }
 
-  fetch(SCRIPT_URL+"?action=getAllTutors")
-    .then(res=>res.json())
-    .then(tutors=>{
-      const tutor = tutors.find(t=> t.email===email && t.password===password && t.status==="Approved");
-      if(tutor){
-        msg.style.color="green";
-        msg.innerText="Login successful! Redirecting...";
-        setTimeout(()=>{window.location="tutors.html";},1000);
-      } else {
-        msg.innerText="Invalid credentials or not approved yet.";
-      }
-    })
-    .catch(e=>{
-      msg.innerText="Error connecting to server.";
-    });
+  fetch(`${SCRIPT_URL}?action=tutorLogin&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`)
+  .then(res=>res.json())
+  .then(data=>{
+    if(data.success){
+      msg.style.color="green";
+      msg.innerText="Login successful! Redirecting...";
+
+      // store session token
+      localStorage.setItem("tutorToken", data.token);
+      localStorage.setItem("tutorName", data.name);
+
+      setTimeout(()=>{window.location="tutors.html";},1000);
+
+    } else {
+      msg.innerText="Invalid credentials or not approved yet.";
+    }
+  })
+  .catch(()=>{
+    msg.innerText="Error connecting to server.";
+  });
 }
 </script>
 
