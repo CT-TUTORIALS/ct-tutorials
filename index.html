@@ -284,6 +284,12 @@ object-position:center 75%;
 </div>
 
 <div class="service-card">
+<h3>Secondary School Subjects</h3>
+<p>Academic support sessions focused on secondary school level subjects to improve understanding and performance.</p>
+<span class="service-link" onclick="openPricing('secondary')">View Pricing</span>
+</div>
+
+<div class="service-card">
 <h3>Group Learning Sessions</h3>
 <p>Collaborative sessions designed to support multiple students working on similar academic challenges.</p>
 <span class="service-link" onclick="openPricing('group')">View Pricing</span>
@@ -492,6 +498,11 @@ pricingDetails.innerHTML=`
 <p>Hourly Rate – <b>N$40</b></p>`;
 }
 
+if(service==="secondary"){
+pricingTitle.innerText="Secondary School Subjects";
+pricingDetails.innerHTML=`<p>Session – <b>N$40</b></p>`;
+}
+
 if(service==="group"){
 pricingTitle.innerText="Group Learning Sessions";
 pricingDetails.innerHTML=`
@@ -520,6 +531,7 @@ openForm();
 
 setTimeout(()=>{
 if(selectedService==="writing") serviceSelect.value="Intro Academic Writing";
+if(selectedService==="secondary") serviceSelect.value="Secondary School Subjects";
 if(selectedService==="group") serviceSelect.value="Group Sessions";
 if(selectedService==="assignment") serviceSelect.value="Draft Editing";
 if(selectedService==="speaking") serviceSelect.value="Public Speaking Support";
@@ -546,14 +558,29 @@ return;
 }
 
 let category="";
+let allowTutor=false;
 
-if(this.value==="Intro Academic Writing" || this.value==="Topic Specific" || this.value==="Hourly Rate") category="writing";
-else if(this.value==="Group Sessions") category="group";
-else if(this.value==="Public Speaking Support") category="speaking";
-else if(this.value==="Draft Editing" || this.value==="Proofreading" || this.value==="Referencing Assistance") category="assignment";
-else if(this.value==="Secondary School Subjects") category="secondary";
+if(this.value==="Intro Academic Writing" || this.value==="Topic Specific" || this.value==="Hourly Rate"){
+category="writing";
+allowTutor=true;
+}
+else if(this.value==="Group Sessions"){
+category="group";
+allowTutor=true;
+}
+else if(this.value==="Public Speaking Support"){
+category="speaking";
+allowTutor=true;
+}
+else if(this.value==="Secondary School Subjects"){
+category="secondary";
+allowTutor=true;
+}
+else{
+allowTutor=false;
+}
 
-if(tutorsData[category]){
+if(allowTutor && tutorsData[category]){
 tutorLabel.style.display="block";
 tutorSelect.innerHTML='<option value="">Select a tutor</option>';
 tutorsData[category].forEach(t=>{
@@ -564,6 +591,7 @@ tutorSelect.appendChild(opt);
 });
 }else{
 tutorLabel.style.display="none";
+tutorSelect.innerHTML='<option value="">Select a tutor</option>';
 }
 
 });
@@ -608,4 +636,4 @@ if(e.target===pricingModal) pricingModal.style.display="none";
 </script>
 
 </body>
-  </html>
+</html>
