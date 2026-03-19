@@ -398,7 +398,8 @@ method:"POST",
 headers:{"Content-Type":"application/json"},
 body:JSON.stringify({
 type:"approveTutor",
-email:email
+email:email,
+token:localStorage.getItem("adminToken")
 })
 })
 .then(()=>loadApplications(localStorage.getItem("adminToken")))
@@ -412,7 +413,8 @@ method:"POST",
 headers:{"Content-Type":"application/json"},
 body:JSON.stringify({
 type:"rejectTutor",
-email:email
+email:email,
+token:localStorage.getItem("adminToken")
 })
 })
 .then(()=>loadApplications(localStorage.getItem("adminToken")))
