@@ -290,12 +290,17 @@ window.onclick=e=>{
 if(e.target.classList.contains("modal")) e.target.style.display="none"
 }
 
-/* APPLY (FIXED FOR CORS) */
+/* APPLY (FIXED WITH TOKEN + CORS) */
 applyForm.onsubmit=async e=>{
 e.preventDefault()
 
 const formData = Object.fromEntries(new FormData(applyForm))
 
+// STEP 1: GET TOKEN (allowed GET request)
+const tokenRes = await fetch(SCRIPT_URL+"?action=getToken")
+const tokenData = await tokenRes.json()
+
+// STEP 2: SEND WITH TOKEN (no-cors)
 await fetch(SCRIPT_URL,{
 method:"POST",
 mode:"no-cors",
@@ -304,6 +309,7 @@ headers:{
 },
 body:JSON.stringify({
 type:"tutorApplication",
+token:tokenData.token,
 ...formData
 })
 })
