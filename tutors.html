@@ -15,11 +15,6 @@ flex-direction:column;
 min-height:100vh;
 }
 
-/* ✅ ADDED: prevent background visibility when locked */
-body.locked{
-overflow:hidden;
-}
-
 header{
 background:#003366;
 color:white;
@@ -43,19 +38,16 @@ padding:40px;
 flex:1;
 }
 
-/* ✅ ADDED: fade control */
-.fade-hidden{
-opacity:0;
-pointer-events:none;
-transition:opacity .4s ease;
-}
-
-.fade-visible{
-opacity:1;
-transition:opacity .4s ease;
-}
-
 h2{color:#003366;}
+
+/* ✅ fade-in */
+.fade{
+opacity:0;
+transition:opacity .4s ease;
+}
+.fade.show{
+opacity:1;
+}
 
 .card-container{
 display:flex;
@@ -106,7 +98,7 @@ height:100%;
 background:rgba(0,0,0,0.6);
 justify-content:center;
 align-items:center;
-z-index:2000; /* ✅ ensure above everything */
+z-index:2000;
 }
 
 .modal form{
@@ -188,8 +180,7 @@ margin-bottom:15px;
 <h1>C&T Tutorials Tutors Portal</h1>
 
 <nav>
-<!-- ✅ UPDATED: Home logs out -->
-<a href="index.html" onclick="logoutTutor()">Home</a>
+<a href="#" onclick="goHome()">Home</a>
 <a onclick="openApply()">Apply</a>
 <a onclick="openCreate()">Create Account</a>
 <a onclick="openLogin()">Login</a>
@@ -197,7 +188,7 @@ margin-bottom:15px;
 
 </header>
 
-<div class="main fade-hidden" id="mainContent">
+<div class="main">
 
 <div id="infoSection">
 
@@ -240,7 +231,7 @@ If you are passionate about helping students achieve their academic goals, we en
 
 </div>
 
-<div id="dashboard" style="display:none" class="fade-hidden">
+<div id="dashboard" style="display:none" class="fade">
 
 <h2>Welcome to the Team!</h2>
 
@@ -321,85 +312,25 @@ This portal is intended for individuals applying to become tutors or approved to
 
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxIShwbw27ViNIHCShqkhJv4WaQ0igIE9AQ44FGT9RL1ik4rqeOzi01liVl4vjCFhNqQw/exec"
 
+function goHome(){
+localStorage.removeItem("tutorToken")
+window.location.href="index.html"
+}
+
 function openApply(){applyModal.style.display="flex"}
 function openCreate(){createModal.style.display="flex"}
 function openLogin(){loginModal.style.display="flex"}
 
 window.onclick=e=>{
-if(e.target.id==="loginModal") return
-if(e.target.classList.contains("modal")){
+if(e.target.classList.contains("modal") && e.target.id!=="loadingModal"){
 e.target.style.display="none"
 }
 }
-
-document.addEventListener("keydown", function(e){
-if(e.key==="Escape"){
-if(loginModal.style.display==="flex"){
-e.preventDefault()
-}
-}
-})
 
 async function getToken(){
 const r=await fetch(SCRIPT_URL+"?action=getToken")
 const d=await r.json()
 return d.token
-}
-
-/* APPLY */
-applyForm.onsubmit=async e=>{
-e.preventDefault()
-const t=await getToken()
-
-const params=new URLSearchParams({
-type:"tutorApplication",
-token:t,
-...Object.fromEntries(new FormData(applyForm))
-})
-
-const res=await fetch(SCRIPT_URL,{method:"POST",body:params})
-const d=await res.json()
-
-if(d.status==="success"){
-alert("Application submitted")
-applyModal.style.display="none"
-}
-else if(d.status==="duplicate_detected") alert("Already applied")
-else alert("Error")
-}
-
-/* CREATE */
-createForm.onsubmit=async e=>{
-e.preventDefault()
-
-if(createForm.password.value!==createForm.confirm.value){
-alert("Passwords do not match");return;
-}
-
-const t=await getToken()
-
-const params=new URLSearchParams({
-type:"createTutorAccount",
-token:t,
-email:createForm.email.value,
-accessCode:createForm.code.value,
-password:createForm.password.value
-})
-
-const res=await fetch(SCRIPT_URL,{method:"POST",body:params})
-const d=await res.json()
-
-if(d.status==="account_created"){
-alert("Account created")
-createModal.style.display="none"
-openLogin()
-}else if(d.status==="not_approved"){
-alert("Not approved yet")
-}else if(d.status==="invalid_code"){
-alert("Invalid access code")
-}else{
-alert(d.status)
-}
 }
 
 /* LOGIN */
@@ -409,7 +340,6 @@ e.preventDefault()
 loadingModal.style.display="flex"
 
 try{
-
 const res=await fetch(`${SCRIPT_URL}?action=tutorLogin&email=${encodeURIComponent(loginForm.email.value)}&password=${encodeURIComponent(loginForm.password.value)}`)
 const d=await res.json()
 
@@ -417,17 +347,9 @@ if(d.success){
 
 localStorage.setItem("tutorToken",d.token)
 
-/* FADE OUT LOGIN */
-loginModal.style.opacity="0"
-setTimeout(()=>loginModal.style.display="none",300)
+loginModal.style.display="none"
 
-/* LOAD DATA */
 await loadStudents(d.token)
-
-/* SHOW CONTENT */
-document.body.classList.remove("locked")
-mainContent.classList.remove("fade-hidden")
-mainContent.classList.add("fade-visible")
 
 loadingModal.style.display="none"
 
@@ -435,7 +357,6 @@ loadingModal.style.display="none"
 loadingModal.style.display="none"
 alert("Invalid login")
 }
-
 }catch(err){
 loadingModal.style.display="none"
 alert("Network error")
@@ -449,6 +370,7 @@ const data=await res.json()
 
 if(data.error){
 alert("Session expired")
+logoutTutor()
 return
 }
 
@@ -461,29 +383,23 @@ ${s.email}<br>${s.phone}<br>${s.service}
 infoSection.style.display="none"
 dashboard.style.display="block"
 
-/* FADE IN DASHBOARD */
-dashboard.classList.remove("fade-hidden")
-dashboard.classList.add("fade-visible")
+setTimeout(()=>dashboard.classList.add("show"),50)
 }
 
 window.onload=()=>{
-document.body.classList.add("locked")
-loginModal.style.display="flex"
-
 const t=localStorage.getItem("tutorToken")
 
 if(t){
+loadingModal.style.display="flex"
 loadStudents(t).then(()=>{
-document.body.classList.remove("locked")
-loginModal.style.display="none"
-mainContent.classList.remove("fade-hidden")
-mainContent.classList.add("fade-visible")
+loadingModal.style.display="none"
 })
 }
 }
 
 function logoutTutor(){
 localStorage.removeItem("tutorToken")
+location.reload()
 }
 
 </script>
