@@ -389,35 +389,25 @@ tbody.innerHTML+=`
 
 }
 
-/* ===== ACTIONS ===== */
+/* ===== ACTIONS (FIXED CORS) ===== */
 
 function approve(email){
 
-fetch(SCRIPT_URL,{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({
-type:"approveTutor",
-email:email,
-token:localStorage.getItem("adminToken")
-})
-})
-.then(()=>loadApplications(localStorage.getItem("adminToken")))
+const token = localStorage.getItem("adminToken")
+
+fetch(`${SCRIPT_URL}?action=approveTutor&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`)
+.then(r=>r.json())
+.then(()=>loadApplications(token))
 
 }
 
 function reject(email){
 
-fetch(SCRIPT_URL,{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({
-type:"rejectTutor",
-email:email,
-token:localStorage.getItem("adminToken")
-})
-})
-.then(()=>loadApplications(localStorage.getItem("adminToken")))
+const token = localStorage.getItem("adminToken")
+
+fetch(`${SCRIPT_URL}?action=rejectTutor&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`)
+.then(r=>r.json())
+.then(()=>loadApplications(token))
 
 }
 
