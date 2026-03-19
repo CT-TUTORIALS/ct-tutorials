@@ -221,7 +221,6 @@ Below is the list of students who selected you.
 
 </div>
 
-<!-- APPLY MODAL -->
 <div class="modal" id="applyModal">
 <form id="applyForm">
 <h3>Apply as Tutor</h3>
@@ -243,7 +242,6 @@ I agree to the
 </form>
 </div>
 
-<!-- CREATE -->
 <div class="modal" id="createModal">
 <form id="createForm">
 <h3>Create Tutor Account</h3>
@@ -257,7 +255,6 @@ I agree to the
 </form>
 </div>
 
-<!-- LOGIN -->
 <div class="modal" id="loginModal">
 <form id="loginForm">
 <h3>Tutor Login</h3>
@@ -290,33 +287,33 @@ window.onclick=e=>{
 if(e.target.classList.contains("modal")) e.target.style.display="none"
 }
 
-/* APPLY (FIXED WITH TOKEN + CORS) */
+async function getToken(){
+const r=await fetch(SCRIPT_URL+"?action=getToken")
+const d=await r.json()
+return d.token
+}
+
+/* APPLY */
 applyForm.onsubmit=async e=>{
 e.preventDefault()
+const t=await getToken()
 
-const formData = Object.fromEntries(new FormData(applyForm))
-
-// STEP 1: GET TOKEN (allowed GET request)
-const tokenRes = await fetch(SCRIPT_URL+"?action=getToken")
-const tokenData = await tokenRes.json()
-
-// STEP 2: SEND WITH TOKEN (no-cors)
-await fetch(SCRIPT_URL,{
-method:"POST",
-mode:"no-cors",
-headers:{
-"Content-Type":"text/plain"
-},
-body:JSON.stringify({
+const params=new URLSearchParams({
 type:"tutorApplication",
-token:tokenData.token,
-...formData
-})
+token:t,
+...Object.fromEntries(new FormData(applyForm))
 })
 
-alert("Application submitted successfully")
-applyModal.style.display="none"
-applyForm.reset()
+const res=await fetch(SCRIPT_URL,{
+method:"POST",
+body:params
+})
+
+const d=await res.json()
+
+if(d.status==="success") alert("Application submitted")
+else if(d.status==="duplicate_detected") alert("Already applied")
+else alert("Error")
 }
 
 /* CREATE */
@@ -327,18 +324,19 @@ if(createForm.password.value!==createForm.confirm.value){
 alert("Passwords do not match");return;
 }
 
-const t=await fetch(SCRIPT_URL+"?action=getToken").then(r=>r.json()).then(d=>d.token)
+const t=await getToken()
 
-const res=await fetch(SCRIPT_URL,{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({
+const params=new URLSearchParams({
 type:"createTutorAccount",
 token:t,
 email:createForm.email.value,
 accessCode:createForm.code.value,
 password:createForm.password.value
 })
+
+const res=await fetch(SCRIPT_URL,{
+method:"POST",
+body:params
 })
 
 const d=await res.json()
@@ -355,7 +353,7 @@ alert(d.status)
 }
 }
 
-/* LOGIN */
+/* LOGIN (unchanged) */
 loginForm.onsubmit=async e=>{
 e.preventDefault()
 
@@ -370,7 +368,6 @@ alert("Invalid login")
 }
 }
 
-/* LOAD */
 async function loadStudents(token){
 const res=await fetch(`${SCRIPT_URL}?action=getStudentsForTutor&token=${token}`)
 const data=await res.json()
@@ -387,7 +384,6 @@ ${s.email}<br>${s.phone}<br>${s.service}
 </div>`).join("")
 }
 
-/* AUTO LOGIN */
 window.onload=()=>{
 const t=localStorage.getItem("tutorToken")
 if(t) loadStudents(t)
