@@ -306,9 +306,24 @@ function openCreate(){createModal.style.display="flex"}
 function openLogin(){loginModal.style.display="flex"}
 
 window.onclick=e=>{
-if(e.target.classList.contains("modal")) e.target.style.display="none"
+/* ❌ DO NOT CLOSE login modal */
+if(e.target.id==="loginModal") return
+
+/* ✅ allow other modals to close */
+if(e.target.classList.contains("modal")){
+e.target.style.display="none"
+}
 }
 
+document.addEventListener("keydown", function(e){
+if(e.key==="Escape"){
+/* prevent closing login modal */
+if(loginModal.style.display==="flex"){
+e.preventDefault()
+}
+}
+})
+  
 async function getToken(){
 const r=await fetch(SCRIPT_URL+"?action=getToken")
 const d=await r.json()
@@ -420,19 +435,25 @@ alert("Network error")
 }
 
 async function loadStudents(token){
+
 const res=await fetch(`${SCRIPT_URL}?action=getStudentsForTutor&token=${token}`)
 const data=await res.json()
 
-if(data.error){alert("Session expired");return}
-
-infoSection.style.display="none"
-dashboard.style.display="block"
+if(data.error){
+alert("Session expired")
+return
+}
 
 studentsList.innerHTML=data.map(s=>`
 <div class="student-card">
 <strong>${s.name}</strong><br>
 ${s.email}<br>${s.phone}<br>${s.service}
 </div>`).join("")
+
+/* ✅ THEN show dashboard */
+infoSection.style.display="none"
+dashboard.style.display="block"
+
 }
 
 window.onload=()=>{
