@@ -415,7 +415,7 @@ fetch(`${SCRIPT_URL}?action=rejectTutor&email=${encodeURIComponent(email)}&token
 
 function logout(){
 localStorage.removeItem("adminToken")
-location.reload()
+window.location.href = "index.html"
 }
 
 </script>
