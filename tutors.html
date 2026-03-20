@@ -38,7 +38,26 @@ padding:40px;
 flex:1;
 }
 
-h2{color:#003366;}
+h2{
+color:#003366;
+}
+
+/* NEW: Section underline styling */
+.section-title{
+display:inline-block;
+position:relative;
+padding-bottom:8px;
+}
+
+.section-title::after{
+content:"";
+position:absolute;
+left:0;
+bottom:0;
+height:3px;
+width:100%;
+background:#003366;
+}
 
 /* fade-in */
 .fade{
@@ -198,8 +217,10 @@ margin-bottom:15px;
 
 <div id="infoSection">
 
-<h2>Thank You for Your Interest</h2>
+<h2 class="section-title">Thank You for Your Interest</h2>
 
+<div class="card-container">
+<div class="service-card">
 <p>
 We sincerely appreciate your interest in joining C&T Tutorials. Our organization is committed to providing high-quality academic support while creating a professional and supportive environment for tutors.
 </p>
@@ -211,12 +232,91 @@ C&T Tutorials is an equal opportunity employer. Tutors are selected based on the
 <p>
 If you are passionate about helping students achieve their academic goals, we encourage you to apply to become part of our tutoring team.
 </p>
+</div>
+</div>
+
+<h2 class="section-title">Tutor Requirements</h2>
+<div class="card-container">
+<div class="service-card">
+<ul>
+<li>Strong knowledge in your subject area</li>
+<li>Good communication and teaching ability</li>
+<li>Reliable internet and availability</li>
+<li>Professionalism and commitment to students</li>
+</ul>
+</div>
+</div>
+
+<h2 class="section-title">What Happens Next</h2>
+<div class="card-container">
+<div class="service-card">
+<ul>
+<li>Submit your tutor application</li>
+<li>Your application is reviewed by our admin team</li>
+<li>You will receive an official email informing you whether your application has been approved or not</li>
+<li>If approved, you will be provided with a secure access code</li>
+<li>Use your access code to create your tutor account</li>
+<li>Log in and begin accessing student requests and tutoring opportunities</li>
+</ul>
+</div>
+</div>
+
+<h2 class="section-title">Benefits of Joining Us</h2>
+<div class="card-container">
+
+<div class="service-card">
+<h3>⏰ Flexible Schedule</h3>
+<p>
+Enjoy full control over your availability. You can plan sessions around your personal schedule, studies, or other work commitments, allowing you to maintain flexibility while staying productive.
+</p>
+</div>
+
+<div class="service-card">
+<h3>💰 Earn Income</h3>
+<p>
+Turn your academic knowledge into a reliable source of income. The more committed and effective you are, the greater your earning potential through consistent tutoring opportunities.
+</p>
+</div>
+
+<div class="service-card">
+<h3>📈 Grow Professionally</h3>
+<p>
+Gain valuable real-world experience by working with students from different backgrounds. Improve your communication, teaching techniques, and subject mastery while building a strong professional profile.
+</p>
+</div>
+
+</div>
+
+<h2 class="section-title">Subjects in Demand</h2>
+<div class="card-container">
+<div class="service-card">
+<ul>
+<li>Mathematics</li>
+<li>Science</li>
+<li>English</li>
+<li>Exam Preparation</li>
+</ul>
+</div>
+</div>
+
+<h2 class="section-title">Frequently Asked Questions</h2>
+<div class="card-container">
+<div class="service-card">
+<ul>
+<li><strong>How long does the approval process take?</strong> Applications are reviewed within a few days depending on volume and verification requirements.</li>
+<li><strong>Will I be notified if my application is rejected?</strong> Yes, all applicants receive an official email response regardless of the outcome.</li>
+<li><strong>How will I receive my access code?</strong> Approved applicants are sent a secure access code via the email they used to apply.</li>
+<li><strong>Can I reapply if I am not accepted?</strong> Yes, you may submit a new application after improving your qualifications or providing additional details.</li>
+<li><strong>Do I need prior teaching experience?</strong> While experience is beneficial, strong subject knowledge and communication skills are equally important.</li>
+</ul>
+</div>
+</div>
 
 </div>
 
 <div id="contactSection">
 
-<h2>Contact Us</h2>
+<h2 class="section-title">Contact Us</h2>
 
 <div class="card-container">
 
@@ -239,7 +339,7 @@ If you are passionate about helping students achieve their academic goals, we en
 
 <div id="dashboard" style="display:none" class="fade">
 
-<h2>Welcome to the Team!</h2>
+<h2 class="section-title">Welcome to the Team!</h2>
 
 <p>
 Below is the list of students who selected you.
@@ -321,7 +421,6 @@ Approved tutors are expected to maintain professional conduct, uphold academic i
 </div>
 
 <script>
-
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxIShwbw27ViNIHCShqkhJv4WaQ0igIE9AQ44FGT9RL1ik4rqeOzi01liVl4vjCFhNqQw/exec"
 
 function goHome(){
@@ -345,29 +444,18 @@ const d=await r.json()
 return d.token
 }
 
-/* APPLY */
 applyForm.onsubmit=async e=>{
 e.preventDefault()
-
 loadingModal.style.display="flex"
-
 const t=await getToken()
-
 const params=new URLSearchParams({
 type:"tutorApplication",
 token:t,
 ...Object.fromEntries(new FormData(applyForm))
 })
-
-const res=await fetch(SCRIPT_URL,{
-method:"POST",
-body:params
-})
-
+const res=await fetch(SCRIPT_URL,{method:"POST",body:params})
 const d=await res.json()
-
 loadingModal.style.display="none"
-
 if(d.status==="success"){
 alert("Application submitted")
 applyModal.style.display="none"
@@ -378,19 +466,14 @@ alert("Error submitting application")
 }
 }
 
-/* CREATE */
 createForm.onsubmit=async e=>{
 e.preventDefault()
-
 if(createForm.password.value!==createForm.confirm.value){
 alert("Passwords do not match")
 return
 }
-
 loadingModal.style.display="flex"
-
 const t=await getToken()
-
 const params=new URLSearchParams({
 type:"createTutorAccount",
 token:t,
@@ -398,16 +481,9 @@ email:createForm.email.value,
 accessCode:createForm.code.value,
 password:createForm.password.value
 })
-
-const res=await fetch(SCRIPT_URL,{
-method:"POST",
-body:params
-})
-
+const res=await fetch(SCRIPT_URL,{method:"POST",body:params})
 const d=await res.json()
-
 loadingModal.style.display="none"
-
 if(d.status==="account_created"){
 alert("Account created")
 createModal.style.display="none"
@@ -421,26 +497,17 @@ alert("Error creating account")
 }
 }
 
-/* LOGIN */
 loginForm.onsubmit=async e=>{
 e.preventDefault()
-
 loadingModal.style.display="flex"
-
 try{
 const res=await fetch(`${SCRIPT_URL}?action=tutorLogin&email=${encodeURIComponent(loginForm.email.value)}&password=${encodeURIComponent(loginForm.password.value)}`)
 const d=await res.json()
-
 if(d.success){
-
 localStorage.setItem("tutorToken",d.token)
-
 loginModal.style.display="none"
-
 await loadStudents(d.token)
-
 loadingModal.style.display="none"
-
 }else{
 loadingModal.style.display="none"
 alert("Invalid login")
@@ -452,32 +519,26 @@ alert("Network error")
 }
 
 async function loadStudents(token){
-
 const res=await fetch(`${SCRIPT_URL}?action=getStudentsForTutor&token=${token}`)
 const data=await res.json()
-
 if(data.error){
 loadingModal.style.display="none"
 localStorage.removeItem("tutorToken")
 loginModal.style.display="flex"
 return
 }
-
 studentsList.innerHTML=data.map(s=>`
 <div class="student-card">
 <strong>${s.name}</strong><br>
 ${s.email}<br>${s.phone}<br>${s.service}
 </div>`).join("")
-
 infoSection.style.display="none"
 dashboard.style.display="block"
-
 setTimeout(()=>dashboard.classList.add("show"),50)
 }
 
 window.onload=()=>{
 const t=localStorage.getItem("tutorToken")
-
 if(t){
 loadingModal.style.display="flex"
 loadStudents(t).then(()=>{
@@ -490,8 +551,7 @@ function logoutTutor(){
 localStorage.removeItem("tutorToken")
 location.reload()
 }
-
 </script>
 
 </body>
-</html>
+  </html>
