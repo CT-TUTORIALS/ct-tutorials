@@ -40,7 +40,7 @@ flex:1;
 
 h2{color:#003366;}
 
-/* ✅ fade-in */
+/* fade-in */
 .fade{
 opacity:0;
 transition:opacity .4s ease;
@@ -295,7 +295,9 @@ I agree to the
 <footer>
 <div class="footer-disclaimer">
 <strong>Disclaimer:</strong><br>
-This portal is intended for individuals applying to become tutors or approved to provide tutoring services through C&T Tutorials.
+This portal is intended for individuals applying to become tutors or approved to provide tutoring services through C&T Tutorials. Submission of a tutor application does not guarantee selection.
+<br><br>
+Approved tutors are expected to maintain professional conduct, uphold academic integrity, and comply with all policies and disclosure agreements associated with tutoring activities.
 <br><br>
 © 2026 C&T Tutorials. All rights reserved.
 </div>
@@ -331,6 +333,74 @@ async function getToken(){
 const r=await fetch(SCRIPT_URL+"?action=getToken")
 const d=await r.json()
 return d.token
+}
+
+/* APPLY */
+applyForm.onsubmit=async e=>{
+e.preventDefault()
+
+const t=await getToken()
+
+const params=new URLSearchParams({
+type:"tutorApplication",
+token:t,
+...Object.fromEntries(new FormData(applyForm))
+})
+
+const res=await fetch(SCRIPT_URL,{
+method:"POST",
+body:params
+})
+
+const d=await res.json()
+
+if(d.status==="success"){
+alert("Application submitted")
+applyModal.style.display="none"
+}else if(d.status==="duplicate_detected"){
+alert("Already applied")
+}else{
+alert("Error submitting application")
+}
+}
+
+/* CREATE */
+createForm.onsubmit=async e=>{
+e.preventDefault()
+
+if(createForm.password.value!==createForm.confirm.value){
+alert("Passwords do not match")
+return
+}
+
+const t=await getToken()
+
+const params=new URLSearchParams({
+type:"createTutorAccount",
+token:t,
+email:createForm.email.value,
+accessCode:createForm.code.value,
+password:createForm.password.value
+})
+
+const res=await fetch(SCRIPT_URL,{
+method:"POST",
+body:params
+})
+
+const d=await res.json()
+
+if(d.status==="account_created"){
+alert("Account created")
+createModal.style.display="none"
+openLogin()
+}else if(d.status==="not_approved"){
+alert("Not approved yet")
+}else if(d.status==="invalid_code"){
+alert("Invalid access code")
+}else{
+alert("Error creating account")
+}
 }
 
 /* LOGIN */
@@ -369,8 +439,9 @@ const res=await fetch(`${SCRIPT_URL}?action=getStudentsForTutor&token=${token}`)
 const data=await res.json()
 
 if(data.error){
-alert("Session expired")
-logoutTutor()
+loadingModal.style.display="none"
+localStorage.removeItem("tutorToken")
+loginModal.style.display="flex"
 return
 }
 
