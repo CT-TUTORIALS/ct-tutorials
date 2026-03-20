@@ -316,7 +316,7 @@ Approved tutors are expected to maintain professional conduct, uphold academic i
 <div class="modal" id="loadingModal">
 <div style="background:white;padding:30px;border-radius:8px;text-align:center;">
 <div class="spinner"></div>
-<p>Logging in...</p>
+<p>Processing...</p>
 </div>
 </div>
 
@@ -349,6 +349,8 @@ return d.token
 applyForm.onsubmit=async e=>{
 e.preventDefault()
 
+loadingModal.style.display="flex"
+
 const t=await getToken()
 
 const params=new URLSearchParams({
@@ -363,6 +365,8 @@ body:params
 })
 
 const d=await res.json()
+
+loadingModal.style.display="none"
 
 if(d.status==="success"){
 alert("Application submitted")
