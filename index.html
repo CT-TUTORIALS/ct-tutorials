@@ -146,7 +146,8 @@ box-shadow:0 4px 6px rgba(0,0,0,0.3);
 }
 
 #modal,
-#pricingModal{
+#pricingModal,
+#loadingModal{
 display:none;
 position:fixed;
 inset:0;
@@ -202,6 +203,22 @@ cursor:pointer;
 }
 
 .submit-btn:hover{background:#00509e;}
+
+.spinner{
+width:40px;
+height:40px;
+border:4px solid #ccc;
+border-top:4px solid #003366;
+border-radius:50%;
+animation:spin 1s linear infinite;
+margin:auto;
+margin-bottom:15px;
+}
+
+@keyframes spin{
+0%{transform:rotate(0deg);}
+100%{transform:rotate(360deg);}
+}
 
 footer{
 background:#003366;
@@ -462,6 +479,13 @@ I agree to the <a href="documents/Disclosure-Agreement.pdf" target="_blank">Disc
 </div>
 </div>
 
+<div id="loadingModal">
+<div style="background:white;padding:30px;border-radius:8px;text-align:center;">
+<div class="spinner"></div>
+<p>Submitting...</p>
+</div>
+</div>
+
 <footer>
 <div class="footer-disclaimer">
 <strong>Disclaimer:</strong><br>
@@ -486,6 +510,7 @@ const modal=document.getElementById("modal");
 const pricingModal=document.getElementById("pricingModal");
 const pricingTitle=document.getElementById("pricingTitle");
 const pricingDetails=document.getElementById("pricingDetails");
+const loadingModal=document.getElementById("loadingModal");
 
 let selectedService="";
 const serviceSelect=document.getElementById("serviceSelect");
@@ -618,6 +643,8 @@ if(this.company.value!==""){
 return;
 }
 
+loadingModal.style.display="flex";
+
 document.getElementById("tokenField").value=generateToken();
 
 fetch(SCRIPT_URL,{
@@ -626,6 +653,8 @@ body:new FormData(this)
 })
 .then(res=>res.json())
 .then(res=>{
+loadingModal.style.display="none";
+
 if(res.status==="duplicate_detected"){
 alert("You have already submitted this request.");
 }else if(res.status==="success"){
@@ -639,6 +668,7 @@ alert("Submission failed. Please try again.");
 }
 })
 .catch(()=>{
+loadingModal.style.display="none";
 alert("Network error. Please try again.");
 });
 
