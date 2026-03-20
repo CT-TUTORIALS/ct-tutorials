@@ -142,6 +142,37 @@ display:none;
 font-size:13px;
 }
 
+/* LOADING MODAL */
+
+.modal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.6);
+justify-content:center;
+align-items:center;
+z-index:2000;
+}
+
+.spinner{
+width:40px;
+height:40px;
+border:4px solid #ccc;
+border-top:4px solid #003366;
+border-radius:50%;
+animation:spin 1s linear infinite;
+margin:auto;
+margin-bottom:15px;
+}
+
+@keyframes spin{
+0%{transform:rotate(0deg);}
+100%{transform:rotate(360deg);}
+}
+
 /* FOOTER */
 
 .footer{
@@ -228,6 +259,14 @@ z-index:1000;
 © 2026 C&T Tutorials | Admin Panel • All Rights Reserved
 </div>
 
+<!-- LOADING MODAL -->
+<div class="modal" id="loadingModal">
+<div style="background:white;padding:30px;border-radius:8px;text-align:center;">
+<div class="spinner"></div>
+<p>Processing...</p>
+</div>
+</div>
+
 <script>
 
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxIShwbw27ViNIHCShqkhJv4WaQ0igIE9AQ44FGT9RL1ik4rqeOzi01liVl4vjCFhNqQw/exec";
@@ -239,6 +278,8 @@ function adminLogin(){
 const username=document.getElementById("username").value.trim()
 const password=document.getElementById("password").value.trim()
 
+loadingModal.style.display="flex"
+
 fetch(SCRIPT_URL+"?action=adminLogin&username="+encodeURIComponent(username)+"&password="+encodeURIComponent(password))
 .then(r=>r.json())
 .then(res=>{
@@ -249,10 +290,17 @@ localStorage.setItem("adminToken",res.token)
 
 initAdmin(res.token)
 
+loadingModal.style.display="none"
+
 }else{
+loadingModal.style.display="none"
 document.getElementById("error").style.display="block"
 }
 
+})
+.catch(()=>{
+loadingModal.style.display="none"
+alert("Network error")
 })
 
 }
@@ -389,7 +437,7 @@ tbody.innerHTML+=`
 
 }
 
-/* ===== ACTIONS (FIXED CORS) ===== */
+/* ===== ACTIONS ===== */
 
 function approve(email){
 
