@@ -383,6 +383,8 @@ alert("Passwords do not match")
 return
 }
 
+loadingModal.style.display="flex"
+
 const t=await getToken()
 
 const params=new URLSearchParams({
@@ -399,6 +401,8 @@ body:params
 })
 
 const d=await res.json()
+
+loadingModal.style.display="none"
 
 if(d.status==="account_created"){
 alert("Account created")
