@@ -13,21 +13,41 @@ background:#f4f4f4;
 display:flex;
 flex-direction:column;
 min-height:100vh;
-padding-top: 80px; /* Space for fixed header */
+padding-top: 120px; 
 }
 
 header{
 background:#003366;
 color:white;
-padding:20px;
+padding:15px 20px;
 text-align:center;
-position: fixed; /* Fixed Header */
+position: fixed; 
 top: 0;
 width: 100%;
 z-index: 2000;
+box-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
 
-header h1 { margin: 0; }
+.header-emblem {
+    height: 50px;
+    width: auto;
+    margin-bottom: 5px;
+    filter: brightness(0) invert(1); 
+}
+
+.section-emblem {
+    display: block;
+    height: 100px;
+    width: auto;
+    margin: 0 auto 20px auto;
+}
+
+header h1 { 
+    margin: 0; 
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
 
 nav { margin-top: 10px; }
 
@@ -45,6 +65,8 @@ margin: 20px auto;
 background:white;
 padding:40px;
 flex:1;
+border-radius: 8px;
+box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
 h2{
@@ -156,7 +178,18 @@ width:100%;
 border:1px solid #ddd;
 padding:15px;
 margin-bottom:10px;
+border-radius: 5px;
 }
+
+.resource-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.resource-item:last-child { border-bottom: none; }
 
 .logout{
 margin-top:20px;
@@ -200,7 +233,6 @@ margin:auto;
 margin-bottom:15px;
 }
 
-/* Tab Management */
 .tab-content { display: none; }
 .tab-content.active { display: block; }
 
@@ -214,7 +246,8 @@ margin-bottom:15px;
 <body>
 
 <header>
-<h1>C&T Tutorials Tutors Portal</h1>
+<img src="White_background[1].png" alt="C&T Logo" class="header-emblem">
+<h1>Tutors Portal</h1>
 
 <nav id="mainNav">
 <a onclick="handleHomeClick()">Home</a>
@@ -229,6 +262,7 @@ margin-bottom:15px;
 <div class="main">
 
 <div id="infoSection">
+<img src="White_background[1].png" alt="C&T Tutorials" class="section-emblem">
 <h2 class="section-title">Thank You for Your Interest</h2>
 <div class="card-container">
 <div class="service-card">
@@ -335,6 +369,7 @@ margin-bottom:15px;
 </div>
 
 <div id="dashboard" style="display:none" class="fade">
+<img src="White_background[1].png" alt="C&T Tutorials" class="section-emblem">
 <h2 class="section-title">Tutor Dashboard</h2>
 
 <div id="tab-home" class="tab-content active">
@@ -343,24 +378,35 @@ margin-bottom:15px;
 </div>
 
 <div id="tab-resources" class="tab-content">
-<h3>Resources & Materials</h3>
+<h2 class="section-title">Resources & Materials</h2>
 <div class="service-card">
-<p>This section is reserved for your teaching aids and curriculum documents.</p>
+    <div class="resource-item">
+        <span>📄 Business Policies & Guidelines</span>
+        <a href="documents/Business-Policies.pdf" target="_blank">View/Download</a>
+    </div>
+    <div class="resource-item">
+        <span>📄 Tutors' Disclosure Agreement</span>
+        <a href="documents/Tutor-Disclosure-Agreement.pdf" target="_blank">View/Download</a>
+    </div>
+    <div class="resource-item">
+        <span>📄 Lesson Plan Template</span>
+        <a href="#" style="color: gray; cursor: not-allowed;">Coming Soon</a>
+    </div>
 </div>
 </div>
 
 <div id="tab-messages" class="tab-content">
-<h3>Messages</h3>
+<h2 class="section-title">Messages</h2>
 <div class="service-card">
 <p>Communication history with the administrative team will appear here.</p>
 </div>
 </div>
 
 <div id="tab-support" class="tab-content">
-<h3>Help & Support</h3>
+<h2 class="section-title">Help & Support</h2>
 <div class="service-card">
 <textarea id="supportInput" placeholder="How can we help you?"></textarea>
-<button onclick="alert('Your request has been logged.')">Submit Request</button>
+<button onclick="submitSupport()">Submit Request</button>
 </div>
 </div>
 
@@ -378,12 +424,12 @@ margin-bottom:15px;
 <input name="subjects" placeholder="Subjects" required>
 <input name="qualification" placeholder="Qualification" required>
 <input name="experience" placeholder="Experience">
-<label>
-<input type="checkbox" required>
+<label style="display: block; margin-top: 10px; font-size: 14px;">
+<input type="checkbox" required style="width: auto; margin-right: 10px;">
 I agree to the
-<a href="documents/Tutor-Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a>
+<a href="documents/Tutor-Disclosure-Agreement.pdf" target="_blank">Tutors' Disclosure Agreement</a>
 </label>
-<button type="submit">Submit Application</button>
+<button type="submit" style="margin-top: 15px;">Submit Application</button>
 </form>
 </div>
 
@@ -440,20 +486,18 @@ e.target.style.display="none"
 }
 }
 
-// ✅ Handle Home link behavior
 function handleHomeClick() {
-    if (localStorage.getItem("tutorToken")) {
-        logoutTutor();
-    } else {
-        window.location.href = "index.html";
-    }
+    if (localStorage.getItem("tutorToken")) {
+        logoutTutor();
+    } else {
+        window.location.href = "index.html";
+    }
 }
 
-// ✅ Browser Back Arrow logic
 window.onpopstate = function(event) {
-    if (localStorage.getItem("tutorToken")) {
-        logoutTutor();
-    }
+    if (localStorage.getItem("tutorToken")) {
+        logoutTutor();
+    }
 };
 
 function updateNav(isLoggedIn) {
@@ -500,9 +544,9 @@ const res=await fetch(SCRIPT_URL,{method:"POST",body:params})
 const d=await res.json()
 loadingModal.style.display="none"
 if(d.status==="success"){
-alert("Application submitted")
+alert("Application submitted successfully. We will review it shortly.")
 applyModal.style.display="none"
-}else{ alert("Error submitting application") }
+}else{ alert("Error submitting application. Please try again.") }
 }
 
 createForm.onsubmit=async e=>{
@@ -524,10 +568,10 @@ const res=await fetch(SCRIPT_URL,{method:"POST",body:params})
 const d=await res.json()
 loadingModal.style.display="none"
 if(d.status==="account_created"){
-alert("Account created")
+alert("Account created successfully. You can now log in.")
 createModal.style.display="none"
 openLogin()
-}else{ alert("Error creating account") }
+}else{ alert("Error creating account. Check your code and try again.") }
 }
 
 loginForm.onsubmit=async e=>{
@@ -538,18 +582,40 @@ const res=await fetch(`${SCRIPT_URL}?action=tutorLogin&email=${encodeURIComponen
 const d=await res.json()
 if(d.success){
 localStorage.setItem("tutorToken",d.token);
-localStorage.setItem("tutorEmail", d.email); // Store for support
-// ✅ Push state so back button can be intercepted
+localStorage.setItem("tutorEmail", d.email); 
 history.pushState({ loggedIn: true }, "Dashboard", "");
 location.reload(); 
 }else{
 loadingModal.style.display="none"
-alert("Invalid login")
+alert("Invalid login credentials.")
 }
 }catch(err){
 loadingModal.style.display="none"
-alert("Network error")
+alert("Network error. Please try again.")
 }
+}
+
+async function submitSupport(){
+    const msg = supportInput.value.trim();
+    if(!msg) return;
+    loadingModal.style.display="flex";
+    const params = new URLSearchParams({
+        type: "supportRequest",
+        email: localStorage.getItem("tutorEmail"),
+        message: msg
+    });
+    try {
+        const res = await fetch(SCRIPT_URL, {method:"POST", body:params});
+        const d = await res.json();
+        loadingModal.style.display="none";
+        if(d.status === "success"){
+            alert("Your request has been logged. Admin will contact you soon.");
+            supportInput.value = "";
+        }
+    } catch(err) {
+        loadingModal.style.display="none";
+        alert("Error sending support request.");
+    }
 }
 
 async function loadStudents(token){
@@ -559,15 +625,15 @@ if(data.error){
 logoutTutor();
 return
 }
-studentsList.innerHTML=data.map(s=>`
+studentsList.innerHTML=data.length > 0 ? data.map(s=>`
 <div class="student-card">
 <strong>${s.name}</strong><br>
-${s.email}<br>${s.phone}<br>${s.service}
-</div>`).join("")
-infoSection.style.display="none"
-contactSection.style.display="none"
-dashboard.style.display="block"
-setTimeout(()=>dashboard.classList.add("show"),50)
+Email: ${s.email}<br>Phone: ${s.phone}<br>Service: ${s.service}
+</div>`).join("") : "<p>No students assigned yet.</p>";
+infoSection.style.display="none";
+contactSection.style.display="none";
+dashboard.style.display="block";
+setTimeout(()=>dashboard.classList.add("show"),50);
 }
 
 window.onload=()=>{
@@ -582,8 +648,7 @@ updateNav(false);
 
 function logoutTutor(){
 localStorage.clear();
-// Redirect to front of tutors page (this current page) by refreshing without session
-window.location.href = window.location.pathname; 
+window.location.href = window.location.pathname; 
 }
 </script>
 
