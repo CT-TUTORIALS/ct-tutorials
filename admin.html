@@ -451,21 +451,46 @@ tbody.innerHTML+=`
 
 function approve(email){
 
+if(!confirm("Are you sure you want to approve this tutor?")) return;
+
 const token = localStorage.getItem("adminToken")
+loadingModal.style.display="flex"
 
 fetch(`${SCRIPT_URL}?action=approveTutor&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`)
 .then(r=>r.json())
-.then(()=>loadApplications(token))
+.then(res=>{
+  loadingModal.style.display="none"
+  if(res.status === "approved"){
+    loadApplications(token)
+    loadApprovedTutors(token)
+  }
+})
+.catch(()=> {
+  loadingModal.style.display="none"
+  alert("Error processing approval")
+})
 
 }
 
 function reject(email){
 
+if(!confirm("Are you sure you want to reject this tutor?")) return;
+
 const token = localStorage.getItem("adminToken")
+loadingModal.style.display="flex"
 
 fetch(`${SCRIPT_URL}?action=rejectTutor&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`)
 .then(r=>r.json())
-.then(()=>loadApplications(token))
+.then(res=>{
+  loadingModal.style.display="none"
+  if(res.status === "rejected"){
+    loadApplications(token)
+  }
+})
+.catch(()=> {
+  loadingModal.style.display="none"
+  alert("Error processing rejection")
+})
 
 }
 
