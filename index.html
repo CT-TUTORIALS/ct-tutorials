@@ -231,7 +231,7 @@ margin-bottom:15px;
 }
 
 footer{
-background:#003366;
+background:#001a33; /* Matched to Header Bold Navy */
 color:white;
 text-align:center;
 padding:25px;
@@ -452,10 +452,28 @@ opacity:0.9;
 <select name="service" id="serviceSelect" required>
 <option value="">Select a service</option>
 <option value="Intro Academic Writing">Introduction to Academic Writing</option>
-<option value="Secondary School Subjects">Secondary School Subjects</option>
 <option value="Topic Specific">Topic Specific Sessions</option>
 <option value="Hourly Rate">Hourly Rate</option>
-<option value="Group Sessions">Group Sessions</option>
+<optgroup label="Secondary School Subjects">
+<option value="Secondary School Subject: English">English</option>
+<option value="Secondary School Subject: Oshikwanyama">Oshikwanyama</option>
+<option value="Secondary School Subject: Oshindonga">Oshindonga</option>
+<option value="Secondary School Subject: Accounting">Accounting</option>
+<option value="Secondary School Subject: Economics">Economics</option>
+<option value="Secondary School Subject: Business Studies">Business Studies</option>
+<option value="Secondary School Subject: Entrepreneurship">Entrepreneurship</option>
+<option value="Secondary School Subject: Mathematics">Mathematics</option>
+<option value="Secondary School Subject: Physics">Physics</option>
+<option value="Secondary School Subject: Biology">Biology</option>
+<option value="Secondary School Subject: History">History</option>
+<option value="Secondary School Subject: Geography">Geography</option>
+<option value="Secondary School Subject: Development Studies">Development Studies</option>
+</optgroup>
+<optgroup label="Group Learning Sessions">
+<option value="Group Sessions: 2-5 People">2 – 5 People</option>
+<option value="Group Sessions: 6-14 People">6 – 14 People</option>
+<option value="Group Sessions: More than 14 People">More than 14 People</option>
+</optgroup>
 <option value="Public Speaking Support">Public Speaking Support</option>
 <option value="Draft Editing">Draft Editing</option>
 <option value="Proofreading">Proofreading</option>
@@ -553,15 +571,15 @@ content = `
 if(service==="secondary"){
 pricingTitle.innerText="Secondary School Subjects";
 const subjects = ["English", "Oshikwanyama", "Oshindonga", "Accounting", "Economics", "Business Studies", "Entrepreneurship", "Mathematics", "Physics", "Biology", "History", "Geography", "Development Studies"];
-content = subjects.map((s, i) => `<label class="pricing-option"><input type="radio" name="priceOption" value="Secondary School Subjects" ${i===0?'checked':''}> ${s} – <b>N$40</b></label>`).join('');
+content = subjects.map((s, i) => `<label class="pricing-option"><input type="radio" name="priceOption" value="Secondary School Subject: ${s}" ${i===0?'checked':''}> ${s} – <b>N$40</b></label>`).join('');
 }
 
 if(service==="group"){
 pricingTitle.innerText="Group Learning Sessions";
 content = `
-<label class="pricing-option"><input type="radio" name="priceOption" value="Group Sessions" checked> 2 – 5 People – <b>N$200</b></label>
-<label class="pricing-option"><input type="radio" name="priceOption" value="Group Sessions"> 6 – 14 People – <b>N$450</b></label>
-<label class="pricing-option"><input type="radio" name="priceOption" value="Group Sessions"> More than 14 People – <b>N$600</b></label>`;
+<label class="pricing-option"><input type="radio" name="priceOption" value="Group Sessions: 2-5 People" checked> 2 – 5 People – <b>N$200</b></label>
+<label class="pricing-option"><input type="radio" name="priceOption" value="Group Sessions: 6-14 People"> 6 – 14 People – <b>N$450</b></label>
+<label class="pricing-option"><input type="radio" name="priceOption" value="Group Sessions: More than 14 People"> More than 14 People – <b>N$600</b></label>`;
 }
 
 if(service==="assignment"){
@@ -618,7 +636,7 @@ if(this.value==="Intro Academic Writing" || this.value==="Topic Specific" || thi
 category="writing";
 allowTutor=true;
 }
-else if(this.value==="Group Sessions"){
+else if(this.value.includes("Group Sessions")){
 category="group";
 allowTutor=true;
 }
@@ -626,7 +644,7 @@ else if(this.value==="Public Speaking Support"){
 category="speaking";
 allowTutor=true;
 }
-else if(this.value==="Secondary School Subjects"){
+else if(this.value.includes("Secondary School Subject")){
 category="secondary";
 allowTutor=true;
 }
