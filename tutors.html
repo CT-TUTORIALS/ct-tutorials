@@ -217,7 +217,7 @@ margin-bottom:15px;
 <h1>C&T Tutorials Tutors Portal</h1>
 
 <nav id="mainNav">
-<a href="index.html">Home</a>
+<a onclick="handleHomeClick()">Home</a>
 <span id="dynamicLinks">
 <a onclick="openApply()">Apply</a>
 <a onclick="openCreate()">Create Account</a>
@@ -440,29 +440,45 @@ e.target.style.display="none"
 }
 }
 
-function updateNav(isLoggedIn) {
-    const dynamicLinks = document.getElementById('dynamicLinks');
-    if (isLoggedIn) {
-        dynamicLinks.innerHTML = `
-            <a onclick="showTab('home')">Dashboard Home</a>
-            <a onclick="showTab('resources')">Resources</a>
-            <a onclick="showTab('messages')">Messages</a>
-            <a onclick="showTab('support')">Support</a>
-            <a onclick="logoutTutor()" style="color:#ff9999; margin-left:15px;">Logout</a>
-        `;
+// ✅ Handle Home link behavior
+function handleHomeClick() {
+    if (localStorage.getItem("tutorToken")) {
+        logoutTutor();
     } else {
-        dynamicLinks.innerHTML = `
-            <a onclick="openApply()">Apply</a>
-            <a onclick="openCreate()">Create Account</a>
-            <a onclick="openLogin()">Login</a>
-        `;
+        window.location.href = "index.html";
     }
 }
 
+// ✅ Browser Back Arrow logic
+window.onpopstate = function(event) {
+    if (localStorage.getItem("tutorToken")) {
+        logoutTutor();
+    }
+};
+
+function updateNav(isLoggedIn) {
+    const dynamicLinks = document.getElementById('dynamicLinks');
+    if (isLoggedIn) {
+        dynamicLinks.innerHTML = `
+            <a onclick="showTab('home')">Dashboard Home</a>
+            <a onclick="showTab('resources')">Resources</a>
+            <a onclick="showTab('messages')">Messages</a>
+            <a onclick="showTab('support')">Support</a>
+            <a onclick="logoutTutor()" style="color:#ff9999; margin-left:15px;">Logout</a>
+        `;
+    } else {
+        dynamicLinks.innerHTML = `
+            <a onclick="openApply()">Apply</a>
+            <a onclick="openCreate()">Create Account</a>
+            <a onclick="openLogin()">Login</a>
+        `;
+    }
+}
+
 function showTab(tabId) {
-    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-    document.getElementById('tab-' + tabId).classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + tabId).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 async function getToken(){
@@ -521,8 +537,11 @@ try{
 const res=await fetch(`${SCRIPT_URL}?action=tutorLogin&email=${encodeURIComponent(loginForm.email.value)}&password=${encodeURIComponent(loginForm.password.value)}`)
 const d=await res.json()
 if(d.success){
-localStorage.setItem("tutorToken",d.token)
-location.reload(); 
+localStorage.setItem("tutorToken",d.token);
+localStorage.setItem("tutorEmail", d.email); // Store for support
+// ✅ Push state so back button can be intercepted
+history.pushState({ loggedIn: true }, "Dashboard", "");
+location.reload(); 
 }else{
 loadingModal.style.display="none"
 alert("Invalid login")
@@ -563,7 +582,8 @@ updateNav(false);
 
 function logoutTutor(){
 localStorage.clear();
-location.reload();
+// Redirect to front of tutors page (this current page) by refreshing without session
+window.location.href = window.location.pathname; 
 }
 </script>
 
