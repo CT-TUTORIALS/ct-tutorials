@@ -145,7 +145,7 @@ text-decoration:underline;
 position:fixed;
 bottom:25px;
 right:25px;
-background:#003366;
+background:#001a33; /* Matched to Header/Footer Navy */
 color:white;
 padding:15px 22px;
 border:none;
@@ -685,7 +685,7 @@ body:new FormData(this)
 })
 .then(res=>res.json())
 .then(res=>{
-// The loading modal disappears exactly as the success/error alert pops out
+// Logic ensures loadingModal hides exactly as the success/error alert is called
 loadingModal.style.display="none";
 
 if(res.status==="duplicate_detected"){
