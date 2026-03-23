@@ -98,6 +98,17 @@ cursor:pointer;
 .approve{background:#2e7d32;color:white;}
 .reject{background:#c62828;color:white;}
 
+/* Clickable link styling for student table */
+#studentsTable td a {
+    color: #003366;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+#studentsTable td a:hover {
+    text-decoration: underline;
+}
+
 /* LOGIN */
 
 .login-overlay{
@@ -259,7 +270,6 @@ z-index:1000;
 © 2026 C&T Tutorials | Admin Panel • All Rights Reserved
 </div>
 
-<!-- LOADING MODAL -->
 <div class="modal" id="loadingModal">
 <div style="background:white;padding:30px;border-radius:8px;text-align:center;">
 <div class="spinner"></div>
@@ -425,8 +435,8 @@ data.forEach(s=>{
 tbody.innerHTML+=`
 <tr>
 <td>${s.name||""}</td>
-<td>${s.email||""}</td>
-<td>${s.phone||""}</td>
+<td><a href="mailto:${s.email||""}">${s.email||""}</a></td>
+<td><a href="tel:${s.phone||""}">${s.phone||""}</a></td>
 <td>${s.service||""}</td>
 <td>${s.tutor||""}</td>
 </tr>`
