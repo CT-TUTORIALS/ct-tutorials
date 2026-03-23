@@ -545,7 +545,7 @@ const params=new URLSearchParams({
 type:"createTutorAccount",
 token:t,
 email:createForm.email.value,
-accessCode:createForm.code.value,
+accessCode:createCode.value,
 password:createForm.password.value
 })
 const res=await fetch(SCRIPT_URL,{method:"POST",body:params})
