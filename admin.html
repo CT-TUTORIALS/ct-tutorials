@@ -99,7 +99,7 @@ cursor:pointer;
 background:#2e7d32;
 color:white;
 width: 85px; 
-margin-right: 8px;
+margin-right: 12px;
 }
 
 .reject{
@@ -232,7 +232,7 @@ z-index:1000;
 
 <div class="admin-header">
 <div class="admin-nav">
-<a href="index.html">Home</a>
+<a href="#" onclick="logout()">Home</a>
 <span id="adminLinks" style="display:none;">
 <a href="#applications">Applications</a>
 <a href="#approved">Approved Tutors</a>
@@ -364,7 +364,7 @@ return false;
 
 function loadApplications(token){
 
-fetch(SCRIPT_URL+"?action=getTutorApplications&token="+token)
+return fetch(SCRIPT_URL+"?action=getTutorApplications&token="+token)
 .then(r=>r.json())
 .then(data=>{
 
@@ -400,7 +400,7 @@ tbody.innerHTML+=row
 
 function loadApprovedTutors(token){
 
-fetch(SCRIPT_URL+"?action=getApprovedTutors&token="+token)
+return fetch(SCRIPT_URL+"?action=getApprovedTutors&token="+token)
 .then(r=>r.json())
 .then(data=>{
 
@@ -429,7 +429,7 @@ tbody.innerHTML+=`
 
 function loadStudents(token){
 
-fetch(SCRIPT_URL+"?action=getAllStudents&token="+token)
+return fetch(SCRIPT_URL+"?action=getAllStudents&token="+token)
 .then(r=>r.json())
 .then(data=>{
 
@@ -472,15 +472,16 @@ fetch(`${SCRIPT_URL}?action=approveTutor&email=${encodeURIComponent(email)}&toke
 .then(r=>r.json())
 .then(res=>{
   if(res.status === "approved"){
-    loadApplications(token)
-    loadApprovedTutors(token)
+    Promise.all([loadApplications(token), loadApprovedTutors(token)]).then(() => {
+       modal.style.display="none"
+    })
+  } else {
+    modal.style.display="none"
   }
 })
 .catch(()=> {
   alert("Error processing approval")
-})
-.finally(() => {
-  modal.style.display="none" // Hides only when finished
+  modal.style.display="none"
 })
 
 }
@@ -498,14 +499,16 @@ fetch(`${SCRIPT_URL}?action=rejectTutor&email=${encodeURIComponent(email)}&token
 .then(r=>r.json())
 .then(res=>{
   if(res.status === "rejected"){
-    loadApplications(token)
+    loadApplications(token).then(() => {
+       modal.style.display="none"
+    })
+  } else {
+    modal.style.display="none"
   }
 })
 .catch(()=> {
   alert("Error processing rejection")
-})
-.finally(() => {
-  modal.style.display="none" // Hides only when finished
+  modal.style.display="none"
 })
 
 }
