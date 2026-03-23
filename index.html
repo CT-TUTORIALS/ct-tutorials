@@ -259,6 +259,22 @@ object-fit:cover;
 object-position:center 75%;
 }
 }
+
+/* Pricing Selection Styles */
+.pricing-option {
+    display: block;
+    background: #f9f9f9;
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.pricing-option:hover { background: #f0f0f0; }
+.pricing-option input { width: auto; margin-right: 10px; }
+.pricing-option.selected { border-color: #003366; background: #e6f0ff; }
+#pricingDetails { max-height: 300px; overflow-y: auto; margin-top: 15px; }
 </style>
 </head>
 
@@ -529,53 +545,56 @@ function closeForm(){ modal.style.display="none"; }
 function openPricing(service){
 selectedService=service;
 pricingModal.style.display="flex";
+let content = "";
 
 if(service==="writing"){
 pricingTitle.innerText="Academic Writing Tutorials";
-pricingDetails.innerHTML=`
-<p>Introduction to Academic Writing (4 sessions) – <b>N$150</b></p>
-<p>Topic Specific Sessions – <b>N$40</b></p>
-<p>Hourly Rate – <b>N$40</b></p>`;
+content = `
+<label class="pricing-option"><input type="radio" name="priceOption" value="Intro Academic Writing" checked> Introduction to Academic Writing (4 sessions) – <b>N$150</b></label>
+<label class="pricing-option"><input type="radio" name="priceOption" value="Topic Specific"> Topic Specific Sessions – <b>N$40</b></label>
+<label class="pricing-option"><input type="radio" name="priceOption" value="Hourly Rate"> Hourly Rate – <b>N$40</b></label>`;
 }
 
 if(service==="secondary"){
 pricingTitle.innerText="Secondary School Subjects";
-pricingDetails.innerHTML=`<p>Session – <b>N$40</b></p>`;
+const subjects = ["English", "Oshikwanyama", "Oshindonga", "Accounting", "Economics", "Business Studies", "Entrepreneurship", "Mathematics", "Physics", "Biology", "History", "Geography", "Development Studies"];
+content = subjects.map((s, i) => `<label class="pricing-option"><input type="radio" name="priceOption" value="Secondary School Subjects" ${i===0?'checked':''}> ${s} – <b>N$40</b></label>`).join('');
 }
 
 if(service==="group"){
 pricingTitle.innerText="Group Learning Sessions";
-pricingDetails.innerHTML=`
-<p>2 – 5 People – <b>N$200</b></p>
-<p>6 – 14 People – <b>N$450</b></p>
-<p>More than 14 People – <b>N$600</b></p>`;
+content = `
+<label class="pricing-option"><input type="radio" name="priceOption" value="Group Sessions" checked> 2 – 5 People – <b>N$200</b></label>
+<label class="pricing-option"><input type="radio" name="priceOption" value="Group Sessions"> 6 – 14 People – <b>N$450</b></label>
+<label class="pricing-option"><input type="radio" name="priceOption" value="Group Sessions"> More than 14 People – <b>N$600</b></label>`;
 }
 
 if(service==="assignment"){
 pricingTitle.innerText="Assignment Support";
-pricingDetails.innerHTML=`
-<p>Draft Editing – <b>N$15 per page</b></p>
-<p>Proofreading – <b>N$10 per page</b></p>
-<p>Referencing Assistance – <b>N$20</b></p>`;
+content = `
+<label class="pricing-option"><input type="radio" name="priceOption" value="Draft Editing" checked> Draft Editing – <b>N$15 per page</b></label>
+<label class="pricing-option"><input type="radio" name="priceOption" value="Proofreading"> Proofreading – <b>N$10 per page</b></label>
+<label class="pricing-option"><input type="radio" name="priceOption" value="Referencing Assistance"> Referencing Assistance – <b>N$20</b></label>`;
 }
 
 if(service==="speaking"){
 pricingTitle.innerText="Public Speaking Support";
-pricingDetails.innerHTML=`<p>Coaching Session – <b>N$40</b></p>`;
+content = `<label class="pricing-option"><input type="radio" name="priceOption" value="Public Speaking Support" checked> Coaching Session – <b>N$40</b></label>`;
 }
+
+pricingDetails.innerHTML = content;
 }
 
 function bookService(){
+const selectedOption = document.querySelector('input[name="priceOption"]:checked');
+if(!selectedOption) return;
+
+const bookingValue = selectedOption.value;
 pricingModal.style.display="none";
 openForm();
 
 setTimeout(()=>{
-if(selectedService==="writing") serviceSelect.value="Intro Academic Writing";
-if(selectedService==="secondary") serviceSelect.value="Secondary School Subjects";
-if(selectedService==="group") serviceSelect.value="Group Sessions";
-if(selectedService==="assignment") serviceSelect.value="Draft Editing";
-if(selectedService==="speaking") serviceSelect.value="Public Speaking Support";
-
+serviceSelect.value = bookingValue;
 serviceSelect.dispatchEvent(new Event("change"));
 },100);
 }
@@ -681,4 +700,4 @@ if(e.target===pricingModal) pricingModal.style.display="none";
 </script>
 
 </body>
-  </html>
+</html>
