@@ -685,6 +685,7 @@ body:new FormData(this)
 })
 .then(res=>res.json())
 .then(res=>{
+// The loading modal disappears exactly as the success/error alert pops out
 loadingModal.style.display="none";
 
 if(res.status==="duplicate_detected"){
