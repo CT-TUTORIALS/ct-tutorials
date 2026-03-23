@@ -13,7 +13,7 @@ background:#f4f4f4;
 display:flex;
 flex-direction:column;
 min-height:100vh;
-padding-top: 80px; /* Restored original header spacing */
+padding-top: 80px; /* Space for fixed header */
 }
 
 header{
@@ -25,14 +25,6 @@ position: fixed;
 top: 0;
 width: 100%;
 z-index: 2000;
-}
-
-/* Emblem only for content sections */
-.section-emblem {
-    display: block;
-    height: 100px;
-    width: auto;
-    margin: 0 auto 20px auto;
 }
 
 header h1 { margin: 0; }
@@ -246,7 +238,6 @@ margin-bottom:15px;
 <div class="main">
 
 <div id="infoSection">
-<img src="White_background[1].png" alt="C&T Tutorials" class="section-emblem">
 <h2 class="section-title">Thank You for Your Interest</h2>
 <div class="card-container">
 <div class="service-card">
@@ -353,7 +344,6 @@ margin-bottom:15px;
 </div>
 
 <div id="dashboard" style="display:none" class="fade">
-<img src="White_background[1].png" alt="C&T Tutorials" class="section-emblem">
 <h2 class="section-title">Tutor Dashboard</h2>
 
 <div id="tab-home" class="tab-content active">
@@ -545,7 +535,7 @@ const params=new URLSearchParams({
 type:"createTutorAccount",
 token:t,
 email:createForm.email.value,
-accessCode:createCode.value,
+accessCode:createForm.code.value,
 password:createForm.password.value
 })
 const res=await fetch(SCRIPT_URL,{method:"POST",body:params})
@@ -566,9 +556,9 @@ const res=await fetch(`${SCRIPT_URL}?action=tutorLogin&email=${encodeURIComponen
 const d=await res.json()
 if(d.success){
 localStorage.setItem("tutorToken",d.token);
-localStorage.setItem("tutorEmail", d.email); 
+localStorage.setItem("tutorEmail", d.email); 
 history.pushState({ loggedIn: true }, "Dashboard", "");
-location.reload(); 
+location.reload(); 
 }else{
 loadingModal.style.display="none"
 alert("Invalid login credentials.")
@@ -632,7 +622,7 @@ updateNav(false);
 
 function logoutTutor(){
 localStorage.clear();
-window.location.href = window.location.pathname; 
+window.location.href = window.location.pathname; 
 }
 </script>
 
