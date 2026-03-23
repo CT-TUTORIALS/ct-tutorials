@@ -145,7 +145,7 @@ text-decoration:underline;
 position:fixed;
 bottom:25px;
 right:25px;
-background:#001a33; /* Matched to Header/Footer Navy */
+background:#001a33; /* Exact match to header and footer */
 color:white;
 padding:15px 22px;
 border:none;
@@ -231,7 +231,7 @@ margin-bottom:15px;
 }
 
 footer{
-background:#001a33; /* Matched to Header Bold Navy */
+background:#001a33; /* Bold Navy */
 color:white;
 text-align:center;
 padding:25px;
@@ -270,6 +270,19 @@ opacity:0.9;
 .pricing-option input { width: auto; margin-right: 10px; }
 .pricing-option.selected { border-color: #003366; background: #e6f0ff; }
 #pricingDetails { max-height: 300px; overflow-y: auto; margin-top: 15px; }
+
+/* Checkbox alignment */
+.agreement-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    margin-top: 20px;
+}
+.agreement-label input {
+    width: auto;
+    margin-top: 4px;
+}
 </style>
 </head>
 
@@ -490,9 +503,9 @@ opacity:0.9;
 <input type="hidden" name="token" id="tokenField">
 <input type="text" name="company" style="display:none">
 
-<label>
+<label class="agreement-label">
 <input type="checkbox" required>
-I agree to the <a href="documents/Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a>
+<span>I agree that the information provided above is correct to my knowledge at the time of submission and that I have read and understood the <a href="documents/Disclosure-Agreement.pdf" target="_blank">Disclosure Agreement</a>.</span>
 </label>
 
 <button type="submit" class="submit-btn">Submit Registration</button>
@@ -668,43 +681,41 @@ tutorSelect.innerHTML='<option value="">Select a tutor</option>';
 
 });
 
-document.getElementById("studentRegisterForm").addEventListener("submit",function(e){
-e.preventDefault();
+document.getElementById("studentRegisterForm").addEventListener("submit", function(e) {
+    e.preventDefault();
 
-if(this.company.value!==""){
-return;
-}
+    if (this.company.value !== "") {
+        return;
+    }
 
-loadingModal.style.display="flex";
+    loadingModal.style.display = "flex";
+    document.getElementById("tokenField").value = generateToken();
 
-document.getElementById("tokenField").value=generateToken();
+    fetch(SCRIPT_URL, {
+        method: "POST",
+        body: new FormData(this)
+    })
+    .then(res => res.json())
+    .then(res => {
+        // We close the loading modal at the EXACT moment we determine the response
+        loadingModal.style.display = "none";
 
-fetch(SCRIPT_URL,{
-method:"POST",
-body:new FormData(this)
-})
-.then(res=>res.json())
-.then(res=>{
-// Logic ensures loadingModal hides exactly as the success/error alert is called
-loadingModal.style.display="none";
-
-if(res.status==="duplicate_detected"){
-alert("You have already submitted this request.");
-}else if(res.status==="success"){
-alert("Submitted");
-this.reset();
-tutorLabel.style.display="none";
-tutorSelect.innerHTML='<option value="">Select a tutor</option>';
-closeForm();
-}else{
-alert("Submission failed. Please try again.");
-}
-})
-.catch(()=>{
-loadingModal.style.display="none";
-alert("Network error. Please try again.");
-});
-
+        if (res.status === "duplicate_detected") {
+            alert("You have already submitted this request.");
+        } else if (res.status === "success") {
+            alert("Submitted Successfully");
+            this.reset();
+            tutorLabel.style.display = "none";
+            tutorSelect.innerHTML = '<option value="">Select a tutor</option>';
+            closeForm();
+        } else {
+            alert("Submission failed. Please try again.");
+        }
+    })
+    .catch(() => {
+        loadingModal.style.display = "none";
+        alert("Network error. Please try again.");
+    });
 });
 
 window.onclick=e=>{
