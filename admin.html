@@ -95,8 +95,19 @@ border-radius:4px;
 cursor:pointer;
 }
 
-.approve{background:#2e7d32;color:white;}
-.reject{background:#c62828;color:white;}
+/* BUTTON SIZING & SEPARATION */
+.approve{
+background:#2e7d32;
+color:white;
+width: 85px; 
+margin-right: 8px;
+}
+
+.reject{
+background:#c62828;
+color:white;
+width: 85px;
+}
 
 /* Clickable link styling for student table */
 #studentsTable td a {
@@ -273,7 +284,7 @@ z-index:1000;
 <div class="modal" id="loadingModal">
 <div style="background:white;padding:30px;border-radius:8px;text-align:center;">
 <div class="spinner"></div>
-<p>Processing...</p>
+<p id="loadingText">Processing...</p>
 </div>
 </div>
 
@@ -447,27 +458,30 @@ tbody.innerHTML+=`
 
 }
 
-/* ===== ACTIONS ===== */
+/* ===== ACTIONS (LOADING IMPLEMENTED) ===== */
 
 function approve(email){
 
 if(!confirm("Are you sure you want to approve this tutor?")) return;
 
 const token = localStorage.getItem("adminToken")
-loadingModal.style.display="flex"
+const modal = document.getElementById("loadingModal")
+
+modal.style.display="flex"
 
 fetch(`${SCRIPT_URL}?action=approveTutor&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`)
 .then(r=>r.json())
 .then(res=>{
-  loadingModal.style.display="none"
   if(res.status === "approved"){
     loadApplications(token)
     loadApprovedTutors(token)
   }
 })
 .catch(()=> {
-  loadingModal.style.display="none"
   alert("Error processing approval")
+})
+.finally(() => {
+  modal.style.display="none" // Hides only when finished
 })
 
 }
@@ -477,19 +491,22 @@ function reject(email){
 if(!confirm("Are you sure you want to reject this tutor?")) return;
 
 const token = localStorage.getItem("adminToken")
-loadingModal.style.display="flex"
+const modal = document.getElementById("loadingModal")
+
+modal.style.display="flex"
 
 fetch(`${SCRIPT_URL}?action=rejectTutor&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`)
 .then(r=>r.json())
 .then(res=>{
-  loadingModal.style.display="none"
   if(res.status === "rejected"){
     loadApplications(token)
   }
 })
 .catch(()=> {
-  loadingModal.style.display="none"
   alert("Error processing rejection")
+})
+.finally(() => {
+  modal.style.display="none" // Hides only when finished
 })
 
 }
