@@ -67,6 +67,7 @@ h2{
 color:#003366;
 border-bottom:2px solid #003366;
 padding-bottom:6px;
+margin-left: 10px;
 }
 
 section{
@@ -103,15 +104,15 @@ z-index: 1000;
 border-top: none;
 }
 
-/* SUBJECTS CELL CONFINEMENT - THE FIX */
+/* SUBJECTS CELL CONFINEMENT */
 .subject-cell {
-    max-height: 100px; /* Limits the height of the cell */
-    overflow-y: auto;  /* Adds an internal scrollbar if text is too long */
-    display: block;    /* Required for overflow to work */
+    max-height: 100px;
+    overflow-y: auto;
+    display: block;
     padding-right: 5px;
 }
 
-/* COLUMN WIDTHS */
+/* COLUMN WIDTHS (Desktop) */
 #applicationsTable th:nth-child(1) { width: 12%; }
 #applicationsTable th:nth-child(2) { width: 18%; }
 #applicationsTable th:nth-child(3) { width: 10%; }
@@ -160,8 +161,63 @@ td a:hover {
     text-decoration: underline;
 }
 
-/* LOGIN */
+/* MOBILE AUTO-ADJUSTMENTS VIA ALIGNMENT */
+@media screen and (max-width: 768px) {
+    .container { max-width: 100%; padding: 20px 5px; }
+    
+    /* Change table behavior to block-stacking */
+    table, thead, tbody, th, td, tr { 
+        display: block; 
+        width: 100% !important; 
+        box-sizing: border-box;
+    }
+    
+    /* Hide headers on mobile to prevent clutter */
+    thead { display: none; }
+    
+    tr { 
+        margin-bottom: 20px; 
+        border: 2px solid #003366;
+        border-radius: 6px;
+        background: #fff;
+    }
+    
+    td {
+        text-align: left;
+        padding: 10px;
+        border: none;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        flex-direction: column; /* Stacks label over content */
+        gap: 4px;
+    }
+    
+    /* Adds the label dynamically */
+    td:before { 
+        content: attr(data-label);
+        font-weight: bold;
+        color: #003366;
+        font-size: 12px;
+        text-transform: uppercase;
+    }
 
+    .subject-cell { max-height: none; }
+    
+    /* Adjust buttons for thumb-tapping */
+    td:last-child {
+        display: flex;
+        gap: 10px;
+        white-space: normal;
+    }
+    
+    .approve, .reject { 
+        flex: 1;
+        width: auto;
+        padding: 12px;
+    }
+}
+
+/* LOGIN & MODALS */
 .login-overlay{
 position:fixed;
 top:0;
@@ -173,6 +229,7 @@ display:flex;
 justify-content:center;
 align-items:center;
 z-index: 2000;
+cursor: pointer;
 }
 
 .login-box{
@@ -181,6 +238,7 @@ padding:30px;
 width:320px;
 border-radius:8px;
 text-align:center;
+cursor: default;
 }
 
 .login-box input{
@@ -204,8 +262,6 @@ color:red;
 display:none;
 font-size:13px;
 }
-
-/* LOADING MODAL */
 
 .modal{
 display:none;
@@ -235,8 +291,6 @@ margin-bottom:15px;
 0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);}
 }
 
-/* FOOTER */
-
 .footer{
 position:fixed;
 bottom:0;
@@ -256,7 +310,7 @@ z-index:1100;
 <body>
 
 <div class="login-overlay" id="loginOverlay">
-<div class="login-box">
+<div class="login-box" onclick="event.stopPropagation()">
 <h2>Admin Login</h2>
 <input id="username" placeholder="Username">
 <input id="password" type="password" placeholder="Password">
@@ -328,7 +382,7 @@ z-index:1100;
 </div>
 
 <div class="footer">
-© 2026 C&T Tutorials | Admin Panel • All Rights Reserved
+© 2026 C&T Tutorials | Admin Panel
 </div>
 
 <div class="modal" id="loadingModal">
@@ -342,8 +396,11 @@ z-index:1100;
 
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxIShwbw27ViNIHCShqkhJv4WaQ0igIE9AQ44FGT9RL1ik4rqeOzi01liVl4vjCFhNqQw/exec";
 const loadingModal = document.getElementById("loadingModal");
+const loginOverlay = document.getElementById("loginOverlay");
 
-/* ===== LOGIN ===== */
+loginOverlay.addEventListener("click", function() {
+    window.location.href = "index.html";
+});
 
 function adminLogin(){
 const username=document.getElementById("username").value.trim()
@@ -367,13 +424,11 @@ alert("Network error")
 })
 }
 
-/* AUTO LOGIN */
 window.onload=function(){
 const token=localStorage.getItem("adminToken")
 if(token){ initAdmin(token); }
 }
 
-/* INIT */
 async function initAdmin(token){
 document.getElementById("loginOverlay").style.display="none"
 document.getElementById("adminContent").style.display="block"
@@ -394,7 +449,6 @@ try {
 }
 }
 
-/* ===== LOAD DATA ===== */
 function handleAuthError(data){
 if(data && data.error==="Unauthorized"){
 alert("Session expired. Please login again.");
@@ -415,12 +469,12 @@ if(!Array.isArray(data)) return
 data.forEach(app=>{
 tbody.innerHTML+=`
 <tr>
-<td>${app.name||""}</td>
-<td>${app.email||""}</td>
-<td>${app.phone||""}</td>
-<td><div class="subject-cell">${app.subjects||""}</div></td>
-<td>${app.status||"Pending"}</td>
-<td>
+<td data-label="Name">${app.name||""}</td>
+<td data-label="Email">${app.email||""}</td>
+<td data-label="Phone">${app.phone||""}</td>
+<td data-label="Subjects"><div class="subject-cell">${app.subjects||""}</div></td>
+<td data-label="Status">${app.status||"Pending"}</td>
+<td data-label="Action">
 <button class="approve" onclick="approve('${app.email}')">Approve</button>
 <button class="reject" onclick="reject('${app.email}')">Reject</button>
 </td>
@@ -440,10 +494,10 @@ if(!Array.isArray(data)) return
 data.forEach(t=>{
 tbody.innerHTML+=`
 <tr>
-<td>${t.name||""}</td>
-<td>${t.email||""}</td>
-<td>${t.phone||""}</td>
-<td><div class="subject-cell">${t.subjects||""}</div></td>
+<td data-label="Name">${t.name||""}</td>
+<td data-label="Email">${t.email||""}</td>
+<td data-label="Phone">${t.phone||""}</td>
+<td data-label="Subjects"><div class="subject-cell">${t.subjects||""}</div></td>
 </tr>`
 })
 })
@@ -460,10 +514,10 @@ if(!Array.isArray(data)) return
 data.forEach(s=>{
 tbody.innerHTML+=`
 <tr>
-<td>${s.name||""}</td>
-<td><a href="mailto:${s.email||""}">${s.email||""}</a></td>
-<td><a href="tel:${s.phone||""}">${s.phone||""}</a></td>
-<td>${s.service||""}</td>
+<td data-label="Name">${s.name||""}</td>
+<td data-label="Email"><a href="mailto:${s.email||""}">${s.email||""}</a></td>
+<td data-label="Phone"><a href="tel:${s.phone||""}">${s.phone||""}</a></td>
+<td data-label="Service">${s.service||""}</td>
 </tr>`
 })
 })
@@ -480,22 +534,20 @@ if(!Array.isArray(data)) return
 data.forEach(s=>{
 tbody.innerHTML+=`
 <tr>
-<td>${s.name||""}</td>
-<td><a href="mailto:${s.email||""}">${s.email||""}</a></td>
-<td><a href="tel:${s.phone||""}">${s.phone||""}</a></td>
-<td>${s.service||""}</td>
+<td data-label="Name">${s.name||""}</td>
+<td data-label="Email"><a href="mailto:${s.email||""}">${s.email||""}</a></td>
+<td data-label="Phone"><a href="tel:${s.phone||""}">${s.phone||""}</a></td>
+<td data-label="Service">${s.service||""}</td>
 </tr>`
 })
 })
 }
 
-/* ===== ACTIONS ===== */
 function approve(email){
 if(!confirm("Are you sure you want to approve this tutor?")) return;
 const token = localStorage.getItem("adminToken")
 loadingModal.style.display="flex"
 document.getElementById("loadingText").innerText = "Approving...";
-
 fetch(`${SCRIPT_URL}?action=approveTutor&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`)
 .then(r=>r.json())
 .then(res=>{
@@ -503,9 +555,7 @@ fetch(`${SCRIPT_URL}?action=approveTutor&email=${encodeURIComponent(email)}&toke
     Promise.all([loadApplications(token), loadApprovedTutors(token)]).then(() => {
        loadingModal.style.display="none"
     })
-  } else {
-    loadingModal.style.display="none"
-  }
+  } else { loadingModal.style.display="none" }
 })
 .catch(()=> {
   alert("Error processing approval")
@@ -518,7 +568,6 @@ if(!confirm("Are you sure you want to reject this tutor?")) return;
 const token = localStorage.getItem("adminToken")
 loadingModal.style.display="flex"
 document.getElementById("loadingText").innerText = "Rejecting...";
-
 fetch(`${SCRIPT_URL}?action=rejectTutor&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`)
 .then(r=>r.json())
 .then(res=>{
@@ -526,9 +575,7 @@ fetch(`${SCRIPT_URL}?action=rejectTutor&email=${encodeURIComponent(email)}&token
     loadApplications(token).then(() => {
        loadingModal.style.display="none"
     })
-  } else {
-    loadingModal.style.display="none"
-  }
+  } else { loadingModal.style.display="none" }
 })
 .catch(()=> {
   alert("Error processing rejection")
