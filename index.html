@@ -63,6 +63,7 @@ opacity: 0.95;
 display:flex;
 flex-wrap:wrap;
 justify-content:center;
+align-items: center;
 gap:15px;
 padding:12px 10px;
 margin-top: 15px; 
@@ -75,6 +76,12 @@ font-weight:bold;
 }
 
 .top-bar nav a:hover{text-decoration:underline;}
+
+.nav-separator {
+border-left: 2px solid rgba(255,255,255,0.5);
+height: 14px;
+margin: 0;
+}
 
 /* CONTENT SPACING */
 .main-content{
@@ -89,6 +96,7 @@ margin-top: 220px;
 .top-bar { height: 200px; }
 .header-title h1 { font-size: 32px; }
 .header-title p { font-size: 22px; }
+.nav-separator { display: none; } /* Hide separators on small screens to prevent clutter */
 }
 
 section{
@@ -300,12 +308,19 @@ opacity:0.9;
 </div>
 <nav>
 <a href="#about">About</a>
+<div class="nav-separator"></div>
 <a href="#services">Services</a>
+<div class="nav-separator"></div>
 <a href="#why">Why Choose Us</a>
+<div class="nav-separator"></div>
 <a href="#faq">FAQ</a>
+<div class="nav-separator"></div>
 <a href="#resources">Resources</a>
+<div class="nav-separator"></div>
 <a href="#contact">Contact</a>
+<div class="nav-separator"></div>
 <a href="admin.html">Admins Portal</a>
+<div class="nav-separator"></div>
 <a href="tutors.html">Tutors' Portal</a>
 </nav>
 </div>
