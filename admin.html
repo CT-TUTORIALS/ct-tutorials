@@ -80,6 +80,7 @@ width:100%;
 border-collapse:collapse;
 background:white;
 margin-top:20px;
+table-layout: auto;
 }
 
 th,td{
@@ -87,6 +88,7 @@ padding:15px 10px;
 border:1px solid #ddd;
 font-size:14px;
 height: 50px;
+word-wrap: break-word;
 }
 
 th{
@@ -96,9 +98,15 @@ color:white;
 
 /* Fix: Targeting the action column specifically to ensure width and alignment */
 td:last-child {
+width: 210px;
 min-width: 210px;
 text-align: center;
 white-space: nowrap;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 0; 
+border: 1px solid #ddd;
 }
 
 button{
@@ -107,7 +115,7 @@ padding:6px 10px;
 border-radius:4px;
 cursor:pointer;
 vertical-align: middle;
-display: inline-block; /* Ensures they sit side-by-side correctly */
+display: inline-block;
 }
 
 /* BUTTON SIZING & SEPARATION */
@@ -115,7 +123,7 @@ display: inline-block; /* Ensures they sit side-by-side correctly */
 background:#2e7d32;
 color:white;
 width: 85px; 
-margin-right: 15px; /* Increased gap */
+margin-right: 15px; 
 }
 
 .reject{
@@ -315,6 +323,7 @@ z-index:1000;
 <script>
 
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxIShwbw27ViNIHCShqkhJv4WaQ0igIE9AQ44FGT9RL1ik4rqeOzi01liVl4vjCFhNqQw/exec";
+const loadingModal = document.getElementById("loadingModal");
 
 /* ===== LOGIN ===== */
 
@@ -324,6 +333,7 @@ const username=document.getElementById("username").value.trim()
 const password=document.getElementById("password").value.trim()
 
 loadingModal.style.display="flex"
+document.getElementById("loadingText").innerText = "Authenticating...";
 
 fetch(SCRIPT_URL+"?action=adminLogin&username="+encodeURIComponent(username)+"&password="+encodeURIComponent(password))
 .then(r=>r.json())
@@ -334,8 +344,6 @@ if(res.success){
 localStorage.setItem("adminToken",res.token)
 
 initAdmin(res.token)
-
-loadingModal.style.display="none"
 
 }else{
 loadingModal.style.display="none"
@@ -364,16 +372,25 @@ initAdmin(token)
 
 /* INIT */
 
-function initAdmin(token){
+async function initAdmin(token){
 
 document.getElementById("loginOverlay").style.display="none"
 document.getElementById("adminContent").style.display="block"
 document.getElementById("adminLinks").style.display="flex"
 
-loadApplications(token)
-loadApprovedTutors(token)
-loadStudents(token)
-loadOtherClients(token)
+loadingModal.style.display="flex"
+document.getElementById("loadingText").innerText = "Loading Dashboard Data...";
+
+try {
+    await Promise.all([
+        loadApplications(token),
+        loadApprovedTutors(token),
+        loadStudents(token),
+        loadOtherClients(token)
+    ]);
+} finally {
+    loadingModal.style.display="none"
+}
 
 }
 
@@ -388,11 +405,10 @@ return true;
 return false;
 }
 
-function loadApplications(token){
+async function loadApplications(token){
 
-return fetch(SCRIPT_URL+"?action=getTutorApplications&token="+token)
-.then(r=>r.json())
-.then(data=>{
+const r = await fetch(SCRIPT_URL+"?action=getTutorApplications&token="+token);
+const data = await r.json();
 
 if(handleAuthError(data)) return;
 
@@ -403,12 +419,12 @@ if(!Array.isArray(data)) return
 
 data.forEach(app=>{
 
-const row=`
+tbody.innerHTML+=`
 <tr>
 <td>${app.name||""}</td>
 <td>${app.email||""}</td>
 <td>${app.phone||""}</td>
-<td>${app.subjects||""}</td>
+<td style="max-width: 200px;">${app.subjects||""}</td>
 <td>${app.status||"Pending"}</td>
 <td>
 <button class="approve" onclick="approve('${app.email}')">Approve</button>
@@ -416,19 +432,14 @@ const row=`
 </td>
 </tr>`
 
-tbody.innerHTML+=row
-
-})
-
 })
 
 }
 
-function loadApprovedTutors(token){
+async function loadApprovedTutors(token){
 
-return fetch(SCRIPT_URL+"?action=getApprovedTutors&token="+token)
-.then(r=>r.json())
-.then(data=>{
+const r = await fetch(SCRIPT_URL+"?action=getApprovedTutors&token="+token);
+const data = await r.json();
 
 if(handleAuthError(data)) return;
 
@@ -444,20 +455,17 @@ tbody.innerHTML+=`
 <td>${t.name||""}</td>
 <td>${t.email||""}</td>
 <td>${t.phone||""}</td>
-<td>${t.subjects||""}</td>
+<td style="max-width: 200px;">${t.subjects||""}</td>
 </tr>`
-
-})
 
 })
 
 }
 
-function loadStudents(token){
+async function loadStudents(token){
 
-return fetch(SCRIPT_URL+"?action=getAllStudents&token="+token)
-.then(r=>r.json())
-.then(data=>{
+const r = await fetch(SCRIPT_URL+"?action=getAllStudents&token="+token);
+const data = await r.json();
 
 if(handleAuthError(data)) return;
 
@@ -479,15 +487,12 @@ tbody.innerHTML+=`
 
 })
 
-})
-
 }
 
-function loadOtherClients(token){
+async function loadOtherClients(token){
 
-return fetch(SCRIPT_URL+"?action=getOtherClients&token="+token)
-.then(r=>r.json())
-.then(data=>{
+const r = await fetch(SCRIPT_URL+"?action=getOtherClients&token="+token);
+const data = await r.json();
 
 if(handleAuthError(data)) return;
 
@@ -508,35 +513,32 @@ tbody.innerHTML+=`
 
 })
 
-})
-
 }
 
-/* ===== ACTIONS (LOADING IMPLEMENTED) ===== */
+/* ===== ACTIONS ===== */
 
 function approve(email){
 
 if(!confirm("Are you sure you want to approve this tutor?")) return;
 
 const token = localStorage.getItem("adminToken")
-const modal = document.getElementById("loadingModal")
-
-modal.style.display="flex"
+loadingModal.style.display="flex"
+document.getElementById("loadingText").innerText = "Processing Approval...";
 
 fetch(`${SCRIPT_URL}?action=approveTutor&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`)
 .then(r=>r.json())
 .then(res=>{
   if(res.status === "approved"){
     Promise.all([loadApplications(token), loadApprovedTutors(token)]).then(() => {
-       modal.style.display="none"
+       loadingModal.style.display="none"
     })
   } else {
-    modal.style.display="none"
+    loadingModal.style.display="none"
   }
 })
 .catch(()=> {
   alert("Error processing approval")
-  modal.style.display="none"
+  loadingModal.style.display="none"
 })
 
 }
@@ -546,24 +548,23 @@ function reject(email){
 if(!confirm("Are you sure you want to reject this tutor?")) return;
 
 const token = localStorage.getItem("adminToken")
-const modal = document.getElementById("loadingModal")
-
-modal.style.display="flex"
+loadingModal.style.display="flex"
+document.getElementById("loadingText").innerText = "Processing Rejection...";
 
 fetch(`${SCRIPT_URL}?action=rejectTutor&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`)
 .then(r=>r.json())
 .then(res=>{
   if(res.status === "rejected"){
     loadApplications(token).then(() => {
-       modal.style.display="none"
+       loadingModal.style.display="none"
     })
   } else {
-    modal.style.display="none"
+    loadingModal.style.display="none"
   }
 })
 .catch(()=> {
   alert("Error processing rejection")
-  modal.style.display="none"
+  loadingModal.style.display="none"
 })
 
 }
