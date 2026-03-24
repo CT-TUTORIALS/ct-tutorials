@@ -13,7 +13,7 @@ background:#f4f4f4;
 display:flex;
 flex-direction:column;
 min-height:100vh;
-padding-top: 100px; 
+padding-top: 110px; /* Space for fixed centered header */
 }
 
 header{
@@ -40,7 +40,6 @@ justify-content: center;
 align-items: center;
 margin-top: 10px; 
 flex-wrap: wrap; 
-gap: 15px; /* Increased gap for better spacing with separators */
 width: 100%;
 }
 
@@ -51,13 +50,13 @@ font-weight:bold;
 cursor:pointer;
 white-space: nowrap;
 font-size: 14px;
+margin: 0 15px; /* Spacing between links and separators */
 }
 
-/* NAV SEPARATOR - Restored */
 .nav-separator {
 border-left: 2px solid rgba(255,255,255,0.5);
 height: 14px;
-margin: 0;
+display: inline-block;
 }
 
 .main{
@@ -69,6 +68,12 @@ display: flex;
 flex-direction: column;
 flex:1;
 border-radius: 8px;
+transition: max-width 0.4s ease;
+}
+
+/* Dashboard Expansion for Computer View */
+#dashboard.show-expanded {
+    max-width: 1400px; /* Expands the width on desktop */
 }
 
 h2{
@@ -107,16 +112,16 @@ color:inherit;
 display:block;
 }
 
-/* DASHBOARD SPECIFIC EXPANSION & SCROLLING */
+/* DASHBOARD SPECIFIC EXPANSION */
 .dashboard-section .service-card {
-    padding: 40px; 
-    min-height: 200px; 
+    padding: 50px; /* Significantly larger padding for desktop */
+    min-height: 250px; 
 }
 
 .scroll-container {
-    max-height: 300px; 
+    max-height: 400px; /* Taller scroll area for desktop */
     overflow-y: auto;
-    padding-right: 10px;
+    padding-right: 15px;
 }
 
 .service-card:hover{
@@ -178,16 +183,17 @@ width:100%;
 
 .student-card{
 border:1px solid #ddd;
-padding:15px;
-margin-bottom:10px;
+padding:20px;
+margin-bottom:15px;
 border-radius: 5px;
+background: white;
 }
 
 .resource-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px;
+    padding: 15px;
     border-bottom: 1px solid #eee;
 }
 
@@ -223,11 +229,6 @@ background:#cc0000;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     z-index: 2500;
     font-size: 24px;
-    transition: background 0.3s;
-}
-
-.back-to-top:hover {
-    background: #00509e;
 }
 
 #contactSection{
@@ -238,7 +239,7 @@ footer{
 background:#003366;
 color:white;
 text-align:center;
-padding:12px 10px;
+padding:20px 10px;
 font-size:14px;
 margin-top:auto;
 }
@@ -268,7 +269,7 @@ margin-bottom:15px;
 }
 
 .dashboard-section {
-    margin-bottom: 50px;
+    margin-bottom: 60px;
 }
 
 @keyframes spin{
@@ -277,9 +278,9 @@ margin-bottom:15px;
 }
 
 @media screen and (max-width: 768px) {
-    /* Hide separators on mobile to save space when links wrap */
     .nav-separator { display: none; }
-    nav { gap: 10px; }
+    .main { padding: 20px; }
+    nav a { margin: 5px 10px; }
 }
 </style>
 </head>
@@ -291,14 +292,14 @@ margin-bottom:15px;
 
 <nav id="mainNav">
 <a onclick="handleHomeClick()">Home</a>
-<span id="dynamicLinks" style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 15px;">
+<span id="dynamicLinks" style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap;">
 </span>
 </nav>
 </header>
 
 <div id="btnTop" class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</div>
 
-<div class="main">
+<div class="main" id="mainContainer">
 
 <div id="infoSection">
 <h2>Thank You for Your Interest</h2>
@@ -448,7 +449,7 @@ margin-bottom:15px;
 <div id="section-support" class="dashboard-section">
 <h2>Help & Support</h2>
 <div class="service-card">
-<textarea id="supportInput" placeholder="How can we help you?" style="height: 150px;"></textarea>
+<textarea id="supportInput" placeholder="How can we help you?" style="height: 180px;"></textarea>
 <button onclick="submitSupport()">Submit Request</button>
 </div>
 </div>
@@ -528,6 +529,7 @@ const loadingModal = document.getElementById("loadingModal");
 const infoSection = document.getElementById("infoSection");
 const contactSection = document.getElementById("contactSection");
 const dashboard = document.getElementById("dashboard");
+const mainContainer = document.getElementById("mainContainer");
 const dashboardLogout = document.getElementById("dashboardLogout");
 const studentsList = document.getElementById("studentsList");
 const supportInput = document.getElementById("supportInput");
@@ -562,7 +564,7 @@ function handleHomeClick() {
 function scrollToSection(id) {
     const element = document.getElementById('section-' + id);
     if(element) {
-        const headerOffset = 120;
+        const headerOffset = 130;
         const elementPosition = element.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
         window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
@@ -627,7 +629,7 @@ password:createForm.password.value
 })
 const res=await fetch(SCRIPT_URL,{method:"POST",body:params})
 const d=await res.json()
-loadingModal.style.display="none"
+loadingModal.style.none="none"
 if(d.status==="account_created"){
 alert("Account created successfully. You can now log in.")
 createModal.style.display="none"
@@ -646,7 +648,6 @@ if(d.success){
 localStorage.setItem("tutorToken",d.token);
 localStorage.setItem("tutorEmail", d.email); 
 loginModal.style.display = "none";
-document.getElementById('loadingText').innerText = "Preparing Dashboard...";
 updateNav(true);
 await loadStudents(d.token);
 }else{
@@ -698,6 +699,7 @@ Email: ${s.email}<br>Phone: ${s.phone}<br>Service: ${s.service}
 infoSection.style.display="none";
 contactSection.style.display="none";
 dashboard.style.display="flex";
+mainContainer.style.maxWidth = "1400px"; // Expand for dashboard
 dashboardLogout.style.display="block";
 setTimeout(()=>dashboard.classList.add("show"),50);
 loadingModal.style.display="none";
