@@ -40,12 +40,6 @@ font-weight:bold;
 font-size:14px;
 }
 
-.nav-separator {
-border-left: 2px solid rgba(255,255,255,0.5);
-height: 14px;
-margin: 0;
-}
-
 .signout{
 background:#c62828;
 padding:6px 12px;
@@ -80,24 +74,18 @@ width:100%;
 border-collapse:collapse;
 background:white;
 margin-top:20px;
-/* Fix: Mandatory to prevent text from pushing columns */
-table-layout: fixed; 
+table-layout: fixed; /* Ensures columns respect defined widths */
 }
 
 th,td{
-padding:15px 10px;
+padding:12px 10px;
 border:1px solid #ddd;
 font-size:14px;
 text-align: left;
-/* Fix: Prevents content from overlapping neighbors */
-vertical-align: top;
+vertical-align: top; /* Prevents text from middle-aligning and overlapping */
 word-wrap: break-word;
 overflow-wrap: break-word;
-word-break: break-word;
-white-space: normal;
-overflow: hidden;
-position: relative;
-/* Removed height: 50px to allow vertical expansion for wrapped subjects */
+white-space: normal; /* Allows text to wrap to new lines */
 }
 
 th{
@@ -105,17 +93,23 @@ background:#003366;
 color:white;
 }
 
-/* Fix: Targeting the action column specifically to ensure width and alignment */
+/* APPLICATION TABLE WIDTHS */
+#applicationsTable th:nth-child(1) { width: 12%; }
+#applicationsTable th:nth-child(2) { width: 18%; }
+#applicationsTable th:nth-child(3) { width: 10%; }
+#applicationsTable th:nth-child(4) { width: 35%; }
+#applicationsTable th:nth-child(5) { width: 10%; }
+#applicationsTable th:nth-child(6) { width: 15%; }
+
+/* APPROVED TABLE WIDTHS */
+#approvedTable th:nth-child(1) { width: 15%; }
+#approvedTable th:nth-child(2) { width: 20%; }
+#approvedTable th:nth-child(3) { width: 15%; }
+#approvedTable th:nth-child(4) { width: 50%; }
+
+/* Fix for Button Alignment */
 td:last-child {
-width: 210px;
-min-width: 210px;
-text-align: center;
-display: flex;
-align-items: center;
-justify-content: center;
-gap: 0; 
-border: 1px solid #ddd;
-white-space: nowrap;
+    white-space: nowrap; /* Prevents buttons from stacking vertically */
 }
 
 button{
@@ -123,8 +117,7 @@ border:none;
 padding:6px 10px;
 border-radius:4px;
 cursor:pointer;
-vertical-align: middle;
-display: inline-block;
+font-weight: bold;
 }
 
 /* BUTTON SIZING & SEPARATION */
@@ -132,7 +125,7 @@ display: inline-block;
 background:#2e7d32;
 color:white;
 width: 85px; 
-margin-right: 15px; 
+margin-right: 8px;
 }
 
 .reject{
@@ -223,7 +216,7 @@ margin-bottom:15px;
 }
 
 @keyframes spin{
-0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}
+0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);}
 }
 
 /* FOOTER */
@@ -259,16 +252,11 @@ z-index:1000;
 <div class="admin-header">
 <div class="admin-nav">
 <a href="#" onclick="logout()">Home</a>
-<span id="adminLinks" style="display:none; align-items: center; gap: 15px;">
-<div class="nav-separator"></div>
+<span id="adminLinks" style="display:none;">
 <a href="#applications">Applications</a>
-<div class="nav-separator"></div>
 <a href="#approved">Approved Tutors</a>
-<div class="nav-separator"></div>
 <a href="#students">Students</a>
-<div class="nav-separator"></div>
 <a href="#otherClients">Other Clients</a>
-<div class="nav-separator"></div>
 <a href="#" class="signout" onclick="logout()">Sign Out</a>
 </span>
 </div>
@@ -280,7 +268,7 @@ z-index:1000;
 <h2>Tutor Applications</h2>
 <table id="applicationsTable">
 <thead><tr>
-<th style="width:12%">Name</th><th style="width:18%">Email</th><th style="width:12%">Phone</th><th style="width:33%">Subjects</th><th style="width:10%">Status</th><th style="width:15%">Action</th>
+<th>Name</th><th>Email</th><th>Phone</th><th>Subjects</th><th>Status</th><th>Action</th>
 </tr></thead>
 <tbody></tbody>
 </table>
@@ -290,7 +278,7 @@ z-index:1000;
 <h2>Approved Tutors</h2>
 <table id="approvedTable">
 <thead><tr>
-<th style="width:15%">Name</th><th style="width:20%">Email</th><th style="width:15%">Phone</th><th style="width:50%">Subjects</th>
+<th>Name</th><th>Email</th><th>Phone</th><th>Subjects</th>
 </tr></thead>
 <tbody></tbody>
 </table>
@@ -300,7 +288,7 @@ z-index:1000;
 <h2>Students</h2>
 <table id="studentsTable">
 <thead><tr>
-<th>Name</th><th>Email</th><th>Phone</th><th>Service</th><th>Tutor</th>
+<th>Name</th><th>Email</th><th>Phone</th><th>Service</th>
 </tr></thead>
 <tbody></tbody>
 </table>
@@ -337,74 +325,46 @@ const loadingModal = document.getElementById("loadingModal");
 /* ===== LOGIN ===== */
 
 function adminLogin(){
-
 const username=document.getElementById("username").value.trim()
 const password=document.getElementById("password").value.trim()
-
 loadingModal.style.display="flex"
-document.getElementById("loadingText").innerText = "Authenticating...";
 
 fetch(SCRIPT_URL+"?action=adminLogin&username="+encodeURIComponent(username)+"&password="+encodeURIComponent(password))
 .then(r=>r.json())
 .then(res=>{
-
 if(res.success){
-
 localStorage.setItem("adminToken",res.token)
-
 initAdmin(res.token)
-
+loadingModal.style.display="none"
 }else{
 loadingModal.style.display="none"
 document.getElementById("error").style.display="block"
 }
-
 })
 .catch(()=>{
 loadingModal.style.display="none"
 alert("Network error")
 })
-
 }
 
 /* AUTO LOGIN */
-
 window.onload=function(){
-
 const token=localStorage.getItem("adminToken")
-
-if(token){
-initAdmin(token)
-}
-
+if(token){ initAdmin(token); }
 }
 
 /* INIT */
-
-async function initAdmin(token){
-
+function initAdmin(token){
 document.getElementById("loginOverlay").style.display="none"
 document.getElementById("adminContent").style.display="block"
-document.getElementById("adminLinks").style.display="flex"
-
-loadingModal.style.display="flex"
-document.getElementById("loadingText").innerText = "Loading Dashboard Data...";
-
-try {
-    await Promise.all([
-        loadApplications(token),
-        loadApprovedTutors(token),
-        loadStudents(token),
-        loadOtherClients(token)
-    ]);
-} finally {
-    loadingModal.style.display="none"
-}
-
+document.getElementById("adminLinks").style.display="inline"
+loadApplications(token)
+loadApprovedTutors(token)
+loadStudents(token)
+loadOtherClients(token)
 }
 
 /* ===== LOAD DATA ===== */
-
 function handleAuthError(data){
 if(data && data.error==="Unauthorized"){
 alert("Session expired. Please login again.");
@@ -414,20 +374,15 @@ return true;
 return false;
 }
 
-async function loadApplications(token){
-
-const r = await fetch(SCRIPT_URL+"?action=getTutorApplications&token="+token);
-const data = await r.json();
-
+function loadApplications(token){
+return fetch(SCRIPT_URL+"?action=getTutorApplications&token="+token)
+.then(r=>r.json())
+.then(data=>{
 if(handleAuthError(data)) return;
-
 const tbody=document.querySelector("#applicationsTable tbody")
 tbody.innerHTML=""
-
 if(!Array.isArray(data)) return
-
 data.forEach(app=>{
-
 tbody.innerHTML+=`
 <tr>
 <td>${app.name||""}</td>
@@ -440,25 +395,19 @@ tbody.innerHTML+=`
 <button class="reject" onclick="reject('${app.email}')">Reject</button>
 </td>
 </tr>`
-
 })
-
+})
 }
 
-async function loadApprovedTutors(token){
-
-const r = await fetch(SCRIPT_URL+"?action=getApprovedTutors&token="+token);
-const data = await r.json();
-
+function loadApprovedTutors(token){
+return fetch(SCRIPT_URL+"?action=getApprovedTutors&token="+token)
+.then(r=>r.json())
+.then(data=>{
 if(handleAuthError(data)) return;
-
 const tbody=document.querySelector("#approvedTable tbody")
 tbody.innerHTML=""
-
 if(!Array.isArray(data)) return
-
 data.forEach(t=>{
-
 tbody.innerHTML+=`
 <tr>
 <td>${t.name||""}</td>
@@ -466,52 +415,39 @@ tbody.innerHTML+=`
 <td>${t.phone||""}</td>
 <td>${t.subjects||""}</td>
 </tr>`
-
 })
-
+})
 }
 
-async function loadStudents(token){
-
-const r = await fetch(SCRIPT_URL+"?action=getAllStudents&token="+token);
-const data = await r.json();
-
+function loadStudents(token){
+return fetch(SCRIPT_URL+"?action=getAllStudents&token="+token)
+.then(r=>r.json())
+.then(data=>{
 if(handleAuthError(data)) return;
-
 const tbody=document.querySelector("#studentsTable tbody")
 tbody.innerHTML=""
-
 if(!Array.isArray(data)) return
-
 data.forEach(s=>{
-
 tbody.innerHTML+=`
 <tr>
 <td>${s.name||""}</td>
 <td><a href="mailto:${s.email||""}">${s.email||""}</a></td>
 <td><a href="tel:${s.phone||""}">${s.phone||""}</a></td>
 <td>${s.service||""}</td>
-<td>${s.tutor||"Not Assigned"}</td>
 </tr>`
-
 })
-
+})
 }
 
-async function loadOtherClients(token){
-
-const r = await fetch(SCRIPT_URL+"?action=getOtherClients&token="+token);
-const data = await r.json();
-
+function loadOtherClients(token){
+return fetch(SCRIPT_URL+"?action=getOtherClients&token="+token)
+.then(r=>r.json())
+.then(data=>{
 if(handleAuthError(data)) return;
-
 const tbody=document.querySelector("#otherClientsTable tbody")
 tbody.innerHTML=""
-
 if(!Array.isArray(data)) return
-
 data.forEach(s=>{
-
 tbody.innerHTML+=`
 <tr>
 <td>${s.name||""}</td>
@@ -519,21 +455,15 @@ tbody.innerHTML+=`
 <td><a href="tel:${s.phone||""}">${s.phone||""}</a></td>
 <td>${s.service||""}</td>
 </tr>`
-
 })
-
+})
 }
 
 /* ===== ACTIONS ===== */
-
 function approve(email){
-
 if(!confirm("Are you sure you want to approve this tutor?")) return;
-
 const token = localStorage.getItem("adminToken")
 loadingModal.style.display="flex"
-document.getElementById("loadingText").innerText = "Processing Approval...";
-
 fetch(`${SCRIPT_URL}?action=approveTutor&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`)
 .then(r=>r.json())
 .then(res=>{
@@ -549,17 +479,12 @@ fetch(`${SCRIPT_URL}?action=approveTutor&email=${encodeURIComponent(email)}&toke
   alert("Error processing approval")
   loadingModal.style.display="none"
 })
-
 }
 
 function reject(email){
-
 if(!confirm("Are you sure you want to reject this tutor?")) return;
-
 const token = localStorage.getItem("adminToken")
 loadingModal.style.display="flex"
-document.getElementById("loadingText").innerText = "Processing Rejection...";
-
 fetch(`${SCRIPT_URL}?action=rejectTutor&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`)
 .then(r=>r.json())
 .then(res=>{
@@ -575,10 +500,7 @@ fetch(`${SCRIPT_URL}?action=rejectTutor&email=${encodeURIComponent(email)}&token
   alert("Error processing rejection")
   loadingModal.style.display="none"
 })
-
 }
-
-/* LOGOUT */
 
 function logout(){
 localStorage.removeItem("adminToken")
