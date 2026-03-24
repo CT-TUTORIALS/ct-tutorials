@@ -40,6 +40,12 @@ font-weight:bold;
 font-size:14px;
 }
 
+.nav-separator {
+border-left: 2px solid rgba(255,255,255,0.5);
+height: 14px;
+margin: 0;
+}
+
 .signout{
 background:#c62828;
 padding:6px 12px;
@@ -77,9 +83,10 @@ margin-top:20px;
 }
 
 th,td{
-padding:10px;
+padding:15px 10px; /* Increased vertical padding for all rows */
 border:1px solid #ddd;
 font-size:14px;
+height: 50px; /* Uniform row height */
 }
 
 th{
@@ -92,6 +99,7 @@ border:none;
 padding:6px 10px;
 border-radius:4px;
 cursor:pointer;
+vertical-align: middle;
 }
 
 /* BUTTON SIZING & SEPARATION */
@@ -226,11 +234,16 @@ z-index:1000;
 <div class="admin-header">
 <div class="admin-nav">
 <a href="#" onclick="logout()">Home</a>
-<span id="adminLinks" style="display:none;">
+<span id="adminLinks" style="display:none; align-items: center; gap: 15px;">
+<div class="nav-separator"></div>
 <a href="#applications">Applications</a>
+<div class="nav-separator"></div>
 <a href="#approved">Approved Tutors</a>
+<div class="nav-separator"></div>
 <a href="#students">Students</a>
+<div class="nav-separator"></div>
 <a href="#otherClients">Other Clients</a>
+<div class="nav-separator"></div>
 <a href="#" class="signout" onclick="logout()">Sign Out</a>
 </span>
 </div>
@@ -347,7 +360,7 @@ function initAdmin(token){
 
 document.getElementById("loginOverlay").style.display="none"
 document.getElementById("adminContent").style.display="block"
-document.getElementById("adminLinks").style.display="inline"
+document.getElementById("adminLinks").style.display="flex"
 
 loadApplications(token)
 loadApprovedTutors(token)
