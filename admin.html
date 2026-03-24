@@ -108,14 +108,14 @@ color:white;
 width: 85px;
 }
 
-/* Clickable link styling for student table */
-#studentsTable td a {
+/* Clickable link styling for tables */
+td a {
     color: #003366;
     text-decoration: none;
     font-weight: 500;
 }
 
-#studentsTable td a:hover {
+td a:hover {
     text-decoration: underline;
 }
 
@@ -190,8 +190,7 @@ margin-bottom:15px;
 }
 
 @keyframes spin{
-0%{transform:rotate(0deg);}
-100%{transform:rotate(360deg);}
+0%{transform:rotate(0deg);}<br>100%{transform:rotate(360deg);}
 }
 
 /* FOOTER */
@@ -215,18 +214,12 @@ z-index:1000;
 <body>
 
 <div class="login-overlay" id="loginOverlay">
-
 <div class="login-box">
-
 <h2>Admin Login</h2>
-
 <input id="username" placeholder="Username">
 <input id="password" type="password" placeholder="Password">
-
 <button class="login-btn" onclick="adminLogin()">Login</button>
-
 <p id="error" class="error">Invalid credentials</p>
-
 </div>
 </div>
 
@@ -237,6 +230,7 @@ z-index:1000;
 <a href="#applications">Applications</a>
 <a href="#approved">Approved Tutors</a>
 <a href="#students">Students</a>
+<a href="#otherClients">Other Clients</a>
 <a href="#" class="signout" onclick="logout()">Sign Out</a>
 </span>
 </div>
@@ -268,7 +262,17 @@ z-index:1000;
 <h2>Students</h2>
 <table id="studentsTable">
 <thead><tr>
-<th>Name</th><th>Email</th><th>Phone</th><th>Service</th><th>Tutor</th>
+<th>Name</th><th>Email</th><th>Phone</th><th>Service</th>
+</tr></thead>
+<tbody></tbody>
+</table>
+</section>
+
+<section id="otherClients">
+<h2>Other Clients</h2>
+<table id="otherClientsTable">
+<thead><tr>
+<th>Name</th><th>Email</th><th>Phone</th><th>Service</th>
 </tr></thead>
 <tbody></tbody>
 </table>
@@ -348,6 +352,7 @@ document.getElementById("adminLinks").style.display="inline"
 loadApplications(token)
 loadApprovedTutors(token)
 loadStudents(token)
+loadOtherClients(token)
 
 }
 
@@ -448,7 +453,35 @@ tbody.innerHTML+=`
 <td><a href="mailto:${s.email||""}">${s.email||""}</a></td>
 <td><a href="tel:${s.phone||""}">${s.phone||""}</a></td>
 <td>${s.service||""}</td>
-<td>${s.tutor||""}</td>
+</tr>`
+
+})
+
+})
+
+}
+
+function loadOtherClients(token){
+
+return fetch(SCRIPT_URL+"?action=getOtherClients&token="+token)
+.then(r=>r.json())
+.then(data=>{
+
+if(handleAuthError(data)) return;
+
+const tbody=document.querySelector("#otherClientsTable tbody")
+tbody.innerHTML=""
+
+if(!Array.isArray(data)) return
+
+data.forEach(s=>{
+
+tbody.innerHTML+=`
+<tr>
+<td>${s.name||""}</td>
+<td><a href="mailto:${s.email||""}">${s.email||""}</a></td>
+<td><a href="tel:${s.phone||""}">${s.phone||""}</a></td>
+<td>${s.service||""}</td>
 </tr>`
 
 })
