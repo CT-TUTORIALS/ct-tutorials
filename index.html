@@ -33,7 +33,7 @@ left:0;
 width:100%;
 background:#003366; /* Applied Tutors' Portal color */
 z-index:1000;
-height: 200px; /* Exact height of the former banner */
+height: 220px; /* Slightly increased height to accommodate larger text */
 display: flex;
 flex-direction: column;
 align-items: center;
@@ -44,15 +44,18 @@ text-align: center;
 
 .header-title h1 {
 margin: 0;
-font-size: 36px;
-letter-spacing: 1px;
+font-size: 48px; /* Increased from 36px */
+letter-spacing: 2px;
+font-weight: 800; /* Extra bold */
+text-transform: uppercase;
 }
 
 .header-title p {
-margin: 0;
-font-family: "Brush Script MT", "Cursive", sans-serif; /* Scribbled effect */
-font-size: 20px;
-opacity: 0.9;
+margin: 5px 0 0 0;
+font-family: "Brush Script MT", "Cursive", sans-serif; 
+font-size: 28px; /* Increased from 20px */
+font-weight: bold; /* Boldened slogan */
+opacity: 0.95;
 }
 
 .top-bar nav{
@@ -61,7 +64,7 @@ flex-wrap:wrap;
 justify-content:center;
 gap:15px;
 padding:12px 10px;
-margin-top: 15px; /* Pushes links to the bottom of the header area */
+margin-top: 15px; 
 }
 
 .top-bar nav a{
@@ -77,18 +80,19 @@ font-weight:bold;
 max-width:1100px;
 margin:auto;
 padding:50px 40px;
-margin-top: 200px; /* Matches header height */
+margin-top: 220px; /* Matches new header height */
 }
 
 @media(max-width:768px){
-.main-content{padding:30px 20px;}
-.header-title h1 { font-size: 28px; }
-.header-title p { font-size: 16px; }
+.main-content{padding:30px 20px; margin-top: 200px;}
+.top-bar { height: 200px; }
+.header-title h1 { font-size: 32px; }
+.header-title p { font-size: 22px; }
 }
 
 section{
 margin-bottom:60px;
-scroll-margin-top:220px; /* Offset to prevent header from covering section titles */
+scroll-margin-top:240px; /* Offset for new header height */
 }
 
 h2{
@@ -145,7 +149,7 @@ text-decoration:underline;
 position:fixed;
 bottom:25px;
 right:25px;
-background:#003366; /* Applied Tutors' Portal color */
+background:#003366; 
 color:white;
 padding:15px 22px;
 border:none;
@@ -231,7 +235,7 @@ margin-bottom:15px;
 }
 
 footer{
-background:#003366; /* Applied Tutors' Portal color */
+background:#003366; 
 color:white;
 text-align:center;
 padding:25px;
@@ -697,7 +701,6 @@ document.getElementById("studentRegisterForm").addEventListener("submit", functi
     })
     .then(res => res.json())
     .then(res => {
-        // We close the loading modal at the EXACT moment we determine the response
         loadingModal.style.display = "none";
 
         if (res.status === "duplicate_detected") {
