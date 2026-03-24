@@ -190,7 +190,7 @@ margin-bottom:15px;
 }
 
 @keyframes spin{
-0%{transform:rotate(0deg);}<br>100%{transform:rotate(360deg);}
+0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}
 }
 
 /* FOOTER */
@@ -262,7 +262,7 @@ z-index:1000;
 <h2>Students</h2>
 <table id="studentsTable">
 <thead><tr>
-<th>Name</th><th>Email</th><th>Phone</th><th>Service</th>
+<th>Name</th><th>Email</th><th>Phone</th><th>Service</th><th>Tutor</th>
 </tr></thead>
 <tbody></tbody>
 </table>
@@ -453,6 +453,7 @@ tbody.innerHTML+=`
 <td><a href="mailto:${s.email||""}">${s.email||""}</a></td>
 <td><a href="tel:${s.phone||""}">${s.phone||""}</a></td>
 <td>${s.service||""}</td>
+<td>${s.tutor||"Not Assigned"}</td>
 </tr>`
 
 })
