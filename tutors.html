@@ -13,7 +13,7 @@ background:#f4f4f4;
 display:flex;
 flex-direction:column;
 min-height:100vh;
-padding-top: 100px; /* Space for fixed centered header */
+padding-top: 100px; 
 }
 
 header{
@@ -39,8 +39,8 @@ display: flex;
 justify-content: center;
 align-items: center;
 margin-top: 10px; 
-flex-wrap: wrap; /* Prevents links from being cropped */
-gap: 10px;
+flex-wrap: wrap; 
+gap: 15px; /* Increased gap for better spacing with separators */
 width: 100%;
 }
 
@@ -53,6 +53,7 @@ white-space: nowrap;
 font-size: 14px;
 }
 
+/* NAV SEPARATOR - Restored */
 .nav-separator {
 border-left: 2px solid rgba(255,255,255,0.5);
 height: 14px;
@@ -108,12 +109,12 @@ display:block;
 
 /* DASHBOARD SPECIFIC EXPANSION & SCROLLING */
 .dashboard-section .service-card {
-    padding: 40px; /* Double the padding for dashboard content */
-    min-height: 200px; /* Larger footprint */
+    padding: 40px; 
+    min-height: 200px; 
 }
 
 .scroll-container {
-    max-height: 300px; /* Confines long lists with a scrollbar */
+    max-height: 300px; 
     overflow-y: auto;
     padding-right: 10px;
 }
@@ -276,7 +277,9 @@ margin-bottom:15px;
 }
 
 @media screen and (max-width: 768px) {
+    /* Hide separators on mobile to save space when links wrap */
     .nav-separator { display: none; }
+    nav { gap: 10px; }
 }
 </style>
 </head>
@@ -288,7 +291,7 @@ margin-bottom:15px;
 
 <nav id="mainNav">
 <a onclick="handleHomeClick()">Home</a>
-<span id="dynamicLinks" style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px;">
+<span id="dynamicLinks" style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 15px;">
 </span>
 </nav>
 </header>
@@ -555,12 +558,6 @@ function handleHomeClick() {
         window.location.href = "index.html";
     }
 }
-
-window.onpopstate = function(event) {
-    if (localStorage.getItem("tutorToken")) {
-        logoutTutor();
-    }
-};
 
 function scrollToSection(id) {
     const element = document.getElementById('section-' + id);
