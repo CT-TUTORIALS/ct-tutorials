@@ -29,7 +29,12 @@ z-index: 2000;
 
 header h1 { margin: 0; }
 
-nav { margin-top: 10px; }
+nav { 
+display: flex;
+justify-content: center;
+align-items: center;
+margin-top: 10px; 
+}
 
 nav a{
 color:white;
@@ -39,11 +44,19 @@ font-weight:bold;
 cursor:pointer;
 }
 
+.nav-separator {
+border-left: 2px solid rgba(255,255,255,0.5);
+height: 14px;
+margin: 0;
+}
+
 .main{
 max-width:1000px;
 margin: 20px auto;
 background:white;
 padding:40px;
+display: flex;
+flex-direction: column;
 flex:1;
 border-radius: 8px;
 }
@@ -157,7 +170,7 @@ border-radius: 5px;
 }
 
 .logout-btn{
-margin-top:30px;
+margin-top: auto;
 background:#990000;
 color:white;
 border:none;
@@ -209,8 +222,10 @@ margin:auto;
 margin-bottom:15px;
 }
 
-.tab-content { display: none; }
-.tab-content.active { display: block; }
+/* Dashboard Vertical Styling */
+.dashboard-section {
+    margin-bottom: 50px;
+}
 
 @keyframes spin{
 0%{transform:rotate(0deg);}
@@ -226,10 +241,7 @@ margin-bottom:15px;
 
 <nav id="mainNav">
 <a onclick="handleHomeClick()">Home</a>
-<span id="dynamicLinks">
-<a onclick="openApply()">Apply</a>
-<a onclick="openCreate()">Create Account</a>
-<a onclick="openLogin()">Login</a>
+<span id="dynamicLinks" style="display: flex; align-items: center;">
 </span>
 </nav>
 </header>
@@ -342,15 +354,15 @@ margin-bottom:15px;
 </div>
 </div>
 
-<div id="dashboard" style="display:none" class="fade">
+<div id="dashboard" style="display:none; flex-direction:column; flex:1;" class="fade">
 
-<div id="tab-home" class="tab-content active">
+<div id="section-home" class="dashboard-section">
 <h2>Tutor Dashboard</h2>
 <p>Welcome back! Below is the current list of students assigned to you.</p>
 <div id="studentsList">Loading students...</div>
 </div>
 
-<div id="tab-resources" class="tab-content">
+<div id="section-resources" class="dashboard-section">
 <h2>Resources & Materials</h2>
 <div class="service-card">
     <div class="resource-item">
@@ -368,14 +380,14 @@ margin-bottom:15px;
 </div>
 </div>
 
-<div id="tab-messages" class="tab-content">
+<div id="section-messages" class="dashboard-section">
 <h2>Messages</h2>
 <div class="service-card">
 <p>Communication history with the administrative team will appear here.</p>
 </div>
 </div>
 
-<div id="tab-support" class="tab-content">
+<div id="section-support" class="dashboard-section">
 <h2>Help & Support</h2>
 <div class="service-card">
 <textarea id="supportInput" placeholder="How can we help you?"></textarea>
@@ -383,7 +395,7 @@ margin-bottom:15px;
 </div>
 </div>
 
-<button class="logout-btn" onclick="logoutTutor()">Logout</button>
+<button id="dashboardLogout" class="logout-btn" style="display:none;" onclick="logoutTutor()">Logout</button>
 </div>
 
 </div>
@@ -472,29 +484,32 @@ window.onpopstate = function(event) {
     }
 };
 
+function scrollToSection(id) {
+    const element = document.getElementById('section-' + id);
+    if(element) {
+        const headerOffset = 100;
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+    }
+}
+
 function updateNav(isLoggedIn) {
     const dynamicLinks = document.getElementById('dynamicLinks');
     if (isLoggedIn) {
         dynamicLinks.innerHTML = `
-            <a onclick="showTab('home')">Dashboard Home</a>
-            <a onclick="showTab('resources')">Resources</a>
-            <a onclick="showTab('messages')">Messages</a>
-            <a onclick="showTab('support')">Support</a>
+            <div class="nav-separator"></div><a onclick="scrollToSection('home')">Home</a>
+            <div class="nav-separator"></div><a onclick="scrollToSection('resources')">Resources</a>
+            <div class="nav-separator"></div><a onclick="scrollToSection('messages')">Messages</a>
+            <div class="nav-separator"></div><a onclick="scrollToSection('support')">Support</a>
         `;
     } else {
         dynamicLinks.innerHTML = `
-            <a onclick="openApply()">Apply</a>
-            <a onclick="openCreate()">Create Account</a>
-            <a onclick="openLogin()">Login</a>
+            <div class="nav-separator"></div><a onclick="openApply()">Apply</a>
+            <div class="nav-separator"></div><a onclick="openCreate()">Create Account</a>
+            <div class="nav-separator"></div><a onclick="openLogin()">Login</a>
         `;
     }
-}
-
-function showTab(tabId) {
-    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-    const target = document.getElementById('tab-' + tabId);
-    if(target) target.classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 async function getToken(){
@@ -558,7 +573,6 @@ localStorage.setItem("tutorToken",d.token);
 localStorage.setItem("tutorEmail", d.email); 
 loginModal.style.display = "none";
 document.getElementById('loadingText').innerText = "Preparing Dashboard...";
-// Directly trigger student load without reload
 updateNav(true);
 await loadStudents(d.token);
 }else{
@@ -607,10 +621,10 @@ studentsList.innerHTML=data.length > 0 ? data.map(s=>`
 Email: ${s.email}<br>Phone: ${s.phone}<br>Service: ${s.service}
 </div>`).join("") : "<p>No students assigned yet.</p>";
 
-// Finalizing dashboard display
 infoSection.style.display="none";
 contactSection.style.display="none";
-dashboard.style.display="block";
+dashboard.style.display="flex";
+dashboardLogout.style.display="block";
 setTimeout(()=>dashboard.classList.add("show"),50);
 loadingModal.style.display="none";
 }
