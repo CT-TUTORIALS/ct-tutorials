@@ -13,35 +13,44 @@ background:#f4f4f4;
 display:flex;
 flex-direction:column;
 min-height:100vh;
-padding-top: 80px; /* Space for fixed header */
+padding-top: 100px; /* Space for fixed centered header */
 }
 
 header{
 background:#003366;
 color:white;
-padding:20px;
+padding:20px 10px;
 text-align:center;
 position: fixed; 
 top: 0;
 width: 100%;
 z-index: 2000;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+box-sizing: border-box;
 }
 
-header h1 { margin: 0; }
+header h1 { margin: 0; font-size: 1.5rem; }
 
 nav { 
 display: flex;
 justify-content: center;
 align-items: center;
 margin-top: 10px; 
+flex-wrap: wrap; /* Prevents links from being cropped */
+gap: 10px;
+width: 100%;
 }
 
 nav a{
 color:white;
-margin:0 15px;
 text-decoration:none;
 font-weight:bold;
 cursor:pointer;
+white-space: nowrap;
+font-size: 14px;
 }
 
 .nav-separator {
@@ -95,6 +104,18 @@ transition:0.3s;
 text-decoration:none;
 color:inherit;
 display:block;
+}
+
+/* DASHBOARD SPECIFIC EXPANSION & SCROLLING */
+.dashboard-section .service-card {
+    padding: 40px; /* Double the padding for dashboard content */
+    min-height: 200px; /* Larger footprint */
+}
+
+.scroll-container {
+    max-height: 300px; /* Confines long lists with a scrollbar */
+    overflow-y: auto;
+    padding-right: 10px;
 }
 
 .service-card:hover{
@@ -185,7 +206,6 @@ font-weight:bold;
 background:#cc0000;
 }
 
-/* Floating Action Button */
 .back-to-top {
     position: fixed;
     bottom: 30px;
@@ -246,7 +266,6 @@ margin:auto;
 margin-bottom:15px;
 }
 
-/* Dashboard Vertical Styling */
 .dashboard-section {
     margin-bottom: 50px;
 }
@@ -254,6 +273,10 @@ margin-bottom:15px;
 @keyframes spin{
 0%{transform:rotate(0deg);}
 100%{transform:rotate(360deg);}
+}
+
+@media screen and (max-width: 768px) {
+    .nav-separator { display: none; }
 }
 </style>
 </head>
@@ -265,7 +288,7 @@ margin-bottom:15px;
 
 <nav id="mainNav">
 <a onclick="handleHomeClick()">Home</a>
-<span id="dynamicLinks" style="display: flex; align-items: center;">
+<span id="dynamicLinks" style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px;">
 </span>
 </nav>
 </header>
@@ -385,23 +408,27 @@ margin-bottom:15px;
 <div id="section-home" class="dashboard-section">
 <h2>Tutor Dashboard</h2>
 <p>Welcome back! Below is the current list of students assigned to you.</p>
-<div id="studentsList">Loading students...</div>
+<div class="service-card">
+    <div id="studentsList" class="scroll-container">Loading students...</div>
+</div>
 </div>
 
 <div id="section-resources" class="dashboard-section">
 <h2>Resources & Materials</h2>
 <div class="service-card">
-    <div class="resource-item">
-        <span>📄 Business Policies & Guidelines</span>
-        <a href="documents/Business-Policies.pdf" target="_blank">View/Download</a>
-    </div>
-    <div class="resource-item">
-        <span>📄 Tutors' Disclosure Agreement</span>
-        <a href="documents/Tutor-Disclosure-Agreement.pdf" target="_blank">View/Download</a>
-    </div>
-    <div class="resource-item">
-        <span>📄 Lesson Plan Template</span>
-        <a href="documents/Lesson_Plan_Template[1].docx" target="_blank">View/Download</a>
+    <div class="scroll-container">
+        <div class="resource-item">
+            <span>📄 Business Policies & Guidelines</span>
+            <a href="documents/Business-Policies.pdf" target="_blank">View/Download</a>
+        </div>
+        <div class="resource-item">
+            <span>📄 Tutors' Disclosure Agreement</span>
+            <a href="documents/Tutor-Disclosure-Agreement.pdf" target="_blank">View/Download</a>
+        </div>
+        <div class="resource-item">
+            <span>📄 Lesson Plan Template</span>
+            <a href="documents/Lesson_Plan_Template[1].docx" target="_blank">View/Download</a>
+        </div>
     </div>
 </div>
 </div>
@@ -409,14 +436,16 @@ margin-bottom:15px;
 <div id="section-messages" class="dashboard-section">
 <h2>Messages</h2>
 <div class="service-card">
-<p>Communication history with the administrative team will appear here.</p>
+    <div class="scroll-container">
+        <p>Communication history with the administrative team will appear here.</p>
+    </div>
 </div>
 </div>
 
 <div id="section-support" class="dashboard-section">
 <h2>Help & Support</h2>
 <div class="service-card">
-<textarea id="supportInput" placeholder="How can we help you?"></textarea>
+<textarea id="supportInput" placeholder="How can we help you?" style="height: 150px;"></textarea>
 <button onclick="submitSupport()">Submit Request</button>
 </div>
 </div>
@@ -486,6 +515,20 @@ Approved tutors are expected to maintain professional conduct, uphold academic i
 <script>
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxIShwbw27ViNIHCShqkhJv4WaQ0igIE9AQ44FGT9RL1ik4rqeOzi01liVl4vjCFhNqQw/exec"
 
+const applyModal = document.getElementById("applyModal");
+const createModal = document.getElementById("createModal");
+const loginModal = document.getElementById("loginModal");
+const applyForm = document.getElementById("applyForm");
+const createForm = document.getElementById("createForm");
+const loginForm = document.getElementById("loginForm");
+const loadingModal = document.getElementById("loadingModal");
+const infoSection = document.getElementById("infoSection");
+const contactSection = document.getElementById("contactSection");
+const dashboard = document.getElementById("dashboard");
+const dashboardLogout = document.getElementById("dashboardLogout");
+const studentsList = document.getElementById("studentsList");
+const supportInput = document.getElementById("supportInput");
+
 function openApply(){applyModal.style.display="flex"}
 function openCreate(){createModal.style.display="flex"}
 function openLogin(){loginModal.style.display="flex"}
@@ -496,7 +539,6 @@ e.target.style.display="none"
 }
 }
 
-// Logic for back-to-top button visibility
 window.onscroll = function() {
     const btn = document.getElementById("btnTop");
     if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
@@ -523,7 +565,7 @@ window.onpopstate = function(event) {
 function scrollToSection(id) {
     const element = document.getElementById('section-' + id);
     if(element) {
-        const headerOffset = 100;
+        const headerOffset = 120;
         const elementPosition = element.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
         window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
@@ -533,7 +575,6 @@ function scrollToSection(id) {
 function updateNav(isLoggedIn) {
     const dynamicLinks = document.getElementById('dynamicLinks');
     if (isLoggedIn) {
-        // Internal Home link removed as requested
         dynamicLinks.innerHTML = `
             <div class="nav-separator"></div><a onclick="scrollToSection('resources')">Resources</a>
             <div class="nav-separator"></div><a onclick="scrollToSection('messages')">Messages</a>
