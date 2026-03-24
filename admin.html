@@ -88,12 +88,15 @@ padding:15px 10px;
 border:1px solid #ddd;
 font-size:14px;
 height: 50px;
-word-wrap: break-word;
+/* Ensure text wraps inside the cell and doesn't overlap neighbors */
+word-break: break-word;
+overflow-wrap: break-word;
 }
 
 th{
 background:#003366;
 color:white;
+text-align: left;
 }
 
 /* Fix: Targeting the action column specifically to ensure width and alignment */
@@ -105,7 +108,7 @@ white-space: nowrap;
 display: flex;
 align-items: center;
 justify-content: center;
-gap: 0; 
+gap: 15px; /* Forced separation gap */
 border: 1px solid #ddd;
 }
 
@@ -123,7 +126,6 @@ display: inline-block;
 background:#2e7d32;
 color:white;
 width: 85px; 
-margin-right: 15px; 
 }
 
 .reject{
@@ -424,7 +426,7 @@ tbody.innerHTML+=`
 <td>${app.name||""}</td>
 <td>${app.email||""}</td>
 <td>${app.phone||""}</td>
-<td style="max-width: 200px;">${app.subjects||""}</td>
+<td style="max-width: 250px;">${app.subjects||""}</td>
 <td>${app.status||"Pending"}</td>
 <td>
 <button class="approve" onclick="approve('${app.email}')">Approve</button>
@@ -455,7 +457,7 @@ tbody.innerHTML+=`
 <td>${t.name||""}</td>
 <td>${t.email||""}</td>
 <td>${t.phone||""}</td>
-<td style="max-width: 200px;">${t.subjects||""}</td>
+<td style="max-width: 250px;">${t.subjects||""}</td>
 </tr>`
 
 })
