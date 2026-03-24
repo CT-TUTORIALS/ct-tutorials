@@ -15,7 +15,6 @@ padding-bottom:60px;
 }
 
 /* HEADER - Always Centered */
-
 .admin-header{
 background:#003366;
 color:white;
@@ -24,14 +23,14 @@ position:sticky;
 top:0;
 z-index:1100;
 display: flex;
-justify-content: center; /* Ensures the entire nav block is centered */
+justify-content: center; 
 }
 
 .admin-nav{
 display:flex;
 justify-content:center;
 gap:15px;
-flex-wrap:wrap; /* Allows links to wrap to a new line instead of cropping */
+flex-wrap:wrap; 
 align-items:center; 
 text-align:center;
 max-width: 100%;
@@ -42,7 +41,7 @@ color:white;
 text-decoration:none;
 font-weight:bold;
 font-size:14px;
-white-space: nowrap; /* Keeps individual links from breaking internally */
+white-space: nowrap; 
 }
 
 #adminLinks {
@@ -68,7 +67,6 @@ display:inline-block;
 }
 
 /* CONTENT */
-
 .container{
 max-width: 98%; 
 margin:auto;
@@ -88,7 +86,6 @@ margin-bottom:70px;
 }
 
 /* TABLES */
-
 table{
 width:100%;
 border-collapse:separate; 
@@ -117,8 +114,8 @@ z-index: 1000;
 border-top: none;
 }
 
-/* SUBJECTS CELL CONFINEMENT */
-.subject-cell {
+/* UNIVERSAL CELL CONFINEMENT - Added to all data cells */
+.scroll-cell {
     max-height: 100px;
     overflow-y: auto;
     display: block;
@@ -177,7 +174,6 @@ td a:hover {
 /* MOBILE AUTO-ADJUSTMENTS */
 @media screen and (max-width: 768px) {
     .container { max-width: 100%; padding: 20px 5px; }
-    
     .nav-separator { display: none; }
     
     table, thead, tbody, th, td, tr { 
@@ -213,7 +209,7 @@ td a:hover {
         text-transform: uppercase;
     }
 
-    .subject-cell { max-height: none; }
+    .scroll-cell { max-height: none; }
     
     td:last-child {
         display: flex;
@@ -480,11 +476,11 @@ if(!Array.isArray(data)) return
 data.forEach(app=>{
 tbody.innerHTML+=`
 <tr>
-<td data-label="Name">${app.name||""}</td>
-<td data-label="Email">${app.email||""}</td>
-<td data-label="Phone">${app.phone||""}</td>
-<td data-label="Subjects"><div class="subject-cell">${app.subjects||""}</div></td>
-<td data-label="Status">${app.status||"Pending"}</td>
+<td data-label="Name"><div class="scroll-cell">${app.name||""}</div></td>
+<td data-label="Email"><div class="scroll-cell">${app.email||""}</div></td>
+<td data-label="Phone"><div class="scroll-cell">${app.phone||""}</div></td>
+<td data-label="Subjects"><div class="scroll-cell">${app.subjects||""}</div></td>
+<td data-label="Status"><div class="scroll-cell">${app.status||"Pending"}</div></td>
 <td data-label="Action">
 <button class="approve" onclick="approve('${app.email}')">Approve</button>
 <button class="reject" onclick="reject('${app.email}')">Reject</button>
@@ -505,10 +501,10 @@ if(!Array.isArray(data)) return
 data.forEach(t=>{
 tbody.innerHTML+=`
 <tr>
-<td data-label="Name">${t.name||""}</td>
-<td data-label="Email">${t.email||""}</td>
-<td data-label="Phone">${t.phone||""}</td>
-<td data-label="Subjects"><div class="subject-cell">${t.subjects||""}</div></td>
+<td data-label="Name"><div class="scroll-cell">${t.name||""}</div></td>
+<td data-label="Email"><div class="scroll-cell">${t.email||""}</div></td>
+<td data-label="Phone"><div class="scroll-cell">${t.phone||""}</div></td>
+<td data-label="Subjects"><div class="scroll-cell">${t.subjects||""}</div></td>
 </tr>`
 })
 })
@@ -525,10 +521,10 @@ if(!Array.isArray(data)) return
 data.forEach(s=>{
 tbody.innerHTML+=`
 <tr>
-<td data-label="Name">${s.name||""}</td>
-<td data-label="Email"><a href="mailto:${s.email||""}">${s.email||""}</a></td>
-<td data-label="Phone"><a href="tel:${s.phone||""}">${s.phone||""}</a></td>
-<td data-label="Service">${s.service||""}</td>
+<td data-label="Name"><div class="scroll-cell">${s.name||""}</div></td>
+<td data-label="Email"><div class="scroll-cell"><a href="mailto:${s.email||""}">${s.email||""}</a></div></td>
+<td data-label="Phone"><div class="scroll-cell"><a href="tel:${s.phone||""}">${s.phone||""}</a></div></td>
+<td data-label="Service"><div class="scroll-cell">${s.service||""}</div></td>
 </tr>`
 })
 })
@@ -545,10 +541,10 @@ if(!Array.isArray(data)) return
 data.forEach(s=>{
 tbody.innerHTML+=`
 <tr>
-<td data-label="Name">${s.name||""}</td>
-<td data-label="Email"><a href="mailto:${s.email||""}">${s.email||""}</a></td>
-<td data-label="Phone"><a href="tel:${s.phone||""}">${s.phone||""}</a></td>
-<td data-label="Service">${s.service||""}</td>
+<td data-label="Name"><div class="scroll-cell">${s.name||""}</div></td>
+<td data-label="Email"><div class="scroll-cell"><a href="mailto:${s.email||""}">${s.email||""}</a></div></td>
+<td data-label="Phone"><div class="scroll-cell"><a href="tel:${s.phone||""}">${s.phone||""}</a></div></td>
+<td data-label="Service"><div class="scroll-cell">${s.service||""}</div></td>
 </tr>`
 })
 })
