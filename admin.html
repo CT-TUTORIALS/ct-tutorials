@@ -48,12 +48,12 @@ cursor:pointer;
 display:inline-block;
 }
 
-/* CONTENT */
+/* CONTENT - Updated to Full Width */
 
 .container{
-max-width:1200px;
+max-width: 95%; /* Makes use of the entire screen */
 margin:auto;
-padding:40px 25px;
+padding:40px 0;
 display:none;
 }
 
@@ -74,7 +74,7 @@ width:100%;
 border-collapse:collapse;
 background:white;
 margin-top:20px;
-table-layout: fixed; /* Ensures columns respect defined widths */
+table-layout: fixed; 
 }
 
 th,td{
@@ -82,10 +82,10 @@ padding:12px 10px;
 border:1px solid #ddd;
 font-size:14px;
 text-align: left;
-vertical-align: top; /* Prevents text from middle-aligning and overlapping */
+vertical-align: top; 
 word-wrap: break-word;
 overflow-wrap: break-word;
-white-space: normal; /* Allows text to wrap to new lines */
+white-space: normal; 
 }
 
 th{
@@ -109,7 +109,7 @@ color:white;
 
 /* Fix for Button Alignment */
 td:last-child {
-    white-space: nowrap; /* Prevents buttons from stacking vertically */
+    white-space: nowrap; 
 }
 
 button{
@@ -134,7 +134,7 @@ color:white;
 width: 85px;
 }
 
-/* Clickable link styling for tables */
+/* Clickable link styling */
 td a {
     color: #003366;
     text-decoration: none;
@@ -335,7 +335,6 @@ fetch(SCRIPT_URL+"?action=adminLogin&username="+encodeURIComponent(username)+"&p
 if(res.success){
 localStorage.setItem("adminToken",res.token)
 initAdmin(res.token)
-loadingModal.style.display="none"
 }else{
 loadingModal.style.display="none"
 document.getElementById("error").style.display="block"
@@ -354,14 +353,25 @@ if(token){ initAdmin(token); }
 }
 
 /* INIT */
-function initAdmin(token){
+async function initAdmin(token){
 document.getElementById("loginOverlay").style.display="none"
 document.getElementById("adminContent").style.display="block"
 document.getElementById("adminLinks").style.display="inline"
-loadApplications(token)
-loadApprovedTutors(token)
-loadStudents(token)
-loadOtherClients(token)
+
+loadingModal.style.display="flex"
+document.getElementById("loadingText").innerText = "Loading Dashboard...";
+
+try {
+    // Ensures modal stays up until all data is pulled
+    await Promise.all([
+        loadApplications(token),
+        loadApprovedTutors(token),
+        loadStudents(token),
+        loadOtherClients(token)
+    ]);
+} finally {
+    loadingModal.style.display="none"
+}
 }
 
 /* ===== LOAD DATA ===== */
@@ -464,6 +474,8 @@ function approve(email){
 if(!confirm("Are you sure you want to approve this tutor?")) return;
 const token = localStorage.getItem("adminToken")
 loadingModal.style.display="flex"
+document.getElementById("loadingText").innerText = "Approving...";
+
 fetch(`${SCRIPT_URL}?action=approveTutor&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`)
 .then(r=>r.json())
 .then(res=>{
@@ -485,6 +497,8 @@ function reject(email){
 if(!confirm("Are you sure you want to reject this tutor?")) return;
 const token = localStorage.getItem("adminToken")
 loadingModal.style.display="flex"
+document.getElementById("loadingText").innerText = "Rejecting...";
+
 fetch(`${SCRIPT_URL}?action=rejectTutor&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`)
 .then(r=>r.json())
 .then(res=>{
