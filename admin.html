@@ -22,7 +22,7 @@ color:white;
 padding:12px 10px;
 position:sticky;
 top:0;
-z-index:1000;
+z-index:1100; /* Higher than table headers */
 }
 
 .admin-nav{
@@ -40,6 +40,12 @@ font-weight:bold;
 font-size:14px;
 }
 
+.nav-separator {
+border-left: 2px solid rgba(255,255,255,0.5);
+height: 14px;
+margin: 0;
+}
+
 .signout{
 background:#c62828;
 padding:6px 12px;
@@ -48,10 +54,10 @@ cursor:pointer;
 display:inline-block;
 }
 
-/* CONTENT - Updated to Full Width */
+/* CONTENT */
 
 .container{
-max-width: 95%; /* Makes use of the entire screen */
+max-width: 98%; 
 margin:auto;
 padding:40px 0;
 display:none;
@@ -71,7 +77,8 @@ margin-bottom:70px;
 
 table{
 width:100%;
-border-collapse:collapse;
+border-collapse:separate; /* Required for sticky border consistency */
+border-spacing: 0;
 background:white;
 margin-top:20px;
 table-layout: fixed; 
@@ -91,9 +98,13 @@ white-space: normal;
 th{
 background:#003366;
 color:white;
+position: sticky;
+top: 42px; /* Sits exactly below the admin-header */
+z-index: 1000;
+border-top: none;
 }
 
-/* APPLICATION TABLE WIDTHS */
+/* COLUMN WIDTHS */
 #applicationsTable th:nth-child(1) { width: 12%; }
 #applicationsTable th:nth-child(2) { width: 18%; }
 #applicationsTable th:nth-child(3) { width: 10%; }
@@ -101,13 +112,12 @@ color:white;
 #applicationsTable th:nth-child(5) { width: 10%; }
 #applicationsTable th:nth-child(6) { width: 15%; }
 
-/* APPROVED TABLE WIDTHS */
 #approvedTable th:nth-child(1) { width: 15%; }
 #approvedTable th:nth-child(2) { width: 20%; }
 #approvedTable th:nth-child(3) { width: 15%; }
 #approvedTable th:nth-child(4) { width: 50%; }
 
-/* Fix for Button Alignment */
+/* Button Alignment */
 td:last-child {
     white-space: nowrap; 
 }
@@ -120,7 +130,6 @@ cursor:pointer;
 font-weight: bold;
 }
 
-/* BUTTON SIZING & SEPARATION */
 .approve{
 background:#2e7d32;
 color:white;
@@ -134,7 +143,6 @@ color:white;
 width: 85px;
 }
 
-/* Clickable link styling */
 td a {
     color: #003366;
     text-decoration: none;
@@ -157,6 +165,7 @@ background:rgba(0,0,0,.6);
 display:flex;
 justify-content:center;
 align-items:center;
+z-index: 2000;
 }
 
 .login-box{
@@ -201,7 +210,7 @@ height:100%;
 background:rgba(0,0,0,0.6);
 justify-content:center;
 align-items:center;
-z-index:2000;
+z-index:3000;
 }
 
 .spinner{
@@ -231,7 +240,7 @@ color:white;
 text-align:center;
 padding:12px 10px;
 font-size:14px;
-z-index:1000;
+z-index:1100;
 }
 
 </style>
@@ -252,11 +261,16 @@ z-index:1000;
 <div class="admin-header">
 <div class="admin-nav">
 <a href="#" onclick="logout()">Home</a>
-<span id="adminLinks" style="display:none;">
+<span id="adminLinks" style="display:none; align-items: center; gap: 15px;">
+<div class="nav-separator"></div>
 <a href="#applications">Applications</a>
+<div class="nav-separator"></div>
 <a href="#approved">Approved Tutors</a>
+<div class="nav-separator"></div>
 <a href="#students">Students</a>
+<div class="nav-separator"></div>
 <a href="#otherClients">Other Clients</a>
+<div class="nav-separator"></div>
 <a href="#" class="signout" onclick="logout()">Sign Out</a>
 </span>
 </div>
@@ -356,13 +370,12 @@ if(token){ initAdmin(token); }
 async function initAdmin(token){
 document.getElementById("loginOverlay").style.display="none"
 document.getElementById("adminContent").style.display="block"
-document.getElementById("adminLinks").style.display="inline"
+document.getElementById("adminLinks").style.display="flex"
 
 loadingModal.style.display="flex"
 document.getElementById("loadingText").innerText = "Loading Dashboard...";
 
 try {
-    // Ensures modal stays up until all data is pulled
     await Promise.all([
         loadApplications(token),
         loadApprovedTutors(token),
