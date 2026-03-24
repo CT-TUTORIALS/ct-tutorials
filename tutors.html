@@ -46,28 +46,13 @@ background:white;
 padding:40px;
 flex:1;
 border-radius: 8px;
-overflow-x: hidden; /* Prevents horizontal scroll from extended lines */
 }
 
 h2{
 color:#003366;
-}
-
-.section-title{
-display:block; /* Changed to block to allow full width divider */
-position:relative;
+border-bottom:2px solid #003366;
 padding-bottom:8px;
-margin-bottom: 25px;
-}
-
-.section-title::after{
-content:"";
-position:absolute;
-left: -40px; /* Aligns with main container padding */
-bottom:0;
-height:3px;
-width: 200%; /* Extends across the section */
-background:#003366;
+margin-bottom:25px;
 }
 
 .fade{
@@ -241,7 +226,7 @@ margin-bottom:15px;
 <div class="main">
 
 <div id="infoSection">
-<h2 class="section-title">Thank You for Your Interest</h2>
+<h2>Thank You for Your Interest</h2>
 <div class="card-container">
 <div class="service-card">
 <p>We sincerely appreciate your interest in joining C&T Tutorials. Our organization is committed to providing high-quality academic support while creating a professional and supportive environment for tutors.</p>
@@ -250,7 +235,7 @@ margin-bottom:15px;
 </div>
 </div>
 
-<h2 class="section-title">Tutor Requirements</h2>
+<h2>Tutor Requirements</h2>
 <div class="card-container">
 <div class="service-card">
 <ul>
@@ -262,7 +247,7 @@ margin-bottom:15px;
 </div>
 </div>
 
-<h2 class="section-title">What Happens Next</h2>
+<h2>What Happens Next</h2>
 <div class="card-container">
 <div class="service-card">
 <ul>
@@ -276,7 +261,7 @@ margin-bottom:15px;
 </div>
 </div>
 
-<h2 class="section-title">Benefits of Joining Us</h2>
+<h2>Benefits of Joining Us</h2>
 <div class="card-container">
 <div class="service-card">
 <h3>⏰ Flexible Schedule</h3>
@@ -292,7 +277,7 @@ margin-bottom:15px;
 </div>
 </div>
 
-<h2 class="section-title">Subjects in Demand</h2>
+<h2>Subjects in Demand</h2>
 <div class="card-container">
 <div class="service-card">
 <ul>
@@ -304,7 +289,7 @@ margin-bottom:15px;
 </div>
 </div>
 
-<h2 class="section-title">Frequently Asked Questions</h2>
+<h2>Frequently Asked Questions</h2>
 <div class="card-container">
 <div class="service-card">
 <h3>How long does the approval process take?</h3>
@@ -330,7 +315,7 @@ margin-bottom:15px;
 </div>
 
 <div id="contactSection">
-<h2 class="section-title">Contact Us</h2>
+<h2>Contact Us</h2>
 <div class="card-container">
 <a href="mailto:ct0tutorials@gmail.com" class="service-card">
 <h3>📧 Email</h3>
@@ -347,7 +332,7 @@ margin-bottom:15px;
 </div>
 
 <div id="dashboard" style="display:none" class="fade">
-<h2 class="section-title">Tutor Dashboard</h2>
+<h2>Tutor Dashboard</h2>
 
 <div id="tab-home" class="tab-content active">
 <p>Welcome back! Below is the current list of students assigned to you.</p>
@@ -355,7 +340,7 @@ margin-bottom:15px;
 </div>
 
 <div id="tab-resources" class="tab-content">
-<h2 class="section-title">Resources & Materials</h2>
+<h2>Resources & Materials</h2>
 <div class="service-card">
     <div class="resource-item">
         <span>📄 Business Policies & Guidelines</span>
@@ -373,14 +358,14 @@ margin-bottom:15px;
 </div>
 
 <div id="tab-messages" class="tab-content">
-<h2 class="section-title">Messages</h2>
+<h2>Messages</h2>
 <div class="service-card">
 <p>Communication history with the administrative team will appear here.</p>
 </div>
 </div>
 
 <div id="tab-support" class="tab-content">
-<h2 class="section-title">Help & Support</h2>
+<h2>Help & Support</h2>
 <div class="service-card">
 <textarea id="supportInput" placeholder="How can we help you?"></textarea>
 <button onclick="submitSupport()">Submit Request</button>
@@ -519,7 +504,7 @@ token:t,
 })
 const res=await fetch(SCRIPT_URL,{method:"POST",body:params})
 const d=await res.json()
-loadingModal.style.display="none" // Hidden BEFORE alert
+loadingModal.style.display="none"
 if(d.status==="success"){
 alert("Application submitted successfully. We will review it shortly.")
 applyModal.style.display="none"
@@ -543,7 +528,7 @@ password:createForm.password.value
 })
 const res=await fetch(SCRIPT_URL,{method:"POST",body:params})
 const d=await res.json()
-loadingModal.style.display="none" // Hidden BEFORE alert
+loadingModal.style.display="none"
 if(d.status==="account_created"){
 alert("Account created successfully. You can now log in.")
 createModal.style.display="none"
@@ -557,13 +542,13 @@ loadingModal.style.display="flex"
 try{
 const res=await fetch(`${SCRIPT_URL}?action=tutorLogin&email=${encodeURIComponent(loginForm.email.value)}&password=${encodeURIComponent(loginForm.password.value)}`)
 const d=await res.json()
+loadingModal.style.display="none"
 if(d.success){
 localStorage.setItem("tutorToken",d.token);
 localStorage.setItem("tutorEmail", d.email); 
 history.pushState({ loggedIn: true }, "Dashboard", "");
 location.reload(); 
 }else{
-loadingModal.style.display="none"
 alert("Invalid login credentials.")
 }
 }catch(err){
@@ -584,7 +569,7 @@ async function submitSupport(){
     try {
         const res = await fetch(SCRIPT_URL, {method:"POST", body:params});
         const d = await res.json();
-        loadingModal.style.display="none"; // Hidden BEFORE alert
+        loadingModal.style.display="none";
         if(d.status === "success"){
             alert("Your request has been logged. Admin will contact you soon.");
             supportInput.value = "";
