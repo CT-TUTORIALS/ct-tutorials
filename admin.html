@@ -14,7 +14,7 @@ background:#f4f4f4;
 padding-bottom:60px;
 }
 
-/* HEADER */
+/* HEADER - Always Centered */
 
 .admin-header{
 background:#003366;
@@ -23,14 +23,18 @@ padding:12px 10px;
 position:sticky;
 top:0;
 z-index:1100;
+display: flex;
+justify-content: center; /* Ensures the entire nav block is centered */
 }
 
 .admin-nav{
 display:flex;
 justify-content:center;
 gap:15px;
-flex-wrap:wrap;
-align-items:center; text-align:center;
+flex-wrap:wrap; /* Allows links to wrap to a new line instead of cropping */
+align-items:center; 
+text-align:center;
+max-width: 100%;
 }
 
 .admin-nav a{
@@ -38,6 +42,15 @@ color:white;
 text-decoration:none;
 font-weight:bold;
 font-size:14px;
+white-space: nowrap; /* Keeps individual links from breaking internally */
+}
+
+#adminLinks {
+display:none; 
+align-items: center; 
+justify-content: center;
+gap: 15px;
+flex-wrap: wrap;
 }
 
 .nav-separator {
@@ -161,18 +174,18 @@ td a:hover {
     text-decoration: underline;
 }
 
-/* MOBILE AUTO-ADJUSTMENTS VIA ALIGNMENT */
+/* MOBILE AUTO-ADJUSTMENTS */
 @media screen and (max-width: 768px) {
     .container { max-width: 100%; padding: 20px 5px; }
     
-    /* Change table behavior to block-stacking */
+    .nav-separator { display: none; }
+    
     table, thead, tbody, th, td, tr { 
         display: block; 
         width: 100% !important; 
         box-sizing: border-box;
     }
     
-    /* Hide headers on mobile to prevent clutter */
     thead { display: none; }
     
     tr { 
@@ -188,11 +201,10 @@ td a:hover {
         border: none;
         border-bottom: 1px solid #eee;
         display: flex;
-        flex-direction: column; /* Stacks label over content */
+        flex-direction: column;
         gap: 4px;
     }
     
-    /* Adds the label dynamically */
     td:before { 
         content: attr(data-label);
         font-weight: bold;
@@ -203,7 +215,6 @@ td a:hover {
 
     .subject-cell { max-height: none; }
     
-    /* Adjust buttons for thumb-tapping */
     td:last-child {
         display: flex;
         gap: 10px;
@@ -322,7 +333,7 @@ z-index:1100;
 <div class="admin-header">
 <div class="admin-nav">
 <a href="#" onclick="logout()">Home</a>
-<span id="adminLinks" style="display:none; align-items: center; gap: 15px;">
+<span id="adminLinks">
 <div class="nav-separator"></div>
 <a href="#applications">Applications</a>
 <div class="nav-separator"></div>
