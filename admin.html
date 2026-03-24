@@ -83,15 +83,22 @@ margin-top:20px;
 }
 
 th,td{
-padding:15px 10px; /* Increased vertical padding for all rows */
+padding:15px 10px;
 border:1px solid #ddd;
 font-size:14px;
-height: 50px; /* Uniform row height */
+height: 50px;
 }
 
 th{
 background:#003366;
 color:white;
+}
+
+/* Fix: Targeting the action column specifically to ensure width and alignment */
+td:last-child {
+min-width: 210px;
+text-align: center;
+white-space: nowrap;
 }
 
 button{
@@ -100,6 +107,7 @@ padding:6px 10px;
 border-radius:4px;
 cursor:pointer;
 vertical-align: middle;
+display: inline-block; /* Ensures they sit side-by-side correctly */
 }
 
 /* BUTTON SIZING & SEPARATION */
@@ -107,7 +115,7 @@ vertical-align: middle;
 background:#2e7d32;
 color:white;
 width: 85px; 
-margin-right: 12px;
+margin-right: 15px; /* Increased gap */
 }
 
 .reject{
