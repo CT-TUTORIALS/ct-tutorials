@@ -46,6 +46,7 @@ background:white;
 padding:40px;
 flex:1;
 border-radius: 8px;
+overflow-x: hidden; /* Prevents horizontal scroll from extended lines */
 }
 
 h2{
@@ -53,18 +54,19 @@ color:#003366;
 }
 
 .section-title{
-display:inline-block;
+display:block; /* Changed to block to allow full width divider */
 position:relative;
 padding-bottom:8px;
+margin-bottom: 25px;
 }
 
 .section-title::after{
 content:"";
 position:absolute;
-left:0;
+left: -40px; /* Aligns with main container padding */
 bottom:0;
 height:3px;
-width:100%;
+width: 200%; /* Extends across the section */
 background:#003366;
 }
 
@@ -81,6 +83,7 @@ display:flex;
 flex-wrap:wrap;
 gap:20px;
 margin-top:20px;
+margin-bottom: 40px;
 }
 
 .service-card{
@@ -516,7 +519,7 @@ token:t,
 })
 const res=await fetch(SCRIPT_URL,{method:"POST",body:params})
 const d=await res.json()
-loadingModal.style.display="none"
+loadingModal.style.display="none" // Hidden BEFORE alert
 if(d.status==="success"){
 alert("Application submitted successfully. We will review it shortly.")
 applyModal.style.display="none"
@@ -540,7 +543,7 @@ password:createForm.password.value
 })
 const res=await fetch(SCRIPT_URL,{method:"POST",body:params})
 const d=await res.json()
-loadingModal.style.display="none"
+loadingModal.style.display="none" // Hidden BEFORE alert
 if(d.status==="account_created"){
 alert("Account created successfully. You can now log in.")
 createModal.style.display="none"
@@ -556,9 +559,9 @@ const res=await fetch(`${SCRIPT_URL}?action=tutorLogin&email=${encodeURIComponen
 const d=await res.json()
 if(d.success){
 localStorage.setItem("tutorToken",d.token);
-localStorage.setItem("tutorEmail", d.email); 
+localStorage.setItem("tutorEmail", d.email); 
 history.pushState({ loggedIn: true }, "Dashboard", "");
-location.reload(); 
+location.reload(); 
 }else{
 loadingModal.style.display="none"
 alert("Invalid login credentials.")
@@ -581,7 +584,7 @@ async function submitSupport(){
     try {
         const res = await fetch(SCRIPT_URL, {method:"POST", body:params});
         const d = await res.json();
-        loadingModal.style.display="none";
+        loadingModal.style.display="none"; // Hidden BEFORE alert
         if(d.status === "success"){
             alert("Your request has been logged. Admin will contact you soon.");
             supportInput.value = "";
@@ -622,7 +625,7 @@ updateNav(false);
 
 function logoutTutor(){
 localStorage.clear();
-window.location.href = window.location.pathname; 
+window.location.href = window.location.pathname; 
 }
 </script>
 
