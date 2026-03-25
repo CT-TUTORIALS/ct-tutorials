@@ -50,7 +50,7 @@ font-weight:bold;
 cursor:pointer;
 white-space: nowrap;
 font-size: 14px;
-margin: 0 15px;
+margin: 0 15px; 
 }
 
 /* 1. Visible separator line between links */
@@ -63,7 +63,7 @@ opacity: 0.8;
 }
 
 .main{
-max-width:1000px;
+max-width:1000px; /* Standard size for both front page and dashboard */
 margin: 20px auto;
 background:white;
 padding:40px;
@@ -72,12 +72,7 @@ flex-direction: column;
 flex:1;
 border-radius: 8px;
 transition: max-width 0.4s ease;
-width: 90%; /* Ensure it takes up space on smaller screens */
-}
-
-/* 2. Extended border/width of the dashboard to double the original 1400px */
-.main.dashboard-active {
-    max-width: 2800px !important; 
+width: 90%;
 }
 
 h2{
@@ -116,9 +111,10 @@ color:inherit;
 display:block;
 }
 
+/* DASHBOARD SPECIFIC STYLING */
 .dashboard-section .service-card {
-    padding: 50px;
-    min-height: 250px; 
+    padding: 30px; /* Balanced padding for the 1000px width */
+    min-height: auto; 
 }
 
 .scroll-container {
@@ -201,7 +197,7 @@ background: white;
 }
 
 .logout-btn{
-margin-top: auto;
+margin-top: 20px;
 background:#990000;
 color:white;
 border:none;
@@ -272,7 +268,7 @@ margin-bottom:15px;
 }
 
 .dashboard-section {
-    margin-bottom: 60px;
+    margin-bottom: 40px;
 }
 
 @keyframes spin{
@@ -703,8 +699,8 @@ infoSection.style.display="none";
 contactSection.style.display="none";
 dashboard.style.display="flex";
 
-// Apply the expanded dashboard width class to the main container
-mainContainer.classList.add("dashboard-active");
+// Ensure main container stays at 1000px
+mainContainer.style.maxWidth = "1000px";
 
 dashboardLogout.style.display="block";
 setTimeout(()=>dashboard.classList.add("show"),50);
