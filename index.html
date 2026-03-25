@@ -505,6 +505,7 @@ opacity:0.9;
 <option value="Secondary School Subject: History">History</option>
 <option value="Secondary School Subject: Geography">Geography</option>
 <option value="Secondary School Subject: Development Studies">Development Studies</option>
+<option value="Secondary School Subject: Others">Others</option>
 </optgroup>
 <optgroup label="Group Learning Sessions">
 <option value="Group Sessions: 2-5 People">2 – 5 People</option>
@@ -515,8 +516,14 @@ opacity:0.9;
 <option value="Draft Editing">Draft Editing</option>
 <option value="Proofreading">Proofreading</option>
 <option value="Referencing Assistance">Referencing Assistance</option>
+<option value="Modules: Others">Modules (Not listed)</option>
 </select>
 </label>
+
+<div id="specContainer" style="display:none;">
+<label id="specLabel">Specify Subject/Topic</label>
+<input type="text" name="specification" id="specInput">
+</div>
 
 <input type="hidden" name="priceOption" id="priceOptionField">
 
@@ -581,10 +588,13 @@ const pricingDetails=document.getElementById("pricingDetails");
 const loadingModal=document.getElementById("loadingModal");
 const priceOptionField=document.getElementById("priceOptionField");
 
-let selectedService="";
 const serviceSelect=document.getElementById("serviceSelect");
 const tutorSelect=document.getElementById("tutorSelect");
 const tutorLabel=document.getElementById("tutorLabel");
+
+const specContainer = document.getElementById("specContainer");
+const specLabel = document.getElementById("specLabel");
+const specInput = document.getElementById("specInput");
 
 function openForm(){ 
 modal.style.display="flex";
@@ -592,12 +602,13 @@ tutorLabel.style.display="none";
 tutorSelect.innerHTML='<option value="">Select a tutor</option>';
 serviceSelect.value="";
 priceOptionField.value="";
+specContainer.style.display = "none";
+specInput.required = false;
 }
 
 function closeForm(){ modal.style.display="none"; }
 
 function openPricing(service){
-selectedService=service;
 pricingModal.style.display="flex";
 let content = "";
 
@@ -606,13 +617,15 @@ pricingTitle.innerText="Academic Writing Tutorials";
 content = `
 <label class="pricing-option"><input type="radio" name="priceRadio" value="Intro Academic Writing" checked> Introduction to Academic Writing (4 sessions) – <b>N$150</b></label>
 <label class="pricing-option"><input type="radio" name="priceRadio" value="Topic Specific"> Topic Specific Sessions – <b>N$40</b></label>
-<label class="pricing-option"><input type="radio" name="priceRadio" value="Hourly Rate"> Hourly Rate – <b>N$40</b></label>`;
+<label class="pricing-option"><input type="radio" name="priceRadio" value="Hourly Rate"> Hourly Rate – <b>N$40</b></label>
+<label class="pricing-option"><input type="radio" name="priceRadio" value="Modules: Others"> Modules (Others) – <b>N$40</b></label>`;
 }
 
 if(service==="secondary"){
 pricingTitle.innerText="Secondary School Subjects";
 const subjects = ["English", "Oshikwanyama", "Oshindonga", "Accounting", "Economics", "Business Studies", "Entrepreneurship", "Mathematics", "Physics", "Biology", "History", "Geography", "Development Studies"];
 content = subjects.map((s, i) => `<label class="pricing-option"><input type="radio" name="priceRadio" value="Secondary School Subject: ${s}" ${i===0?'checked':''}> ${s} – <b>N$40</b></label>`).join('');
+content += `<label class="pricing-option"><input type="radio" name="priceRadio" value="Secondary School Subject: Others"> Others (Not listed) – <b>N$40</b></label>`;
 }
 
 if(service==="group"){
@@ -649,7 +662,7 @@ openForm();
 
 setTimeout(()=>{
 serviceSelect.value = bookingValue;
-priceOptionField.value = bookingValue; // Set the value for code.gs logic
+priceOptionField.value = bookingValue;
 serviceSelect.dispatchEvent(new Event("change"));
 },100);
 }
@@ -664,35 +677,39 @@ tutorsData=await res.json();
 loadTutors();
 
 serviceSelect.addEventListener("change",function(){
-priceOptionField.value = this.value; // Keep both in sync if manually changed
+priceOptionField.value = this.value;
 
-if(!this.value){
-tutorLabel.style.display="none";
-tutorSelect.innerHTML='<option value="">Select a tutor</option>';
-return;
+// LOGIC FOR SPECIFICATION FIELD
+const val = this.value;
+if(val === "Topic Specific" || val === "Hourly Rate" || val === "Secondary School Subject: Others" || val === "Modules: Others"){
+    specContainer.style.display = "block";
+    specInput.required = true;
+    specLabel.innerText = (val.includes("Subject") || val === "Modules: Others") ? "Specify Subject" : "Specify Topic/Subject";
+} else {
+    specContainer.style.display = "none";
+    specInput.required = false;
+    specInput.value = "";
 }
 
+// LOGIC FOR TUTOR SELECTION
 let category="";
 let allowTutor=false;
 
-if(this.value==="Intro Academic Writing" || this.value==="Topic Specific" || this.value==="Hourly Rate"){
+if(val==="Intro Academic Writing" || val==="Topic Specific" || val==="Hourly Rate" || val === "Modules: Others"){
 category="writing";
 allowTutor=true;
 }
-else if(this.value.includes("Group Sessions")){
+else if(val.includes("Group Sessions")){
 category="group";
 allowTutor=true;
 }
-else if(this.value==="Public Speaking Support"){
+else if(val==="Public Speaking Support"){
 category="speaking";
 allowTutor=true;
 }
-else if(this.value.includes("Secondary School Subject")){
+else if(val.includes("Secondary School Subject")){
 category="secondary";
 allowTutor=true;
-}
-else{
-allowTutor=false;
 }
 
 if(allowTutor && tutorsData[category]){
@@ -708,7 +725,6 @@ tutorSelect.appendChild(opt);
 tutorLabel.style.display="none";
 tutorSelect.innerHTML='<option value="">Select a tutor</option>';
 }
-
 });
 
 document.getElementById("studentRegisterForm").addEventListener("submit", function(e) {
@@ -736,6 +752,7 @@ document.getElementById("studentRegisterForm").addEventListener("submit", functi
             this.reset();
             tutorLabel.style.display = "none";
             tutorSelect.innerHTML = '<option value="">Select a tutor</option>';
+            specContainer.style.display = "none";
             closeForm();
         } else {
             alert("Submission failed. Please try again.");
