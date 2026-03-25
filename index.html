@@ -222,12 +222,31 @@ padding:10px;
 margin-top:5px;
 border-radius:5px;
 border:1px solid #ccc;
+box-sizing: border-box;
 }
 
-/* Style the select to look clickable like a button when readonly */
-select#serviceSelect[readonly] {
+/* FIXED DROPDOWN STYLES */
+.custom-select-wrapper {
+    position: relative;
     cursor: pointer;
-    background-color: #fff;
+    margin-top: 5px;
+}
+#serviceSelectDisplay {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background: #fff;
+    cursor: pointer;
+}
+.custom-arrow {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    font-size: 10px;
+    color: #666;
 }
 
 .submit-btn{
@@ -284,7 +303,6 @@ font-size:13px;
 opacity:0.9;
 }
 
-/* Service Picker Styling (Matches Pricing Modal) */
 .picker-option {
     display: block;
     background: #f9f9f9;
@@ -305,7 +323,6 @@ opacity:0.9;
     text-transform: uppercase;
 }
 
-/* Checkbox alignment */
 .agreement-label {
     display: flex;
     align-items: flex-start;
@@ -314,7 +331,7 @@ opacity:0.9;
     margin-top: 20px;
 }
 .agreement-label input {
-    width: auto;
+    width: auto !important;
     margin-top: 4px;
 }
 </style>
@@ -511,38 +528,11 @@ opacity:0.9;
 </label>
 
 <label>Select Service
-<select name="service" id="serviceSelect" required onclick="openServicePicker()" onmousedown="event.preventDefault()">
-<option value="">Select a service</option>
-<option value="Intro Academic Writing">Introduction to Academic Writing</option>
-<option value="Topic Specific">Topic Specific Sessions</option>
-<option value="Hourly Rate">Hourly Rate</option>
-<optgroup label="Secondary School Subjects">
-<option value="Secondary School Subject: English">English</option>
-<option value="Secondary School Subject: Oshikwanyama">Oshikwanyama</option>
-<option value="Secondary School Subject: Oshindonga">Oshindonga</option>
-<option value="Secondary School Subject: Accounting">Accounting</option>
-<option value="Secondary School Subject: Economics">Economics</option>
-<option value="Secondary School Subject: Business Studies">Business Studies</option>
-<option value="Secondary School Subject: Entrepreneurship">Entrepreneurship</option>
-<option value="Secondary School Subject: Mathematics">Mathematics</option>
-<option value="Secondary School Subject: Physics">Physics</option>
-<option value="Secondary School Subject: Biology">Biology</option>
-<option value="Secondary School Subject: History">History</option>
-<option value="Secondary School Subject: Geography">Geography</option>
-<option value="Secondary School Subject: Development Studies">Development Studies</option>
-<option value="Secondary School Subject: Others">Others</option>
-</optgroup>
-<optgroup label="Group Learning Sessions">
-<option value="Group Sessions: 2-5 People">2 – 5 People</option>
-<option value="Group Sessions: 6-14 People">6 – 14 People</option>
-<option value="Group Sessions: More than 14 People">More than 14 People</option>
-</optgroup>
-<option value="Public Speaking Support">Public Speaking Support</option>
-<option value="Draft Editing">Draft Editing</option>
-<option value="Proofreading">Proofreading</option>
-<option value="Referencing Assistance">Referencing Assistance</option>
-<option value="Modules: Others">Tertiary Level Modules</option>
-</select>
+<div class="custom-select-wrapper" onclick="openServicePicker()">
+    <input type="text" id="serviceSelectDisplay" placeholder="Select a service" readonly required>
+    <span class="custom-arrow">▼</span>
+</div>
+<input type="hidden" name="service" id="serviceSelectValue">
 </label>
 
 <div id="specContainer" style="display:none;">
@@ -613,48 +603,71 @@ const pricingDetails=document.getElementById("pricingDetails");
 const loadingModal=document.getElementById("loadingModal");
 const priceOptionField=document.getElementById("priceOptionField");
 
-const serviceSelect=document.getElementById("serviceSelect");
 const tutorSelect=document.getElementById("tutorSelect");
 const tutorLabel=document.getElementById("tutorLabel");
-
 const specContainer = document.getElementById("specContainer");
 const specLabel = document.getElementById("specLabel");
 const specInput = document.getElementById("specInput");
 
 const servicePickerModal = document.getElementById("servicePickerModal");
 const pickerOptionsList = document.getElementById("pickerOptionsList");
+const serviceDisplay = document.getElementById("serviceSelectDisplay");
+const serviceHiddenValue = document.getElementById("serviceSelectValue");
+
+// SOURCE OF TRUTH FOR OPTIONS
+const serviceOptionsData = [
+    { label: "Introduction to Academic Writing", value: "Intro Academic Writing" },
+    { label: "Topic Specific Sessions", value: "Topic Specific" },
+    { label: "Hourly Rate", value: "Hourly Rate" },
+    { group: "Secondary School Subjects" },
+    { label: "English", value: "Secondary School Subject: English" },
+    { label: "Oshikwanyama", value: "Secondary School Subject: Oshikwanyama" },
+    { label: "Oshindonga", value: "Secondary School Subject: Oshindonga" },
+    { label: "Accounting", value: "Secondary School Subject: Accounting" },
+    { label: "Economics", value: "Secondary School Subject: Economics" },
+    { label: "Business Studies", value: "Secondary School Subject: Business Studies" },
+    { label: "Entrepreneurship", value: "Secondary School Subject: Entrepreneurship" },
+    { label: "Mathematics", value: "Secondary School Subject: Mathematics" },
+    { label: "Physics", value: "Secondary School Subject: Physics" },
+    { label: "Biology", value: "Secondary School Subject: Biology" },
+    { label: "History", value: "Secondary School Subject: History" },
+    { label: "Geography", value: "Secondary School Subject: Geography" },
+    { label: "Development Studies", value: "Secondary School Subject: Development Studies" },
+    { label: "Others", value: "Secondary School Subject: Others" },
+    { group: "Group Learning Sessions" },
+    { label: "2 – 5 People", value: "Group Sessions: 2-5 People" },
+    { label: "6 – 14 People", value: "Group Sessions: 6-14 People" },
+    { label: "More than 14 People", value: "Group Sessions: More than 14 People" },
+    { group: "Other Services" },
+    { label: "Public Speaking Support", value: "Public Speaking Support" },
+    { label: "Draft Editing", value: "Draft Editing" },
+    { label: "Proofreading", value: "Proofreading" },
+    { label: "Referencing Assistance", value: "Referencing Assistance" },
+    { label: "Tertiary Level Modules", value: "Modules: Others" }
+];
 
 function openServicePicker() {
     pickerOptionsList.innerHTML = "";
-    const children = serviceSelect.children;
-
-    for (let child of children) {
-        if (child.tagName === "OPTGROUP") {
+    serviceOptionsData.forEach(opt => {
+        if (opt.group) {
             const groupTitle = document.createElement("div");
             groupTitle.className = "picker-group-title";
-            groupTitle.textContent = child.label;
+            groupTitle.textContent = opt.group;
             pickerOptionsList.appendChild(groupTitle);
-
-            Array.from(child.options).forEach(opt => {
-                createPickerOption(opt);
-            });
-        } else if (child.tagName === "OPTION" && child.value !== "") {
-            createPickerOption(child);
+        } else {
+            const div = document.createElement("div");
+            div.className = "picker-option";
+            div.textContent = opt.label;
+            div.onclick = () => {
+                serviceDisplay.value = opt.label;
+                serviceHiddenValue.value = opt.value;
+                handleServiceChange(opt.value);
+                closeServicePicker();
+            };
+            pickerOptionsList.appendChild(div);
         }
-    }
+    });
     servicePickerModal.style.display = "flex";
-}
-
-function createPickerOption(opt) {
-    const div = document.createElement("div");
-    div.className = "picker-option";
-    div.textContent = opt.textContent;
-    div.onclick = () => {
-        serviceSelect.value = opt.value;
-        serviceSelect.dispatchEvent(new Event("change"));
-        closeServicePicker();
-    };
-    pickerOptionsList.appendChild(div);
 }
 
 function closeServicePicker() {
@@ -665,7 +678,8 @@ function openForm(){
 modal.style.display="flex";
 tutorLabel.style.display="none";
 tutorSelect.innerHTML='<option value="">Select a tutor</option>';
-serviceSelect.value="";
+serviceDisplay.value="";
+serviceHiddenValue.value="";
 priceOptionField.value="";
 specContainer.style.display = "none";
 specInput.required = false;
@@ -680,38 +694,38 @@ let content = "";
 if(service==="writing"){
 pricingTitle.innerText="Academic Writing Tutorials";
 content = `
-<label class="pricing-option"><input type="radio" name="priceRadio" value="Intro Academic Writing" checked> Introduction to Academic Writing (4 sessions) – <b>N$150</b></label>
-<label class="pricing-option"><input type="radio" name="priceRadio" value="Topic Specific"> Topic Specific Sessions – <b>N$40</b></label>
-<label class="pricing-option"><input type="radio" name="priceRadio" value="Hourly Rate"> Hourly Rate – <b>N$40</b></label>
-<label class="pricing-option"><input type="radio" name="priceRadio" value="Modules: Others"> Tertiary Level Modules – <b>N$40</b></label>`;
+<label class="picker-option"><input type="radio" name="priceRadio" value="Intro Academic Writing" checked> Introduction to Academic Writing (4 sessions) – <b>N$150</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" value="Topic Specific"> Topic Specific Sessions – <b>N$40</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" value="Hourly Rate"> Hourly Rate – <b>N$40</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" value="Modules: Others"> Tertiary Level Modules – <b>N$40</b></label>`;
 }
 
 if(service==="secondary"){
 pricingTitle.innerText="Secondary School Subjects";
 const subjects = ["English", "Oshikwanyama", "Oshindonga", "Accounting", "Economics", "Business Studies", "Entrepreneurship", "Mathematics", "Physics", "Biology", "History", "Geography", "Development Studies"];
-content = subjects.map((s, i) => `<label class="pricing-option"><input type="radio" name="priceRadio" value="Secondary School Subject: ${s}" ${i===0?'checked':''}> ${s} – <b>N$40</b></label>`).join('');
-content += `<label class="pricing-option"><input type="radio" name="priceRadio" value="Secondary School Subject: Others"> Other Unlisted Subjects – <b>N$40</b></label>`;
+content = subjects.map((s, i) => `<label class="picker-option"><input type="radio" name="priceRadio" value="Secondary School Subject: ${s}" ${i===0?'checked':''}> ${s} – <b>N$40</b></label>`).join('');
+content += `<label class="picker-option"><input type="radio" name="priceRadio" value="Secondary School Subject: Others"> Other Unlisted Subjects – <b>N$40</b></label>`;
 }
 
 if(service==="group"){
 pricingTitle.innerText="Group Learning Sessions";
 content = `
-<label class="pricing-option"><input type="radio" name="priceRadio" value="Group Sessions: 2-5 People" checked> 2 – 5 People – <b>N$200</b></label>
-<label class="pricing-option"><input type="radio" name="priceRadio" value="Group Sessions: 6-14 People"> 6 – 14 People – <b>N$450</b></label>
-<label class="pricing-option"><input type="radio" name="priceRadio" value="Group Sessions: More than 14 People"> More than 14 People – <b>N$600</b></label>`;
+<label class="picker-option"><input type="radio" name="priceRadio" value="Group Sessions: 2-5 People" checked> 2 – 5 People – <b>N$200</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" value="Group Sessions: 6-14 People"> 6 – 14 People – <b>N$450</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" value="Group Sessions: More than 14 People"> More than 14 People – <b>N$600</b></label>`;
 }
 
 if(service==="assignment"){
 pricingTitle.innerText="Assignment Support";
 content = `
-<label class="pricing-option"><input type="radio" name="priceRadio" value="Draft Editing" checked> Draft Editing – <b>N$15 per page</b></label>
-<label class="pricing-option"><input type="radio" name="priceRadio" value="Proofreading"> Proofreading – <b>N$10 per page</b></label>
-<label class="pricing-option"><input type="radio" name="priceRadio" value="Referencing Assistance"> Referencing Assistance – <b>N$20</b></label>`;
+<label class="picker-option"><input type="radio" name="priceRadio" value="Draft Editing" checked> Draft Editing – <b>N$15 per page</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" value="Proofreading"> Proofreading – <b>N$10 per page</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" value="Referencing Assistance"> Referencing Assistance – <b>N$20</b></label>`;
 }
 
 if(service==="speaking"){
 pricingTitle.innerText="Public Speaking Support";
-content = `<label class="pricing-option"><input type="radio" name="priceRadio" value="Public Speaking Support" checked> Coaching Session – <b>N$40</b></label>`;
+content = `<label class="picker-option"><input type="radio" name="priceRadio" value="Public Speaking Support" checked> Coaching Session – <b>N$40</b></label>`;
 }
 
 pricingDetails.innerHTML = content;
@@ -726,9 +740,10 @@ pricingModal.style.display="none";
 openForm();
 
 setTimeout(()=>{
-serviceSelect.value = bookingValue;
-priceOptionField.value = bookingValue;
-serviceSelect.dispatchEvent(new Event("change"));
+const found = serviceOptionsData.find(d => d.value === bookingValue);
+serviceDisplay.value = found ? found.label : bookingValue;
+serviceHiddenValue.value = bookingValue;
+handleServiceChange(bookingValue);
 },100);
 }
 
@@ -741,10 +756,9 @@ tutorsData=await res.json();
 
 loadTutors();
 
-serviceSelect.addEventListener("change",function(){
-priceOptionField.value = this.value;
+function handleServiceChange(val){
+priceOptionField.value = val;
 
-const val = this.value;
 if(val === "Topic Specific" || val === "Hourly Rate" || val === "Secondary School Subject: Others" || val === "Modules: Others"){
     specContainer.style.display = "block";
     specInput.required = true;
@@ -788,7 +802,7 @@ tutorSelect.appendChild(opt);
 tutorLabel.style.display="none";
 tutorSelect.innerHTML='<option value="">Select a tutor</option>';
 }
-});
+}
 
 document.getElementById("studentRegisterForm").addEventListener("submit", function(e) {
     e.preventDefault();
