@@ -50,14 +50,16 @@ font-weight:bold;
 cursor:pointer;
 white-space: nowrap;
 font-size: 14px;
-margin: 0 15px; /* Spacing between links and separators */
+margin: 0 15px;
 }
 
+/* 1. Visible separator line between links */
 .nav-separator {
-border-left: 2px solid rgba(255,255,255,0.8); /* Increased opacity for visibility */
-height: 18px; /* Slightly taller for better definition */
+border-left: 2px solid white; 
+height: 16px;
 display: inline-block;
-margin: 0 5px;
+margin: 0;
+opacity: 0.8;
 }
 
 .main{
@@ -70,11 +72,12 @@ flex-direction: column;
 flex:1;
 border-radius: 8px;
 transition: max-width 0.4s ease;
+width: 90%; /* Ensure it takes up space on smaller screens */
 }
 
-/* Dashboard Expansion for Computer View - Doubled from 1400px */
-#dashboard.show-expanded {
-    max-width: 2800px; 
+/* 2. Extended border/width of the dashboard to double the original 1400px */
+.main.dashboard-active {
+    max-width: 2800px !important; 
 }
 
 h2{
@@ -113,14 +116,13 @@ color:inherit;
 display:block;
 }
 
-/* DASHBOARD SPECIFIC EXPANSION */
 .dashboard-section .service-card {
-    padding: 50px; /* Significantly larger padding for desktop */
+    padding: 50px;
     min-height: 250px; 
 }
 
 .scroll-container {
-    max-height: 400px; /* Taller scroll area for desktop */
+    max-height: 400px;
     overflow-y: auto;
     padding-right: 15px;
 }
@@ -700,7 +702,10 @@ Email: ${s.email}<br>Phone: ${s.phone}<br>Service: ${s.service}
 infoSection.style.display="none";
 contactSection.style.display="none";
 dashboard.style.display="flex";
-mainContainer.style.maxWidth = "2800px"; // Doubled expansion for dashboard
+
+// Apply the expanded dashboard width class to the main container
+mainContainer.classList.add("dashboard-active");
+
 dashboardLogout.style.display="block";
 setTimeout(()=>dashboard.classList.add("show"),50);
 loadingModal.style.display="none";
