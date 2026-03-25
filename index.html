@@ -174,7 +174,8 @@ box-shadow:0 4px 6px rgba(0,0,0,0.3);
 
 #modal,
 #pricingModal,
-#loadingModal{
+#loadingModal,
+#servicePickerModal{
 display:none;
 position:fixed;
 inset:0;
@@ -185,7 +186,8 @@ z-index:1000;
 }
 
 #modal form,
-#pricingContent{
+#pricingContent,
+#servicePickerContent{
 background:white;
 padding:25px;
 width:90%;
@@ -195,6 +197,9 @@ position:relative;
 max-height: 90vh;
 overflow-y: auto;
 }
+
+/* Higher Z-index for the picker so it stays on top of the form modal */
+#servicePickerModal { z-index: 1100; }
 
 .close{
 position:absolute;
@@ -274,8 +279,8 @@ font-size:13px;
 opacity:0.9;
 }
 
-/* Service Selection Style (Matches Pricing Modal) */
-.service-option-card {
+/* Service Picker Styling (Matches Pricing Modal) */
+.picker-option {
     display: block;
     background: #f9f9f9;
     padding: 12px;
@@ -283,22 +288,16 @@ opacity:0.9;
     border-radius: 5px;
     border: 1px solid #ddd;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: background 0.2s;
     font-weight: 500;
+}
+.picker-option:hover { background: #f0f0f0; border-color: #003366; }
+.picker-group-title {
+    font-weight: bold;
+    color: #003366;
+    margin: 15px 0 5px 0;
     font-size: 14px;
-}
-.service-option-card:hover { background: #f0f0f0; }
-.service-option-card.selected { 
-    border-color: #003366; 
-    background: #e6f0ff; 
-    box-shadow: inset 0 0 0 1px #003366;
-}
-
-#serviceSelectionContainer {
-    max-height: 300px;
-    overflow-y: auto;
-    margin-top: 10px;
-    padding-right: 5px;
+    text-transform: uppercase;
 }
 
 /* Checkbox alignment */
@@ -481,6 +480,15 @@ opacity:0.9;
 
 </div>
 
+<div id="servicePickerModal">
+    <div id="servicePickerContent">
+        <button type="button" class="close" onclick="closeServicePicker()">×</button>
+        <h3 style="margin-top:0;">Select a Service</h3>
+        <div id="pickerOptionsList">
+            </div>
+    </div>
+</div>
+
 <div id="modal">
 <form id="studentRegisterForm">
 <button type="button" class="close" onclick="closeForm()">×</button>
@@ -498,38 +506,40 @@ opacity:0.9;
 <input type="tel" name="cellphone_number" required>
 </label>
 
-<label>Select a Service</label>
-<div id="serviceSelectionContainer">
-    </div>
-
-<select name="service" id="serviceSelect" required style="display:none;">
-    <option value="">Select a service</option>
-    <option value="Intro Academic Writing">Introduction to Academic Writing</option>
-    <option value="Topic Specific">Topic Specific Sessions</option>
-    <option value="Hourly Rate">Hourly Rate</option>
-    <option value="Secondary School Subject: English">English</option>
-    <option value="Secondary School Subject: Oshikwanyama">Oshikwanyama</option>
-    <option value="Secondary School Subject: Oshindonga">Oshindonga</option>
-    <option value="Secondary School Subject: Accounting">Accounting</option>
-    <option value="Secondary School Subject: Economics">Economics</option>
-    <option value="Secondary School Subject: Business Studies">Business Studies</option>
-    <option value="Secondary School Subject: Entrepreneurship">Entrepreneurship</option>
-    <option value="Secondary School Subject: Mathematics">Mathematics</option>
-    <option value="Secondary School Subject: Physics">Physics</option>
-    <option value="Secondary School Subject: Biology">Biology</option>
-    <option value="Secondary School Subject: History">History</option>
-    <option value="Secondary School Subject: Geography">Geography</option>
-    <option value="Secondary School Subject: Development Studies">Development Studies</option>
-    <option value="Secondary School Subject: Others">Secondary School Subjects: Others</option>
-    <option value="Group Sessions: 2-5 People">Group Learning: 2 – 5 People</option>
-    <option value="Group Sessions: 6-14 People">Group Learning: 6 – 14 People</option>
-    <option value="Group Sessions: More than 14 People">Group Learning: More than 14 People</option>
-    <option value="Public Speaking Support">Public Speaking Support</option>
-    <option value="Draft Editing">Draft Editing</option>
-    <option value="Proofreading">Proofreading</option>
-    <option value="Referencing Assistance">Referencing Assistance</option>
-    <option value="Modules: Others">Tertiary Level Modules</option>
+<label>Select Service
+<select name="service" id="serviceSelect" required onmousedown="triggerServicePicker(event)">
+<option value="">Select a service</option>
+<option value="Intro Academic Writing">Introduction to Academic Writing</option>
+<option value="Topic Specific">Topic Specific Sessions</option>
+<option value="Hourly Rate">Hourly Rate</option>
+<optgroup label="Secondary School Subjects">
+<option value="Secondary School Subject: English">English</option>
+<option value="Secondary School Subject: Oshikwanyama">Oshikwanyama</option>
+<option value="Secondary School Subject: Oshindonga">Oshindonga</option>
+<option value="Secondary School Subject: Accounting">Accounting</option>
+<option value="Secondary School Subject: Economics">Economics</option>
+<option value="Secondary School Subject: Business Studies">Business Studies</option>
+<option value="Secondary School Subject: Entrepreneurship">Entrepreneurship</option>
+<option value="Secondary School Subject: Mathematics">Mathematics</option>
+<option value="Secondary School Subject: Physics">Physics</option>
+<option value="Secondary School Subject: Biology">Biology</option>
+<option value="Secondary School Subject: History">History</option>
+<option value="Secondary School Subject: Geography">Geography</option>
+<option value="Secondary School Subject: Development Studies">Development Studies</option>
+<option value="Secondary School Subject: Others">Others</option>
+</optgroup>
+<optgroup label="Group Learning Sessions">
+<option value="Group Sessions: 2-5 People">2 – 5 People</option>
+<option value="Group Sessions: 6-14 People">6 – 14 People</option>
+<option value="Group Sessions: More than 14 People">More than 14 People</option>
+</optgroup>
+<option value="Public Speaking Support">Public Speaking Support</option>
+<option value="Draft Editing">Draft Editing</option>
+<option value="Proofreading">Proofreading</option>
+<option value="Referencing Assistance">Referencing Assistance</option>
+<option value="Modules: Others">Tertiary Level Modules</option>
 </select>
+</label>
 
 <div id="specContainer" style="display:none;">
 <label id="specLabel">Specify Subject/Topic</label>
@@ -607,30 +617,52 @@ const specContainer = document.getElementById("specContainer");
 const specLabel = document.getElementById("specLabel");
 const specInput = document.getElementById("specInput");
 
-// INITIALIZE SERVICE CARDS
-function renderServiceCards() {
-    const container = document.getElementById("serviceSelectionContainer");
-    container.innerHTML = "";
-    const options = Array.from(serviceSelect.options).slice(1); // Skip first placeholder
+const servicePickerModal = document.getElementById("servicePickerModal");
+const pickerOptionsList = document.getElementById("pickerOptionsList");
 
-    options.forEach(opt => {
-        const card = document.createElement("div");
-        card.className = "service-option-card";
-        card.textContent = opt.textContent;
-        card.dataset.value = opt.value;
-        card.onclick = () => selectServiceFromCard(opt.value, card);
-        container.appendChild(card);
-    });
+// 1. Intercept the dropdown click
+function triggerServicePicker(e) {
+    e.preventDefault();
+    serviceSelect.blur(); // Prevent browser from opening standard dropdown
+    openServicePicker();
 }
 
-function selectServiceFromCard(val, cardElement) {
-    serviceSelect.value = val;
-    // Highlight UI
-    document.querySelectorAll('.service-option-card').forEach(c => c.classList.remove('selected'));
-    if(cardElement) cardElement.classList.add('selected');
-    
-    // Trigger existing logic
-    serviceSelect.dispatchEvent(new Event("change"));
+// 2. Build the pop-out content based on the dropdown options
+function openServicePicker() {
+    pickerOptionsList.innerHTML = "";
+    const children = serviceSelect.children;
+
+    for (let child of children) {
+        if (child.tagName === "OPTGROUP") {
+            const groupTitle = document.createElement("div");
+            groupTitle.className = "picker-group-title";
+            groupTitle.textContent = child.label;
+            pickerOptionsList.appendChild(groupTitle);
+
+            Array.from(child.options).forEach(opt => {
+                createPickerOption(opt);
+            });
+        } else if (child.tagName === "OPTION" && child.value !== "") {
+            createPickerOption(child);
+        }
+    }
+    servicePickerModal.style.display = "flex";
+}
+
+function createPickerOption(opt) {
+    const div = document.createElement("div");
+    div.className = "picker-option";
+    div.textContent = opt.textContent;
+    div.onclick = () => {
+        serviceSelect.value = opt.value;
+        serviceSelect.dispatchEvent(new Event("change"));
+        closeServicePicker();
+    };
+    pickerOptionsList.appendChild(div);
+}
+
+function closeServicePicker() {
+    servicePickerModal.style.display = "none";
 }
 
 function openForm(){ 
@@ -641,7 +673,6 @@ serviceSelect.value="";
 priceOptionField.value="";
 specContainer.style.display = "none";
 specInput.required = false;
-document.querySelectorAll('.service-option-card').forEach(c => c.classList.remove('selected'));
 }
 
 function closeForm(){ modal.style.display="none"; }
@@ -699,13 +730,10 @@ pricingModal.style.display="none";
 openForm();
 
 setTimeout(()=>{
-    const targetCard = Array.from(document.querySelectorAll('.service-option-card'))
-                           .find(c => c.dataset.value === bookingValue);
-    selectServiceFromCard(bookingValue, targetCard);
-    
-    // Ensure the card is scrolled into view in the registration modal
-    if(targetCard) targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-}, 150);
+serviceSelect.value = bookingValue;
+priceOptionField.value = bookingValue;
+serviceSelect.dispatchEvent(new Event("change"));
+},100);
 }
 
 let tutorsData={};
@@ -715,12 +743,12 @@ const res=await fetch(SCRIPT_URL+"?action=getTutors");
 tutorsData=await res.json();
 }
 
-renderServiceCards();
 loadTutors();
 
 serviceSelect.addEventListener("change",function(){
 priceOptionField.value = this.value;
 
+// LOGIC FOR SPECIFICATION FIELD
 const val = this.value;
 if(val === "Topic Specific" || val === "Hourly Rate" || val === "Secondary School Subject: Others" || val === "Modules: Others"){
     specContainer.style.display = "block";
@@ -732,6 +760,7 @@ if(val === "Topic Specific" || val === "Hourly Rate" || val === "Secondary Schoo
     specInput.value = "";
 }
 
+// LOGIC FOR TUTOR SELECTION
 let category="";
 let allowTutor=false;
 
@@ -774,11 +803,6 @@ document.getElementById("studentRegisterForm").addEventListener("submit", functi
         return;
     }
 
-    if (!serviceSelect.value) {
-        alert("Please select a service before submitting.");
-        return;
-    }
-
     loadingModal.style.display = "flex";
     document.getElementById("tokenField").value = generateToken();
 
@@ -810,7 +834,6 @@ document.getElementById("studentRegisterForm").addEventListener("submit", functi
             tutorLabel.style.display = "none";
             tutorSelect.innerHTML = '<option value="">Select a tutor</option>';
             specContainer.style.display = "none";
-            document.querySelectorAll('.service-option-card').forEach(c => c.classList.remove('selected'));
             closeForm();
         } else {
             alert("Submission failed. Please try again.");
@@ -825,6 +848,7 @@ document.getElementById("studentRegisterForm").addEventListener("submit", functi
 window.onclick=e=>{
 if(e.target===modal) closeForm();
 if(e.target===pricingModal) pricingModal.style.display="none";
+if(e.target===servicePickerModal) closeServicePicker();
 };
 </script>
 
