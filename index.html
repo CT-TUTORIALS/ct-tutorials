@@ -759,10 +759,14 @@ loadTutors();
 function handleServiceChange(val){
 priceOptionField.value = val;
 
-if(val === "Topic Specific" || val === "Hourly Rate" || val === "Secondary School Subject: Others" || val === "Modules: Others"){
+if(val === "Topic Specific" || val === "Hourly Rate" || val === "Secondary School Subject: Others" || val === "Modules: Others" || val.includes("Group Sessions")){
     specContainer.style.display = "block";
     specInput.required = true;
-    specLabel.innerText = (val.includes("Subject") || val === "Modules: Others") ? "Specify Subject" : "Specify Topic/Subject";
+    if(val.includes("Group Sessions")) {
+        specLabel.innerText = "Specify Topic/Subject/Module";
+    } else {
+        specLabel.innerText = (val.includes("Subject") || val === "Modules: Others") ? "Specify Subject" : "Specify Topic/Subject";
+    }
 } else {
     specContainer.style.display = "none";
     specInput.required = false;
