@@ -188,6 +188,13 @@ border-radius: 5px;
 background: white;
 }
 
+.message-card {
+    border-bottom: 1px solid #eee;
+    padding: 10px 0;
+}
+
+.message-card small { color: #666; }
+
 .resource-item {
     display: flex;
     align-items: center;
@@ -439,7 +446,7 @@ margin-bottom:15px;
 <div id="section-messages" class="dashboard-section">
 <h2>Messages</h2>
 <div class="service-card">
-    <div class="scroll-container">
+    <div id="messagesContainer" class="scroll-container">
         <p>Communication history with the administrative team will appear here.</p>
     </div>
 </div>
@@ -532,6 +539,7 @@ const mainContainer = document.getElementById("mainContainer");
 const dashboardLogout = document.getElementById("dashboardLogout");
 const studentsList = document.getElementById("studentsList");
 const supportInput = document.getElementById("supportInput");
+const messagesContainer = document.getElementById("messagesContainer");
 
 function openApply(){applyModal.style.display="flex"}
 function openCreate(){createModal.style.display="flex"}
@@ -628,7 +636,7 @@ password:createForm.password.value
 })
 const res=await fetch(SCRIPT_URL,{method:"POST",body:params})
 const d=await res.json()
-loadingModal.style.none="none"
+loadingModal.style.display="none"
 if(d.status==="account_created"){
 alert("Account created successfully. You can now log in.")
 createModal.style.display="none"
@@ -649,6 +657,7 @@ localStorage.setItem("tutorEmail", d.email);
 loginModal.style.display = "none";
 updateNav(true);
 await loadStudents(d.token);
+await loadMessages(d.token, d.email);
 }else{
 loadingModal.style.display="none"
 alert("Invalid login credentials.")
@@ -663,8 +672,10 @@ async function submitSupport(){
     const msg = supportInput.value.trim();
     if(!msg) return;
     loadingModal.style.display="flex";
+    const t = localStorage.getItem("tutorToken");
     const params = new URLSearchParams({
         type: "supportRequest",
+        token: t,
         email: localStorage.getItem("tutorEmail"),
         message: msg
     });
@@ -675,11 +686,28 @@ async function submitSupport(){
         if(d.status === "success"){
             alert("Your request has been logged. Admin will contact you soon.");
             supportInput.value = "";
+            loadMessages(t, localStorage.getItem("tutorEmail"));
         }
     } catch(err) {
         loadingModal.style.display="none";
         alert("Error sending support request.");
     }
+}
+
+async function loadMessages(token, email){
+    try {
+        const res = await fetch(`${SCRIPT_URL}?action=getTutorMessages&token=${token}&email=${encodeURIComponent(email)}`);
+        const data = await res.json();
+        if(data && Array.isArray(data)){
+            messagesContainer.innerHTML = data.map(m => `
+                <div class="message-card">
+                    <small>${new Date(m.Timestamp).toLocaleString()}</small><br>
+                    <strong>You:</strong> ${m.Message}<br>
+                    ${m.Reply ? `<strong>Admin:</strong> ${m.Reply}` : `<em>Status: ${m.Status}</em>`}
+                </div>
+            `).join("");
+        }
+    } catch(e){ console.log("Error loading messages"); }
 }
 
 async function loadStudents(token){
@@ -709,11 +737,13 @@ loadingModal.style.display="none";
 
 window.onload=()=>{
 const t=localStorage.getItem("tutorToken")
+const e=localStorage.getItem("tutorEmail")
 if(t){
 loadingModal.style.display="flex";
 document.getElementById('loadingText').innerText = "Resuming Session...";
 updateNav(true);
 loadStudents(t);
+loadMessages(t, e);
 } else {
 updateNav(false);
 }
