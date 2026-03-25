@@ -198,7 +198,6 @@ max-height: 90vh;
 overflow-y: auto;
 }
 
-/* Higher Z-index for the picker so it stays on top of the form modal */
 #servicePickerModal { z-index: 1100; }
 
 .close{
@@ -223,6 +222,12 @@ padding:10px;
 margin-top:5px;
 border-radius:5px;
 border:1px solid #ccc;
+}
+
+/* Style the select to look clickable like a button when readonly */
+select#serviceSelect[readonly] {
+    cursor: pointer;
+    background-color: #fff;
 }
 
 .submit-btn{
@@ -484,8 +489,7 @@ opacity:0.9;
     <div id="servicePickerContent">
         <button type="button" class="close" onclick="closeServicePicker()">×</button>
         <h3 style="margin-top:0;">Select a Service</h3>
-        <div id="pickerOptionsList">
-            </div>
+        <div id="pickerOptionsList"></div>
     </div>
 </div>
 
@@ -507,7 +511,7 @@ opacity:0.9;
 </label>
 
 <label>Select Service
-<select name="service" id="serviceSelect" required onmousedown="triggerServicePicker(event)">
+<select name="service" id="serviceSelect" required onclick="openServicePicker()" onmousedown="event.preventDefault()">
 <option value="">Select a service</option>
 <option value="Intro Academic Writing">Introduction to Academic Writing</option>
 <option value="Topic Specific">Topic Specific Sessions</option>
@@ -620,14 +624,6 @@ const specInput = document.getElementById("specInput");
 const servicePickerModal = document.getElementById("servicePickerModal");
 const pickerOptionsList = document.getElementById("pickerOptionsList");
 
-// 1. Intercept the dropdown click
-function triggerServicePicker(e) {
-    e.preventDefault();
-    serviceSelect.blur(); // Prevent browser from opening standard dropdown
-    openServicePicker();
-}
-
-// 2. Build the pop-out content based on the dropdown options
 function openServicePicker() {
     pickerOptionsList.innerHTML = "";
     const children = serviceSelect.children;
@@ -748,7 +744,6 @@ loadTutors();
 serviceSelect.addEventListener("change",function(){
 priceOptionField.value = this.value;
 
-// LOGIC FOR SPECIFICATION FIELD
 const val = this.value;
 if(val === "Topic Specific" || val === "Hourly Rate" || val === "Secondary School Subject: Others" || val === "Modules: Others"){
     specContainer.style.display = "block";
@@ -760,7 +755,6 @@ if(val === "Topic Specific" || val === "Hourly Rate" || val === "Secondary Schoo
     specInput.value = "";
 }
 
-// LOGIC FOR TUTOR SELECTION
 let category="";
 let allowTutor=false;
 
@@ -798,10 +792,7 @@ tutorSelect.innerHTML='<option value="">Select a tutor</option>';
 
 document.getElementById("studentRegisterForm").addEventListener("submit", function(e) {
     e.preventDefault();
-
-    if (this.company.value !== "") {
-        return;
-    }
+    if (this.company.value !== "") return;
 
     loadingModal.style.display = "flex";
     document.getElementById("tokenField").value = generateToken();
@@ -825,7 +816,6 @@ document.getElementById("studentRegisterForm").addEventListener("submit", functi
     .then(res => res.json())
     .then(res => {
         loadingModal.style.display = "none";
-
         if (res.status === "duplicate_detected") {
             alert("You have already submitted this request.");
         } else if (res.status === "success") {
