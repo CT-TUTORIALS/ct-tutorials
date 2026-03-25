@@ -54,9 +54,10 @@ margin: 0 15px; /* Spacing between links and separators */
 }
 
 .nav-separator {
-border-left: 2px solid rgba(255,255,255,0.5);
-height: 14px;
+border-left: 2px solid rgba(255,255,255,0.8); /* Increased opacity for visibility */
+height: 18px; /* Slightly taller for better definition */
 display: inline-block;
+margin: 0 5px;
 }
 
 .main{
@@ -71,9 +72,9 @@ border-radius: 8px;
 transition: max-width 0.4s ease;
 }
 
-/* Dashboard Expansion for Computer View */
+/* Dashboard Expansion for Computer View - Doubled from 1400px */
 #dashboard.show-expanded {
-    max-width: 1400px; /* Expands the width on desktop */
+    max-width: 2800px; 
 }
 
 h2{
@@ -699,7 +700,7 @@ Email: ${s.email}<br>Phone: ${s.phone}<br>Service: ${s.service}
 infoSection.style.display="none";
 contactSection.style.display="none";
 dashboard.style.display="flex";
-mainContainer.style.maxWidth = "1400px"; // Expand for dashboard
+mainContainer.style.maxWidth = "2800px"; // Doubled expansion for dashboard
 dashboardLogout.style.display="block";
 setTimeout(()=>dashboard.classList.add("show"),50);
 loadingModal.style.display="none";
