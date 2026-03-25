@@ -518,6 +518,8 @@ opacity:0.9;
 </select>
 </label>
 
+<input type="hidden" name="priceOption" id="priceOptionField">
+
 <label id="tutorLabel" style="display:none;">Select Tutor
 <select name="tutor" id="tutorSelect">
 <option value="">Select a tutor</option>
@@ -577,6 +579,7 @@ const pricingModal=document.getElementById("pricingModal");
 const pricingTitle=document.getElementById("pricingTitle");
 const pricingDetails=document.getElementById("pricingDetails");
 const loadingModal=document.getElementById("loadingModal");
+const priceOptionField=document.getElementById("priceOptionField");
 
 let selectedService="";
 const serviceSelect=document.getElementById("serviceSelect");
@@ -588,6 +591,7 @@ modal.style.display="flex";
 tutorLabel.style.display="none";
 tutorSelect.innerHTML='<option value="">Select a tutor</option>';
 serviceSelect.value="";
+priceOptionField.value="";
 }
 
 function closeForm(){ modal.style.display="none"; }
@@ -600,43 +604,43 @@ let content = "";
 if(service==="writing"){
 pricingTitle.innerText="Academic Writing Tutorials";
 content = `
-<label class="pricing-option"><input type="radio" name="priceOption" value="Intro Academic Writing" checked> Introduction to Academic Writing (4 sessions) – <b>N$150</b></label>
-<label class="pricing-option"><input type="radio" name="priceOption" value="Topic Specific"> Topic Specific Sessions – <b>N$40</b></label>
-<label class="pricing-option"><input type="radio" name="priceOption" value="Hourly Rate"> Hourly Rate – <b>N$40</b></label>`;
+<label class="pricing-option"><input type="radio" name="priceRadio" value="Intro Academic Writing" checked> Introduction to Academic Writing (4 sessions) – <b>N$150</b></label>
+<label class="pricing-option"><input type="radio" name="priceRadio" value="Topic Specific"> Topic Specific Sessions – <b>N$40</b></label>
+<label class="pricing-option"><input type="radio" name="priceRadio" value="Hourly Rate"> Hourly Rate – <b>N$40</b></label>`;
 }
 
 if(service==="secondary"){
 pricingTitle.innerText="Secondary School Subjects";
 const subjects = ["English", "Oshikwanyama", "Oshindonga", "Accounting", "Economics", "Business Studies", "Entrepreneurship", "Mathematics", "Physics", "Biology", "History", "Geography", "Development Studies"];
-content = subjects.map((s, i) => `<label class="pricing-option"><input type="radio" name="priceOption" value="Secondary School Subject: ${s}" ${i===0?'checked':''}> ${s} – <b>N$40</b></label>`).join('');
+content = subjects.map((s, i) => `<label class="pricing-option"><input type="radio" name="priceRadio" value="Secondary School Subject: ${s}" ${i===0?'checked':''}> ${s} – <b>N$40</b></label>`).join('');
 }
 
 if(service==="group"){
 pricingTitle.innerText="Group Learning Sessions";
 content = `
-<label class="pricing-option"><input type="radio" name="priceOption" value="Group Sessions: 2-5 People" checked> 2 – 5 People – <b>N$200</b></label>
-<label class="pricing-option"><input type="radio" name="priceOption" value="Group Sessions: 6-14 People"> 6 – 14 People – <b>N$450</b></label>
-<label class="pricing-option"><input type="radio" name="priceOption" value="Group Sessions: More than 14 People"> More than 14 People – <b>N$600</b></label>`;
+<label class="pricing-option"><input type="radio" name="priceRadio" value="Group Sessions: 2-5 People" checked> 2 – 5 People – <b>N$200</b></label>
+<label class="pricing-option"><input type="radio" name="priceRadio" value="Group Sessions: 6-14 People"> 6 – 14 People – <b>N$450</b></label>
+<label class="pricing-option"><input type="radio" name="priceRadio" value="Group Sessions: More than 14 People"> More than 14 People – <b>N$600</b></label>`;
 }
 
 if(service==="assignment"){
 pricingTitle.innerText="Assignment Support";
 content = `
-<label class="pricing-option"><input type="radio" name="priceOption" value="Draft Editing" checked> Draft Editing – <b>N$15 per page</b></label>
-<label class="pricing-option"><input type="radio" name="priceOption" value="Proofreading"> Proofreading – <b>N$10 per page</b></label>
-<label class="pricing-option"><input type="radio" name="priceOption" value="Referencing Assistance"> Referencing Assistance – <b>N$20</b></label>`;
+<label class="pricing-option"><input type="radio" name="priceRadio" value="Draft Editing" checked> Draft Editing – <b>N$15 per page</b></label>
+<label class="pricing-option"><input type="radio" name="priceRadio" value="Proofreading"> Proofreading – <b>N$10 per page</b></label>
+<label class="pricing-option"><input type="radio" name="priceRadio" value="Referencing Assistance"> Referencing Assistance – <b>N$20</b></label>`;
 }
 
 if(service==="speaking"){
 pricingTitle.innerText="Public Speaking Support";
-content = `<label class="pricing-option"><input type="radio" name="priceOption" value="Public Speaking Support" checked> Coaching Session – <b>N$40</b></label>`;
+content = `<label class="pricing-option"><input type="radio" name="priceRadio" value="Public Speaking Support" checked> Coaching Session – <b>N$40</b></label>`;
 }
 
 pricingDetails.innerHTML = content;
 }
 
 function bookService(){
-const selectedOption = document.querySelector('input[name="priceOption"]:checked');
+const selectedOption = document.querySelector('input[name="priceRadio"]:checked');
 if(!selectedOption) return;
 
 const bookingValue = selectedOption.value;
@@ -645,6 +649,7 @@ openForm();
 
 setTimeout(()=>{
 serviceSelect.value = bookingValue;
+priceOptionField.value = bookingValue; // Set the value for code.gs logic
 serviceSelect.dispatchEvent(new Event("change"));
 },100);
 }
@@ -659,6 +664,7 @@ tutorsData=await res.json();
 loadTutors();
 
 serviceSelect.addEventListener("change",function(){
+priceOptionField.value = this.value; // Keep both in sync if manually changed
 
 if(!this.value){
 tutorLabel.style.display="none";
@@ -726,7 +732,7 @@ document.getElementById("studentRegisterForm").addEventListener("submit", functi
         if (res.status === "duplicate_detected") {
             alert("You have already submitted this request.");
         } else if (res.status === "success") {
-            alert("Submitted Successfully");
+            alert("Submitted Successfully. An email notification has been sent to the admin.");
             this.reset();
             tutorLabel.style.display = "none";
             tutorSelect.innerHTML = '<option value="">Select a tutor</option>';
