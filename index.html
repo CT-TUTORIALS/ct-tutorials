@@ -694,7 +694,7 @@ pricingTitle.innerText="Academic Writing & Individual Tutorials";
 content = `
 <label class="picker-option"><input type="radio" name="priceRadio" value="Intro Academic Writing" checked> Introduction to Academic Writing (4 sessions) – <b>N$150</b></label>
 <label class="picker-option"><input type="radio" name="priceRadio" value="Secondary Subject"> Secondary School Subject (Topic Specific) – <b>N$35</b></label>
-<label class="picker-option"><input type="radio" name="priceRadio" value="Tertiary Module"> Tertiary Level Module (Topic Specific) – <b>N$40</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" value="Tertiary Level Module"> Tertiary Level Module (Topic Specific) – <b>N$40</b></label>
 <label class="picker-option"><input type="radio" name="priceRadio" value="Topic Specific"> General Topic Specific Session – <b>N$40</b></label>
 <label class="picker-option"><input type="radio" name="priceRadio" value="Hourly Rate"> Hourly Rate – <b>N$40</b></label>`;
 }
@@ -777,23 +777,34 @@ if(allowTutor && tutorsData[category]){
     tutorLabel.style.display="block";
     tutorSelect.innerHTML='<option value="">Select a tutor</option>';
     
+    // Normalization logic for broad filtering
     let rawSpec = specInput.value.trim().toLowerCase();
     let rawService = val.toLowerCase();
     
-    // Check if the input matches a known topic (to map it back to a parent subject/module)
+    // Step 1: Broad Keyword Identification
+    // Filters out filler words to find the core subject/topic
+    let fillerWords = ["introduction", "intro", "to", "of", "the", "basics", "advanced", "level", "session", "tutorial"];
+    let specKeywords = rawSpec.split(/\s+/).filter(word => word && !fillerWords.includes(word));
+    
+    // Step 2: Check for Topic Mapping (specific dictionary match)
     let parentSubjectFromTopic = topicMapping[rawSpec] || "";
     if (rawService === "intro academic writing") rawService = "academic writing";
 
     const filtered = tutorsData[category].filter(t => {
         let tutorSubjects = t.subjects.toLowerCase();
         
-        // Logical check: Match if...
-        // 1. The tutor offers the parent subject of the topic typed (e.g. tutor has "Economics" and student typed "Macroeconomics")
-        // 2. The tutor explicitly lists the raw manual input typed by the student
-        // 3. The tutor offers the general service category selected
-        return (parentSubjectFromTopic && tutorSubjects.includes(parentSubjectFromTopic)) || 
-               (rawSpec && tutorSubjects.includes(rawSpec)) || 
-               tutorSubjects.includes(rawService);
+        // Logical Match Criteria:
+        // A. Match via pre-defined dictionary mapping
+        let matchA = parentSubjectFromTopic && tutorSubjects.includes(parentSubjectFromTopic);
+        
+        // B. Match via broad keyword intersection (FUTURE PROOFING)
+        // If the tutor lists "Math" and student types "Discrete Math", they intersect on "Math"
+        let matchB = specKeywords.some(keyword => tutorSubjects.includes(keyword));
+        
+        // C. Match via broad category (e.g., "Academic Writing")
+        let matchC = tutorSubjects.includes(rawService);
+
+        return matchA || matchB || matchC;
     });
 
     if (filtered.length > 0) {
@@ -803,7 +814,7 @@ if(allowTutor && tutorsData[category]){
             tutorSelect.appendChild(opt);
         });
     } else {
-        tutorSelect.innerHTML = `<option value="">No tutors for "${parentSubjectFromTopic || rawSpec || rawService}"</option>`;
+        tutorSelect.innerHTML = `<option value="">No tutors for "${rawSpec || rawService}"</option>`;
     }
 } else {
     tutorLabel.style.display="none";
