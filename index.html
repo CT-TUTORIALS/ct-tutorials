@@ -777,20 +777,23 @@ if(allowTutor && tutorsData[category]){
     tutorLabel.style.display="block";
     tutorSelect.innerHTML='<option value="">Select a tutor</option>';
     
-    // 1. Get raw inputs
     let rawSpec = specInput.value.trim().toLowerCase();
     let rawService = val.toLowerCase();
     
-    // 2. Identify mapped keyword
-    let mappedKeyword = topicMapping[rawSpec] || "";
+    // Check if the input matches a known topic (to map it back to a parent subject/module)
+    let parentSubjectFromTopic = topicMapping[rawSpec] || "";
     if (rawService === "intro academic writing") rawService = "academic writing";
 
     const filtered = tutorsData[category].filter(t => {
-        let subjects = t.subjects.toLowerCase();
-        // 3. Match against Mapped, Raw Manual, or Service Data
-        return (mappedKeyword && subjects.includes(mappedKeyword)) || 
-               (rawSpec && subjects.includes(rawSpec)) || 
-               subjects.includes(rawService);
+        let tutorSubjects = t.subjects.toLowerCase();
+        
+        // Logical check: Match if...
+        // 1. The tutor offers the parent subject of the topic typed (e.g. tutor has "Economics" and student typed "Macroeconomics")
+        // 2. The tutor explicitly lists the raw manual input typed by the student
+        // 3. The tutor offers the general service category selected
+        return (parentSubjectFromTopic && tutorSubjects.includes(parentSubjectFromTopic)) || 
+               (rawSpec && tutorSubjects.includes(rawSpec)) || 
+               tutorSubjects.includes(rawService);
     });
 
     if (filtered.length > 0) {
@@ -800,7 +803,7 @@ if(allowTutor && tutorsData[category]){
             tutorSelect.appendChild(opt);
         });
     } else {
-        tutorSelect.innerHTML = `<option value="">No tutors for "${mappedKeyword || rawSpec || rawService}"</option>`;
+        tutorSelect.innerHTML = `<option value="">No tutors for "${parentSubjectFromTopic || rawSpec || rawService}"</option>`;
     }
 } else {
     tutorLabel.style.display="none";
