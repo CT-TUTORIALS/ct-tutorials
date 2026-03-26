@@ -780,24 +780,24 @@ function handleServiceChange(val){
         let specKeywords = rawSpec.split(/\s+/).filter(word => word && !fillerWords.includes(word));
         let parentSubjectFromTopic = topicMapping[rawSpec] || "";
 
-        // ✅ UNIFIED POOL: Merge ALL tutors into one searchable array
-        // This ensures tutors offering school subjects are available for group sessions
+        // ✅ AGGRESSIVE UNIFIED POOL: Flatten every possible key found in the tutorsData object
+        // This ensures school subject tutors are found even if "Group Sessions" is selected.
         let allTutors = [];
-        Object.keys(tutorsData).forEach(cat => {
-            if (Array.isArray(tutorsData[cat])) {
-                allTutors = allTutors.concat(tutorsData[cat]);
+        for (let key in tutorsData) {
+            if (Array.isArray(tutorsData[key])) {
+                allTutors = allTutors.concat(tutorsData[key]);
             }
-        });
+        }
         
-        // Remove duplicate tutors by name
+        // Remove duplicate tutors by name to keep list clean
         let uniqueTutors = allTutors.filter((t, index, self) =>
             index === self.findIndex((temp) => temp.name === t.name)
         );
 
         const filtered = uniqueTutors.filter(t => {
-            let tutorSubjects = t.subjects.toLowerCase();
+            let tutorSubjects = (t.subjects || "").toLowerCase();
             
-            // Logic: Does the tutor's subject list match the user's input or mapped topic?
+            // Core matching logic
             let matchA = parentSubjectFromTopic && tutorSubjects.includes(parentSubjectFromTopic);
             let matchB = specKeywords.some(keyword => tutorSubjects.includes(keyword));
             let matchC = tutorSubjects.includes(rawService) || (rawService.includes("writing") && tutorSubjects.includes("writing"));
@@ -813,7 +813,8 @@ function handleServiceChange(val){
                 tutorSelect.appendChild(opt);
             });
         } else {
-            tutorSelect.innerHTML = `<option value="">No tutors for "${rawSpec || "this topic"}"</option>`;
+            // Updated feedback message
+            tutorSelect.innerHTML = `<option value="">No tutors found for "${rawSpec || "this subject"}"</option>`;
         }
     } else {
         tutorLabel.style.display="none";
