@@ -761,7 +761,7 @@ specInput.addEventListener("input", function() {
     handleServiceChange(serviceHiddenValue.value);
 });
 
-/* ✅ ALTERED: Filter tutors based on exact subject/module match */
+/* ✅ REFINED: Filter tutors based on exact subject/module match using new object format */
 function handleServiceChange(val){
 priceOptionField.value = val;
 
@@ -803,32 +803,26 @@ if(allowTutor && tutorsData[category]){
 tutorLabel.style.display="block";
 tutorSelect.innerHTML='<option value="">Select a tutor</option>';
 
-// Determine what keyword to look for
-let keyword = val.toLowerCase();
-if(specInput.value.trim() !== "") {
-    keyword = specInput.value.trim().toLowerCase();
+// Determine the keyword to match against the tutor's subjects
+let keyword = (specInput.value.trim() !== "") ? specInput.value.trim().toLowerCase() : 
+              (val.includes(": ")) ? val.split(": ").pop().toLowerCase() : val.toLowerCase();
+
+// Filter the tutors based on the keyword within their 'subjects' string
+const filteredTutors = tutorsData[category].filter(tutor => {
+    // tutor.subjects is the raw string from the Spreadsheet
+    return tutor.subjects.includes(keyword);
+});
+
+if (filteredTutors.length > 0) {
+    filteredTutors.forEach(t => {
+        let opt = document.createElement("option");
+        opt.value = t.name; 
+        opt.textContent = t.name;
+        tutorSelect.appendChild(opt);
+    });
 } else {
-    // If it's a secondary subject like "Secondary School Subject: English", just look for "English"
-    if(keyword.includes(": ")) keyword = keyword.split(": ").pop();
+    tutorSelect.innerHTML = '<option value="">No tutors available for this subject</option>';
 }
-
-const filtered = tutorsData[category].filter(t => {
-    // We expect the tutor response from code.gs to have names as strings.
-    // However, if we want exact matching, code.gs should ideally return objects with subject info.
-    // For now, this logic will look for the specific keyword within the tutor's name/entry if tutorsData[category]
-    // is just a list of names, this logic assumes tutorsData[category] was built based on backend filtering.
-    return true; // The backend getTutors() already filters by broad categories.
-});
-
-// Implementation Note: To achieve the user's "Exact match" requirement, 
-// the backend code.gs provided previously already handles filtering tutors into tutors.writing, tutors.secondary, etc.
-// The following block populates the dropdown:
-tutorsData[category].forEach(t=>{
-    let opt=document.createElement("option");
-    opt.value=t;
-    opt.textContent=t;
-    tutorSelect.appendChild(opt);
-});
 
 }else{
 tutorLabel.style.display="none";
