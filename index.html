@@ -25,7 +25,7 @@ color:#333;
 line-height:1.6;
 }
 
-/* PLAIN TEXT HEADER WITH INCREASED HEIGHT AND CENTERING */
+/* ✅ UPDATED: RESPONSIVE HEADER LOGIC */
 .top-bar{
 position:fixed;
 top:0;
@@ -33,20 +33,20 @@ left:0;
 width:100%;
 background:#003366; 
 z-index:1000;
-height: 300px; 
+min-height: 120px; 
 display: flex;
 flex-direction: column;
 align-items: center;
 justify-content: center;
 color: white;
 text-align: center;
-padding: 0 15px;
+padding: 20px 15px;
 box-sizing: border-box;
 }
 
 .header-title h1 {
-margin: 40px 0 0 0;
-font-size: 48px; 
+margin: 10px 0 0 0;
+font-size: clamp(28px, 6vw, 48px); 
 letter-spacing: normal;
 font-weight: bold;
 text-transform: none;
@@ -55,7 +55,7 @@ text-transform: none;
 .header-title p {
 margin: 5px 0 0 0;
 font-family: "Brush Script MT", "Cursive", sans-serif; 
-font-size: 28px; 
+font-size: clamp(18px, 4vw, 28px); 
 font-weight: normal; 
 opacity: 0.95;
 }
@@ -67,7 +67,7 @@ justify-content:center;
 align-items: center;
 gap:15px;
 padding:12px 10px;
-margin-top: 15px; 
+margin-top: 10px; 
 width: 100%;
 }
 
@@ -86,26 +86,32 @@ height: 14px;
 margin: 0;
 }
 
-/* CONTENT SPACING ADJUSTED TO PREVENT CROPPING */
+/* ✅ UPDATED: CONTENT SPACING */
 .main-content{
 max-width:1100px;
 margin:auto;
-padding:50px 40px;
-margin-top: 350px; 
+padding:40px;
+margin-top: 250px; 
+}
+
+/* ✅ NEW: LANDSCAPE/ROTATED FIX */
+@media (max-height: 450px) and (orientation: landscape) {
+.top-bar { padding: 8px 15px; min-height: auto; }
+.header-title h1 { font-size: 22px; margin-top: 0; }
+.header-title p { display: none; }
+.top-bar nav { margin-top: 5px; gap: 8px; }
+.main-content { margin-top: 120px !important; }
 }
 
 @media(max-width:768px){
-.main-content{padding:30px 20px; margin-top: 310px;}
-.top-bar { height: 280px; }
-.header-title h1 { font-size: 32px; margin-top: 30px; }
-.header-title p { font-size: 22px; }
+.main-content{padding:30px 20px; margin-top: 220px;}
 .nav-separator { display: none; }
 .top-bar nav { gap: 10px; }
 }
 
 section{
 margin-bottom:60px;
-scroll-margin-top:310px; 
+scroll-margin-top:250px; 
 }
 
 h2{
@@ -756,12 +762,12 @@ tutorsData=await res.json();
 
 loadTutors();
 
-/* ✅ FIXED: Listener triggers re-filtering when specification is typed */
+/* ✅ Listener triggers re-filtering when specification is typed */
 specInput.addEventListener("input", function() {
     handleServiceChange(serviceHiddenValue.value);
 });
 
-/* ✅ UPDATED: Filtering caters for standard services, "Others" specifications, and exact matches */
+/* ✅ Filtering caters for standard services, "Others" specifications, and exact matches */
 function handleServiceChange(val){
 priceOptionField.value = val;
 
@@ -803,15 +809,14 @@ if(allowTutor && tutorsData[category]){
 tutorLabel.style.display="block";
 tutorSelect.innerHTML='<option value="">Select a tutor</option>';
 
-/* ✅ FIX: Capture the correct keyword from either the 'Others' input or the service name itself */
+/* Capture the correct keyword from either the 'Others' input or the service name itself */
 let keyword = (specInput.value.trim() !== "") ? specInput.value.trim().toLowerCase() : 
               (val.includes(": ")) ? val.split(": ").pop().toLowerCase() : val.toLowerCase();
 
-/* ✅ FIX: Ensure keyword matches common spreadsheet labels like "Introduction to Academic Writing" */
+/* Ensure keyword matches common spreadsheet labels like "Introduction to Academic Writing" */
 if (keyword === "intro academic writing") keyword = "academic writing";
 
 const filteredTutors = tutorsData[category].filter(tutor => {
-    // tutor.subjects is the string from your Spreadsheet
     return tutor.subjects.toLowerCase().includes(keyword);
 });
 
