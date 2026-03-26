@@ -768,11 +768,7 @@ function handleServiceChange(val){
         specInput.required = false;
     }
 
-    let requiresTutor = false;
-    // We check for tutors on all services except basic assignment editing/proofreading
-    if(val.includes("Writing") || val==="Topic Specific" || val==="Hourly Rate" || val === "Tertiary Module" || val === "Secondary Subject" || val.includes("Group Sessions") || val==="Public Speaking Support"){
-        requiresTutor = true;
-    }
+    let requiresTutor = (val !== "Draft Editing" && val !== "Proofreading" && val !== "Referencing Assistance");
 
     if(requiresTutor && tutorsData){
         tutorLabel.style.display="block";
@@ -784,23 +780,24 @@ function handleServiceChange(val){
         let specKeywords = rawSpec.split(/\s+/).filter(word => word && !fillerWords.includes(word));
         let parentSubjectFromTopic = topicMapping[rawSpec] || "";
 
-        // ✅ CONSOLIDATED POOL: Merging 'writing' and 'group' tutors into one search pool
-        let searchPool = [...(tutorsData["writing"] || []), ...(tutorsData["group"] || [])];
+        // ✅ UNIFIED POOL: Merge ALL tutors into one searchable array
+        // This ensures tutors offering school subjects are available for group sessions
+        let allTutors = [];
+        Object.keys(tutorsData).forEach(cat => {
+            if (Array.isArray(tutorsData[cat])) {
+                allTutors = allTutors.concat(tutorsData[cat]);
+            }
+        });
         
-        // Remove duplicates (by name) just in case a tutor is listed in both
-        searchPool = searchPool.filter((t, index, self) =>
+        // Remove duplicate tutors by name
+        let uniqueTutors = allTutors.filter((t, index, self) =>
             index === self.findIndex((temp) => temp.name === t.name)
         );
 
-        const filtered = searchPool.filter(t => {
+        const filtered = uniqueTutors.filter(t => {
             let tutorSubjects = t.subjects.toLowerCase();
             
-            // Public Speaking logic
-            if(val === "Public Speaking Support") {
-                return (tutorSubjects.includes("speaking") || tutorSubjects.includes("coach") || tutorSubjects.includes("presentation"));
-            }
-
-            // Global Subject Matching
+            // Logic: Does the tutor's subject list match the user's input or mapped topic?
             let matchA = parentSubjectFromTopic && tutorSubjects.includes(parentSubjectFromTopic);
             let matchB = specKeywords.some(keyword => tutorSubjects.includes(keyword));
             let matchC = tutorSubjects.includes(rawService) || (rawService.includes("writing") && tutorSubjects.includes("writing"));
@@ -816,7 +813,7 @@ function handleServiceChange(val){
                 tutorSelect.appendChild(opt);
             });
         } else {
-            tutorSelect.innerHTML = `<option value="">No tutors for "${rawSpec || val}"</option>`;
+            tutorSelect.innerHTML = `<option value="">No tutors for "${rawSpec || "this topic"}"</option>`;
         }
     } else {
         tutorLabel.style.display="none";
