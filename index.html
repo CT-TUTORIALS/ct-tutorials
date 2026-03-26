@@ -756,12 +756,12 @@ tutorsData=await res.json();
 
 loadTutors();
 
-/* ✅ ADDED: Listener to re-filter tutors when specification is typed */
+/* ✅ FIXED: Listener triggers re-filtering when specification is typed */
 specInput.addEventListener("input", function() {
     handleServiceChange(serviceHiddenValue.value);
 });
 
-/* ✅ REFINED: Filter tutors based on exact subject/module match using new object format */
+/* ✅ UPDATED: Filtering caters for standard services, "Others" specifications, and exact matches */
 function handleServiceChange(val){
 priceOptionField.value = val;
 
@@ -803,14 +803,16 @@ if(allowTutor && tutorsData[category]){
 tutorLabel.style.display="block";
 tutorSelect.innerHTML='<option value="">Select a tutor</option>';
 
-// Determine the keyword to match against the tutor's subjects
+/* ✅ FIX: Capture the correct keyword from either the 'Others' input or the service name itself */
 let keyword = (specInput.value.trim() !== "") ? specInput.value.trim().toLowerCase() : 
               (val.includes(": ")) ? val.split(": ").pop().toLowerCase() : val.toLowerCase();
 
-// Filter the tutors based on the keyword within their 'subjects' string
+/* ✅ FIX: Ensure keyword matches common spreadsheet labels like "Introduction to Academic Writing" */
+if (keyword === "intro academic writing") keyword = "academic writing";
+
 const filteredTutors = tutorsData[category].filter(tutor => {
-    // tutor.subjects is the raw string from the Spreadsheet
-    return tutor.subjects.includes(keyword);
+    // tutor.subjects is the string from your Spreadsheet
+    return tutor.subjects.toLowerCase().includes(keyword);
 });
 
 if (filteredTutors.length > 0) {
@@ -821,7 +823,7 @@ if (filteredTutors.length > 0) {
         tutorSelect.appendChild(opt);
     });
 } else {
-    tutorSelect.innerHTML = '<option value="">No tutors available for this subject</option>';
+    tutorSelect.innerHTML = '<option value="">No tutors available for this selection</option>';
 }
 
 }else{
