@@ -231,7 +231,7 @@ border:1px solid #ccc;
 box-sizing: border-box;
 }
 
-/* FIXED DROPDOWN STYLES */
+/* DROPDOWN STYLES */
 .custom-select-wrapper {
     position: relative;
     cursor: pointer;
@@ -384,14 +384,8 @@ opacity:0.9;
 
 <div class="service-card">
 <h3>Academic Writing & Individual Tutorials</h3>
-<p>Structured sessions covering academic writing principles, essay development, and research techniques.</p>
+<p>Structured sessions covering academic writing principles, essay development, secondary school subjects, and tertiary modules.</p>
 <span class="service-link" onclick="openPricing('writing')">View Pricing</span>
-</div>
-
-<div class="service-card">
-<h3>Secondary School Subjects</h3>
-<p>Academic support sessions focused on secondary school level subjects to improve understanding and performance.</p>
-<span class="service-link" onclick="openPricing('secondary')">View Pricing</span>
 </div>
 
 <div class="service-card">
@@ -620,26 +614,13 @@ const pickerOptionsList = document.getElementById("pickerOptionsList");
 const serviceDisplay = document.getElementById("serviceSelectDisplay");
 const serviceHiddenValue = document.getElementById("serviceSelectValue");
 
-// SOURCE OF TRUTH FOR OPTIONS
 const serviceOptionsData = [
     { label: "Introduction to Academic Writing", value: "Intro Academic Writing" },
-    { label: "Topic Specific Sessions", value: "Topic Specific" },
+    { group: "Topic Specific Sessions" },
+    { label: "Secondary School Subject", value: "Secondary Subject" },
+    { label: "Tertiary Level Module", value: "Tertiary Module" },
+    { label: "General Topic Specific Session", value: "Topic Specific" },
     { label: "Hourly Rate", value: "Hourly Rate" },
-    { group: "Secondary School Subjects" },
-    { label: "English", value: "Secondary School Subject: English" },
-    { label: "Oshikwanyama", value: "Secondary School Subject: Oshikwanyama" },
-    { label: "Oshindonga", value: "Secondary School Subject: Oshindonga" },
-    { label: "Accounting", value: "Secondary School Subject: Accounting" },
-    { label: "Economics", value: "Secondary School Subject: Economics" },
-    { label: "Business Studies", value: "Secondary School Subject: Business Studies" },
-    { label: "Entrepreneurship", value: "Secondary School Subject: Entrepreneurship" },
-    { label: "Mathematics", value: "Secondary School Subject: Mathematics" },
-    { label: "Physics", value: "Secondary School Subject: Physics" },
-    { label: "Biology", value: "Secondary School Subject: Biology" },
-    { label: "History", value: "Secondary School Subject: History" },
-    { label: "Geography", value: "Secondary School Subject: Geography" },
-    { label: "Development Studies", value: "Secondary School Subject: Development Studies" },
-    { label: "Others", value: "Secondary School Subject: Others" },
     { group: "Group Learning Sessions" },
     { label: "2 – 5 People", value: "Group Sessions: 2-5 People" },
     { label: "6 – 14 People", value: "Group Sessions: 6-14 People" },
@@ -648,41 +629,20 @@ const serviceOptionsData = [
     { label: "Public Speaking Support", value: "Public Speaking Support" },
     { label: "Draft Editing", value: "Draft Editing" },
     { label: "Proofreading", value: "Proofreading" },
-    { label: "Referencing Assistance", value: "Referencing Assistance" },
-    { label: "Tertiary Level Modules", value: "Modules: Others" }
+    { label: "Referencing Assistance", value: "Referencing Assistance" }
 ];
 
-/* ✅ UPDATED RELATIVITY MAPPING: Specific to Namibian Academic Standards (UNAM, NUST, IUM) */
 const topicMapping = {
-    // Academic Writing & Referencing
     "apa": "academic writing", "apa 7th": "academic writing", "referencing": "academic writing",
     "citations": "academic writing", "plagiarism": "academic writing", "thesis": "academic writing",
     "dissertation": "academic writing", "research proposal": "academic writing", "literature review": "academic writing",
     "eap": "academic writing", "academic integrity": "academic writing", "essay structure": "academic writing",
-
-    // Mathematics
-    "algebra": "mathematics", "geometry": "mathematics", "calculus": "mathematics", "trigonometry": "mathematics", "statistics": "mathematics", "probability": "mathematics", "differentiation": "mathematics", "integration": "mathematics", "matrices": "mathematics", "vectors": "mathematics",
-    
-    // Physics
-    "mechanics": "physics", "electricity": "physics", "magnetism": "physics", "waves": "physics", "atomic physics": "physics", "thermal physics": "physics", "kinematics": "physics", "dynamics": "physics", "circuits": "physics",
-    
-    // Biology
-    "genetics": "biology", "ecology": "biology", "human biology": "biology", "cell biology": "biology", "photosynthesis": "biology", "respiration": "biology", "evolution": "biology", "anatomy": "biology", "physiology": "biology", "reproduction": "biology",
-    
-    // Economics
-    "microeconomics": "economics", "macroeconomics": "economics", "supply and demand": "economics", "market structures": "economics", "inflation": "economics", "monetary policy": "economics", "fiscal policy": "economics", "international trade": "economics",
-    
-    // Accounting
-    "financial accounting": "accounting", "cost accounting": "accounting", "ledger": "accounting", "balance sheet": "accounting", "auditing": "accounting", "taxation": "accounting", "bookkeeping": "accounting", "bank reconciliation": "accounting",
-    
-    // Business Studies & Entrepreneurship
-    "marketing": "business studies", "human resources": "business studies", "finance": "business studies", "business plan": "entrepreneurship", "startup": "entrepreneurship", "management": "business studies", "operations": "business studies",
-    
-    // Geography & Development Studies
-    "climatology": "geography", "geomorphology": "geography", "population": "geography", "urbanization": "geography", "poverty": "development studies", "sustainable development": "development studies", "globalization": "development studies",
-    
-    // Languages & General
-    "poetry": "english", "prose": "english", "grammar": "english", "literature": "english", "creative writing": "english", "phonetics": "english", "shorthand": "english", "history of namibia": "history"
+    "algebra": "mathematics", "geometry": "mathematics", "calculus": "mathematics", "trigonometry": "mathematics", "statistics": "mathematics",
+    "mechanics": "physics", "electricity": "physics", "magnetism": "physics", "waves": "physics",
+    "genetics": "biology", "ecology": "biology", "human biology": "biology", "cell biology": "biology",
+    "microeconomics": "economics", "macroeconomics": "economics",
+    "financial accounting": "accounting", "cost accounting": "accounting",
+    "marketing": "business studies", "human resources": "business studies", "finance": "business studies"
 };
 
 function openServicePicker() {
@@ -709,9 +669,7 @@ function openServicePicker() {
     servicePickerModal.style.display = "flex";
 }
 
-function closeServicePicker() {
-    servicePickerModal.style.display = "none";
-}
+function closeServicePicker() { servicePickerModal.style.display = "none"; }
 
 function openForm(){ 
 modal.style.display="flex";
@@ -731,19 +689,13 @@ pricingModal.style.display="flex";
 let content = "";
 
 if(service==="writing"){
-pricingTitle.innerText="Academic Writing Tutorials";
+pricingTitle.innerText="Academic Writing & Individual Tutorials";
 content = `
 <label class="picker-option"><input type="radio" name="priceRadio" value="Intro Academic Writing" checked> Introduction to Academic Writing (4 sessions) – <b>N$150</b></label>
-<label class="picker-option"><input type="radio" name="priceRadio" value="Topic Specific"> Topic Specific Sessions – <b>N$40</b></label>
-<label class="picker-option"><input type="radio" name="priceRadio" value="Hourly Rate"> Hourly Rate – <b>N$40</b></label>
-<label class="picker-option"><input type="radio" name="priceRadio" value="Modules: Others"> Tertiary Level Modules – <b>N$40</b></label>`;
-}
-
-if(service==="secondary"){
-pricingTitle.innerText="Secondary School Subjects";
-const subjects = ["English", "Oshikwanyama", "Oshindonga", "Accounting", "Economics", "Business Studies", "Entrepreneurship", "Mathematics", "Physics", "Biology", "History", "Geography", "Development Studies"];
-content = subjects.map((s, i) => `<label class="picker-option"><input type="radio" name="priceRadio" value="Secondary School Subject: ${s}" ${i===0?'checked':''}> ${s} – <b>N$40</b></label>`).join('');
-content += `<label class="picker-option"><input type="radio" name="priceRadio" value="Secondary School Subject: Others"> Other Unlisted Subjects – <b>N$40</b></label>`;
+<label class="picker-option"><input type="radio" name="priceRadio" value="Secondary Subject"> Secondary School Subject (Topic Specific) – <b>N$35</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" value="Tertiary Module"> Tertiary Level Module (Topic Specific) – <b>N$40</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" value="Topic Specific"> General Topic Specific Session – <b>N$40</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" value="Hourly Rate"> Hourly Rate – <b>N$40</b></label>`;
 }
 
 if(service==="group"){
@@ -773,11 +725,9 @@ pricingDetails.innerHTML = content;
 function bookService(){
 const selectedOption = document.querySelector('input[name="priceRadio"]:checked');
 if(!selectedOption) return;
-
 const bookingValue = selectedOption.value;
 pricingModal.style.display="none";
 openForm();
-
 setTimeout(()=>{
 const found = serviceOptionsData.find(d => d.value === bookingValue);
 serviceDisplay.value = found ? found.label : bookingValue;
@@ -787,146 +737,88 @@ handleServiceChange(bookingValue);
 }
 
 let tutorsData={};
-
 async function loadTutors(){
 const res=await fetch(SCRIPT_URL+"?action=getTutors");
 tutorsData=await res.json();
 }
-
 loadTutors();
 
-/* ✅ Listener triggers re-filtering when specification is typed */
-specInput.addEventListener("input", function() {
-    handleServiceChange(serviceHiddenValue.value);
-});
+specInput.addEventListener("input", () => handleServiceChange(serviceHiddenValue.value));
 
-/* ✅ ENHANCED FILTERING: Now handles Referencing and Academic Writing specific to Namibia */
 function handleServiceChange(val){
 priceOptionField.value = val;
 
-if(val === "Topic Specific" || val === "Hourly Rate" || val === "Secondary School Subject: Others" || val === "Modules: Others" || val.includes("Group Sessions")){
+const isSpecNeeded = val === "Topic Specific" || val === "Hourly Rate" || val === "Secondary Subject" || val === "Tertiary Module" || val.includes("Group Sessions");
+
+if(isSpecNeeded){
     specContainer.style.display = "block";
     specInput.required = true;
-    if(val.includes("Group Sessions")) {
-        specLabel.innerText = "Specify Topic/Subject/Module";
-    } else if(val === "Modules: Others") {
-        specLabel.innerText = "Specify Tertiary Level Module";
-    } else {
-        specLabel.innerText = (val.includes("Subject") || val === "Modules: Others") ? "Specify Subject" : "Specify Topic/Subject";
-    }
+    if(val === "Tertiary Module") specLabel.innerText = "Specify Tertiary Level Module";
+    else if(val.includes("Group")) specLabel.innerText = "Specify Topic/Subject/Module";
+    else specLabel.innerText = "Specify Subject/Topic";
 } else {
     specContainer.style.display = "none";
     specInput.required = false;
     specInput.value = "";
 }
 
-let category="";
-let allowTutor=false;
+let category = "";
+let allowTutor = false;
 
-// Updated Category Mapping to capture Editing/Referencing as Academic Writing tutors
-if(val.includes("Writing") || val==="Topic Specific" || val==="Hourly Rate" || val === "Modules: Others" || val.includes("Editing") || val.includes("Proofreading") || val.includes("Referencing")){
-category="writing";
-allowTutor=true;
-}
-else if(val.includes("Group Sessions")){
-category="group";
-allowTutor=true;
-}
-else if(val==="Public Speaking Support"){
-category="speaking";
-allowTutor=true;
-}
-else if(val.includes("Secondary School Subject")){
-category="secondary";
-allowTutor=true;
+if(val.includes("Writing") || val==="Topic Specific" || val==="Hourly Rate" || val === "Tertiary Module" || val === "Secondary Subject" || val.includes("Editing") || val.includes("Proofreading") || val.includes("Referencing")){
+    category="writing"; allowTutor=true;
+} else if(val.includes("Group Sessions")){
+    category="group"; allowTutor=true;
+} else if(val==="Public Speaking Support"){
+    category="speaking"; allowTutor=true;
 }
 
 if(allowTutor && tutorsData[category]){
-tutorLabel.style.display="block";
-tutorSelect.innerHTML='<option value="">Select a tutor</option>';
+    tutorLabel.style.display="block";
+    tutorSelect.innerHTML='<option value="">Select a tutor</option>';
+    let rawInput = (specInput.value.trim() !== "") ? specInput.value.trim().toLowerCase() : val.toLowerCase();
+    let keyword = topicMapping[rawInput] || rawInput;
+    if (keyword === "intro academic writing") keyword = "academic writing";
 
-/* Capture raw input */
-let rawInput = (specInput.value.trim() !== "") ? specInput.value.trim().toLowerCase() : 
-              (val.includes(": ")) ? val.split(": ").pop().toLowerCase() : val.toLowerCase();
-
-/* ✅ APPLY RELATIVITY: Translates input (e.g., "APA") to the subject tutors possess (e.g., "Academic Writing") */
-let keyword = topicMapping[rawInput] || rawInput;
-
-/* Ensure keyword matches common spreadsheet labels like "Introduction to Academic Writing" */
-if (keyword === "intro academic writing") keyword = "academic writing";
-
-const filteredTutors = tutorsData[category].filter(tutor => {
-    return tutor.subjects.toLowerCase().includes(keyword);
-});
-
-if (filteredTutors.length > 0) {
-    filteredTutors.forEach(t => {
-        let opt = document.createElement("option");
-        opt.value = t.name; 
-        opt.textContent = t.name;
-        tutorSelect.appendChild(opt);
-    });
+    const filtered = tutorsData[category].filter(t => t.subjects.toLowerCase().includes(keyword));
+    if (filtered.length > 0) {
+        filtered.forEach(t => {
+            let opt = document.createElement("option");
+            opt.value = t.name; opt.textContent = t.name;
+            tutorSelect.appendChild(opt);
+        });
+    } else {
+        tutorSelect.innerHTML = `<option value="">No tutors available for "${keyword}"</option>`;
+    }
 } else {
-    tutorSelect.innerHTML = '<option value="">No tutors available for "' + keyword + '"</option>';
-}
-
-}else{
-tutorLabel.style.display="none";
-tutorSelect.innerHTML='<option value="">Select a tutor</option>';
+    tutorLabel.style.display="none";
 }
 }
 
 document.getElementById("studentRegisterForm").addEventListener("submit", function(e) {
     e.preventDefault();
-    if (this.company.value !== "") return;
-
     loadingModal.style.display = "flex";
     document.getElementById("tokenField").value = generateToken();
-
     let formData = new FormData(this);
-    const selectedService = formData.get("service");
-    const specValue = formData.get("specification");
-
-    if(specValue && specValue.trim() !== ""){
-        if(selectedService === "Secondary School Subject: Others"){
-            formData.set("service", "Secondary School Subject: " + specValue.trim());
-        } else if(selectedService === "Modules: Others"){
-            formData.set("service", "Modules: " + specValue.trim());
-        }
-    }
-
-    fetch(SCRIPT_URL, {
-        method: "POST",
-        body: formData
-    })
+    
+    fetch(SCRIPT_URL, { method: "POST", body: formData })
     .then(res => res.json())
     .then(res => {
         loadingModal.style.display = "none";
-        if (res.status === "duplicate_detected") {
-            alert("You have already submitted this request.");
-        } else if (res.status === "success") {
-            alert("Submitted Successfully. An email notification has been sent to the admin.");
+        if (res.status === "success") {
+            alert("Submitted Successfully.");
             this.reset();
-            tutorLabel.style.display = "none";
-            tutorSelect.innerHTML = '<option value="">Select a tutor</option>';
-            specContainer.style.display = "none";
             closeForm();
-        } else {
-            alert("Submission failed. Please try again.");
-        }
+        } else alert("Submission failed.");
     })
-    .catch(() => {
-        loadingModal.style.display = "none";
-        alert("Network error. Please try again.");
-    });
+    .catch(() => { loadingModal.style.display = "none"; alert("Error."); });
 });
 
 window.onclick=e=>{
 if(e.target===modal) closeForm();
-if(e.target===pricingModal) pricingModal.style.display="none";
+if(e.target===pricingModal) pricingModal.style.display='none';
 if(e.target===servicePickerModal) closeServicePicker();
 };
 </script>
-
 </body>
 </html>
