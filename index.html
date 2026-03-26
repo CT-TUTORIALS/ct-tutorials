@@ -637,12 +637,13 @@ const topicMapping = {
     "citations": "academic writing", "plagiarism": "academic writing", "thesis": "academic writing",
     "dissertation": "academic writing", "research proposal": "academic writing", "literature review": "academic writing",
     "eap": "academic writing", "academic integrity": "academic writing", "essay structure": "academic writing",
-    "algebra": "mathematics", "geometry": "mathematics", "calculus": "mathematics", "trigonometry": "mathematics", "statistics": "mathematics",
-    "mechanics": "physics", "electricity": "physics", "magnetism": "physics", "waves": "physics",
-    "genetics": "biology", "ecology": "biology", "human biology": "biology", "cell biology": "biology",
-    "microeconomics": "economics", "macroeconomics": "economics",
-    "financial accounting": "accounting", "cost accounting": "accounting",
-    "marketing": "business studies", "human resources": "business studies", "finance": "business studies"
+    "algebra": "mathematics", "geometry": "mathematics", "calculus": "mathematics", "trigonometry": "mathematics", "statistics": "mathematics", "math": "mathematics",
+    "mechanics": "physics", "electricity": "physics", "magnetism": "physics", "waves": "physics", "physics": "physics",
+    "genetics": "biology", "ecology": "biology", "human biology": "biology", "cell biology": "biology", "biology": "biology",
+    "english": "language", "literacy": "language", "writing": "academic writing",
+    "microeconomics": "economics", "macroeconomics": "economics", "economics": "economics",
+    "financial accounting": "accounting", "cost accounting": "accounting", "accounting": "accounting",
+    "marketing": "business studies", "human resources": "business studies", "finance": "business studies", "business studies": "business studies"
 };
 
 function openServicePicker() {
@@ -781,7 +782,6 @@ function handleServiceChange(val){
         let parentSubjectFromTopic = topicMapping[rawSpec] || "";
 
         // ✅ AGGRESSIVE UNIFIED POOL: Flatten every possible key found in the tutorsData object
-        // This ensures school subject tutors are found even if "Group Sessions" is selected.
         let allTutors = [];
         for (let key in tutorsData) {
             if (Array.isArray(tutorsData[key])) {
@@ -812,14 +812,37 @@ function handleServiceChange(val){
                 opt.value = t.name; opt.textContent = t.name;
                 tutorSelect.appendChild(opt);
             });
+            // ✅ IMPROVEMENT: See all tutors option if filter matches found
+            let allOpt = document.createElement("option");
+            allOpt.value = "ANY"; allOpt.textContent = "-- See All Available Tutors --";
+            tutorSelect.appendChild(allOpt);
         } else {
-            // Updated feedback message
-            tutorSelect.innerHTML = `<option value="">No tutors found for "${rawSpec || "this subject"}"</option>`;
+            // ✅ IMPROVEMENT: Fallback if no specific tutors are found
+            tutorSelect.innerHTML = `<option value="">No tutors specifically for "${rawSpec || 'this subject'}"</option>
+                                    <option value="ANY">-- See All Tutors Instead --</option>`;
         }
     } else {
         tutorLabel.style.display="none";
     }
 }
+
+// ✅ IMPROVEMENT: Listener to handle the "ANY" selection and populate all tutors
+tutorSelect.addEventListener("change", function() {
+    if(this.value === "ANY") {
+        this.innerHTML = '<option value="">Select a tutor</option>';
+        let all = [];
+        for (let key in tutorsData) {
+            if (Array.isArray(tutorsData[key])) all = all.concat(tutorsData[key]);
+        }
+        // Deduplicate
+        let uniqueAll = all.filter((t, index, self) => index === self.findIndex((temp) => temp.name === t.name));
+        uniqueAll.forEach(t => {
+            let opt = document.createElement("option");
+            opt.value = t.name; opt.textContent = t.name;
+            this.appendChild(opt);
+        });
+    }
+});
 
 document.getElementById("studentRegisterForm").addEventListener("submit", function(e) {
     e.preventDefault();
