@@ -652,6 +652,26 @@ const serviceOptionsData = [
     { label: "Tertiary Level Modules", value: "Modules: Others" }
 ];
 
+/* ✅ COMPREHENSIVE RELATIVITY MAPPING: Topics linked to Subject Modules */
+const topicMapping = {
+    // Mathematics
+    "algebra": "mathematics", "geometry": "mathematics", "calculus": "mathematics", "trigonometry": "mathematics", "statistics": "mathematics", "probability": "mathematics", "differentiation": "mathematics", "integration": "mathematics", "matrices": "mathematics", "vectors": "mathematics",
+    // Physics
+    "mechanics": "physics", "electricity": "physics", "magnetism": "physics", "waves": "physics", "atomic physics": "physics", "thermal physics": "physics", "kinematics": "physics", "dynamics": "physics", "circuits": "physics",
+    // Biology
+    "genetics": "biology", "ecology": "biology", "human biology": "biology", "cell biology": "biology", "photosynthesis": "biology", "respiration": "biology", "evolution": "biology", "anatomy": "biology", "physiology": "biology", "reproduction": "biology",
+    // Economics
+    "microeconomics": "economics", "macroeconomics": "economics", "supply and demand": "economics", "market structures": "economics", "inflation": "economics", "monetary policy": "economics", "fiscal policy": "economics", "international trade": "economics",
+    // Accounting
+    "financial accounting": "accounting", "cost accounting": "accounting", "ledger": "accounting", "balance sheet": "accounting", "auditing": "accounting", "taxation": "accounting", "bookkeeping": "accounting", "bank reconciliation": "accounting",
+    // Business Studies & Entrepreneurship
+    "marketing": "business studies", "human resources": "business studies", "finance": "business studies", "business plan": "entrepreneurship", "startup": "entrepreneurship", "management": "business studies", "operations": "business studies",
+    // Geography & Development Studies
+    "climatology": "geography", "geomorphology": "geography", "population": "geography", "urbanization": "geography", "poverty": "development studies", "sustainable development": "development studies", "globalization": "development studies",
+    // Languages & Writing
+    "poetry": "english", "prose": "english", "grammar": "english", "literature": "english", "creative writing": "english", "phonetics": "english", "essay structure": "academic writing", "referencing": "academic writing", "citation": "academic writing", "shorthand": "english"
+};
+
 function openServicePicker() {
     pickerOptionsList.innerHTML = "";
     serviceOptionsData.forEach(opt => {
@@ -767,7 +787,7 @@ specInput.addEventListener("input", function() {
     handleServiceChange(serviceHiddenValue.value);
 });
 
-/* ✅ Filtering caters for standard services, "Others" specifications, and exact matches */
+/* ✅ Filtering caters for standard services, "Others" specifications, and Relativity Mapping */
 function handleServiceChange(val){
 priceOptionField.value = val;
 
@@ -809,9 +829,12 @@ if(allowTutor && tutorsData[category]){
 tutorLabel.style.display="block";
 tutorSelect.innerHTML='<option value="">Select a tutor</option>';
 
-/* Capture the correct keyword from either the 'Others' input or the service name itself */
-let keyword = (specInput.value.trim() !== "") ? specInput.value.trim().toLowerCase() : 
+/* Capture raw input */
+let rawInput = (specInput.value.trim() !== "") ? specInput.value.trim().toLowerCase() : 
               (val.includes(": ")) ? val.split(": ").pop().toLowerCase() : val.toLowerCase();
+
+/* ✅ APPLY RELATIVITY: Check mapping for sub-topics to Subjects */
+let keyword = topicMapping[rawInput] || rawInput;
 
 /* Ensure keyword matches common spreadsheet labels like "Introduction to Academic Writing" */
 if (keyword === "intro academic writing") keyword = "academic writing";
