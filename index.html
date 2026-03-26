@@ -652,24 +652,37 @@ const serviceOptionsData = [
     { label: "Tertiary Level Modules", value: "Modules: Others" }
 ];
 
-/* ✅ COMPREHENSIVE RELATIVITY MAPPING: Topics linked to Subject Modules */
+/* ✅ UPDATED RELATIVITY MAPPING: Specific to Namibian Academic Standards (UNAM, NUST, IUM) */
 const topicMapping = {
+    // Academic Writing & Referencing
+    "apa": "academic writing", "apa 7th": "academic writing", "referencing": "academic writing",
+    "citations": "academic writing", "plagiarism": "academic writing", "thesis": "academic writing",
+    "dissertation": "academic writing", "research proposal": "academic writing", "literature review": "academic writing",
+    "eap": "academic writing", "academic integrity": "academic writing", "essay structure": "academic writing",
+
     // Mathematics
     "algebra": "mathematics", "geometry": "mathematics", "calculus": "mathematics", "trigonometry": "mathematics", "statistics": "mathematics", "probability": "mathematics", "differentiation": "mathematics", "integration": "mathematics", "matrices": "mathematics", "vectors": "mathematics",
+    
     // Physics
     "mechanics": "physics", "electricity": "physics", "magnetism": "physics", "waves": "physics", "atomic physics": "physics", "thermal physics": "physics", "kinematics": "physics", "dynamics": "physics", "circuits": "physics",
+    
     // Biology
     "genetics": "biology", "ecology": "biology", "human biology": "biology", "cell biology": "biology", "photosynthesis": "biology", "respiration": "biology", "evolution": "biology", "anatomy": "biology", "physiology": "biology", "reproduction": "biology",
+    
     // Economics
     "microeconomics": "economics", "macroeconomics": "economics", "supply and demand": "economics", "market structures": "economics", "inflation": "economics", "monetary policy": "economics", "fiscal policy": "economics", "international trade": "economics",
+    
     // Accounting
     "financial accounting": "accounting", "cost accounting": "accounting", "ledger": "accounting", "balance sheet": "accounting", "auditing": "accounting", "taxation": "accounting", "bookkeeping": "accounting", "bank reconciliation": "accounting",
+    
     // Business Studies & Entrepreneurship
     "marketing": "business studies", "human resources": "business studies", "finance": "business studies", "business plan": "entrepreneurship", "startup": "entrepreneurship", "management": "business studies", "operations": "business studies",
+    
     // Geography & Development Studies
     "climatology": "geography", "geomorphology": "geography", "population": "geography", "urbanization": "geography", "poverty": "development studies", "sustainable development": "development studies", "globalization": "development studies",
-    // Languages & Writing
-    "poetry": "english", "prose": "english", "grammar": "english", "literature": "english", "creative writing": "english", "phonetics": "english", "essay structure": "academic writing", "referencing": "academic writing", "citation": "academic writing", "shorthand": "english"
+    
+    // Languages & General
+    "poetry": "english", "prose": "english", "grammar": "english", "literature": "english", "creative writing": "english", "phonetics": "english", "shorthand": "english", "history of namibia": "history"
 };
 
 function openServicePicker() {
@@ -787,7 +800,7 @@ specInput.addEventListener("input", function() {
     handleServiceChange(serviceHiddenValue.value);
 });
 
-/* ✅ Filtering caters for standard services, "Others" specifications, and Relativity Mapping */
+/* ✅ ENHANCED FILTERING: Now handles Referencing and Academic Writing specific to Namibia */
 function handleServiceChange(val){
 priceOptionField.value = val;
 
@@ -808,7 +821,8 @@ if(val === "Topic Specific" || val === "Hourly Rate" || val === "Secondary Schoo
 let category="";
 let allowTutor=false;
 
-if(val==="Intro Academic Writing" || val==="Topic Specific" || val==="Hourly Rate" || val === "Modules: Others"){
+// Updated Category Mapping to capture Editing/Referencing as Academic Writing tutors
+if(val.includes("Writing") || val==="Topic Specific" || val==="Hourly Rate" || val === "Modules: Others" || val.includes("Editing") || val.includes("Proofreading") || val.includes("Referencing")){
 category="writing";
 allowTutor=true;
 }
@@ -833,7 +847,7 @@ tutorSelect.innerHTML='<option value="">Select a tutor</option>';
 let rawInput = (specInput.value.trim() !== "") ? specInput.value.trim().toLowerCase() : 
               (val.includes(": ")) ? val.split(": ").pop().toLowerCase() : val.toLowerCase();
 
-/* ✅ APPLY RELATIVITY: Check mapping for sub-topics to Subjects */
+/* ✅ APPLY RELATIVITY: Translates input (e.g., "APA") to the subject tutors possess (e.g., "Academic Writing") */
 let keyword = topicMapping[rawInput] || rawInput;
 
 /* Ensure keyword matches common spreadsheet labels like "Introduction to Academic Writing" */
@@ -851,7 +865,7 @@ if (filteredTutors.length > 0) {
         tutorSelect.appendChild(opt);
     });
 } else {
-    tutorSelect.innerHTML = '<option value="">No tutors available for this selection</option>';
+    tutorSelect.innerHTML = '<option value="">No tutors available for "' + keyword + '"</option>';
 }
 
 }else{
