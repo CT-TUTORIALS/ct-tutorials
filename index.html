@@ -749,13 +749,20 @@ specInput.addEventListener("input", () => handleServiceChange(serviceHiddenValue
 function handleServiceChange(val){
 priceOptionField.value = val;
 
-const isSpecNeeded = val === "Topic Specific" || val === "Hourly Rate" || val === "Secondary Subject" || val === "Tertiary Module" || val.includes("Group Sessions");
+// UPDATED: Every service triggers the specification field
+const isSpecNeeded = val === "Topic Specific" || val === "Hourly Rate" || 
+                     val === "Secondary Subject" || val === "Tertiary Module" || 
+                     val.includes("Group Sessions") || val.includes("Editing") || 
+                     val.includes("Proofreading") || val.includes("Referencing Assistance") || 
+                     val === "Public Speaking Support";
 
 if(isSpecNeeded){
     specContainer.style.display = "block";
     specInput.required = true;
-    if(val === "Tertiary Module") specLabel.innerText = "Specify Tertiary Level Module";
+    if(val === "Tertiary Level Module") specLabel.innerText = "Specify Tertiary Level Module";
     else if(val.includes("Group")) specLabel.innerText = "Specify Topic/Subject/Module";
+    else if(val === "Public Speaking Support") specLabel.innerText = "Specify Presentation/Debate Goal";
+    else if(val.includes("Editing") || val.includes("Proofreading") || val.includes("Referencing")) specLabel.innerText = "Specify Subject/Module for this assignment";
     else specLabel.innerText = "Specify Subject/Topic";
 } else {
     specContainer.style.display = "none";
@@ -763,48 +770,48 @@ if(isSpecNeeded){
 }
 
 let category = "";
-let allowTutor = false;
+let requiresTutor = false;
 
-if(val.includes("Writing") || val==="Topic Specific" || val==="Hourly Rate" || val === "Tertiary Module" || val === "Secondary Subject" || val.includes("Editing") || val.includes("Proofreading") || val.includes("Referencing")){
-    category="writing"; allowTutor=true;
+// Determine if a live tutor selection is required (Excludes Editing, etc.)
+if(val.includes("Writing") || val==="Topic Specific" || val==="Hourly Rate" || val === "Tertiary Module" || val === "Secondary Subject"){
+    category="writing"; requiresTutor=true;
 } else if(val.includes("Group Sessions")){
-    category="group"; allowTutor=true;
+    category="group"; requiresTutor=true;
 } else if(val==="Public Speaking Support"){
-    category="speaking"; allowTutor=true;
+    category="speaking"; requiresTutor=true;
 }
 
-if(allowTutor && tutorsData[category]){
+if(requiresTutor && tutorsData[category]){
     tutorLabel.style.display="block";
     tutorSelect.innerHTML='<option value="">Select a tutor</option>';
     
-    // Normalization logic for broad filtering
     let rawSpec = specInput.value.trim().toLowerCase();
     let rawService = val.toLowerCase();
     
-    // Step 1: Broad Keyword Identification
-    // Filters out filler words to find the core subject/topic
-    let fillerWords = ["introduction", "intro", "to", "of", "the", "basics", "advanced", "level", "session", "tutorial"];
+    // Broad Logic Filtering
+    let fillerWords = ["introduction", "intro", "to", "of", "the", "basics", "advanced", "level", "session", "tutorial", "module", "subject"];
     let specKeywords = rawSpec.split(/\s+/).filter(word => word && !fillerWords.includes(word));
     
-    // Step 2: Check for Topic Mapping (specific dictionary match)
     let parentSubjectFromTopic = topicMapping[rawSpec] || "";
     if (rawService === "intro academic writing") rawService = "academic writing";
 
     const filtered = tutorsData[category].filter(t => {
         let tutorSubjects = t.subjects.toLowerCase();
         
-        // Logical Match Criteria:
-        // A. Match via pre-defined dictionary mapping
+        // Logical Match Criteria
         let matchA = parentSubjectFromTopic && tutorSubjects.includes(parentSubjectFromTopic);
-        
-        // B. Match via broad keyword intersection (FUTURE PROOFING)
-        // If the tutor lists "Math" and student types "Discrete Math", they intersect on "Math"
         let matchB = specKeywords.some(keyword => tutorSubjects.includes(keyword));
         
-        // C. Match via broad category (e.g., "Academic Writing")
-        let matchC = tutorSubjects.includes(rawService);
+        // Public Speaking Specific Constrain
+        if(val === "Public Speaking Support") {
+            return (tutorSubjects.includes("speaking") || tutorSubjects.includes("coach") || tutorSubjects.includes("presentation"));
+        }
 
-        return matchA || matchB || matchC;
+        // Broad matches for other categories
+        let matchC = tutorSubjects.includes(rawService) || (rawService.includes("writing") && tutorSubjects.includes("writing"));
+        let matchD = rawSpec && tutorSubjects.includes(rawSpec);
+
+        return matchA || matchB || matchC || matchD;
     });
 
     if (filtered.length > 0) {
@@ -814,10 +821,10 @@ if(allowTutor && tutorsData[category]){
             tutorSelect.appendChild(opt);
         });
     } else {
-        tutorSelect.innerHTML = `<option value="">No tutors for "${rawSpec || rawService}"</option>`;
+        tutorSelect.innerHTML = `<option value="">No tutors for "${rawSpec || val}"</option>`;
     }
 } else {
-    tutorLabel.style.display="none";
+    tutorLabel.style.display="none"; // Hidden for Assignment Support
 }
 }
 
