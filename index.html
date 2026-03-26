@@ -747,85 +747,80 @@ loadTutors();
 specInput.addEventListener("input", () => handleServiceChange(serviceHiddenValue.value));
 
 function handleServiceChange(val){
-priceOptionField.value = val;
+    priceOptionField.value = val;
 
-// UPDATED: Every service triggers the specification field
-const isSpecNeeded = val === "Topic Specific" || val === "Hourly Rate" || 
-                     val === "Secondary Subject" || val === "Tertiary Module" || 
-                     val.includes("Group Sessions") || val.includes("Editing") || 
-                     val.includes("Proofreading") || val.includes("Referencing Assistance") || 
-                     val === "Public Speaking Support";
+    const isSpecNeeded = val === "Topic Specific" || val === "Hourly Rate" || 
+                         val === "Secondary Subject" || val === "Tertiary Module" || 
+                         val.includes("Group Sessions") || val.includes("Editing") || 
+                         val.includes("Proofreading") || val.includes("Referencing Assistance") || 
+                         val === "Public Speaking Support";
 
-if(isSpecNeeded){
-    specContainer.style.display = "block";
-    specInput.required = true;
-    if(val === "Tertiary Level Module") specLabel.innerText = "Specify Tertiary Level Module";
-    else if(val.includes("Group")) specLabel.innerText = "Specify Topic/Subject/Module";
-    else if(val === "Public Speaking Support") specLabel.innerText = "Specify Presentation/Debate Goal";
-    else if(val.includes("Editing") || val.includes("Proofreading") || val.includes("Referencing")) specLabel.innerText = "Specify Subject/Module for this assignment";
-    else specLabel.innerText = "Specify Subject/Topic";
-} else {
-    specContainer.style.display = "none";
-    specInput.required = false;
-}
-
-let category = "";
-let requiresTutor = false;
-
-// Determine if a live tutor selection is required (Excludes Editing, etc.)
-if(val.includes("Writing") || val==="Topic Specific" || val==="Hourly Rate" || val === "Tertiary Module" || val === "Secondary Subject"){
-    category="writing"; requiresTutor=true;
-} else if(val.includes("Group Sessions")){
-    category="group"; requiresTutor=true;
-} else if(val==="Public Speaking Support"){
-    category="speaking"; requiresTutor=true;
-}
-
-if(requiresTutor && tutorsData[category]){
-    tutorLabel.style.display="block";
-    tutorSelect.innerHTML='<option value="">Select a tutor</option>';
-    
-    let rawSpec = specInput.value.trim().toLowerCase();
-    let rawService = val.toLowerCase();
-    
-    // Broad Logic Filtering
-    let fillerWords = ["introduction", "intro", "to", "of", "the", "basics", "advanced", "level", "session", "tutorial", "module", "subject"];
-    let specKeywords = rawSpec.split(/\s+/).filter(word => word && !fillerWords.includes(word));
-    
-    let parentSubjectFromTopic = topicMapping[rawSpec] || "";
-    if (rawService === "intro academic writing") rawService = "academic writing";
-
-    const filtered = tutorsData[category].filter(t => {
-        let tutorSubjects = t.subjects.toLowerCase();
-        
-        // Logical Match Criteria
-        let matchA = parentSubjectFromTopic && tutorSubjects.includes(parentSubjectFromTopic);
-        let matchB = specKeywords.some(keyword => tutorSubjects.includes(keyword));
-        
-        // Public Speaking Specific Constrain
-        if(val === "Public Speaking Support") {
-            return (tutorSubjects.includes("speaking") || tutorSubjects.includes("coach") || tutorSubjects.includes("presentation"));
-        }
-
-        // Broad matches for other categories
-        let matchC = tutorSubjects.includes(rawService) || (rawService.includes("writing") && tutorSubjects.includes("writing"));
-        let matchD = rawSpec && tutorSubjects.includes(rawSpec);
-
-        return matchA || matchB || matchC || matchD;
-    });
-
-    if (filtered.length > 0) {
-        filtered.forEach(t => {
-            let opt = document.createElement("option");
-            opt.value = t.name; opt.textContent = t.name;
-            tutorSelect.appendChild(opt);
-        });
+    if(isSpecNeeded){
+        specContainer.style.display = "block";
+        specInput.required = true;
+        if(val === "Tertiary Level Module") specLabel.innerText = "Specify Tertiary Level Module";
+        else if(val.includes("Group")) specLabel.innerText = "Specify Topic/Subject/Module";
+        else if(val === "Public Speaking Support") specLabel.innerText = "Specify Presentation/Debate Goal";
+        else if(val.includes("Editing") || val.includes("Proofreading") || val.includes("Referencing")) specLabel.innerText = "Specify Subject/Module for this assignment";
+        else specLabel.innerText = "Specify Subject/Topic";
     } else {
-        tutorSelect.innerHTML = `<option value="">No tutors for "${rawSpec || val}"</option>`;
+        specContainer.style.display = "none";
+        specInput.required = false;
     }
-} else {
-    tutorLabel.style.display="none"; // Hidden for Assignment Support
-}
+
+    let requiresTutor = false;
+    // We check for tutors on all services except basic assignment editing/proofreading
+    if(val.includes("Writing") || val==="Topic Specific" || val==="Hourly Rate" || val === "Tertiary Module" || val === "Secondary Subject" || val.includes("Group Sessions") || val==="Public Speaking Support"){
+        requiresTutor = true;
+    }
+
+    if(requiresTutor && tutorsData){
+        tutorLabel.style.display="block";
+        tutorSelect.innerHTML='<option value="">Select a tutor</option>';
+        
+        let rawSpec = specInput.value.trim().toLowerCase();
+        let rawService = val.toLowerCase();
+        let fillerWords = ["introduction", "intro", "to", "of", "the", "basics", "advanced", "level", "session", "tutorial", "module", "subject"];
+        let specKeywords = rawSpec.split(/\s+/).filter(word => word && !fillerWords.includes(word));
+        let parentSubjectFromTopic = topicMapping[rawSpec] || "";
+
+        // ✅ CONSOLIDATED POOL: Merging 'writing' and 'group' tutors into one search pool
+        let searchPool = [...(tutorsData["writing"] || []), ...(tutorsData["group"] || [])];
+        
+        // Remove duplicates (by name) just in case a tutor is listed in both
+        searchPool = searchPool.filter((t, index, self) =>
+            index === self.findIndex((temp) => temp.name === t.name)
+        );
+
+        const filtered = searchPool.filter(t => {
+            let tutorSubjects = t.subjects.toLowerCase();
+            
+            // Public Speaking logic
+            if(val === "Public Speaking Support") {
+                return (tutorSubjects.includes("speaking") || tutorSubjects.includes("coach") || tutorSubjects.includes("presentation"));
+            }
+
+            // Global Subject Matching
+            let matchA = parentSubjectFromTopic && tutorSubjects.includes(parentSubjectFromTopic);
+            let matchB = specKeywords.some(keyword => tutorSubjects.includes(keyword));
+            let matchC = tutorSubjects.includes(rawService) || (rawService.includes("writing") && tutorSubjects.includes("writing"));
+            let matchD = rawSpec && (tutorSubjects.includes(rawSpec) || rawSpec.includes(tutorSubjects));
+
+            return matchA || matchB || matchC || matchD;
+        });
+
+        if (filtered.length > 0) {
+            filtered.forEach(t => {
+                let opt = document.createElement("option");
+                opt.value = t.name; opt.textContent = t.name;
+                tutorSelect.appendChild(opt);
+            });
+        } else {
+            tutorSelect.innerHTML = `<option value="">No tutors for "${rawSpec || val}"</option>`;
+        }
+    } else {
+        tutorLabel.style.display="none";
+    }
 }
 
 document.getElementById("studentRegisterForm").addEventListener("submit", function(e) {
