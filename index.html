@@ -383,7 +383,7 @@ opacity:0.9;
 <div class="services-grid">
 
 <div class="service-card">
-<h3>Academic Writing Tutorials</h3>
+<h3>Academic Writing & Individual Tutorials</h3>
 <p>Structured sessions covering academic writing principles, essay development, and research techniques.</p>
 <span class="service-link" onclick="openPricing('writing')">View Pricing</span>
 </div>
@@ -809,6 +809,8 @@ if(val === "Topic Specific" || val === "Hourly Rate" || val === "Secondary Schoo
     specInput.required = true;
     if(val.includes("Group Sessions")) {
         specLabel.innerText = "Specify Topic/Subject/Module";
+    } else if(val === "Modules: Others") {
+        specLabel.innerText = "Specify Tertiary Level Module";
     } else {
         specLabel.innerText = (val.includes("Subject") || val === "Modules: Others") ? "Specify Subject" : "Specify Topic/Subject";
     }
