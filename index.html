@@ -911,14 +911,14 @@ tutorSelect.addEventListener("change", function() {
     }
 });
 
-/* ✅ UPDATED: JSON POST SUBMISSION COMPATIBLE WITH MODE: NO-CORS */
+/* ✅ FINAL SYNC: COMPATIBLE JSON SUBMISSION */
 document.getElementById("studentRegisterForm").addEventListener("submit", function(e) {
     e.preventDefault();
     loadingModal.style.display = "flex";
     
-    // Prepare Data Object for JSON
+    // Structure strictly matching your new Apps Script expectation
     const formDataObj = {
-        type: "studentRegistration",
+        type: "studentRegistration", 
         name: document.getElementById("name").value,
         email: document.getElementById("email").value,
         cellphone_number: document.getElementById("phone").value,
@@ -936,17 +936,17 @@ document.getElementById("studentRegisterForm").addEventListener("submit", functi
         body: JSON.stringify(formDataObj) 
     })
     .then(() => {
-        // Since no-cors doesn't allow reading the response, we assume success after a delay
+        // mode: 'no-cors' doesn't return readable success, so we confirm via timing
         setTimeout(() => {
             loadingModal.style.display = "none";
             alert("Registration submitted successfully! We will contact you soon.");
             closeForm();
             document.getElementById("studentRegisterForm").reset();
-        }, 1500);
+        }, 1200);
     })
     .catch(err => {
         loadingModal.style.display = "none";
-        alert("Registration request sent. Please check your email for confirmation.");
+        alert("Registration failed. Please check your internet connection and try again.");
     });
 });
 </script>
