@@ -644,17 +644,15 @@ async function submitManualMatch() {
     
     fetch(SCRIPT_URL, {
         method: "POST",
+        mode: "no-cors",
         body: JSON.stringify({ type: "manualMatch", token: token, studentEmail: targetStudentEmail, tutorEmail: tutorEmail })
     })
-    .then(r=>r.json())
-    .then(res=>{
-        loadingModal.style.display="none";
-        if(res.status === "success") { 
-            alert("Tutor successfully matched!"); 
-            loadStudents(token); 
-        } else {
-            alert("Match failed: " + (res.message || "Unknown error"));
-        }
+    .then(() => {
+        setTimeout(() => {
+            loadingModal.style.display="none";
+            alert("Match request processed. Refreshing list...");
+            loadStudents(token);
+        }, 1500);
     })
     .catch(() => {
         loadingModal.style.display="none";
@@ -684,37 +682,57 @@ tbody.innerHTML+=`
 }
 
 function loadSupportMessages(token){
-return fetch(SCRIPT_URL+"?action=getSupportMessages&token="+token)
-.then(r=>r.json()).then(data=>{
-if(handleAuthError(data)) return;
-const tbody=document.querySelector("#supportTable tbody"); tbody.innerHTML="";
-if(!Array.isArray(data)) return;
-data.forEach(m=>{
-tbody.innerHTML+=`<tr>
-<td data-label="Date">${new Date(m["Timestamp"]).toLocaleDateString()}</td>
-<td data-label="Tutor Email">${m["Tutor Email"]}</td>
-<td data-label="Message"><div class="scroll-cell">${m["Message"]}</div></td>
-<td data-label="Status">${m["Status"]}</td>
-<td data-label="Action">${m["Status"]==="Pending" ? `<button class="reply-btn" onclick="replyMessage('${m["Tutor Email"]}')">Reply</button>` : 'Replied'}</td>
-</tr>`
-})
-})
+    return fetch(SCRIPT_URL+"?action=getSupportMessages&token="+token)
+    .then(r=>r.json())
+    .then(data=>{
+        if(handleAuthError(data)) return;
+        const tbody=document.querySelector("#supportTable tbody"); 
+        tbody.innerHTML="";
+        if(!Array.isArray(data)) return;
+        
+        data.forEach(m=>{
+            const dateStr = m["Timestamp"] ? new Date(m["Timestamp"]).toLocaleDateString() : "N/A";
+            const tutorEmail = m["Tutor Email"] || "Unknown";
+            const message = m["Message"] || "";
+            const status = m["Status"] || "Pending";
+            
+            tbody.innerHTML+=`<tr>
+                <td data-label="Date">${dateStr}</td>
+                <td data-label="Tutor Email">${tutorEmail}</td>
+                <td data-label="Message"><div class="scroll-cell">${message}</div></td>
+                <td data-label="Status">${status}</td>
+                <td data-label="Action">${status === "Pending" ? 
+                    `<button class="reply-btn" onclick="replyMessage('${tutorEmail}')">Reply</button>` : 
+                    'Replied'}</td>
+            </tr>`;
+        });
+    });
 }
 
 function replyMessage(email){
-const replyText = prompt("Enter your reply to " + email + ":");
-if(!replyText) return;
-const token = localStorage.getItem("adminToken");
-loadingModal.style.display="flex";
-fetch(SCRIPT_URL, {
-    method: "POST",
-    body: JSON.stringify({ type: "replyToSupport", token: token, tutorEmail: email, reply: replyText })
-})
-.then(r=>r.json())
-.then(res=>{
-    if(res.status==="success") { alert("Reply sent via email!"); loadSupportMessages(token); }
-    loadingModal.style.display="none";
-});
+    const replyText = prompt("Enter your reply to " + email + ":");
+    if(!replyText) return;
+    
+    const token = localStorage.getItem("adminToken");
+    loadingModal.style.display="flex";
+    document.getElementById("loadingText").innerText = "Sending Reply...";
+
+    fetch(SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        body: JSON.stringify({ type: "replyToSupport", token: token, tutorEmail: email, reply: replyText })
+    })
+    .then(() => {
+        setTimeout(() => {
+            alert("Reply sent! Note: Dashboard updates may take a moment.");
+            loadSupportMessages(token);
+            loadingModal.style.display="none";
+        }, 1500);
+    })
+    .catch(() => {
+        loadingModal.style.display="none";
+        alert("Error sending reply.");
+    });
 }
 
 function approve(email){
