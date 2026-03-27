@@ -562,11 +562,11 @@ window.onscroll = function() {
 
 function handleHomeClick() {
     if (localStorage.getItem("tutorToken")) {
-        // Log out and return to the tutors portal front page/landing state
+        // Condition 1: Logged in (on dashboard) -> log out and show front page information
         logoutTutor();
     } else {
-        // Already on front page/not logged in, just refresh to top
-        window.scrollTo({top: 0, behavior: 'smooth'});
+        // Condition 2: On front page (not logged in) -> redirect to the student index.html page
+        window.location.href = "index.html";
     }
 }
 
