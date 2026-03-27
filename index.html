@@ -644,19 +644,23 @@ const serviceOptionsData = [
     { label: "Referencing Assistance", value: "Referencing Assistance" }
 ];
 
-// ✅ COMPREHENSIVE CURRICULUM KNOWLEDGE BASE
+// ✅ UPDATED NAMIBIA-SPECIFIC CURRICULUM KNOWLEDGE BASE
 const curriculumKB = {
-    "academic writing": ["apa", "referencing", "literature review", "thesis", "dissertation", "citations", "plagiarism", "abstract", "academic integrity", "essay structure", "eap", "writing", "proper nouns", "grammar", "punctuation"],
-    "mathematics": ["algebra", "calculus", "trigonometry", "statistics", "probability", "geometry", "integration", "differentiation", "functions", "linear algebra", "maths", "math", "matrices"],
-    "physics": ["mechanics", "kinematics", "thermodynamics", "electricity", "magnetism", "quantum", "optics", "nuclear", "waves", "circuits"],
-    "biology": ["genetics", "photosynthesis", "ecology", "cell biology", "anatomy", "physiology", "mitosis", "meiosis", "metabolism", "homeostasis", "evolution", "bio"],
-    "chemistry": ["organic chemistry", "inorganic", "stoichiometry", "periodic table", "atomic structure", "bonding", "redox", "kinetics", "equilibria", "titration", "chem"],
-    "economics": ["microeconomics", "macroeconomics", "inflation", "gdp", "supply and demand", "fiscal policy", "monetary policy", "market structures", "elasticity", "econ"],
-    "accounting": ["financial accounting", "cost accounting", "ledger", "balance sheet", "journal entries", "income statement", "auditing", "taxation", "acc"],
-    "business studies": ["marketing", "human resources", "finance", "entrepreneurship", "strategic management", "business ethics", "organizational behavior", "business", "hr"],
-    "computer science": ["programming", "coding", "java", "python", "algorithms", "data structures", "databases", "sql", "html", "css", "web development", "it"],
-    "legal studies": ["constitutional law", "criminal law", "civil law", "jurisprudence", "contracts", "torts", "administrative law", "legal writing", "law"],
-    "language": ["english", "literacy", "grammar", "linguistics", "parts of speech"]
+    "academic writing": ["apa", "referencing", "literature review", "thesis", "dissertation", "citations", "plagiarism", "abstract", "academic integrity", "essay structure", "eap", "writing", "proper nouns", "grammar", "punctuation", "ulep"],
+    "mathematics": ["algebra", "calculus", "trigonometry", "statistics", "probability", "geometry", "integration", "differentiation", "functions", "linear algebra", "maths", "math", "matrices", "nssco", "nsscas"],
+    "physics": ["mechanics", "kinematics", "thermodynamics", "electricity", "magnetism", "quantum", "optics", "nuclear", "waves", "circuits", "physics"],
+    "biology": ["genetics", "photosynthesis", "ecology", "cell biology", "anatomy", "physiology", "mitosis", "meiosis", "metabolism", "homeostasis", "evolution", "bio", "biology", "human biology"],
+    "chemistry": ["organic chemistry", "inorganic", "stoichiometry", "periodic table", "atomic structure", "bonding", "redox", "kinetics", "equilibria", "titration", "chem", "chemistry"],
+    "economics": ["microeconomics", "macroeconomics", "inflation", "gdp", "supply and demand", "fiscal policy", "monetary policy", "market structures", "elasticity", "econ", "economics", "development economics"],
+    "accounting": ["financial accounting", "cost accounting", "ledger", "balance sheet", "journal entries", "income statement", "auditing", "taxation", "acc", "accounting", "management accounting"],
+    "business management": ["marketing", "human resources", "finance", "entrepreneurship", "strategic management", "business ethics", "organizational behavior", "business", "hr", "swot", "management", "analysis", "public administration"],
+    "computer science": ["programming", "coding", "java", "python", "algorithms", "data structures", "databases", "sql", "html", "css", "web development", "it", "informatics"],
+    "legal studies": ["constitutional law", "criminal law", "civil law", "jurisprudence", "contracts", "torts", "administrative law", "legal writing", "law", "namibian law", "customary law"],
+    "health sciences": ["nursing", "pharmacology", "public health", "biomedical", "microbiology", "epidemiology", "radiography", "pathology"],
+    "humanities & social": ["sociology", "psychology", "history", "geography", "namibian history", "development studies", "philosophy", "social work"],
+    "agriculture": ["animal science", "crop science", "soil science", "agronomy", "agricultural economics", "forestry", "aquaculture"],
+    "engineering": ["civil engineering", "mechanical engineering", "electrical engineering", "mining", "electronics", "surveying"],
+    "language": ["english", "literacy", "grammar", "linguistics", "parts of speech", "khoekhoegowab", "oshikwanyama", "oshindonga", "afrikaans", "otjiherero"]
 };
 
 function openServicePicker() {
@@ -773,7 +777,7 @@ function handleServiceChange(val){
     if(isSpecNeeded){
         specContainer.style.display = "block";
         specInput.required = true;
-        if(val === "Tertiary Level Module") specLabel.innerText = "Specify Tertiary Level Module";
+        if(val === "Tertiary Level Module") specLabel.innerText = "Specify Tertiary Level Module (e.g., CLW3511)";
         else if(val.includes("Group")) specLabel.innerText = "Specify Topic/Subject/Module";
         else if(val === "Public Speaking Support") specLabel.innerText = "Specify Presentation/Debate Goal";
         else if(val.includes("Editing") || val.includes("Proofreading") || val.includes("Referencing")) specLabel.innerText = "Specify Subject/Module for this assignment";
@@ -792,11 +796,9 @@ function handleServiceChange(val){
         
         let rawSpec = specInput.value.trim().toLowerCase();
         
-        // 1. IMPROVED MATCHING: Identify Master Subjects from Topic
         let relatedCurriculumSubjects = [];
         for (let subject in curriculumKB) {
             let topics = curriculumKB[subject];
-            // Check if input matches subject name OR any of its topics
             if (rawSpec.includes(subject) || topics.some(t => rawSpec.includes(t))) {
                 relatedCurriculumSubjects.push(subject);
             }
@@ -813,13 +815,8 @@ function handleServiceChange(val){
 
         const filtered = uniqueTutors.filter(t => {
             let tutorSubjects = (t.subjects || "").toLowerCase();
-            
-            // Match Logic:
-            // A: Tutor teaches the Master Subject (e.g., "Biology")
             let matchKB = relatedCurriculumSubjects.some(s => tutorSubjects.includes(s));
-            // B: Tutor profile literally mentions the word typed (e.g., "Linear Algebra")
             let matchExplicit = rawSpec.length > 2 && tutorSubjects.includes(rawSpec);
-            // C: Service Name match
             let matchService = tutorSubjects.includes(val.toLowerCase()) || (val.toLowerCase().includes("writing") && tutorSubjects.includes("writing"));
 
             return matchKB || matchExplicit || matchService;
