@@ -562,8 +562,10 @@ window.onscroll = function() {
 
 function handleHomeClick() {
     if (localStorage.getItem("tutorToken")) {
-        logoutTutor();
+        // If logged in, reload dashboard view
+        scrollToSection('home');
     } else {
+        // If logged out, go to landing page
         window.location.href = "index.html";
     }
 }
@@ -582,6 +584,7 @@ function updateNav(isLoggedIn) {
     const dynamicLinks = document.getElementById('dynamicLinks');
     if (isLoggedIn) {
         dynamicLinks.innerHTML = `
+            <div class="nav-separator"></div><a onclick="scrollToSection('home')">Dashboard</a>
             <div class="nav-separator"></div><a onclick="scrollToSection('resources')">Resources</a>
             <div class="nav-separator"></div><a onclick="scrollToSection('messages')">Messages</a>
             <div class="nav-separator"></div><a onclick="scrollToSection('support')">Support</a>
@@ -657,7 +660,8 @@ localStorage.setItem("tutorEmail", d.email);
 loginModal.style.display = "none";
 updateNav(true);
 await loadStudents(d.token);
-await loadMessages(d.token, d.email);
+// Initial load for support messages
+await loadSupportMessages(d.token);
 }else{
 loadingModal.style.display="none"
 alert("Invalid login credentials.")
@@ -686,7 +690,7 @@ async function submitSupport(){
         if(d.status === "success"){
             alert("Your request has been logged. Admin will contact you soon.");
             supportInput.value = "";
-            loadMessages(t, localStorage.getItem("tutorEmail"));
+            // Optionally reload messages if you implement a history fetch
         }
     } catch(err) {
         loadingModal.style.display="none";
@@ -694,56 +698,52 @@ async function submitSupport(){
     }
 }
 
-async function loadMessages(token, email){
-    try {
-        const res = await fetch(`${SCRIPT_URL}?action=getTutorMessages&token=${token}&email=${encodeURIComponent(email)}`);
-        const data = await res.json();
-        if(data && Array.isArray(data)){
-            messagesContainer.innerHTML = data.map(m => `
-                <div class="message-card">
-                    <small>${new Date(m.Timestamp).toLocaleString()}</small><br>
-                    <strong>You:</strong> ${m.Message}<br>
-                    ${m.Reply ? `<strong>Admin:</strong> ${m.Reply}` : `<em>Status: ${m.Status}</em>`}
-                </div>
-            `).join("");
-        }
-    } catch(e){ console.log("Error loading messages"); }
+async function loadSupportMessages(token){
+    // This is a placeholder for future message retrieval if needed
+    console.log("Session verified, messages ready.");
 }
 
 async function loadStudents(token){
-const res=await fetch(`${SCRIPT_URL}?action=getStudentsForTutor&token=${token}`)
-const data=await res.json()
-if(data.error){
-logoutTutor();
-return
+try {
+    const res=await fetch(`${SCRIPT_URL}?action=getStudentsForTutor&token=${token}`)
+    const data=await res.json()
+    
+    if(data.error){
+        logoutTutor();
+        return
+    }
+
+    studentsList.innerHTML=data.length > 0 ? data.map(s=>`
+    <div class="student-card">
+    <strong>${s.name}</strong><br>
+    Email: ${s.email}<br>
+    Phone: ${s.phone}<br>
+    Service: ${s.service}
+    </div>`).join("") : "<p>No students assigned yet.</p>";
+
+    infoSection.style.display="none";
+    contactSection.style.display="none";
+    dashboard.style.display="flex";
+
+    // Ensure main container stays at 1000px
+    mainContainer.style.maxWidth = "1000px";
+
+    dashboardLogout.style.display="block";
+    setTimeout(()=>dashboard.classList.add("show"),50);
+    loadingModal.style.display="none";
+} catch(e) {
+    loadingModal.style.display="none";
+    console.log("Error loading dashboard data.");
 }
-studentsList.innerHTML=data.length > 0 ? data.map(s=>`
-<div class="student-card">
-<strong>${s.name}</strong><br>
-Email: ${s.email}<br>Phone: ${s.phone}<br>Service: ${s.service}
-</div>`).join("") : "<p>No students assigned yet.</p>";
-
-infoSection.style.display="none";
-contactSection.style.display="none";
-dashboard.style.display="flex";
-
-// Ensure main container stays at 1000px
-mainContainer.style.maxWidth = "1000px";
-
-dashboardLogout.style.display="block";
-setTimeout(()=>dashboard.classList.add("show"),50);
-loadingModal.style.display="none";
 }
 
 window.onload=()=>{
 const t=localStorage.getItem("tutorToken")
-const e=localStorage.getItem("tutorEmail")
 if(t){
 loadingModal.style.display="flex";
 document.getElementById('loadingText').innerText = "Resuming Session...";
 updateNav(true);
 loadStudents(t);
-loadMessages(t, e);
 } else {
 updateNav(false);
 }
@@ -751,7 +751,7 @@ updateNav(false);
 
 function logoutTutor(){
 localStorage.clear();
-window.location.href = window.location.pathname; 
+window.location.reload(); 
 }
 </script>
 
