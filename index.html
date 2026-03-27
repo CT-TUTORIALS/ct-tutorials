@@ -644,23 +644,31 @@ const serviceOptionsData = [
     { label: "Referencing Assistance", value: "Referencing Assistance" }
 ];
 
-// ✅ UPDATED NAMIBIA-SPECIFIC CURRICULUM KNOWLEDGE BASE
+/* ✅ UPDATED COMPREHENSIVE NAMIBIAN ACADEMIC KNOWLEDGE BASE */
 const curriculumKB = {
-    "academic writing": ["apa", "referencing", "literature review", "thesis", "dissertation", "citations", "plagiarism", "abstract", "academic integrity", "essay structure", "eap", "writing", "proper nouns", "grammar", "punctuation", "ulep"],
-    "mathematics": ["algebra", "calculus", "trigonometry", "statistics", "probability", "geometry", "integration", "differentiation", "functions", "linear algebra", "maths", "math", "matrices", "nssco", "nsscas"],
-    "physics": ["mechanics", "kinematics", "thermodynamics", "electricity", "magnetism", "quantum", "optics", "nuclear", "waves", "circuits", "physics"],
-    "biology": ["genetics", "photosynthesis", "ecology", "cell biology", "anatomy", "physiology", "mitosis", "meiosis", "metabolism", "homeostasis", "evolution", "bio", "biology", "human biology"],
-    "chemistry": ["organic chemistry", "inorganic", "stoichiometry", "periodic table", "atomic structure", "bonding", "redox", "kinetics", "equilibria", "titration", "chem", "chemistry"],
-    "economics": ["microeconomics", "macroeconomics", "inflation", "gdp", "supply and demand", "fiscal policy", "monetary policy", "market structures", "elasticity", "econ", "economics", "development economics"],
-    "accounting": ["financial accounting", "cost accounting", "ledger", "balance sheet", "journal entries", "income statement", "auditing", "taxation", "acc", "accounting", "management accounting"],
-    "business management": ["marketing", "human resources", "finance", "entrepreneurship", "strategic management", "business ethics", "organizational behavior", "business", "hr", "swot", "management", "analysis", "public administration"],
-    "computer science": ["programming", "coding", "java", "python", "algorithms", "data structures", "databases", "sql", "html", "css", "web development", "it", "informatics"],
-    "legal studies": ["constitutional law", "criminal law", "civil law", "jurisprudence", "contracts", "torts", "administrative law", "legal writing", "law", "namibian law", "customary law"],
-    "health sciences": ["nursing", "pharmacology", "public health", "biomedical", "microbiology", "epidemiology", "radiography", "pathology"],
-    "humanities & social": ["sociology", "psychology", "history", "geography", "namibian history", "development studies", "philosophy", "social work"],
-    "agriculture": ["animal science", "crop science", "soil science", "agronomy", "agricultural economics", "forestry", "aquaculture"],
-    "engineering": ["civil engineering", "mechanical engineering", "electrical engineering", "mining", "electronics", "surveying"],
-    "language": ["english", "literacy", "grammar", "linguistics", "parts of speech", "khoekhoegowab", "oshikwanyama", "oshindonga", "afrikaans", "otjiherero"]
+    // ACADEMIC LITERACY & LANGUAGES
+    "academic writing": ["apa", "referencing", "literature review", "thesis", "dissertation", "citations", "plagiarism", "abstract", "academic integrity", "essay structure", "eap", "writing", "proper nouns", "grammar", "punctuation", "ulep", "nouns", "parts of speech", "lea3419", "lce3419", "academic communication"],
+    "language": ["english", "literacy", "linguistics", "khoekhoegowab", "oshikwanyama", "oshindonga", "afrikaans", "otjiherero", "german", "oshivambo", "rukvangali", "setswana", "silozi"],
+
+    // COMMERCE, MANAGEMENT & LAW
+    "economics": ["microeconomics", "macroeconomics", "inflation", "gdp", "supply and demand", "fiscal policy", "monetary policy", "market structures", "elasticity", "development economics", "econometrics", "emi3571", "ema3572"],
+    "accounting": ["financial accounting", "cost accounting", "ledger", "balance sheet", "journal entries", "income statement", "auditing", "taxation", "acc", "accounting", "management accounting", "pac", "accounting for bba", "caf"],
+    "business management": ["marketing", "human resources", "finance", "entrepreneurship", "strategic management", "business ethics", "organizational behavior", "hr", "swot", "public administration", "operations management", "bba", "pma", "project management", "swot analysis"],
+    "legal studies": ["constitutional law", "criminal law", "civil law", "jurisprudence", "contracts", "torts", "administrative law", "legal writing", "namibian law", "customary law", "commercial law", "clw3511", "family law", "property law"],
+
+    // STEM (SCIENCE, TECH, ENGINEERING, MATHS)
+    "mathematics": ["algebra", "calculus", "trigonometry", "statistics", "probability", "geometry", "integration", "differentiation", "functions", "linear algebra", "matrices", "nssco", "nsscas", "quantitative methods", "mat3511", "sms3522"],
+    "physics": ["mechanics", "kinematics", "thermodynamics", "electricity", "magnetism", "quantum", "optics", "nuclear", "waves", "circuits", "sph3511"],
+    "biology": ["genetics", "photosynthesis", "ecology", "cell biology", "anatomy", "physiology", "mitosis", "meiosis", "metabolism", "homeostasis", "evolution", "human biology", "blg3511"],
+    "chemistry": ["organic chemistry", "inorganic", "stoichiometry", "periodic table", "atomic structure", "bonding", "redox", "kinetics", "equilibria", "titration", "chm3511"],
+    "computer science": ["programming", "coding", "java", "python", "algorithms", "data structures", "databases", "sql", "html", "css", "web development", "informatics", "cyber security", "software engineering", "cmp3511"],
+    "engineering": ["civil engineering", "mechanical engineering", "electrical engineering", "mining", "electronics", "surveying", "structural engineering", "hydraulics", "thermodynamics"],
+
+    // HEALTH, EDUCATION & SOCIAL SCIENCES
+    "health sciences": ["nursing", "pharmacology", "public health", "biomedical", "microbiology", "epidemiology", "radiography", "pathology", "anatomy", "midwifery"],
+    "humanities & social": ["sociology", "psychology", "history", "geography", "namibian history", "development studies", "philosophy", "social work", "anthropology", "political science"],
+    "education": ["pedagogy", "educational psychology", "curriculum studies", "classroom management", "inclusive education", "educational technology", "early childhood"],
+    "agriculture": ["animal science", "crop science", "soil science", "agronomy", "agricultural economics", "forestry", "aquaculture", "farm management"]
 };
 
 function openServicePicker() {
