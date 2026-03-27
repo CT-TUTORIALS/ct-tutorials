@@ -547,9 +547,9 @@ function openCreate(){createModal.style.display="flex"}
 function openLogin(){loginModal.style.display="flex"}
 
 window.onclick=e=>{
-if(e.target.classList.contains("modal") && e.target.id!=="loadingModal"){
-e.target.style.display="none"
-}
+    if(e.target.classList.contains("modal") && e.target.id!=="loadingModal"){
+        e.target.style.display="none"
+    }
 }
 
 window.onscroll = function() {
@@ -598,23 +598,28 @@ function updateNav(isLoggedIn) {
 }
 
 async function getToken(){
-const r=await fetch(SCRIPT_URL+"?action=getToken")
-const d=await r.json()
-return d.token
+    const r = await fetch(SCRIPT_URL+"?action=getToken")
+    const d = await r.json()
+    return d.token
 }
 
 applyForm.onsubmit=async e=>{
     e.preventDefault();
     loadingModal.style.display="flex";
     document.getElementById('loadingText').innerText = "Submitting Application...";
-    const t=await getToken();
-    const data={
-        type:"tutorApplication",
-        token:t,
+    const t = await getToken();
+    const data = {
+        type: "tutorApplication",
+        token: t,
         ...Object.fromEntries(new FormData(applyForm))
     };
-    fetch(SCRIPT_URL, {method:"POST", mode: "no-cors", body:JSON.stringify(data)})
-    .then(() => {
+    
+    fetch(SCRIPT_URL, {
+        method: "POST", 
+        mode: "no-cors", 
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" }
+    }).then(() => {
         setTimeout(() => {
             loadingModal.style.display="none";
             alert("Application submitted! We will review it shortly.");
@@ -626,22 +631,27 @@ applyForm.onsubmit=async e=>{
 
 createForm.onsubmit=async e=>{
     e.preventDefault();
-    if(createForm.password.value!==createForm.confirm.value){
+    if(createForm.password.value !== createForm.confirm.value){
         alert("Passwords do not match");
         return;
     }
     loadingModal.style.display="flex";
     document.getElementById('loadingText').innerText = "Creating Account...";
-    const t=await getToken();
-    const data={
-        type:"createTutorAccount",
-        token:t,
-        email:createForm.email.value,
-        accessCode:createForm.code.value,
-        password:createForm.password.value
+    const t = await getToken();
+    const data = {
+        type: "createTutorAccount",
+        token: t,
+        email: createForm.email.value,
+        accessCode: createForm.code.value,
+        password: createForm.password.value
     };
-    fetch(SCRIPT_URL, {method:"POST", mode: "no-cors", body:JSON.stringify(data)})
-    .then(() => {
+    
+    fetch(SCRIPT_URL, {
+        method: "POST", 
+        mode: "no-cors", 
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" }
+    }).then(() => {
         setTimeout(() => {
             loadingModal.style.display="none";
             alert("Account creation request sent. If details are correct, you can log in now.");
@@ -656,11 +666,12 @@ loginForm.onsubmit=async e=>{
     loadingModal.style.display="flex";
     document.getElementById('loadingText').innerText = "Logging in...";
     try{
-        const res=await fetch(`${SCRIPT_URL}?action=tutorLogin&email=${encodeURIComponent(loginForm.email.value)}&password=${encodeURIComponent(loginForm.password.value)}`)
-        const d=await res.json();
+        const res = await fetch(`${SCRIPT_URL}?action=tutorLogin&email=${encodeURIComponent(loginForm.email.value)}&password=${encodeURIComponent(loginForm.password.value)}`)
+        const d = await res.json();
         if(d.success){
-            localStorage.setItem("tutorToken",d.token);
+            localStorage.setItem("tutorToken", d.token);
             localStorage.setItem("tutorEmail", d.email); 
+            localStorage.setItem("tutorName", d.name);
             loginModal.style.display = "none";
             updateNav(true);
             await loadStudents(d.token);
@@ -687,8 +698,13 @@ async function submitSupport(){
         email: localStorage.getItem("tutorEmail"),
         message: msg
     };
-    fetch(SCRIPT_URL, {method:"POST", mode: "no-cors", body:JSON.stringify(data)})
-    .then(() => {
+    
+    fetch(SCRIPT_URL, {
+        method: "POST", 
+        mode: "no-cors", 
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" }
+    }).then(() => {
         setTimeout(() => {
             alert("Your request has been logged. Refreshing messages...");
             supportInput.value = "";
@@ -701,14 +717,17 @@ async function submitSupport(){
 async function loadSupportMessages(token){
     const email = localStorage.getItem("tutorEmail");
     try {
-        const res = await fetch(`${SCRIPT_URL}?action=getSupportMessagesForTutor&token=${token}&email=${encodeURIComponent(email)}`);
+        // Aligned with Code.gs action name
+        const res = await fetch(`${SCRIPT_URL}?action=getSupportMessages&token=${token}&email=${encodeURIComponent(email)}`);
         const data = await res.json();
         if(data && Array.isArray(data)){
-            messagesContainer.innerHTML = data.length > 0 ? data.map(m => `
+            // Filter messages for current tutor only
+            const myMessages = data.filter(m => m["Tutor Email"] === email);
+            messagesContainer.innerHTML = myMessages.length > 0 ? myMessages.map(m => `
                 <div class="message-card">
                     <small>${m.Timestamp ? new Date(m.Timestamp).toLocaleString() : "Recently"}</small>
                     <div><strong>Your Message:</strong> ${m.Message}</div>
-                    ${m.Reply ? `<div class="admin-reply"><strong>Admin:</strong> ${m.Reply}</div>` : `<div style="color:#888; font-size:12px; margin-top:5px;">Waiting for reply...</div>`}
+                    ${m.Status === "Replied" ? `<div class="admin-reply"><strong>Admin:</strong> (Check your email for the full reply)</div>` : `<div style="color:#888; font-size:12px; margin-top:5px;">Status: ${m.Status}</div>`}
                 </div>
             `).join("") : "<p>No message history found.</p>";
         }
@@ -719,20 +738,20 @@ async function loadSupportMessages(token){
 
 async function loadStudents(token){
     try {
-        const res=await fetch(`${SCRIPT_URL}?action=getStudentsForTutor&token=${token}`)
-        const data=await res.json();
+        const res = await fetch(`${SCRIPT_URL}?action=getStudentsForTutor&token=${token}`)
+        const data = await res.json();
         
         if(data.error){
             logoutTutor();
             return;
         }
 
-        studentsList.innerHTML=data.length > 0 ? data.map(s=>`
+        studentsList.innerHTML = data.length > 0 ? data.map(s=>`
         <div class="student-card">
-        <strong>${s.name}</strong><br>
-        Email: ${s.email}<br>
-        Phone: ${s.phone}<br>
-        Service: ${s.service}
+            <strong>${s.name}</strong><br>
+            Email: ${s.email}<br>
+            Phone: ${s.phone}<br>
+            Service: ${s.service}
         </div>`).join("") : "<p>No students assigned yet.</p>";
 
         infoSection.style.display="none";
@@ -749,7 +768,7 @@ async function loadStudents(token){
 }
 
 window.onload=()=>{
-    const t=localStorage.getItem("tutorToken");
+    const t = localStorage.getItem("tutorToken");
     if(t){
         loadingModal.style.display="flex";
         document.getElementById('loadingText').innerText = "Resuming Session...";
@@ -766,6 +785,5 @@ function logoutTutor(){
     window.location.reload(); 
 }
 </script>
-
 </body>
 </html>
