@@ -656,22 +656,22 @@ const serviceOptionsData = [
     { label: "Referencing Assistance", value: "Referencing Assistance" }
 ];
 
-const topicMapping = {
-    "apa": "academic writing", "apa 7th": "academic writing", "referencing": "academic writing",
-    "citations": "academic writing", "plagiarism": "academic writing", "thesis": "academic writing",
-    "dissertation": "academic writing", "research proposal": "academic writing", "literature review": "academic writing",
-    "eap": "academic writing", "academic integrity": "academic writing", "essay structure": "academic writing", "writing": "academic writing",
-    "algebra": "mathematics", "geometry": "mathematics", "calculus": "mathematics", "trigonometry": "mathematics", "statistics": "mathematics", "stats": "mathematics", "math": "mathematics", "maths": "mathematics",
-    "mechanics": "physics", "electricity": "physics", "magnetism": "physics", "waves": "physics", "physics": "physics",
-    "genetics": "biology", "ecology": "biology", "human biology": "biology", "cell biology": "biology", "biology": "biology", "bio": "biology",
-    "inorganic": "chemistry", "organic": "chemistry", "chemistry": "chemistry", "chem": "chemistry",
-    "microeconomics": "economics", "macroeconomics": "economics", "economics": "economics", "econ": "economics",
-    "financial accounting": "accounting", "cost accounting": "accounting", "accounting": "accounting", "acc": "accounting",
-    "marketing": "business studies", "human resources": "business studies", "hr": "business studies", "finance": "business studies", "business studies": "business studies", "business": "business studies",
-    "english": "language", "literacy": "language", "grammar": "language", "linguistics": "language",
-    "nursing": "health sciences", "anatomy": "health sciences", "physiology": "health sciences", "health": "health sciences",
-    "law": "legal studies", "jurisprudence": "legal studies", "contracts": "legal studies", "criminal law": "legal studies",
-    "programming": "computer science", "coding": "computer science", "java": "computer science", "python": "computer science", "it": "computer science", "computer science": "computer science"
+// ✅ CURRICULUM-BASED MAPPING (REPLACES OLD TOPICMAPPING)
+const curriculumKB = {
+    "academic writing": ["apa", "referencing", "literature review", "thesis", "dissertation", "citations", "plagiarism", "abstract", "academic integrity", "essay structure", "eap", "writing"],
+    "mathematics": ["algebra", "calculus", "trigonometry", "statistics", "probability", "geometry", "integration", "differentiation", "functions", "linear algebra", "maths", "math"],
+    "physics": ["mechanics", "kinematics", "thermodynamics", "electricity", "magnetism", "quantum", "optics", "nuclear", "waves", "circuits"],
+    "biology": ["genetics", "photosynthesis", "ecology", "cell biology", "anatomy", "physiology", "mitosis", "meiosis", "metabolism", "homeostasis", "evolution", "bio"],
+    "chemistry": ["organic chemistry", "inorganic", "stoichiometry", "periodic table", "atomic structure", "bonding", "redox", "kinetics", "equilibria", "titration", "chem"],
+    "economics": ["microeconomics", "macroeconomics", "inflation", "gdp", "supply and demand", "fiscal policy", "monetary policy", "market structures", "elasticity", "econ"],
+    "accounting": ["financial accounting", "cost accounting", "ledger", "balance sheet", "journal entries", "income statement", "auditing", "taxation", "acc"],
+    "business studies": ["marketing", "human resources", "finance", "entrepreneurship", "strategic management", "business ethics", "organizational behavior", "business", "hr"],
+    "computer science": ["programming", "coding", "java", "python", "algorithms", "data structures", "databases", "sql", "html", "css", "web development", "it"],
+    "legal studies": ["constitutional law", "criminal law", "civil law", "jurisprudence", "contracts", "torts", "administrative law", "legal writing", "law"],
+    "geography": ["geomorphology", "climatology", "human geography", "population", "settlement", "plate tectonics", "weathering"],
+    "history": ["colonialism", "industrial revolution", "apartheid", "world war", "cold war", "namibian history", "ancient civilizations"],
+    "health sciences": ["nursing", "anatomy", "physiology", "health"],
+    "language": ["english", "literacy", "grammar", "linguistics"]
 };
 
 function openServicePicker() {
@@ -806,12 +806,17 @@ function handleServiceChange(val){
         document.getElementById("viewTutorProfile").style.display = "none";
         
         let rawSpec = specInput.value.trim().toLowerCase();
-        let rawService = val.toLowerCase();
-        let fillerWords = ["introduction", "intro", "to", "of", "the", "basics", "advanced", "level", "session", "tutorial", "module", "subject"];
-        let specKeywords = rawSpec.split(/\s+/).filter(word => word && !fillerWords.includes(word));
-        let parentSubjectFromTopic = topicMapping[rawSpec] || "";
+        
+        // Identify "Master Subjects" that cover the user's specific topic
+        let relatedCurriculumSubjects = [];
+        for (let subject in curriculumKB) {
+            let topics = curriculumKB[subject];
+            // Match if user input is a sub-topic OR the subject itself
+            if (topics.some(t => rawSpec.includes(t)) || rawSpec.includes(subject)) {
+                relatedCurriculumSubjects.push(subject);
+            }
+        }
 
-        // ✅ AGGRESSIVE UNIFIED POOL: Flatten every possible key found in the tutorsData object
         let allTutors = [];
         for (let key in tutorsData) {
             if (Array.isArray(tutorsData[key])) {
@@ -819,7 +824,6 @@ function handleServiceChange(val){
             }
         }
         
-        // Remove duplicate tutors by name to keep list clean
         let uniqueTutors = allTutors.filter((t, index, self) =>
             index === self.findIndex((temp) => temp.name === t.name)
         );
@@ -827,13 +831,15 @@ function handleServiceChange(val){
         const filtered = uniqueTutors.filter(t => {
             let tutorSubjects = (t.subjects || "").toLowerCase();
             
-            // Core matching logic
-            let matchA = parentSubjectFromTopic && tutorSubjects.includes(parentSubjectFromTopic);
-            let matchB = specKeywords.some(keyword => tutorSubjects.includes(keyword));
-            let matchC = tutorSubjects.includes(rawService) || (rawService.includes("writing") && tutorSubjects.includes("writing"));
-            let matchD = rawSpec && (tutorSubjects.includes(rawSpec) || rawSpec.includes(tutorSubjects));
+            // Match if:
+            // 1. Tutor teaches a Master Subject identified from the topic
+            let matchCurriculum = relatedCurriculumSubjects.some(s => tutorSubjects.includes(s));
+            // 2. Tutor profile explicitly mentions the topic typed
+            let matchExplicit = rawSpec.length > 2 && tutorSubjects.includes(rawSpec);
+            // 3. Service type match (e.g. "writing")
+            let matchService = tutorSubjects.includes(val.toLowerCase()) || (val.toLowerCase().includes("writing") && tutorSubjects.includes("writing"));
 
-            return matchA || matchB || matchC || matchD;
+            return matchCurriculum || matchExplicit || matchService;
         });
 
         if (filtered.length > 0) {
@@ -842,13 +848,11 @@ function handleServiceChange(val){
                 opt.value = t.name; opt.textContent = t.name;
                 tutorSelect.appendChild(opt);
             });
-            // ✅ IMPROVEMENT: See all tutors option if filter matches found
             let allOpt = document.createElement("option");
             allOpt.value = "ANY"; allOpt.textContent = "-- See All Available Tutors --";
             tutorSelect.appendChild(allOpt);
         } else {
-            // ✅ IMPROVEMENT: Fallback if no specific tutors are found
-            tutorSelect.innerHTML = `<option value="">No tutors specifically for "${rawSpec || 'this subject'}"</option>
+            tutorSelect.innerHTML = `<option value="">No tutors specifically for "${rawSpec || 'this topic'}"</option>
                                     <option value="ANY">-- See All Tutors Instead --</option>`;
         }
     } else {
@@ -856,12 +860,10 @@ function handleServiceChange(val){
     }
 }
 
-// ✅ NEW: Logic to show subjects for the selected tutor
 function showTutorSubjects() {
     const selectedName = tutorSelect.value;
     if(!selectedName || selectedName === "ANY") return;
 
-    // Find tutor info from flattened data
     let foundTutor = null;
     for (let key in tutorsData) {
         if (Array.isArray(tutorsData[key])) {
@@ -877,7 +879,6 @@ function showTutorSubjects() {
     }
 }
 
-// ✅ IMPROVEMENT: Listener to handle the "ANY" selection and toggle profile link
 tutorSelect.addEventListener("change", function() {
     const profileLink = document.getElementById("viewTutorProfile");
     
@@ -893,14 +894,12 @@ tutorSelect.addEventListener("change", function() {
         for (let key in tutorsData) {
             if (Array.isArray(tutorsData[key])) all = all.concat(tutorsData[key]);
         }
-        // Deduplicate
         let uniqueAll = all.filter((t, index, self) => index === self.findIndex((temp) => temp.name === t.name));
         uniqueAll.forEach(t => {
             let opt = document.createElement("option");
             opt.value = t.name; opt.textContent = t.name;
             this.appendChild(opt);
         });
-        // Add back the ANY option at the bottom if they want to filter again later
         let allOpt = document.createElement("option");
         allOpt.value = "ANY"; allOpt.textContent = "-- Refresh Filter --";
         this.appendChild(allOpt);
