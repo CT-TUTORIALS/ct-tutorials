@@ -181,7 +181,8 @@ box-shadow:0 4px 6px rgba(0,0,0,0.3);
 #modal,
 #pricingModal,
 #loadingModal,
-#servicePickerModal{
+#servicePickerModal,
+#tutorProfileModal{
 display:none;
 position:fixed;
 inset:0;
@@ -193,7 +194,8 @@ z-index:1000;
 
 #modal form,
 #pricingContent,
-#servicePickerContent{
+#servicePickerContent,
+#tutorProfileContent{
 background:white;
 padding:25px;
 width:90%;
@@ -205,6 +207,7 @@ overflow-y: auto;
 }
 
 #servicePickerModal { z-index: 1100; }
+#tutorProfileModal { z-index: 1200; }
 
 .close{
 position:absolute;
@@ -339,6 +342,16 @@ opacity:0.9;
 .agreement-label input {
     width: auto !important;
     margin-top: 4px;
+}
+
+/* NEW: Tutor Link Styling */
+.view-tutor-link {
+    display: block;
+    margin-top: 10px;
+    font-size: 13px;
+    color: #003366;
+    text-decoration: underline;
+    cursor: pointer;
 }
 </style>
 </head>
@@ -546,6 +559,7 @@ opacity:0.9;
 <select name="tutor" id="tutorSelect">
 <option value="">Select a tutor</option>
 </select>
+<span id="viewTutorProfile" class="view-tutor-link" style="display:none;" onclick="showTutorSubjects()">View subjects offered by this tutor</span>
 </label>
 
 <input type="hidden" name="token" id="tokenField">
@@ -558,6 +572,16 @@ opacity:0.9;
 
 <button type="submit" class="submit-btn">Submit Registration</button>
 </form>
+</div>
+
+<div id="tutorProfileModal">
+<div id="tutorProfileContent">
+<button class="close" onclick="document.getElementById('tutorProfileModal').style.display='none'">×</button>
+<h3 id="profileTutorName">Tutor Profile</h3>
+<p><strong>Subjects Offered:</strong></p>
+<div id="profileTutorSubjects" style="background:#f9f9f9; padding:15px; border-radius:5px; border:1px solid #ddd;"></div>
+<button class="submit-btn" onclick="document.getElementById('tutorProfileModal').style.display='none'">Back to Form</button>
+</div>
 </div>
 
 <div id="pricingModal">
@@ -680,6 +704,7 @@ function openForm(){
 modal.style.display="flex";
 tutorLabel.style.display="none";
 tutorSelect.innerHTML='<option value="">Select a tutor</option>';
+document.getElementById("viewTutorProfile").style.display = "none";
 serviceDisplay.value="";
 serviceHiddenValue.value="";
 priceOptionField.value="";
@@ -778,6 +803,7 @@ function handleServiceChange(val){
     if(requiresTutor && tutorsData){
         tutorLabel.style.display="block";
         tutorSelect.innerHTML='<option value="">Select a tutor</option>';
+        document.getElementById("viewTutorProfile").style.display = "none";
         
         let rawSpec = specInput.value.trim().toLowerCase();
         let rawService = val.toLowerCase();
@@ -830,8 +856,37 @@ function handleServiceChange(val){
     }
 }
 
-// ✅ IMPROVEMENT: Listener to handle the "ANY" selection and populate all tutors
+// ✅ NEW: Logic to show subjects for the selected tutor
+function showTutorSubjects() {
+    const selectedName = tutorSelect.value;
+    if(!selectedName || selectedName === "ANY") return;
+
+    // Find tutor info from flattened data
+    let foundTutor = null;
+    for (let key in tutorsData) {
+        if (Array.isArray(tutorsData[key])) {
+            let match = tutorsData[key].find(t => t.name === selectedName);
+            if(match) { foundTutor = match; break; }
+        }
+    }
+
+    if(foundTutor) {
+        document.getElementById("profileTutorName").innerText = foundTutor.name;
+        document.getElementById("profileTutorSubjects").innerText = foundTutor.subjects || "No specific subjects listed.";
+        document.getElementById("tutorProfileModal").style.display = "flex";
+    }
+}
+
+// ✅ IMPROVEMENT: Listener to handle the "ANY" selection and toggle profile link
 tutorSelect.addEventListener("change", function() {
+    const profileLink = document.getElementById("viewTutorProfile");
+    
+    if(this.value && this.value !== "ANY") {
+        profileLink.style.display = "block";
+    } else {
+        profileLink.style.display = "none";
+    }
+
     if(this.value === "ANY") {
         this.innerHTML = '<option value="">Select a tutor</option>';
         let all = [];
@@ -845,6 +900,10 @@ tutorSelect.addEventListener("change", function() {
             opt.value = t.name; opt.textContent = t.name;
             this.appendChild(opt);
         });
+        // Add back the ANY option at the bottom if they want to filter again later
+        let allOpt = document.createElement("option");
+        allOpt.value = "ANY"; allOpt.textContent = "-- Refresh Filter --";
+        this.appendChild(allOpt);
     }
 });
 
@@ -871,6 +930,7 @@ window.onclick=e=>{
 if(e.target===modal) closeForm();
 if(e.target===pricingModal) pricingModal.style.display='none';
 if(e.target===servicePickerModal) closeServicePicker();
+if(e.target===document.getElementById('tutorProfileModal')) document.getElementById('tutorProfileModal').style.display='none';
 };
 </script>
 </body>
