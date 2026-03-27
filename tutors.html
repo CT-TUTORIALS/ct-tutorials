@@ -608,12 +608,12 @@ applyForm.onsubmit=async e=>{
 e.preventDefault()
 loadingModal.style.display="flex"
 const t=await getToken()
-const params=new URLSearchParams({
+const data={
 type:"tutorApplication",
 token:t,
 ...Object.fromEntries(new FormData(applyForm))
-})
-const res=await fetch(SCRIPT_URL,{method:"POST",body:params})
+}
+const res=await fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify(data)})
 const d=await res.json()
 loadingModal.style.display="none"
 if(d.status==="success"){
@@ -630,14 +630,14 @@ return
 }
 loadingModal.style.display="flex"
 const t=await getToken()
-const params=new URLSearchParams({
+const data={
 type:"createTutorAccount",
 token:t,
 email:createForm.email.value,
 accessCode:createForm.code.value,
 password:createForm.password.value
-})
-const res=await fetch(SCRIPT_URL,{method:"POST",body:params})
+}
+const res=await fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify(data)})
 const d=await res.json()
 loadingModal.style.display="none"
 if(d.status==="account_created"){
@@ -677,20 +677,19 @@ async function submitSupport(){
     if(!msg) return;
     loadingModal.style.display="flex";
     const t = localStorage.getItem("tutorToken");
-    const params = new URLSearchParams({
+    const data = {
         type: "supportRequest",
         token: t,
         email: localStorage.getItem("tutorEmail"),
         message: msg
-    });
+    };
     try {
-        const res = await fetch(SCRIPT_URL, {method:"POST", body:params});
+        const res = await fetch(SCRIPT_URL, {method:"POST", body:JSON.stringify(data)});
         const d = await res.json();
         loadingModal.style.display="none";
         if(d.status === "success"){
             alert("Your request has been logged. Admin will contact you soon.");
             supportInput.value = "";
-            // Optionally reload messages if you implement a history fetch
         }
     } catch(err) {
         loadingModal.style.display="none";
@@ -699,7 +698,6 @@ async function submitSupport(){
 }
 
 async function loadSupportMessages(token){
-    // This is a placeholder for future message retrieval if needed
     console.log("Session verified, messages ready.");
 }
 
