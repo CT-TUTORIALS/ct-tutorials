@@ -190,10 +190,11 @@ background: white;
 
 .message-card {
     border-bottom: 1px solid #eee;
-    padding: 10px 0;
+    padding: 15px 0;
 }
 
-.message-card small { color: #666; }
+.message-card small { color: #666; display: block; margin-bottom: 5px; }
+.message-card .admin-reply { margin-top: 8px; color: #2e7d32; font-style: italic; }
 
 .resource-item {
     display: flex;
@@ -562,10 +563,8 @@ window.onscroll = function() {
 
 function handleHomeClick() {
     if (localStorage.getItem("tutorToken")) {
-        // Condition 1: Logged in (on dashboard) -> log out and show front page information
         logoutTutor();
     } else {
-        // Condition 2: On front page (not logged in) -> redirect to the student index.html page
         window.location.href = "index.html";
     }
 }
@@ -605,77 +604,82 @@ return d.token
 }
 
 applyForm.onsubmit=async e=>{
-e.preventDefault()
-loadingModal.style.display="flex"
-const t=await getToken()
-const data={
-type:"tutorApplication",
-token:t,
-...Object.fromEntries(new FormData(applyForm))
-}
-const res=await fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify(data)})
-const d=await res.json()
-loadingModal.style.display="none"
-if(d.status==="success"){
-alert("Application submitted successfully. We will review it shortly.")
-applyModal.style.display="none"
-}else{ alert("Error submitting application. Please try again.") }
+    e.preventDefault();
+    loadingModal.style.display="flex";
+    document.getElementById('loadingText').innerText = "Submitting Application...";
+    const t=await getToken();
+    const data={
+        type:"tutorApplication",
+        token:t,
+        ...Object.fromEntries(new FormData(applyForm))
+    };
+    fetch(SCRIPT_URL, {method:"POST", mode: "no-cors", body:JSON.stringify(data)})
+    .then(() => {
+        setTimeout(() => {
+            loadingModal.style.display="none";
+            alert("Application submitted! We will review it shortly.");
+            applyModal.style.display="none";
+            applyForm.reset();
+        }, 1500);
+    });
 }
 
 createForm.onsubmit=async e=>{
-e.preventDefault()
-if(createForm.password.value!==createForm.confirm.value){
-alert("Passwords do not match")
-return
-}
-loadingModal.style.display="flex"
-const t=await getToken()
-const data={
-type:"createTutorAccount",
-token:t,
-email:createForm.email.value,
-accessCode:createForm.code.value,
-password:createForm.password.value
-}
-const res=await fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify(data)})
-const d=await res.json()
-loadingModal.style.display="none"
-if(d.status==="account_created"){
-alert("Account created successfully. You can now log in.")
-createModal.style.display="none"
-openLogin()
-}else{ alert("Error creating account. Check your code and try again.") }
+    e.preventDefault();
+    if(createForm.password.value!==createForm.confirm.value){
+        alert("Passwords do not match");
+        return;
+    }
+    loadingModal.style.display="flex";
+    document.getElementById('loadingText').innerText = "Creating Account...";
+    const t=await getToken();
+    const data={
+        type:"createTutorAccount",
+        token:t,
+        email:createForm.email.value,
+        accessCode:createForm.code.value,
+        password:createForm.password.value
+    };
+    fetch(SCRIPT_URL, {method:"POST", mode: "no-cors", body:JSON.stringify(data)})
+    .then(() => {
+        setTimeout(() => {
+            loadingModal.style.display="none";
+            alert("Account creation request sent. If details are correct, you can log in now.");
+            createModal.style.display="none";
+            openLogin();
+        }, 1500);
+    });
 }
 
 loginForm.onsubmit=async e=>{
-e.preventDefault()
-loadingModal.style.display="flex"
-document.getElementById('loadingText').innerText = "Logging in...";
-try{
-const res=await fetch(`${SCRIPT_URL}?action=tutorLogin&email=${encodeURIComponent(loginForm.email.value)}&password=${encodeURIComponent(loginForm.password.value)}`)
-const d=await res.json()
-if(d.success){
-localStorage.setItem("tutorToken",d.token);
-localStorage.setItem("tutorEmail", d.email); 
-loginModal.style.display = "none";
-updateNav(true);
-await loadStudents(d.token);
-// Initial load for support messages
-await loadSupportMessages(d.token);
-}else{
-loadingModal.style.display="none"
-alert("Invalid login credentials.")
-}
-}catch(err){
-loadingModal.style.display="none"
-alert("Network error. Please try again.")
-}
+    e.preventDefault();
+    loadingModal.style.display="flex";
+    document.getElementById('loadingText').innerText = "Logging in...";
+    try{
+        const res=await fetch(`${SCRIPT_URL}?action=tutorLogin&email=${encodeURIComponent(loginForm.email.value)}&password=${encodeURIComponent(loginForm.password.value)}`)
+        const d=await res.json();
+        if(d.success){
+            localStorage.setItem("tutorToken",d.token);
+            localStorage.setItem("tutorEmail", d.email); 
+            loginModal.style.display = "none";
+            updateNav(true);
+            await loadStudents(d.token);
+            await loadSupportMessages(d.token);
+        }else{
+            loadingModal.style.display="none";
+            alert("Invalid login credentials.");
+        }
+    }catch(err){
+        loadingModal.style.display="none";
+        alert("Network error.");
+    }
 }
 
 async function submitSupport(){
     const msg = supportInput.value.trim();
     if(!msg) return;
     loadingModal.style.display="flex";
+    document.getElementById('loadingText').innerText = "Submitting Support Request...";
     const t = localStorage.getItem("tutorToken");
     const data = {
         type: "supportRequest",
@@ -683,73 +687,83 @@ async function submitSupport(){
         email: localStorage.getItem("tutorEmail"),
         message: msg
     };
-    try {
-        const res = await fetch(SCRIPT_URL, {method:"POST", body:JSON.stringify(data)});
-        const d = await res.json();
-        loadingModal.style.display="none";
-        if(d.status === "success"){
-            alert("Your request has been logged. Admin will contact you soon.");
+    fetch(SCRIPT_URL, {method:"POST", mode: "no-cors", body:JSON.stringify(data)})
+    .then(() => {
+        setTimeout(() => {
+            alert("Your request has been logged. Refreshing messages...");
             supportInput.value = "";
-        }
-    } catch(err) {
-        loadingModal.style.display="none";
-        alert("Error sending support request.");
-    }
+            loadSupportMessages(t);
+            loadingModal.style.display="none";
+        }, 1500);
+    });
 }
 
 async function loadSupportMessages(token){
-    console.log("Session verified, messages ready.");
+    const email = localStorage.getItem("tutorEmail");
+    try {
+        const res = await fetch(`${SCRIPT_URL}?action=getSupportMessagesForTutor&token=${token}&email=${encodeURIComponent(email)}`);
+        const data = await res.json();
+        if(data && Array.isArray(data)){
+            messagesContainer.innerHTML = data.length > 0 ? data.map(m => `
+                <div class="message-card">
+                    <small>${m.Timestamp ? new Date(m.Timestamp).toLocaleString() : "Recently"}</small>
+                    <div><strong>Your Message:</strong> ${m.Message}</div>
+                    ${m.Reply ? `<div class="admin-reply"><strong>Admin:</strong> ${m.Reply}</div>` : `<div style="color:#888; font-size:12px; margin-top:5px;">Waiting for reply...</div>`}
+                </div>
+            `).join("") : "<p>No message history found.</p>";
+        }
+    } catch(e) {
+        console.log("Error loading messages.");
+    }
 }
 
 async function loadStudents(token){
-try {
-    const res=await fetch(`${SCRIPT_URL}?action=getStudentsForTutor&token=${token}`)
-    const data=await res.json()
-    
-    if(data.error){
-        logoutTutor();
-        return
+    try {
+        const res=await fetch(`${SCRIPT_URL}?action=getStudentsForTutor&token=${token}`)
+        const data=await res.json();
+        
+        if(data.error){
+            logoutTutor();
+            return;
+        }
+
+        studentsList.innerHTML=data.length > 0 ? data.map(s=>`
+        <div class="student-card">
+        <strong>${s.name}</strong><br>
+        Email: ${s.email}<br>
+        Phone: ${s.phone}<br>
+        Service: ${s.service}
+        </div>`).join("") : "<p>No students assigned yet.</p>";
+
+        infoSection.style.display="none";
+        contactSection.style.display="none";
+        dashboard.style.display="flex";
+        mainContainer.style.maxWidth = "1000px";
+        dashboardLogout.style.display="block";
+        setTimeout(()=>dashboard.classList.add("show"),50);
+        loadingModal.style.display="none";
+    } catch(e) {
+        loadingModal.style.display="none";
+        console.log("Error loading dashboard data.");
     }
-
-    studentsList.innerHTML=data.length > 0 ? data.map(s=>`
-    <div class="student-card">
-    <strong>${s.name}</strong><br>
-    Email: ${s.email}<br>
-    Phone: ${s.phone}<br>
-    Service: ${s.service}
-    </div>`).join("") : "<p>No students assigned yet.</p>";
-
-    infoSection.style.display="none";
-    contactSection.style.display="none";
-    dashboard.style.display="flex";
-
-    // Ensure main container stays at 1000px
-    mainContainer.style.maxWidth = "1000px";
-
-    dashboardLogout.style.display="block";
-    setTimeout(()=>dashboard.classList.add("show"),50);
-    loadingModal.style.display="none";
-} catch(e) {
-    loadingModal.style.display="none";
-    console.log("Error loading dashboard data.");
-}
 }
 
 window.onload=()=>{
-const t=localStorage.getItem("tutorToken")
-if(t){
-loadingModal.style.display="flex";
-document.getElementById('loadingText').innerText = "Resuming Session...";
-updateNav(true);
-loadStudents(t);
-} else {
-updateNav(false);
-}
+    const t=localStorage.getItem("tutorToken");
+    if(t){
+        loadingModal.style.display="flex";
+        document.getElementById('loadingText').innerText = "Resuming Session...";
+        updateNav(true);
+        loadStudents(t);
+        loadSupportMessages(t);
+    } else {
+        updateNav(false);
+    }
 }
 
 function logoutTutor(){
-localStorage.clear();
-window.location.reload(); 
+    localStorage.clear();
+    window.location.reload(); 
 }
 </script>
 
