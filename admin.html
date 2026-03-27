@@ -205,6 +205,29 @@ color:white;
 width: 85px;
 }
 
+/* Manual Match Styling */
+.match-btn {
+background:#f39c12;
+color:white;
+width: 100%;
+font-size: 11px;
+}
+
+/* TUTOR SELECTION MODAL */
+.tutor-modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7); display: none; justify-content: center;
+    align-items: center; z-index: 4000;
+}
+.tutor-modal-box {
+    background: white; padding: 20px; border-radius: 8px;
+    width: 350px; max-height: 70vh; overflow-y: auto; text-align: center;
+}
+.tutor-option {
+    padding: 12px; border-bottom: 1px solid #eee; cursor: pointer; text-align: left;
+}
+.tutor-option:hover { background: #f0f7ff; }
+
 /* Restored standard link styling for navigation only */
 .admin-nav a:hover {
     text-decoration: underline;
@@ -256,7 +279,7 @@ width: 85px;
         white-space: normal;
     }
     
-    .approve, .reject, .reply-btn { 
+    .approve, .reject, .reply-btn, .match-btn { 
         flex: 1;
         width: auto;
         padding: 12px;
@@ -364,6 +387,14 @@ z-index:1100;
 </div>
 </div>
 
+<div class="tutor-modal-overlay" id="tutorModal">
+    <div class="tutor-modal-box">
+        <h3 style="color:#003366; margin-top:0;">Select a Tutor</h3>
+        <div id="tutorListContainer"></div>
+        <button onclick="closeTutorModal()" style="margin-top:15px; width:100%; background:#888; color:white;">Cancel</button>
+    </div>
+</div>
+
 <div class="admin-header">
 <div class="admin-nav">
 <a href="#" onclick="logout()">Home</a>
@@ -454,6 +485,8 @@ z-index:1100;
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxIShwbw27ViNIHCShqkhJv4WaQ0igIE9AQ44FGT9RL1ik4rqeOzi01liVl4vjCFhNqQw/exec";
 const loadingModal = document.getElementById("loadingModal");
 const loginOverlay = document.getElementById("loginOverlay");
+let cachedApprovedTutors = []; 
+let studentToAssign = "";
 
 loginOverlay.addEventListener("click", function() {
     window.location.href = "index.html";
@@ -546,6 +579,7 @@ return fetch(SCRIPT_URL+"?action=getApprovedTutors&token="+token)
 .then(r=>r.json())
 .then(data=>{
 if(handleAuthError(data)) return;
+cachedApprovedTutors = data; 
 const tbody=document.querySelector("#approvedTable tbody")
 tbody.innerHTML=""
 if(!Array.isArray(data)) return
@@ -571,6 +605,10 @@ tbody.innerHTML=""
 if(!Array.isArray(data)) return
 data.forEach(s=>{
 const isUnmatched = s.tutorFound === "No Match";
+const tutorDisplay = (s.tutor === "Pending" || !s.tutor) 
+    ? `<button class="match-btn" onclick="openTutorModal('${s.email}')">Manual Match</button>` 
+    : s.tutor;
+
 tbody.innerHTML+=`
 <tr class="${isUnmatched ? 'unmatched-alert' : ''}">
 <td data-label="Name"><div class="scroll-cell">${s.name||""}</div></td>
@@ -578,7 +616,7 @@ tbody.innerHTML+=`
 <td data-label="Phone"><div class="scroll-cell"><a href="tel:${s.phone||""}">${s.phone||""}</a></div></td>
 <td data-label="Service"><div class="scroll-cell">${s.service||""}</div></td>
 <td data-label="Specified Topic/Module/Subject"><div class="scroll-cell">${s.topic||""}</div></td>
-<td data-label="Tutor"><div class="scroll-cell">${s.tutor||"Pending"}</div></td>
+<td data-label="Tutor"><div class="scroll-cell">${tutorDisplay}</div></td>
 <td data-label="Match" class="${isUnmatched ? 'text-danger' : ''}">${s.tutorFound||"Match Found"}</td>
 </tr>`
 })
@@ -604,6 +642,41 @@ tbody.innerHTML+=`
 </tr>`
 })
 })
+}
+
+function openTutorModal(email) {
+    studentToAssign = email;
+    const container = document.getElementById("tutorListContainer");
+    container.innerHTML = "";
+    if(cachedApprovedTutors.length === 0) { container.innerHTML = "<p>No approved tutors available.</p>"; }
+    cachedApprovedTutors.forEach(t => {
+        const div = document.createElement("div");
+        div.className = "tutor-option";
+        div.innerHTML = `<strong>${t.name}</strong><br><small>${t.email}</small>`;
+        div.onclick = () => performManualAssign(t.email);
+        container.appendChild(div);
+    });
+    document.getElementById("tutorModal").style.display = "flex";
+}
+
+function closeTutorModal() { document.getElementById("tutorModal").style.display = "none"; }
+
+function performManualAssign(tutorEmail) {
+    if(!confirm("Assign " + tutorEmail + " to this student?")) return;
+    closeTutorModal();
+    const token = localStorage.getItem("adminToken");
+    loadingModal.style.display = "flex";
+    document.getElementById("loadingText").innerText = "Assigning...";
+    
+    fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({ type: "manualAssign", token: token, studentEmail: studentToAssign, tutorEmail: tutorEmail })
+    })
+    .then(r=>r.json()).then(res=>{
+        if(res.status==="success") { alert("Tutor assigned successfully!"); loadStudents(token); }
+        else { alert("Error: " + (res.message || "Could not assign tutor")); }
+        loadingModal.style.display = "none";
+    });
 }
 
 function loadSupportMessages(token){
