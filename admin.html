@@ -23,15 +23,15 @@ position:sticky;
 top:0;
 z-index:1100;
 display: flex;
-justify-content: center; 
+justify-content: center; 
 }
 
 .admin-nav{
 display:flex;
 justify-content:center;
 gap:15px;
-flex-wrap:wrap; 
-align-items:center; 
+flex-wrap:wrap; 
+align-items:center; 
 text-align:center;
 max-width: 100%;
 }
@@ -41,12 +41,12 @@ color:white;
 text-decoration:none;
 font-weight:bold;
 font-size:14px;
-white-space: nowrap; 
+white-space: nowrap; 
 }
 
 #adminLinks {
-display:none; 
-align-items: center; 
+display:none; 
+align-items: center; 
 justify-content: center;
 gap: 15px;
 flex-wrap: wrap;
@@ -68,7 +68,7 @@ display:inline-block;
 
 /* CONTENT */
 .container{
-max-width: 98%; 
+max-width: 98%; 
 margin:auto;
 padding:40px 0;
 display:none;
@@ -88,11 +88,11 @@ margin-bottom:70px;
 /* TABLES */
 table{
 width:100%;
-border-collapse:separate; 
+border-collapse:separate; 
 border-spacing: 0;
 background:white;
 margin-top:20px;
-table-layout: fixed; 
+table-layout: fixed; 
 }
 
 th,td{
@@ -100,7 +100,7 @@ padding:12px 10px;
 border:1px solid #ddd;
 font-size:14px;
 text-align: left;
-vertical-align: top; 
+vertical-align: top; 
 word-wrap: break-word;
 overflow-wrap: break-word;
 }
@@ -109,29 +109,29 @@ th{
 background:#003366;
 color:white;
 position: sticky;
-top: 42px; 
+top: 42px; 
 z-index: 1000;
 border-top: none;
 }
 
 /* UNIVERSAL CELL CONFINEMENT - Added to all data cells */
 .scroll-cell {
-    max-height: 100px;
-    overflow-y: auto;
-    display: block;
-    padding-right: 5px;
+    max-height: 100px;
+    overflow-y: auto;
+    display: block;
+    padding-right: 5px;
 }
 
 /* SLEEK CONTACT LINKS */
 .scroll-cell a {
-    color: inherit; /* Keeps the text black/default */
-    text-decoration: none;
-    transition: color 0.2s;
+    color: inherit; /* Keeps the text black/default */
+    text-decoration: none;
+    transition: color 0.2s;
 }
 
 .scroll-cell a:hover {
-    color: #0056b3; /* Subtle blue on hover */
-    text-decoration: underline;
+    color: #0056b3; /* Subtle blue on hover */
+    text-decoration: underline;
 }
 
 /* COLUMN WIDTHS (Desktop) */
@@ -164,17 +164,17 @@ border-top: none;
 
 /* Visual Alerts for missing tutors */
 .unmatched-alert {
-    background-color: #ffe6e6 !important;
+    background-color: #ffe6e6 !important;
 }
 
 .text-danger {
-    color: #c62828;
-    font-weight: bold;
+    color: #c62828;
+    font-weight: bold;
 }
 
 /* Button Alignment */
 td:last-child {
-    white-space: nowrap; 
+    white-space: nowrap; 
 }
 
 button{
@@ -188,7 +188,7 @@ font-weight: bold;
 .approve{
 background:#2e7d32;
 color:white;
-width: 85px; 
+width: 85px; 
 margin-right: 8px;
 }
 
@@ -215,75 +215,75 @@ font-size: 11px;
 
 /* TUTOR SELECTION MODAL */
 .tutor-modal-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.7); display: none; justify-content: center;
-    align-items: center; z-index: 4000;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.7); display: none; justify-content: center;
+    align-items: center; z-index: 4000;
 }
 .tutor-modal-box {
-    background: white; padding: 20px; border-radius: 8px;
-    width: 350px; max-height: 70vh; overflow-y: auto; text-align: center;
+    background: white; padding: 20px; border-radius: 8px;
+    width: 350px; max-height: 70vh; overflow-y: auto; text-align: center;
 }
 .tutor-option {
-    padding: 12px; border-bottom: 1px solid #eee; cursor: pointer; text-align: left;
+    padding: 12px; border-bottom: 1px solid #eee; cursor: pointer; text-align: left;
 }
 .tutor-option:hover { background: #f0f7ff; }
 
 /* Restored standard link styling for navigation only */
 .admin-nav a:hover {
-    text-decoration: underline;
+    text-decoration: underline;
 }
 
 /* MOBILE AUTO-ADJUSTMENTS */
 @media screen and (max-width: 768px) {
-    .container { max-width: 100%; padding: 20px 5px; }
-    .nav-separator { display: none; }
-    
-    table, thead, tbody, th, td, tr { 
-        display: block; 
-        width: 100% !important; 
-        box-sizing: border-box;
-    }
-    
-    thead { display: none; }
-    
-    tr { 
-        margin-bottom: 20px; 
-        border: 2px solid #003366; 
-        border-radius: 6px; 
-        background: #fff;
-    }
-    
-    td {
-        text-align: left;
-        padding: 10px;
-        border: none;
-        border-bottom: 1px solid #eee;
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-    }
-    
-    td:before { 
-        content: attr(data-label);
-        font-weight: bold;
-        color: #003366;
-        font-size: 12px;
-        text-transform: uppercase;
-    }
+    .container { max-width: 100%; padding: 20px 5px; }
+    .nav-separator { display: none; }
+    
+    table, thead, tbody, th, td, tr { 
+        display: block; 
+        width: 100% !important; 
+        box-sizing: border-box;
+    }
+    
+    thead { display: none; }
+    
+    tr { 
+        margin-bottom: 20px; 
+        border: 2px solid #003366; 
+        border-radius: 6px; 
+        background: #fff;
+    }
+    
+    td {
+        text-align: left;
+        padding: 10px;
+        border: none;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+    
+    td:before { 
+        content: attr(data-label);
+        font-weight: bold;
+        color: #003366;
+        font-size: 12px;
+        text-transform: uppercase;
+    }
 
-    .scroll-cell { max-height: none; }
-    
-    td:last-child {
-        display: flex;
-        gap: 10px;
-        white-space: normal;
-    }
-    
-    .approve, .reject, .reply-btn, .match-btn { 
-        flex: 1;
-        width: auto;
-        padding: 12px;
-    }
+    .scroll-cell { max-height: none; }
+    
+    td:last-child {
+        display: flex;
+        gap: 10px;
+        white-space: normal;
+    }
+    
+    .approve, .reject, .reply-btn, .match-btn { 
+        flex: 1;
+        width: auto;
+        padding: 12px;
+    }
 }
 
 /* LOGIN & MODALS */
@@ -388,11 +388,11 @@ z-index:1100;
 </div>
 
 <div class="tutor-modal-overlay" id="tutorModal">
-    <div class="tutor-modal-box">
-        <h3 style="color:#003366; margin-top:0;">Select a Tutor</h3>
-        <div id="tutorListContainer"></div>
-        <button onclick="closeTutorModal()" style="margin-top:15px; width:100%; background:#888; color:white;">Cancel</button>
-    </div>
+    <div class="tutor-modal-box">
+        <h3 style="color:#003366; margin-top:0;">Select a Tutor</h3>
+        <div id="tutorListContainer"></div>
+        <button onclick="closeTutorModal()" style="margin-top:15px; width:100%; background:#888; color:white;">Cancel</button>
+    </div>
 </div>
 
 <div class="admin-header">
@@ -485,11 +485,11 @@ z-index:1100;
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxIShwbw27ViNIHCShqkhJv4WaQ0igIE9AQ44FGT9RL1ik4rqeOzi01liVl4vjCFhNqQw/exec";
 const loadingModal = document.getElementById("loadingModal");
 const loginOverlay = document.getElementById("loginOverlay");
-let cachedApprovedTutors = []; 
+let cachedApprovedTutors = []; 
 let studentToAssign = "";
 
 loginOverlay.addEventListener("click", function() {
-    window.location.href = "index.html";
+    window.location.href = "index.html";
 });
 
 function adminLogin(){
@@ -528,15 +528,15 @@ loadingModal.style.display="flex"
 document.getElementById("loadingText").innerText = "Loading Dashboard...";
 
 try {
-    await Promise.all([
-        loadApplications(token),
-        loadApprovedTutors(token),
-        loadStudents(token),
-        loadOtherClients(token),
-        loadSupportMessages(token)
-    ]);
+    await Promise.all([
+        loadApplications(token),
+        loadApprovedTutors(token),
+        loadStudents(token),
+        loadOtherClients(token),
+        loadSupportMessages(token)
+    ]);
 } finally {
-    loadingModal.style.display="none"
+    loadingModal.style.display="none"
 }
 }
 
@@ -579,7 +579,7 @@ return fetch(SCRIPT_URL+"?action=getApprovedTutors&token="+token)
 .then(r=>r.json())
 .then(data=>{
 if(handleAuthError(data)) return;
-cachedApprovedTutors = data; 
+cachedApprovedTutors = data; 
 const tbody=document.querySelector("#approvedTable tbody")
 tbody.innerHTML=""
 if(!Array.isArray(data)) return
@@ -605,9 +605,9 @@ tbody.innerHTML=""
 if(!Array.isArray(data)) return
 data.forEach(s=>{
 const isUnmatched = s.tutorFound === "No Match";
-const tutorDisplay = (s.tutor === "Pending" || !s.tutor) 
-    ? `<button class="match-btn" onclick="openTutorModal('${s.email}')">Manual Match</button>` 
-    : s.tutor;
+const tutorDisplay = (s.tutor === "Pending" || !s.tutor) 
+    ? `<button class="match-btn" onclick="openTutorModal('${s.email}')">Manual Match</button>` 
+    : s.tutor;
 
 tbody.innerHTML+=`
 <tr class="${isUnmatched ? 'unmatched-alert' : ''}">
@@ -645,38 +645,45 @@ tbody.innerHTML+=`
 }
 
 function openTutorModal(email) {
-    studentToAssign = email;
-    const container = document.getElementById("tutorListContainer");
-    container.innerHTML = "";
-    if(cachedApprovedTutors.length === 0) { container.innerHTML = "<p>No approved tutors available.</p>"; }
-    cachedApprovedTutors.forEach(t => {
-        const div = document.createElement("div");
-        div.className = "tutor-option";
-        div.innerHTML = `<strong>${t.name}</strong><br><small>${t.email}</small>`;
-        div.onclick = () => performManualAssign(t.email);
-        container.appendChild(div);
-    });
-    document.getElementById("tutorModal").style.display = "flex";
+    studentToAssign = email;
+    const container = document.getElementById("tutorListContainer");
+    container.innerHTML = "";
+    if(cachedApprovedTutors.length === 0) { container.innerHTML = "<p>No approved tutors available.</p>"; }
+    cachedApprovedTutors.forEach(t => {
+        const div = document.createElement("div");
+        div.className = "tutor-option";
+        div.innerHTML = `<strong>${t.name}</strong><br><small>${t.email}</small>`;
+        div.onclick = () => performManualAssign(t.email);
+        container.appendChild(div);
+    });
+    document.getElementById("tutorModal").style.display = "flex";
 }
 
 function closeTutorModal() { document.getElementById("tutorModal").style.display = "none"; }
 
 function performManualAssign(tutorEmail) {
-    if(!confirm("Assign " + tutorEmail + " to this student?")) return;
-    closeTutorModal();
-    const token = localStorage.getItem("adminToken");
-    loadingModal.style.display = "flex";
-    document.getElementById("loadingText").innerText = "Assigning...";
-    
-    fetch(SCRIPT_URL, {
-        method: "POST",
-        body: JSON.stringify({ type: "manualAssign", token: token, studentEmail: studentToAssign, tutorEmail: tutorEmail })
-    })
-    .then(r=>r.json()).then(res=>{
-        if(res.status==="success") { alert("Tutor assigned successfully!"); loadStudents(token); }
-        else { alert("Error: " + (res.message || "Could not assign tutor")); }
-        loadingModal.style.display = "none";
-    });
+    if(!confirm("Assign " + tutorEmail + " to this student?")) return;
+    closeTutorModal();
+    const token = localStorage.getItem("adminToken");
+    loadingModal.style.display = "flex";
+    document.getElementById("loadingText").innerText = "Assigning...";
+    
+    const params = new URLSearchParams({
+        type: "manualAssign",
+        token: token,
+        studentEmail: studentToAssign,
+        tutorEmail: tutorEmail
+    });
+
+    fetch(SCRIPT_URL, {
+        method: "POST",
+        body: params
+    })
+    .then(r=>r.json()).then(res=>{
+        if(res.status==="success") { alert("Tutor assigned successfully!"); loadStudents(token); }
+        else { alert("Error: " + (res.message || "Could not assign tutor")); }
+        loadingModal.style.display = "none";
+    });
 }
 
 function loadSupportMessages(token){
@@ -702,14 +709,22 @@ const replyText = prompt("Enter your reply to " + email + ":");
 if(!replyText) return;
 const token = localStorage.getItem("adminToken");
 loadingModal.style.display="flex";
+
+const params = new URLSearchParams({
+    type: "replyToSupport",
+    token: token,
+    tutorEmail: email,
+    reply: replyText
+});
+
 fetch(SCRIPT_URL, {
-    method: "POST",
-    body: JSON.stringify({ type: "replyToSupport", token: token, tutorEmail: email, reply: replyText })
+    method: "POST",
+    body: params
 })
 .then(r=>r.json())
 .then(res=>{
-    if(res.status==="success") { alert("Reply sent via email!"); loadSupportMessages(token); }
-    loadingModal.style.display="none";
+    if(res.status==="success") { alert("Reply sent via email!"); loadSupportMessages(token); }
+    loadingModal.style.display="none";
 });
 }
 
@@ -721,15 +736,15 @@ document.getElementById("loadingText").innerText = "Approving...";
 fetch(`${SCRIPT_URL}?action=approveTutor&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`)
 .then(r=>r.json())
 .then(res=>{
-  if(res.status === "approved"){
-    Promise.all([loadApplications(token), loadApprovedTutors(token)]).then(() => {
-       loadingModal.style.display="none"
-    })
-  } else { loadingModal.style.display="none" }
+  if(res.status === "approved"){
+    Promise.all([loadApplications(token), loadApprovedTutors(token)]).then(() => {
+       loadingModal.style.display="none"
+    })
+  } else { loadingModal.style.display="none" }
 })
 .catch(()=> {
-  alert("Error processing approval")
-  loadingModal.style.display="none"
+  alert("Error processing approval")
+  loadingModal.style.display="none"
 })
 }
 
@@ -741,15 +756,15 @@ document.getElementById("loadingText").innerText = "Rejecting...";
 fetch(`${SCRIPT_URL}?action=rejectTutor&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`)
 .then(r=>r.json())
 .then(res=>{
-  if(res.status === "rejected"){
-    loadApplications(token).then(() => {
-       loadingModal.style.display="none"
-    })
-  } else { loadingModal.style.display="none" }
+  if(res.status === "rejected"){
+    loadApplications(token).then(() => {
+       loadingModal.style.display="none"
+    })
+  } else { loadingModal.style.display="none" }
 })
 .catch(()=> {
-  alert("Error processing rejection")
-  loadingModal.style.display="none"
+  alert("Error processing rejection")
+  loadingModal.style.display="none"
 })
 }
 
