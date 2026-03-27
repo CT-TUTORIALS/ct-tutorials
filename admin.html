@@ -23,15 +23,15 @@ position:sticky;
 top:0;
 z-index:1100;
 display: flex;
-justify-content: center; 
+justify-content: center; 
 }
 
 .admin-nav{
 display:flex;
 justify-content:center;
 gap:15px;
-flex-wrap:wrap; 
-align-items:center; 
+flex-wrap:wrap; 
+align-items:center; 
 text-align:center;
 max-width: 100%;
 }
@@ -41,12 +41,12 @@ color:white;
 text-decoration:none;
 font-weight:bold;
 font-size:14px;
-white-space: nowrap; 
+white-space: nowrap; 
 }
 
 #adminLinks {
-display:none; 
-align-items: center; 
+display:none; 
+align-items: center; 
 justify-content: center;
 gap: 15px;
 flex-wrap: wrap;
@@ -68,7 +68,7 @@ display:inline-block;
 
 /* CONTENT */
 .container{
-max-width: 98%; 
+max-width: 98%; 
 margin:auto;
 padding:40px 0;
 display:none;
@@ -88,11 +88,11 @@ margin-bottom:70px;
 /* TABLES */
 table{
 width:100%;
-border-collapse:separate; 
+border-collapse:separate; 
 border-spacing: 0;
 background:white;
 margin-top:20px;
-table-layout: fixed; 
+table-layout: fixed; 
 }
 
 th,td{
@@ -100,7 +100,7 @@ padding:12px 10px;
 border:1px solid #ddd;
 font-size:14px;
 text-align: left;
-vertical-align: top; 
+vertical-align: top; 
 word-wrap: break-word;
 overflow-wrap: break-word;
 }
@@ -109,17 +109,29 @@ th{
 background:#003366;
 color:white;
 position: sticky;
-top: 42px; 
+top: 42px; 
 z-index: 1000;
 border-top: none;
 }
 
 /* UNIVERSAL CELL CONFINEMENT - Added to all data cells */
 .scroll-cell {
-    max-height: 100px;
-    overflow-y: auto;
-    display: block;
-    padding-right: 5px;
+    max-height: 100px;
+    overflow-y: auto;
+    display: block;
+    padding-right: 5px;
+}
+
+/* SLEEK CONTACT LINKS */
+.scroll-cell a {
+    color: inherit; /* Keeps the text black/default */
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.scroll-cell a:hover {
+    color: #0056b3; /* Subtle blue on hover */
+    text-decoration: underline;
 }
 
 /* COLUMN WIDTHS (Desktop) */
@@ -152,17 +164,17 @@ border-top: none;
 
 /* Visual Alerts for missing tutors */
 .unmatched-alert {
-    background-color: #ffe6e6 !important;
+    background-color: #ffe6e6 !important;
 }
 
 .text-danger {
-    color: #c62828;
-    font-weight: bold;
+    color: #c62828;
+    font-weight: bold;
 }
 
 /* Button Alignment */
 td:last-child {
-    white-space: nowrap; 
+    white-space: nowrap; 
 }
 
 button{
@@ -176,7 +188,7 @@ font-weight: bold;
 .approve{
 background:#2e7d32;
 color:white;
-width: 85px; 
+width: 85px; 
 margin-right: 8px;
 }
 
@@ -193,67 +205,62 @@ color:white;
 width: 85px;
 }
 
-td a {
-    color: #003366;
-    text-decoration: none;
-    font-weight: 500;
-}
-
-td a:hover {
-    text-decoration: underline;
+/* Restored standard link styling for navigation only */
+.admin-nav a:hover {
+    text-decoration: underline;
 }
 
 /* MOBILE AUTO-ADJUSTMENTS */
 @media screen and (max-width: 768px) {
-    .container { max-width: 100%; padding: 20px 5px; }
-    .nav-separator { display: none; }
-    
-    table, thead, tbody, th, td, tr { 
-        display: block; 
-        width: 100% !important; 
-        box-sizing: border-box;
-    }
-    
-    thead { display: none; }
-    
-    tr { 
-        margin-bottom: 20px; 
-        border: 2px solid #003366; 
-        border-radius: 6px; 
-        background: #fff;
-    }
-    
-    td {
-        text-align: left;
-        padding: 10px;
-        border: none;
-        border-bottom: 1px solid #eee;
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-    }
-    
-    td:before { 
-        content: attr(data-label);
-        font-weight: bold;
-        color: #003366;
-        font-size: 12px;
-        text-transform: uppercase;
-    }
+    .container { max-width: 100%; padding: 20px 5px; }
+    .nav-separator { display: none; }
+    
+    table, thead, tbody, th, td, tr { 
+        display: block; 
+        width: 100% !important; 
+        box-sizing: border-box;
+    }
+    
+    thead { display: none; }
+    
+    tr { 
+        margin-bottom: 20px; 
+        border: 2px solid #003366; 
+        border-radius: 6px; 
+        background: #fff;
+    }
+    
+    td {
+        text-align: left;
+        padding: 10px;
+        border: none;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+    
+    td:before { 
+        content: attr(data-label);
+        font-weight: bold;
+        color: #003366;
+        font-size: 12px;
+        text-transform: uppercase;
+    }
 
-    .scroll-cell { max-height: none; }
-    
-    td:last-child {
-        display: flex;
-        gap: 10px;
-        white-space: normal;
-    }
-    
-    .approve, .reject, .reply-btn { 
-        flex: 1;
-        width: auto;
-        padding: 12px;
-    }
+    .scroll-cell { max-height: none; }
+    
+    td:last-child {
+        display: flex;
+        gap: 10px;
+        white-space: normal;
+    }
+    
+    .approve, .reject, .reply-btn { 
+        flex: 1;
+        width: auto;
+        padding: 12px;
+    }
 }
 
 /* LOGIN & MODALS */
@@ -298,8 +305,7 @@ margin-top:10px;
 
 .error{
 color:red;
-display:none;
-font-size:13px;
+display:none; font-size:13px;
 }
 
 .modal{
@@ -450,7 +456,7 @@ const loadingModal = document.getElementById("loadingModal");
 const loginOverlay = document.getElementById("loginOverlay");
 
 loginOverlay.addEventListener("click", function() {
-    window.location.href = "index.html";
+    window.location.href = "index.html";
 });
 
 function adminLogin(){
@@ -489,15 +495,15 @@ loadingModal.style.display="flex"
 document.getElementById("loadingText").innerText = "Loading Dashboard...";
 
 try {
-    await Promise.all([
-        loadApplications(token),
-        loadApprovedTutors(token),
-        loadStudents(token),
-        loadOtherClients(token),
-        loadSupportMessages(token)
-    ]);
+    await Promise.all([
+        loadApplications(token),
+        loadApprovedTutors(token),
+        loadStudents(token),
+        loadOtherClients(token),
+        loadSupportMessages(token)
+    ]);
 } finally {
-    loadingModal.style.display="none"
+    loadingModal.style.display="none"
 }
 }
 
@@ -522,8 +528,8 @@ data.forEach(app=>{
 tbody.innerHTML+=`
 <tr>
 <td data-label="Name"><div class="scroll-cell">${app.name||""}</div></td>
-<td data-label="Email"><div class="scroll-cell">${app.email||""}</div></td>
-<td data-label="Phone"><div class="scroll-cell">${app.phone||""}</div></td>
+<td data-label="Email"><div class="scroll-cell"><a href="mailto:${app.email||""}">${app.email||""}</a></div></td>
+<td data-label="Phone"><div class="scroll-cell"><a href="tel:${app.phone||""}">${app.phone||""}</a></div></td>
 <td data-label="Subjects"><div class="scroll-cell">${app.subjects||""}</div></td>
 <td data-label="Status"><div class="scroll-cell">${app.status||"Pending"}</div></td>
 <td data-label="Action">
@@ -547,8 +553,8 @@ data.forEach(t=>{
 tbody.innerHTML+=`
 <tr>
 <td data-label="Name"><div class="scroll-cell">${t.name||""}</div></td>
-<td data-label="Email"><div class="scroll-cell">${t.email||""}</div></td>
-<td data-label="Phone"><div class="scroll-cell">${t.phone||""}</div></td>
+<td data-label="Email"><div class="scroll-cell"><a href="mailto:${t.email||""}">${t.email||""}</a></div></td>
+<td data-label="Phone"><div class="scroll-cell"><a href="tel:${t.phone||""}">${t.phone||""}</a></div></td>
 <td data-label="Subjects"><div class="scroll-cell">${t.subjects||""}</div></td>
 </tr>`
 })
@@ -624,13 +630,13 @@ if(!replyText) return;
 const token = localStorage.getItem("adminToken");
 loadingModal.style.display="flex";
 fetch(SCRIPT_URL, {
-    method: "POST",
-    body: JSON.stringify({ type: "replyToSupport", token: token, tutorEmail: email, reply: replyText })
+    method: "POST",
+    body: JSON.stringify({ type: "replyToSupport", token: token, tutorEmail: email, reply: replyText })
 })
 .then(r=>r.json())
 .then(res=>{
-    if(res.status==="success") { alert("Reply sent via email!"); loadSupportMessages(token); }
-    loadingModal.style.display="none";
+    if(res.status==="success") { alert("Reply sent via email!"); loadSupportMessages(token); }
+    loadingModal.style.display="none";
 });
 }
 
@@ -642,15 +648,15 @@ document.getElementById("loadingText").innerText = "Approving...";
 fetch(`${SCRIPT_URL}?action=approveTutor&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`)
 .then(r=>r.json())
 .then(res=>{
-  if(res.status === "approved"){
-    Promise.all([loadApplications(token), loadApprovedTutors(token)]).then(() => {
-       loadingModal.style.display="none"
-    })
-  } else { loadingModal.style.display="none" }
+  if(res.status === "approved"){
+    Promise.all([loadApplications(token), loadApprovedTutors(token)]).then(() => {
+       loadingModal.style.display="none"
+    })
+  } else { loadingModal.style.display="none" }
 })
 .catch(()=> {
-  alert("Error processing approval")
-  loadingModal.style.display="none"
+  alert("Error processing approval")
+  loadingModal.style.display="none"
 })
 }
 
@@ -662,15 +668,15 @@ document.getElementById("loadingText").innerText = "Rejecting...";
 fetch(`${SCRIPT_URL}?action=rejectTutor&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`)
 .then(r=>r.json())
 .then(res=>{
-  if(res.status === "rejected"){
-    loadApplications(token).then(() => {
-       loadingModal.style.display="none"
-    })
-  } else { loadingModal.style.display="none" }
+  if(res.status === "rejected"){
+    loadApplications(token).then(() => {
+       loadingModal.style.display="none"
+    })
+  } else { loadingModal.style.display="none" }
 })
 .catch(()=> {
-  alert("Error processing rejection")
-  loadingModal.style.display="none"
+  alert("Error processing rejection")
+  loadingModal.style.display="none"
 })
 }
 
