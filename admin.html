@@ -136,19 +136,19 @@ border-top: none;
 #approvedTable th:nth-child(4) { width: 50%; }
 
 /* Adjusted widths for Students and Other Clients to accommodate new columns */
-#studentsTable th:nth-child(1) { width: 12%; }
-#studentsTable th:nth-child(2) { width: 15%; }
+#studentsTable th:nth-child(1) { width: 10%; }
+#studentsTable th:nth-child(2) { width: 12%; }
 #studentsTable th:nth-child(3) { width: 10%; }
-#studentsTable th:nth-child(4) { width: 15%; }
-#studentsTable th:nth-child(5) { width: 18%; }
+#studentsTable th:nth-child(4) { width: 12%; }
+#studentsTable th:nth-child(5) { width: 25%; } /* Expanded for the long title */
 #studentsTable th:nth-child(6) { width: 12%; }
-#studentsTable th:nth-child(7) { width: 8%; }
+#studentsTable th:nth-child(7) { width: 9%; }
 
-#otherClientsTable th:nth-child(1) { width: 15%; }
-#otherClientsTable th:nth-child(2) { width: 20%; }
-#otherClientsTable th:nth-child(3) { width: 15%; }
-#otherClientsTable th:nth-child(4) { width: 20%; }
-#otherClientsTable th:nth-child(5) { width: 30%; }
+#otherClientsTable th:nth-child(1) { width: 12%; }
+#otherClientsTable th:nth-child(2) { width: 18%; }
+#otherClientsTable th:nth-child(3) { width: 12%; }
+#otherClientsTable th:nth-child(4) { width: 15%; }
+#otherClientsTable th:nth-child(5) { width: 43%; }
 
 /* Visual Alerts for missing tutors */
 .unmatched-alert {
@@ -404,7 +404,7 @@ z-index:1100;
 <h2>Students</h2>
 <table id="studentsTable">
 <thead><tr>
-<th>Name</th><th>Email</th><th>Phone</th><th>Service</th><th>Topic/Module</th><th>Tutor</th><th>Match</th>
+<th>Name</th><th>Email</th><th>Phone</th><th>Service</th><th>Specified Topic/Module/Subject</th><th>Tutor</th><th>Match</th>
 </tr></thead>
 <tbody></tbody>
 </table>
@@ -414,7 +414,7 @@ z-index:1100;
 <h2>Other Clients</h2>
 <table id="otherClientsTable">
 <thead><tr>
-<th>Name</th><th>Email</th><th>Phone</th><th>Service</th><th>Specification</th>
+<th>Name</th><th>Email</th><th>Phone</th><th>Service</th><th>Specified Topic/Module/Subject</th>
 </tr></thead>
 <tbody></tbody>
 </table>
@@ -571,7 +571,7 @@ tbody.innerHTML+=`
 <td data-label="Email"><div class="scroll-cell"><a href="mailto:${s.email||""}">${s.email||""}</a></div></td>
 <td data-label="Phone"><div class="scroll-cell"><a href="tel:${s.phone||""}">${s.phone||""}</a></div></td>
 <td data-label="Service"><div class="scroll-cell">${s.service||""}</div></td>
-<td data-label="Topic/Module"><div class="scroll-cell">${s.topic||""}</div></td>
+<td data-label="Specified Topic/Module/Subject"><div class="scroll-cell">${s.topic||""}</div></td>
 <td data-label="Tutor"><div class="scroll-cell">${s.tutor||"Pending"}</div></td>
 <td data-label="Match" class="${isUnmatched ? 'text-danger' : ''}">${s.tutorFound||"Match Found"}</td>
 </tr>`
@@ -594,7 +594,7 @@ tbody.innerHTML+=`
 <td data-label="Email"><div class="scroll-cell"><a href="mailto:${s.email||""}">${s.email||""}</a></div></td>
 <td data-label="Phone"><div class="scroll-cell"><a href="tel:${s.phone||""}">${s.phone||""}</a></div></td>
 <td data-label="Service"><div class="scroll-cell">${s.service||""}</div></td>
-<td data-label="Specification"><div class="scroll-cell">${s.topic||""}</div></td>
+<td data-label="Specified Topic/Module/Subject"><div class="scroll-cell">${s.topic||""}</div></td>
 </tr>`
 })
 })
