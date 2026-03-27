@@ -937,20 +937,17 @@ document.getElementById("studentRegisterForm").addEventListener("submit", functi
     .then(res => {
         loadingModal.style.display = "none";
         if (res.status === "success" || res.status === "duplicate_detected") {
-            alert(res.status === "duplicate_detected" ? "A similar registration already exists." : "Submitted Successfully.");
-            this.reset();
-            closeForm();
-        } else alert("Submission failed: " + (res.error || "Unknown Error"));
+            alert(res.status === "duplicate_detected" ? "A similar registration already exists." : "Submitted Successfully!");
+            location.reload();
+        } else {
+            alert("Error: " + (res.error || "Submission failed"));
+        }
     })
-    .catch(() => { loadingModal.style.display = "none"; alert("Error connecting to server."); });
+    .catch(err => {
+        loadingModal.style.display = "none";
+        alert("Network Error. Please try again later.");
+    });
 });
-
-window.onclick=e=>{
-if(e.target===modal) closeForm();
-if(e.target===pricingModal) pricingModal.style.display='none';
-if(e.target===servicePickerModal) closeServicePicker();
-if(e.target===document.getElementById('tutorProfileModal')) document.getElementById('tutorProfileModal').style.display='none';
-};
 </script>
 </body>
 </html>
