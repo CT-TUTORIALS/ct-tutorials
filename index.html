@@ -272,20 +272,8 @@ cursor:pointer;
 .submit-btn:hover{background:#00509e;}
 
 .spinner{
-width:40px;
-height:40px;
-border:4px solid #ccc;
-border-top:4px solid #003366;
-border-radius:50%;
-animation:spin 1s linear infinite;
-margin:auto;
-margin-bottom:15px;
-}
-
-@keyframes spin{
-0%{transform:rotate(0deg);}
-100%{transform:rotate(360deg);}
-}
+width:40px;height:40px;border:4px solid #ccc;border-top:4px solid #003366;border-radius:50%;animation:spin 1s linear infinite;margin:auto;margin-bottom:15px;}
+@keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
 
 footer{
 background:#003366; 
@@ -656,10 +644,10 @@ const serviceOptionsData = [
     { label: "Referencing Assistance", value: "Referencing Assistance" }
 ];
 
-// ✅ CURRICULUM-BASED MAPPING (REPLACES OLD TOPICMAPPING)
+// ✅ COMPREHENSIVE CURRICULUM KNOWLEDGE BASE
 const curriculumKB = {
-    "academic writing": ["apa", "referencing", "literature review", "thesis", "dissertation", "citations", "plagiarism", "abstract", "academic integrity", "essay structure", "eap", "writing"],
-    "mathematics": ["algebra", "calculus", "trigonometry", "statistics", "probability", "geometry", "integration", "differentiation", "functions", "linear algebra", "maths", "math"],
+    "academic writing": ["apa", "referencing", "literature review", "thesis", "dissertation", "citations", "plagiarism", "abstract", "academic integrity", "essay structure", "eap", "writing", "proper nouns", "grammar", "punctuation"],
+    "mathematics": ["algebra", "calculus", "trigonometry", "statistics", "probability", "geometry", "integration", "differentiation", "functions", "linear algebra", "maths", "math", "matrices"],
     "physics": ["mechanics", "kinematics", "thermodynamics", "electricity", "magnetism", "quantum", "optics", "nuclear", "waves", "circuits"],
     "biology": ["genetics", "photosynthesis", "ecology", "cell biology", "anatomy", "physiology", "mitosis", "meiosis", "metabolism", "homeostasis", "evolution", "bio"],
     "chemistry": ["organic chemistry", "inorganic", "stoichiometry", "periodic table", "atomic structure", "bonding", "redox", "kinetics", "equilibria", "titration", "chem"],
@@ -668,10 +656,7 @@ const curriculumKB = {
     "business studies": ["marketing", "human resources", "finance", "entrepreneurship", "strategic management", "business ethics", "organizational behavior", "business", "hr"],
     "computer science": ["programming", "coding", "java", "python", "algorithms", "data structures", "databases", "sql", "html", "css", "web development", "it"],
     "legal studies": ["constitutional law", "criminal law", "civil law", "jurisprudence", "contracts", "torts", "administrative law", "legal writing", "law"],
-    "geography": ["geomorphology", "climatology", "human geography", "population", "settlement", "plate tectonics", "weathering"],
-    "history": ["colonialism", "industrial revolution", "apartheid", "world war", "cold war", "namibian history", "ancient civilizations"],
-    "health sciences": ["nursing", "anatomy", "physiology", "health"],
-    "language": ["english", "literacy", "grammar", "linguistics"]
+    "language": ["english", "literacy", "grammar", "linguistics", "parts of speech"]
 };
 
 function openServicePicker() {
@@ -807,21 +792,19 @@ function handleServiceChange(val){
         
         let rawSpec = specInput.value.trim().toLowerCase();
         
-        // Identify "Master Subjects" that cover the user's specific topic
+        // 1. IMPROVED MATCHING: Identify Master Subjects from Topic
         let relatedCurriculumSubjects = [];
         for (let subject in curriculumKB) {
             let topics = curriculumKB[subject];
-            // Match if user input is a sub-topic OR the subject itself
-            if (topics.some(t => rawSpec.includes(t)) || rawSpec.includes(subject)) {
+            // Check if input matches subject name OR any of its topics
+            if (rawSpec.includes(subject) || topics.some(t => rawSpec.includes(t))) {
                 relatedCurriculumSubjects.push(subject);
             }
         }
 
         let allTutors = [];
         for (let key in tutorsData) {
-            if (Array.isArray(tutorsData[key])) {
-                allTutors = allTutors.concat(tutorsData[key]);
-            }
+            if (Array.isArray(tutorsData[key])) allTutors = allTutors.concat(tutorsData[key]);
         }
         
         let uniqueTutors = allTutors.filter((t, index, self) =>
@@ -831,15 +814,15 @@ function handleServiceChange(val){
         const filtered = uniqueTutors.filter(t => {
             let tutorSubjects = (t.subjects || "").toLowerCase();
             
-            // Match if:
-            // 1. Tutor teaches a Master Subject identified from the topic
-            let matchCurriculum = relatedCurriculumSubjects.some(s => tutorSubjects.includes(s));
-            // 2. Tutor profile explicitly mentions the topic typed
+            // Match Logic:
+            // A: Tutor teaches the Master Subject (e.g., "Biology")
+            let matchKB = relatedCurriculumSubjects.some(s => tutorSubjects.includes(s));
+            // B: Tutor profile literally mentions the word typed (e.g., "Linear Algebra")
             let matchExplicit = rawSpec.length > 2 && tutorSubjects.includes(rawSpec);
-            // 3. Service type match (e.g. "writing")
+            // C: Service Name match
             let matchService = tutorSubjects.includes(val.toLowerCase()) || (val.toLowerCase().includes("writing") && tutorSubjects.includes("writing"));
 
-            return matchCurriculum || matchExplicit || matchService;
+            return matchKB || matchExplicit || matchService;
         });
 
         if (filtered.length > 0) {
