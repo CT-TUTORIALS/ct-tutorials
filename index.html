@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -517,15 +517,15 @@ opacity:0.9;
 <h2>Service Registration</h2>
 
 <label>Full Name
-<input type="text" name="name" required>
+<input type="text" id="name" name="name" required>
 </label>
 
 <label>Email
-<input type="email" name="email" required>
+<input type="email" id="email" name="email" required>
 </label>
 
 <label>Cellphone Number
-<input type="tel" name="cellphone_number" required>
+<input type="tel" id="phone" name="cellphone_number" required>
 </label>
 
 <label>Select Service
@@ -911,23 +911,38 @@ tutorSelect.addEventListener("change", function() {
     }
 });
 
+/* ✅ UPDATED: JSON POST SUBMISSION */
 document.getElementById("studentRegisterForm").addEventListener("submit", function(e) {
     e.preventDefault();
     loadingModal.style.display = "flex";
-    document.getElementById("tokenField").value = generateToken();
-    let formData = new FormData(this);
     
-    fetch(SCRIPT_URL, { method: "POST", body: formData })
+    // Prepare Data Object for JSON
+    const formDataObj = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        cellphone_number: document.getElementById("phone").value,
+        service: serviceHiddenValue.value,
+        priceOption: priceOptionField.value,
+        specification: specInput.value,
+        tutor: (tutorSelect.value === "ANY" || tutorSelect.value.includes("No tutors")) ? "" : tutorSelect.value,
+        no_tutor_found: document.getElementById("noTutorFoundFlag").value,
+        token: generateToken()
+    };
+    
+    fetch(SCRIPT_URL, { 
+        method: "POST", 
+        body: JSON.stringify(formDataObj) 
+    })
     .then(res => res.json())
     .then(res => {
         loadingModal.style.display = "none";
-        if (res.status === "success") {
-            alert("Submitted Successfully.");
+        if (res.status === "success" || res.status === "duplicate_detected") {
+            alert(res.status === "duplicate_detected" ? "A similar registration already exists." : "Submitted Successfully.");
             this.reset();
             closeForm();
-        } else alert("Submission failed.");
+        } else alert("Submission failed: " + (res.error || "Unknown Error"));
     })
-    .catch(() => { loadingModal.style.display = "none"; alert("Error."); });
+    .catch(() => { loadingModal.style.display = "none"; alert("Error connecting to server."); });
 });
 
 window.onclick=e=>{
