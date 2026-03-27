@@ -542,6 +542,7 @@ opacity:0.9;
 </div>
 
 <input type="hidden" name="priceOption" id="priceOptionField">
+<input type="hidden" name="no_tutor_found" id="noTutorFoundFlag" value="false">
 
 <label id="tutorLabel" style="display:none;">Select Tutor
 <select name="tutor" id="tutorSelect">
@@ -644,27 +645,20 @@ const serviceOptionsData = [
     { label: "Referencing Assistance", value: "Referencing Assistance" }
 ];
 
-/* ✅ UPDATED COMPREHENSIVE NAMIBIAN ACADEMIC KNOWLEDGE BASE */
+/* ✅ COMPREHENSIVE NAMIBIAN ACADEMIC KNOWLEDGE BASE */
 const curriculumKB = {
-    // ACADEMIC LITERACY & LANGUAGES
-    "academic writing": ["apa", "referencing", "literature review", "thesis", "dissertation", "citations", "plagiarism", "abstract", "academic integrity", "essay structure", "eap", "writing", "proper nouns", "grammar", "punctuation", "ulep", "nouns", "parts of speech", "lea3419", "lce3419", "academic communication"],
+    "academic writing": ["apa", "referencing", "literature review", "thesis", "dissertation", "citations", "plagiarism", "abstract", "academic integrity", "essay structure", "eap", "writing", "proper nouns", "grammar", "punctuation", "ulep", "lea3419", "lce3419"],
     "language": ["english", "literacy", "linguistics", "khoekhoegowab", "oshikwanyama", "oshindonga", "afrikaans", "otjiherero", "german", "oshivambo", "rukvangali", "setswana", "silozi"],
-
-    // COMMERCE, MANAGEMENT & LAW
-    "economics": ["microeconomics", "macroeconomics", "inflation", "gdp", "supply and demand", "fiscal policy", "monetary policy", "market structures", "elasticity", "development economics", "econometrics", "emi3571", "ema3572"],
-    "accounting": ["financial accounting", "cost accounting", "ledger", "balance sheet", "journal entries", "income statement", "auditing", "taxation", "acc", "accounting", "management accounting", "pac", "accounting for bba", "caf"],
-    "business management": ["marketing", "human resources", "finance", "entrepreneurship", "strategic management", "business ethics", "organizational behavior", "hr", "swot", "public administration", "operations management", "bba", "pma", "project management", "swot analysis"],
+    "economics": ["microeconomics", "macroeconomics", "inflation", "gdp", "supply and demand", "fiscal policy", "monetary policy", "market structures", "elasticity", "econometrics", "emi3571", "ema3572"],
+    "accounting": ["financial accounting", "cost accounting", "ledger", "balance sheet", "journal entries", "income statement", "auditing", "taxation", "acc", "accounting", "management accounting", "pac", "caf"],
+    "business management": ["marketing", "human resources", "finance", "entrepreneurship", "strategic management", "business ethics", "organizational behavior", "hr", "swot", "public administration", "operations management", "bba", "pma", "project management"],
     "legal studies": ["constitutional law", "criminal law", "civil law", "jurisprudence", "contracts", "torts", "administrative law", "legal writing", "namibian law", "customary law", "commercial law", "clw3511", "family law", "property law"],
-
-    // STEM (SCIENCE, TECH, ENGINEERING, MATHS)
     "mathematics": ["algebra", "calculus", "trigonometry", "statistics", "probability", "geometry", "integration", "differentiation", "functions", "linear algebra", "matrices", "nssco", "nsscas", "quantitative methods", "mat3511", "sms3522"],
     "physics": ["mechanics", "kinematics", "thermodynamics", "electricity", "magnetism", "quantum", "optics", "nuclear", "waves", "circuits", "sph3511"],
     "biology": ["genetics", "photosynthesis", "ecology", "cell biology", "anatomy", "physiology", "mitosis", "meiosis", "metabolism", "homeostasis", "evolution", "human biology", "blg3511"],
     "chemistry": ["organic chemistry", "inorganic", "stoichiometry", "periodic table", "atomic structure", "bonding", "redox", "kinetics", "equilibria", "titration", "chm3511"],
     "computer science": ["programming", "coding", "java", "python", "algorithms", "data structures", "databases", "sql", "html", "css", "web development", "informatics", "cyber security", "software engineering", "cmp3511"],
     "engineering": ["civil engineering", "mechanical engineering", "electrical engineering", "mining", "electronics", "surveying", "structural engineering", "hydraulics", "thermodynamics"],
-
-    // HEALTH, EDUCATION & SOCIAL SCIENCES
     "health sciences": ["nursing", "pharmacology", "public health", "biomedical", "microbiology", "epidemiology", "radiography", "pathology", "anatomy", "midwifery"],
     "humanities & social": ["sociology", "psychology", "history", "geography", "namibian history", "development studies", "philosophy", "social work", "anthropology", "political science"],
     "education": ["pedagogy", "educational psychology", "curriculum studies", "classroom management", "inclusive education", "educational technology", "early childhood"],
@@ -708,6 +702,8 @@ priceOptionField.value="";
 specContainer.style.display = "none";
 specInput.required = false;
 specInput.value = "";
+// Reset flag
+document.getElementById("noTutorFoundFlag").value = "false";
 }
 
 function closeForm(){ modal.style.display="none"; }
@@ -773,6 +769,14 @@ loadTutors();
 
 specInput.addEventListener("input", () => handleServiceChange(serviceHiddenValue.value));
 
+/* ✅ SMART DYNAMIC MATCHING ENGINE */
+function getTokens(str) {
+    return str.toLowerCase()
+        .replace(/[^a-z0-9 ]/g, " ") 
+        .split(/\s+/)                
+        .filter(t => t.length > 2);  
+}
+
 function handleServiceChange(val){
     priceOptionField.value = val;
 
@@ -802,35 +806,46 @@ function handleServiceChange(val){
         tutorSelect.innerHTML='<option value="">Select a tutor</option>';
         document.getElementById("viewTutorProfile").style.display = "none";
         
-        let rawSpec = specInput.value.trim().toLowerCase();
+        const userInput = specInput.value.trim();
+        const userTokens = getTokens(userInput);
         
-        let relatedCurriculumSubjects = [];
-        for (let subject in curriculumKB) {
-            let topics = curriculumKB[subject];
-            if (rawSpec.includes(subject) || topics.some(t => rawSpec.includes(t))) {
-                relatedCurriculumSubjects.push(subject);
+        // 1. Map user input to broader categories
+        let matchedCategories = [];
+        for (let category in curriculumKB) {
+            const kbKeywords = curriculumKB[category].concat(getTokens(category));
+            if (userTokens.some(token => kbKeywords.some(kw => kw.includes(token) || token.includes(kw)))) {
+                matchedCategories.push(category.toLowerCase());
             }
         }
 
-        let allTutors = [];
+        let allTutorsList = [];
         for (let key in tutorsData) {
-            if (Array.isArray(tutorsData[key])) allTutors = allTutors.concat(tutorsData[key]);
+            if (Array.isArray(tutorsData[key])) allTutorsList = allTutorsList.concat(tutorsData[key]);
         }
         
-        let uniqueTutors = allTutors.filter((t, index, self) =>
+        let uniqueTutors = allTutorsList.filter((t, index, self) =>
             index === self.findIndex((temp) => temp.name === t.name)
         );
 
-        const filtered = uniqueTutors.filter(t => {
-            let tutorSubjects = (t.subjects || "").toLowerCase();
-            let matchKB = relatedCurriculumSubjects.some(s => tutorSubjects.includes(s));
-            let matchExplicit = rawSpec.length > 2 && tutorSubjects.includes(rawSpec);
-            let matchService = tutorSubjects.includes(val.toLowerCase()) || (val.toLowerCase().includes("writing") && tutorSubjects.includes("writing"));
+        // 2. Filter with Relevance Scoring
+        const filtered = uniqueTutors.map(t => {
+            const tutorSubjects = (t.subjects || "").toLowerCase();
+            const tutorTokens = getTokens(tutorSubjects);
+            
+            let score = 0;
+            // High Score for Direct Word Matches
+            if(userTokens.some(uTok => tutorTokens.some(tTok => tTok.includes(uTok) || uTok.includes(tTok)))) score += 10;
+            // Medium Score for Category matches
+            if(matchedCategories.some(cat => tutorSubjects.includes(cat))) score += 5;
+            // Service match
+            if(val.toLowerCase().includes("writing") && tutorSubjects.includes("writing")) score += 3;
 
-            return matchKB || matchExplicit || matchService;
-        });
+            return { ...t, relevance: score };
+        }).filter(t => t.relevance > 0).sort((a,b) => b.relevance - a.relevance);
 
+        // 3. UI Update
         if (filtered.length > 0) {
+            document.getElementById("noTutorFoundFlag").value = "false";
             filtered.forEach(t => {
                 let opt = document.createElement("option");
                 opt.value = t.name; opt.textContent = t.name;
@@ -840,7 +855,9 @@ function handleServiceChange(val){
             allOpt.value = "ANY"; allOpt.textContent = "-- See All Available Tutors --";
             tutorSelect.appendChild(allOpt);
         } else {
-            tutorSelect.innerHTML = `<option value="">No tutors specifically for "${rawSpec || 'this topic'}"</option>
+            // ✅ TRACKING: Flag for Admin if a specific input was entered but no tutor found
+            document.getElementById("noTutorFoundFlag").value = userInput ? "true" : "false";
+            tutorSelect.innerHTML = `<option value="">No tutors specifically for "${userInput || 'this topic'}"</option>
                                     <option value="ANY">-- See All Tutors Instead --</option>`;
         }
     } else {
