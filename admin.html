@@ -205,6 +205,13 @@ color:white;
 width: 85px;
 }
 
+.match-btn {
+background:#003366;
+color:white;
+padding: 4px 8px;
+font-size: 12px;
+}
+
 /* Restored standard link styling for navigation only */
 .admin-nav a:hover {
     text-decoration: underline;
@@ -256,7 +263,7 @@ width: 85px;
         white-space: normal;
     }
     
-    .approve, .reject, .reply-btn { 
+    .approve, .reject, .reply-btn, .match-btn { 
         flex: 1;
         width: auto;
         padding: 12px;
@@ -287,7 +294,7 @@ text-align:center;
 cursor: default;
 }
 
-.login-box input{
+.login-box input, .modal-box select {
 width:100%;
 padding:10px;
 margin:8px 0;
@@ -319,6 +326,15 @@ background:rgba(0,0,0,0.6);
 justify-content:center;
 align-items:center;
 z-index:3000;
+}
+
+.modal-box {
+background:white;
+padding:25px;
+border-radius:8px;
+width:90%;
+max-width:400px;
+text-align:center;
 }
 
 .spinner{
@@ -442,6 +458,16 @@ z-index:1100;
 © 2026 C&T Tutorials | Admin Panel
 </div>
 
+<div class="modal" id="matchModal">
+<div class="modal-box">
+<h3 id="matchTitle">Assign Tutor</h3>
+<p id="matchStudentInfo" style="font-size:13px; color:#555; margin-bottom:15px;"></p>
+<select id="tutorDropdown"></select>
+<button class="login-btn" onclick="submitManualMatch()">Confirm Assignment</button>
+<button class="reject" style="width:100%; margin-top:10px;" onclick="closeMatchModal()">Cancel</button>
+</div>
+</div>
+
 <div class="modal" id="loadingModal">
 <div style="background:white;padding:30px;border-radius:8px;text-align:center;">
 <div class="spinner"></div>
@@ -454,6 +480,8 @@ z-index:1100;
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxIShwbw27ViNIHCShqkhJv4WaQ0igIE9AQ44FGT9RL1ik4rqeOzi01liVl4vjCFhNqQw/exec";
 const loadingModal = document.getElementById("loadingModal");
 const loginOverlay = document.getElementById("loginOverlay");
+let approvedTutorsList = [];
+let targetStudentEmail = "";
 
 loginOverlay.addEventListener("click", function() {
     window.location.href = "index.html";
@@ -546,6 +574,7 @@ return fetch(SCRIPT_URL+"?action=getApprovedTutors&token="+token)
 .then(r=>r.json())
 .then(data=>{
 if(handleAuthError(data)) return;
+approvedTutorsList = data; // Save for dropdown usage
 const tbody=document.querySelector("#approvedTable tbody")
 tbody.innerHTML=""
 if(!Array.isArray(data)) return
@@ -578,24 +607,44 @@ tbody.innerHTML+=`
 <td data-label="Phone"><div class="scroll-cell"><a href="tel:${s.phone||""}">${s.phone||""}</a></div></td>
 <td data-label="Service"><div class="scroll-cell">${s.service||""}</div></td>
 <td data-label="Specified Topic/Module/Subject"><div class="scroll-cell">${s.topic||""}</div></td>
-<td data-label="Tutor"><div class="scroll-cell" style="cursor:pointer; text-decoration: underline;" onclick="manualMatch('${s.email}')">${s.tutor||"Assign Tutor"}</div></td>
-<td data-label="Match" class="${isUnmatched ? 'text-danger' : ''}" style="cursor:pointer" onclick="manualMatch('${s.email}')">${s.tutorFound||"Match Found"}</td>
+<td data-label="Tutor"><div class="scroll-cell">${s.tutor||"Pending"}</div></td>
+<td data-label="Match" class="${isUnmatched ? 'text-danger' : ''}">
+    ${isUnmatched ? `<button class="match-btn" onclick="openMatchModal('${s.email}', '${s.name}')">Assign Tutor</button>` : (s.tutorFound||"Match Found")}
+</td>
 </tr>`
 })
 })
 }
 
-async function manualMatch(studentEmail){
-    const tutorEmail = prompt("Enter the Tutor Email you wish to assign to " + studentEmail + ":");
-    if(!tutorEmail) return;
+function openMatchModal(email, name) {
+    targetStudentEmail = email;
+    document.getElementById("matchStudentInfo").innerText = "Matching for: " + name + " (" + email + ")";
+    const dropdown = document.getElementById("tutorDropdown");
+    dropdown.innerHTML = '<option value="">-- Select a Tutor --</option>';
+    
+    approvedTutorsList.forEach(t => {
+        dropdown.innerHTML += `<option value="${t.email}">${t.name} (${t.subjects})</option>`;
+    });
+    
+    document.getElementById("matchModal").style.display = "flex";
+}
+
+function closeMatchModal() {
+    document.getElementById("matchModal").style.display = "none";
+}
+
+async function submitManualMatch() {
+    const tutorEmail = document.getElementById("tutorDropdown").value;
+    if(!tutorEmail) { alert("Please select a tutor first."); return; }
     
     const token = localStorage.getItem("adminToken");
+    closeMatchModal();
     loadingModal.style.display="flex";
     document.getElementById("loadingText").innerText = "Assigning Tutor...";
     
     fetch(SCRIPT_URL, {
         method: "POST",
-        body: JSON.stringify({ type: "manualMatch", token: token, studentEmail: studentEmail, tutorEmail: tutorEmail })
+        body: JSON.stringify({ type: "manualMatch", token: token, studentEmail: targetStudentEmail, tutorEmail: tutorEmail })
     })
     .then(r=>r.json())
     .then(res=>{
