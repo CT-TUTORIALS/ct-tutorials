@@ -365,10 +365,38 @@ font-size:14px;
 z-index:1100;
 }
 
+/* BACK TO TOP BUTTON - Professional Transparency */
+#backToTop {
+    display: none;
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    z-index: 1200;
+    background: rgba(0, 51, 102, 0.7); 
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px); 
+}
+
+#backToTop:hover {
+    background: rgba(0, 51, 102, 1); 
+    transform: translateY(-3px); 
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+
 </style>
 </head>
 
 <body>
+
+<button id="backToTop" onclick="scrollToTop()">↑</button>
 
 <div class="login-overlay" id="loginOverlay">
 <div class="login-box" onclick="event.stopPropagation()">
@@ -778,6 +806,20 @@ fetch(`${SCRIPT_URL}?action=rejectTutor&email=${encodeURIComponent(email)}&token
 function logout(){
 localStorage.removeItem("adminToken")
 window.location.href = "index.html"
+}
+
+// BACK TO TOP LOGIC
+window.onscroll = function() {
+  const btn = document.getElementById("backToTop");
+  if (document.body.scrollTop > 250 || document.documentElement.scrollTop > 250) {
+    btn.style.display = "block";
+  } else {
+    btn.style.display = "none";
+  }
+};
+
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 </script>
