@@ -911,6 +911,14 @@ tutorSelect.addEventListener("change", function() {
     }
 });
 
+/* ✅ CLICK OUTSIDE TO DISMISS */
+window.onclick = function(event) {
+    if (event.target == modal) closeForm();
+    if (event.target == pricingModal) pricingModal.style.display = "none";
+    if (event.target == servicePickerModal) closeServicePicker();
+    if (event.target == document.getElementById('tutorProfileModal')) document.getElementById('tutorProfileModal').style.display='none';
+};
+
 /* ✅ FINAL SYNC: COMPATIBLE JSON SUBMISSION */
 document.getElementById("studentRegisterForm").addEventListener("submit", function(e) {
     e.preventDefault();
