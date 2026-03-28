@@ -341,6 +341,14 @@ opacity:0.9;
     text-decoration: underline;
     cursor: pointer;
 }
+
+.pricing-subtopic {
+    font-weight: bold;
+    color: #003366;
+    margin: 15px 0 8px 0;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 4px;
+}
 </style>
 </head>
 
@@ -384,7 +392,7 @@ opacity:0.9;
 <div class="services-grid">
 
 <div class="service-card">
-<h3>Academic Writing & Individual Tutorials</h3>
+<h3>Individual Tutorials</h3>
 <p>Structured sessions covering academic writing principles, essay development, secondary school subjects, and tertiary modules.</p>
 <span class="service-link" onclick="openPricing('writing')">View Pricing</span>
 </div>
@@ -634,10 +642,14 @@ const serviceOptionsData = [
     { label: "Tertiary Level Module", value: "Tertiary Module" },
     { label: "General Topic Specific Session", value: "Topic Specific" },
     { label: "Hourly Rate", value: "Hourly Rate" },
-    { group: "Group Learning Sessions" },
+    { group: "Group Learning Sessions: Academic & Tertiary" },
     { label: "2 – 5 People", value: "Group Sessions: 2-5 People" },
     { label: "6 – 14 People", value: "Group Sessions: 6-14 People" },
     { label: "More than 14 People", value: "Group Sessions: More than 14 People" },
+    { group: "Group Learning Sessions: Secondary Subjects" },
+    { label: "2 – 5 People (Secondary)", value: "Group Sessions: 2-5 People (Secondary)" },
+    { label: "6 – 14 People (Secondary)", value: "Group Sessions: 6-14 People (Secondary)" },
+    { label: "More than 14 People (Secondary)", value: "Group Sessions: More than 14 People (Secondary)" },
     { group: "Other Services" },
     { label: "Public Speaking Support", value: "Public Speaking Support" },
     { label: "Draft Editing", value: "Draft Editing" },
@@ -702,7 +714,6 @@ priceOptionField.value="";
 specContainer.style.display = "none";
 specInput.required = false;
 specInput.value = "";
-// Reset flag
 document.getElementById("noTutorFoundFlag").value = "false";
 }
 
@@ -713,7 +724,7 @@ pricingModal.style.display="flex";
 let content = "";
 
 if(service==="writing"){
-pricingTitle.innerText="Academic Writing & Individual Tutorials";
+pricingTitle.innerText="Individual Tutorials";
 content = `
 <label class="picker-option"><input type="radio" name="priceRadio" value="Intro Academic Writing" checked> Introduction to Academic Writing (4 sessions) – <b>N$150</b></label>
 <label class="picker-option"><input type="radio" name="priceRadio" value="Secondary Subject"> Secondary School Subject (Topic Specific) – <b>N$35</b></label>
@@ -725,9 +736,15 @@ content = `
 if(service==="group"){
 pricingTitle.innerText="Group Learning Sessions";
 content = `
+<div class="pricing-subtopic">A. Academic Writing & Tertiary Level Modules</div>
 <label class="picker-option"><input type="radio" name="priceRadio" value="Group Sessions: 2-5 People" checked> 2 – 5 People – <b>N$200</b></label>
 <label class="picker-option"><input type="radio" name="priceRadio" value="Group Sessions: 6-14 People"> 6 – 14 People – <b>N$450</b></label>
-<label class="picker-option"><input type="radio" name="priceRadio" value="Group Sessions: More than 14 People"> More than 14 People – <b>N$600</b></label>`;
+<label class="picker-option"><input type="radio" name="priceRadio" value="Group Sessions: More than 14 People"> More than 14 People – <b>N$600</b></label>
+
+<div class="pricing-subtopic">B. Secondary School Subjects</div>
+<label class="picker-option"><input type="radio" name="priceRadio" value="Group Sessions: 2-5 People (Secondary)"> 2 – 5 People – <b>N$150</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" value="Group Sessions: 6-14 People (Secondary)"> 6 – 14 People – <b>N$250</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" value="Group Sessions: More than 14 People (Secondary)"> > 14 People – <b>N$350</b></label>`;
 }
 
 if(service==="assignment"){
@@ -769,7 +786,6 @@ loadTutors();
 
 specInput.addEventListener("input", () => handleServiceChange(serviceHiddenValue.value));
 
-/* ✅ SMART DYNAMIC MATCHING ENGINE */
 function getTokens(str) {
     return str.toLowerCase()
         .replace(/[^a-z0-9 ]/g, " ") 
@@ -809,7 +825,6 @@ function handleServiceChange(val){
         const userInput = specInput.value.trim();
         const userTokens = getTokens(userInput);
         
-        // 1. Map user input to broader categories
         let matchedCategories = [];
         for (let category in curriculumKB) {
             const kbKeywords = curriculumKB[category].concat(getTokens(category));
@@ -827,23 +842,16 @@ function handleServiceChange(val){
             index === self.findIndex((temp) => temp.name === t.name)
         );
 
-        // 2. Filter with Relevance Scoring
         const filtered = uniqueTutors.map(t => {
             const tutorSubjects = (t.subjects || "").toLowerCase();
             const tutorTokens = getTokens(tutorSubjects);
-            
             let score = 0;
-            // High Score for Direct Word Matches
             if(userTokens.some(uTok => tutorTokens.some(tTok => tTok.includes(uTok) || uTok.includes(tTok)))) score += 10;
-            // Medium Score for Category matches
             if(matchedCategories.some(cat => tutorSubjects.includes(cat))) score += 5;
-            // Service match
             if(val.toLowerCase().includes("writing") && tutorSubjects.includes("writing")) score += 3;
-
             return { ...t, relevance: score };
         }).filter(t => t.relevance > 0).sort((a,b) => b.relevance - a.relevance);
 
-        // 3. UI Update
         if (filtered.length > 0) {
             document.getElementById("noTutorFoundFlag").value = "false";
             filtered.forEach(t => {
@@ -855,7 +863,6 @@ function handleServiceChange(val){
             allOpt.value = "ANY"; allOpt.textContent = "-- See All Available Tutors --";
             tutorSelect.appendChild(allOpt);
         } else {
-            // ✅ TRACKING: Flag for Admin if a specific input was entered but no tutor found
             document.getElementById("noTutorFoundFlag").value = userInput ? "true" : "false";
             tutorSelect.innerHTML = `<option value="">No tutors specifically for "${userInput || 'this topic'}"</option>
                                     <option value="ANY">-- See All Tutors Instead --</option>`;
@@ -868,7 +875,6 @@ function handleServiceChange(val){
 function showTutorSubjects() {
     const selectedName = tutorSelect.value;
     if(!selectedName || selectedName === "ANY") return;
-
     let foundTutor = null;
     for (let key in tutorsData) {
         if (Array.isArray(tutorsData[key])) {
@@ -876,7 +882,6 @@ function showTutorSubjects() {
             if(match) { foundTutor = match; break; }
         }
     }
-
     if(foundTutor) {
         document.getElementById("profileTutorName").innerText = foundTutor.name;
         document.getElementById("profileTutorSubjects").innerText = foundTutor.subjects || "No specific subjects listed.";
@@ -886,13 +891,11 @@ function showTutorSubjects() {
 
 tutorSelect.addEventListener("change", function() {
     const profileLink = document.getElementById("viewTutorProfile");
-    
     if(this.value && this.value !== "ANY") {
         profileLink.style.display = "block";
     } else {
         profileLink.style.display = "none";
     }
-
     if(this.value === "ANY") {
         this.innerHTML = '<option value="">Select a tutor</option>';
         let all = [];
@@ -911,20 +914,22 @@ tutorSelect.addEventListener("change", function() {
     }
 });
 
-/* ✅ CLICK OUTSIDE TO DISMISS */
+/* ✅ GLOBAL MODAL DISMISS LOGIC */
 window.onclick = function(event) {
-    if (event.target == modal) closeForm();
-    if (event.target == pricingModal) pricingModal.style.display = "none";
-    if (event.target == servicePickerModal) closeServicePicker();
-    if (event.target == document.getElementById('tutorProfileModal')) document.getElementById('tutorProfileModal').style.display='none';
+    if (event.target == modal) {
+        closeForm();
+    } else if (event.target == pricingModal) {
+        pricingModal.style.display = "none";
+    } else if (event.target == servicePickerModal) {
+        closeServicePicker();
+    } else if (event.target == document.getElementById('tutorProfileModal')) {
+        document.getElementById('tutorProfileModal').style.display = 'none';
+    }
 };
 
-/* ✅ FINAL SYNC: COMPATIBLE JSON SUBMISSION */
 document.getElementById("studentRegisterForm").addEventListener("submit", function(e) {
     e.preventDefault();
     loadingModal.style.display = "flex";
-    
-    // Structure strictly matching your new Apps Script expectation
     const formDataObj = {
         type: "studentRegistration", 
         name: document.getElementById("name").value,
@@ -937,7 +942,6 @@ document.getElementById("studentRegisterForm").addEventListener("submit", functi
         no_tutor_found: document.getElementById("noTutorFoundFlag").value,
         token: generateToken()
     };
-    
     fetch(SCRIPT_URL, { 
         method: "POST", 
         mode: "no-cors",
