@@ -725,7 +725,7 @@ tbody.innerHTML+=`
 })
 }
 
-/* UPDATED RESOURCE UPLOAD - Modal overlap fix & Post formatting */
+/* UPDATED RESOURCE UPLOAD - Fixed POST action and Modal feedback */
 async function uploadResource(tutorEmail) {
     const safeEmail = tutorEmail.replace(/[@.]/g, '-');
     const fileInput = document.getElementById(`file-${safeEmail}`);
@@ -741,7 +741,7 @@ async function uploadResource(tutorEmail) {
     reader.onload = function(e) {
         const base64 = e.target.result.split(",")[1];
         const payload = {
-            action: "uploadTutorResource",
+            action: "uploadTutorResource", // Backend expects this specific action
             token: token,
             tutorEmail: tutorEmail,
             fileName: file.name,
@@ -755,9 +755,8 @@ async function uploadResource(tutorEmail) {
         })
         .then(r => r.json())
         .then(res => {
-            // Immediate closure of loading modal before any alert logic
             loadingModal.style.display = "none";
-            if(res.success) {
+            if(res.success || res.status === "success") {
                 alert("File uploaded successfully.");
                 fileInput.value = "";
             } else {
@@ -766,7 +765,7 @@ async function uploadResource(tutorEmail) {
         })
         .catch(err => {
             loadingModal.style.display = "none";
-            alert("Upload failed: " + err);
+            alert("Network error: " + err);
         });
     };
     reader.readAsDataURL(file);
