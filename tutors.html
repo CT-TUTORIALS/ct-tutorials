@@ -475,6 +475,8 @@ margin-bottom:15px;
             <span>📄 Lesson Plan Template</span>
             <a href="documents/Lesson_Plan_Template[1].docx" target="_blank">View/Download</a>
         </div>
+        
+        <div id="individualResources"></div>
     </div>
 </div>
 </div>
@@ -622,8 +624,8 @@ function handleHomeClick() {
     if (localStorage.getItem("tutorToken")) {
         logoutTutor();
     } else {
-        // Corrected link to main tutor portal page
-        window.location.href = "tutor-portal.html";
+        // FIXED: Corrected link from tutor-portal.html to tutors.html
+        window.location.href = "tutors.html";
     }
 }
 
@@ -735,6 +737,7 @@ loginForm.onsubmit=async e=>{
             resetLogoutTimer();
             await loadStudents(d.token);
             await loadSupportMessages(d.token);
+            await loadIndividualResources(d.token);
         }else{
             loadingModal.style.display="none";
             alert("Invalid login credentials.");
@@ -848,6 +851,24 @@ async function loadStudents(token){
     }
 }
 
+/* ✅ NEW: Fetch individual resources for specific tutor */
+async function loadIndividualResources(token) {
+    const email = localStorage.getItem("tutorEmail");
+    const container = document.getElementById("individualResources");
+    try {
+        const res = await fetch(`${SCRIPT_URL}?action=getIndividualResources&token=${token}&email=${encodeURIComponent(email)}`);
+        const data = await res.json();
+        if(data && data.length > 0) {
+            container.innerHTML = data.map(f => `
+                <div class="resource-item" style="background: #eef4ff; margin-top: 5px;">
+                    <span>📂 ${f.name}</span>
+                    <a href="${f.url}" target="_blank">View/Download</a>
+                </div>
+            `).join("");
+        }
+    } catch(e) { console.log("Individual resources load failed."); }
+}
+
 window.onload=()=>{
     const t = localStorage.getItem("tutorToken");
     if(t){
@@ -857,6 +878,7 @@ window.onload=()=>{
         resetLogoutTimer();
         loadStudents(t);
         loadSupportMessages(t);
+        loadIndividualResources(t);
     } else {
         updateNav(false);
     }
@@ -865,8 +887,8 @@ window.onload=()=>{
 function logoutTutor(){
     clearTimeout(logoutTimer);
     localStorage.clear();
-    // Corrected link to main tutor portal page
-    window.location.href = "tutor-portal.html"; 
+    // FIXED: Corrected link from tutor-portal.html to tutors.html
+    window.location.href = "tutors.html"; 
 }
 </script>
 </body>
