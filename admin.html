@@ -492,7 +492,7 @@ z-index:1100;
 <div class="nav-separator"></div>
 <a href="#otherClients">Other Clients</a>
 <div class="nav-separator"></div>
-<a href="#support" onmouseover="clearBadge()">Support <span id="supportBadge" class="badge">0</span></a>
+<a href="#support" onmouseover="markMessagesAsRead()">Support <span id="supportBadge" class="badge">0</span></a>
 <div class="nav-separator"></div>
 <a href="#" class="signout" onclick="logout()">Sign Out</a>
 </span>
@@ -585,14 +585,12 @@ loginOverlay.addEventListener("click", function() {
 
 function resetLogoutTimer() {
     clearTimeout(logoutTimer);
-    // 15 minutes = 15 * 60 * 1000 ms
     logoutTimer = setTimeout(() => {
         alert("Session expired due to 15 minutes of inactivity.");
         logout();
     }, 900000); 
 }
 
-// Track activity to keep session alive
 window.onmousemove = resetLogoutTimer;
 window.onmousedown = resetLogoutTimer;
 window.onclick = resetLogoutTimer;
@@ -657,10 +655,13 @@ return true;
 return false;
 }
 
-function clearBadge() {
+// PERSISTENT BADGE LOGIC
+function markMessagesAsRead() {
     const badge = document.getElementById("supportBadge");
     badge.style.display = "none";
     badge.innerText = "0";
+    // Store current time as the "Last Checked" point
+    localStorage.setItem("lastSupportCheck", Date.now().toString());
 }
 
 function loadApplications(token){
@@ -808,21 +809,36 @@ function loadSupportMessages(token){
         grid.innerHTML = "";
         if(!Array.isArray(data)) return;
         
+        const lastChecked = parseInt(localStorage.getItem("lastSupportCheck") || "0");
+        let unreadConversationCount = 0;
         const groups = {};
+
         data.forEach(m => {
             const email = m["Tutor Email"] || "unknown@tutor.com";
+            const msgTime = m["Date"] ? new Date(m["Date"]).getTime() : 0;
+            
             if(!groups[email]) {
                 groups[email] = {
                     name: m["Tutor Name"] || "Unknown Tutor",
-                    msgs: []
+                    msgs: [],
+                    hasNew: false
                 };
             }
             groups[email].msgs.push(m);
+            
+            // Check if THIS message is newer than the last time we hovered "Support"
+            if (msgTime > lastChecked && m["Sender"] !== "Admin") {
+                groups[email].hasNew = true;
+            }
         });
 
-        const activeCount = Object.keys(groups).length;
-        if(activeCount > 0) {
-            badge.innerText = activeCount;
+        // Calculate count based on unique conversations that have at least one new message
+        for (let key in groups) {
+            if (groups[key].hasNew) unreadConversationCount++;
+        }
+
+        if(unreadConversationCount > 0) {
+            badge.innerText = unreadConversationCount;
             badge.style.display = "inline-block";
         } else {
             badge.style.display = "none";
