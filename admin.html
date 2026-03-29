@@ -472,8 +472,8 @@ z-index:1100;
 <div class="login-overlay" id="loginOverlay">
 <div class="login-box" onclick="event.stopPropagation()">
 <h2>Admin Login</h2>
-<input id="username" placeholder="Username">
-<input id="password" type="password" placeholder="Password">
+<input id="username" placeholder="Username" onkeydown="if(event.key==='Enter') adminLogin()">
+<input id="password" type="password" placeholder="Password" onkeydown="if(event.key==='Enter') adminLogin()">
 <button class="login-btn" onclick="adminLogin()">Login</button>
 <p id="error" class="error">Invalid credentials</p>
 </div>
@@ -492,7 +492,7 @@ z-index:1100;
 <div class="nav-separator"></div>
 <a href="#otherClients">Other Clients</a>
 <div class="nav-separator"></div>
-<a href="#support">Support <span id="supportBadge" class="badge">0</span></a>
+<a href="#support" onmouseover="clearBadge()">Support <span id="supportBadge" class="badge">0</span></a>
 <div class="nav-separator"></div>
 <a href="#" class="signout" onclick="logout()">Sign Out</a>
 </span>
@@ -637,6 +637,12 @@ logout();
 return true;
 }
 return false;
+}
+
+function clearBadge() {
+    const badge = document.getElementById("supportBadge");
+    badge.style.display = "none";
+    badge.innerText = "0";
 }
 
 function loadApplications(token){
@@ -784,7 +790,6 @@ function loadSupportMessages(token){
         grid.innerHTML = "";
         if(!Array.isArray(data)) return;
         
-        // Group messages by Tutor Email
         const groups = {};
         data.forEach(m => {
             const email = m["Tutor Email"] || "unknown@tutor.com";
@@ -797,7 +802,6 @@ function loadSupportMessages(token){
             groups[email].msgs.push(m);
         });
 
-        // Update Notification Badge
         const activeCount = Object.keys(groups).length;
         if(activeCount > 0) {
             badge.innerText = activeCount;
@@ -806,7 +810,6 @@ function loadSupportMessages(token){
             badge.style.display = "none";
         }
 
-        // Loop through grouped conversations to build cards
         for(let email in groups) {
             let chatBubblesHtml = "";
             groups[email].msgs.forEach(m => {
@@ -819,6 +822,7 @@ function loadSupportMessages(token){
                     </div>`;
             });
 
+            const cardId = email.replace(/[@.]/g, '-');
             const card = document.createElement("div");
             card.className = "support-card";
             card.innerHTML = `
@@ -829,17 +833,16 @@ function loadSupportMessages(token){
                     </div>
                     <button class="close-chat-btn" onclick="deleteConversation('${email}')">Close Chat</button>
                 </div>
-                <div class="chat-container" id="chat-${email.replace(/[@.]/g, '-')}">
+                <div class="chat-container" id="chat-${cardId}">
                     ${chatBubblesHtml}
                 </div>
                 <div class="chat-input-area">
-                    <input type="text" placeholder="Type a reply..." id="input-${email.replace(/[@.]/g, '-')}">
+                    <input type="text" placeholder="Type a reply..." id="input-${cardId}" onkeydown="if(event.key==='Enter') directReply('${email}')">
                     <button class="reply-btn" onclick="directReply('${email}')">Send</button>
                 </div>
             `;
             grid.appendChild(card);
             
-            // Scroll to bottom of chat
             const chatBox = card.querySelector(".chat-container");
             chatBox.scrollTop = chatBox.scrollHeight;
         }
