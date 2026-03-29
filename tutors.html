@@ -624,7 +624,6 @@ function handleHomeClick() {
     if (localStorage.getItem("tutorToken")) {
         logoutTutor();
     } else {
-        // FIXED: Corrected link from tutor-portal.html to tutors.html
         window.location.href = "tutors.html";
     }
 }
@@ -851,7 +850,6 @@ async function loadStudents(token){
     }
 }
 
-/* ✅ NEW: Fetch individual resources for specific tutor */
 async function loadIndividualResources(token) {
     const email = localStorage.getItem("tutorEmail");
     const container = document.getElementById("individualResources");
@@ -859,6 +857,7 @@ async function loadIndividualResources(token) {
         const res = await fetch(`${SCRIPT_URL}?action=getIndividualResources&token=${token}&email=${encodeURIComponent(email)}`);
         const data = await res.json();
         if(data && data.length > 0) {
+            // SYNCED: Updated to map to correct backend property names (name/url)
             container.innerHTML = data.map(f => `
                 <div class="resource-item" style="background: #eef4ff; margin-top: 5px;">
                     <span>📂 ${f.name}</span>
@@ -887,7 +886,6 @@ window.onload=()=>{
 function logoutTutor(){
     clearTimeout(logoutTimer);
     localStorage.clear();
-    // FIXED: Corrected link from tutor-portal.html to tutors.html
     window.location.href = "tutors.html"; 
 }
 </script>
