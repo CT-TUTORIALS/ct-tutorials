@@ -725,7 +725,7 @@ tbody.innerHTML+=`
 })
 }
 
-/* ✅ NEW: RESOURCE UPLOAD LOGIC */
+/* RESOURCE UPLOAD LOGIC - Updated for action-based payload */
 async function uploadResource(tutorEmail) {
     const safeEmail = tutorEmail.replace(/[@.]/g, '-');
     const fileInput = document.getElementById(`file-${safeEmail}`);
@@ -741,7 +741,7 @@ async function uploadResource(tutorEmail) {
     reader.onload = function(e) {
         const base64 = e.target.result.split(",")[1];
         const payload = {
-            type: "uploadTutorResource",
+            action: "uploadTutorResource", // Matches backend switch case
             token: token,
             tutorEmail: tutorEmail,
             fileName: file.name,
@@ -751,15 +751,19 @@ async function uploadResource(tutorEmail) {
 
         fetch(SCRIPT_URL, {
             method: "POST",
-            mode: "no-cors",
             body: JSON.stringify(payload)
-        }).then(() => {
-            setTimeout(() => {
-                loadingModal.style.display = "none";
-                alert("File uploaded successfully to " + tutorEmail + "'s folder.");
+        })
+        .then(r => r.json())
+        .then(res => {
+            loadingModal.style.display = "none";
+            if(res.success) {
+                alert("File uploaded successfully.");
                 fileInput.value = "";
-            }, 2000);
-        }).catch(err => {
+            } else {
+                alert("Upload failed: " + (res.error || "Unknown error"));
+            }
+        })
+        .catch(err => {
             loadingModal.style.display = "none";
             alert("Upload failed: " + err);
         });
@@ -815,14 +819,13 @@ async function submitManualMatch() {
     loadingModal.style.display="flex";
     fetch(SCRIPT_URL, {
         method: "POST",
-        mode: "no-cors",
-        body: JSON.stringify({ type: "manualMatch", token: token, studentEmail: targetStudentEmail, tutorEmail: tutorEmail })
+        body: JSON.stringify({ action: "manualMatch", token: token, studentEmail: targetStudentEmail, tutorEmail: tutorEmail })
     })
-    .then(() => {
-        setTimeout(() => {
-            loadingModal.style.display="none";
-            loadStudents(token);
-        }, 1500);
+    .then(r => r.json())
+    .then(res => {
+        loadingModal.style.display="none";
+        if(res.success) loadStudents(token);
+        else alert("Match failed: " + res.error);
     });
 }
 
@@ -913,22 +916,25 @@ function loadSupportMessages(token, silent = false){
 }
 
 function directReply(email){
-    const inputId = `input-${email.replace(/[@.]/g, '-')}`;
+    const cardId = email.replace(/[@.]/g, '-');
+    const inputId = `input-${cardId}`;
     const replyText = document.getElementById(inputId).value.trim();
     if(!replyText) return;
     const token = localStorage.getItem("adminToken");
     loadingModal.style.display="flex";
     fetch(SCRIPT_URL, {
         method: "POST",
-        mode: "no-cors",
-        body: JSON.stringify({ type: "replyToSupport", token: token, tutorEmail: email, reply: replyText })
+        body: JSON.stringify({ action: "replyToSupport", token: token, tutorEmail: email, reply: replyText })
     })
-    .then(() => {
-        setTimeout(() => {
+    .then(r => r.json())
+    .then(res => {
+        loadingModal.style.display="none";
+        if(res.success) {
             document.getElementById(inputId).value = "";
             loadSupportMessages(token);
-            loadingModal.style.display="none";
-        }, 1500);
+        } else {
+            alert("Reply failed: " + res.error);
+        }
     });
 }
 
@@ -938,14 +944,12 @@ function deleteConversation(email) {
     loadingModal.style.display="flex";
     fetch(SCRIPT_URL, {
         method: "POST",
-        mode: "no-cors",
-        body: JSON.stringify({ type: "deleteSupportChat", token: token, tutorEmail: email })
+        body: JSON.stringify({ action: "deleteSupportChat", token: token, tutorEmail: email })
     })
-    .then(() => {
-        setTimeout(() => {
-            loadSupportMessages(token);
-            loadingModal.style.display="none";
-        }, 1500);
+    .then(r => r.json())
+    .then(res => {
+        loadingModal.style.display="none";
+        if(res.success) loadSupportMessages(token);
     });
 }
 
@@ -956,8 +960,12 @@ loadingModal.style.display="flex"
 fetch(`${SCRIPT_URL}?action=approveTutor&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`)
 .then(r=>r.json())
 .then(res=>{
-  if(res.status === "approved") Promise.all([loadApplications(token), loadApprovedTutors(token)]).then(() => { loadingModal.style.display="none" })
-  else loadingModal.style.display="none"
+  if(res.status === "approved") {
+      Promise.all([loadApplications(token), loadApprovedTutors(token)]).then(() => { loadingModal.style.display="none" });
+  } else {
+      loadingModal.style.display="none";
+      alert("Approval failed: " + (res.error || "Unknown error"));
+  }
 });
 }
 
@@ -968,8 +976,12 @@ loadingModal.style.display="flex"
 fetch(`${SCRIPT_URL}?action=rejectTutor&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`)
 .then(r=>r.json())
 .then(res=>{
-  if(res.status === "rejected") loadApplications(token).then(() => { loadingModal.style.display="none" })
-  else loadingModal.style.display="none"
+  if(res.status === "rejected") {
+      loadApplications(token).then(() => { loadingModal.style.display="none" });
+  } else {
+      loadingModal.style.display="none";
+      alert("Rejection failed: " + (res.error || "Unknown error"));
+  }
 });
 }
 
