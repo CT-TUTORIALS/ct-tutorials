@@ -123,6 +123,50 @@ display:block;
     padding-right: 15px;
 }
 
+/* CHAT INTERFACE STYLING */
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 10px;
+    background: #f0f2f5;
+    border-radius: 8px;
+}
+
+.chat-bubble {
+    padding: 12px 16px;
+    border-radius: 15px;
+    max-width: 80%;
+    font-size: 14px;
+    line-height: 1.5;
+    position: relative;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.chat-bubble.tutor {
+    background: #003366;
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 2px;
+}
+
+.chat-bubble.admin {
+    background: #e4e6eb;
+    color: #050505;
+    align-self: flex-start;
+    border-bottom-left-radius: 2px;
+}
+
+.chat-date {
+    font-size: 10px;
+    display: block;
+    margin-top: 6px;
+    opacity: 0.7;
+}
+
+.chat-bubble.admin .chat-date { text-align: left; }
+.chat-bubble.tutor .chat-date { text-align: right; }
+
 .service-card:hover{
 transform:translateY(-5px);
 }
@@ -187,14 +231,6 @@ margin-bottom:15px;
 border-radius: 5px;
 background: white;
 }
-
-.message-card {
-    border-bottom: 1px solid #eee;
-    padding: 15px 0;
-}
-
-.message-card small { color: #666; display: block; margin-bottom: 5px; }
-.message-card .admin-reply { margin-top: 8px; color: #2e7d32; font-style: italic; }
 
 .resource-item {
     display: flex;
@@ -456,8 +492,9 @@ margin-bottom:15px;
 <div id="section-support" class="dashboard-section">
 <h2>Help & Support</h2>
 <div class="service-card">
-<textarea id="supportInput" placeholder="How can we help you?" style="height: 180px;"></textarea>
-<button onclick="submitSupport()">Submit Request</button>
+<p style="font-size: 14px; margin-bottom: 10px; color: #555;">Send a message to the admin team. Responses will appear in the Messages section above.</p>
+<textarea id="supportInput" placeholder="Type your message here..." style="height: 120px;"></textarea>
+<button onclick="submitSupport()">Send Message</button>
 </div>
 </div>
 
@@ -690,7 +727,7 @@ async function submitSupport(){
     const msg = supportInput.value.trim();
     if(!msg) return;
     loadingModal.style.display="flex";
-    document.getElementById('loadingText').innerText = "Submitting Support Request...";
+    document.getElementById('loadingText').innerText = "Submitting Message...";
     const t = localStorage.getItem("tutorToken");
     const data = {
         type: "supportRequest",
@@ -706,7 +743,7 @@ async function submitSupport(){
         headers: { "Content-Type": "application/json" }
     }).then(() => {
         setTimeout(() => {
-            alert("Your request has been logged. Refreshing messages...");
+            alert("Message sent! Refreshing history...");
             supportInput.value = "";
             loadSupportMessages(t);
             loadingModal.style.display="none";
@@ -723,22 +760,31 @@ async function loadSupportMessages(token){
         const data = await res.json();
         
         if(data && Array.isArray(data) && data.length > 0){
-            messagesContainer.innerHTML = data.map(m => {
+            let chatHtml = `<div class="chat-container">`;
+            data.forEach(m => {
                 const timestamp = m["Timestamp"] || "Recently";
                 const messageText = m["Message"] || "";
-                const status = m["Status"] || "Pending";
+                const adminReply = m["AdminReply"] || ""; 
                 const dateDisplay = timestamp !== "Recently" ? new Date(timestamp).toLocaleString() : "Recently";
 
-                return `
-                    <div class="message-card">
-                        <small>${dateDisplay}</small>
-                        <div><strong>Your Message:</strong> ${messageText}</div>
-                        ${status === "Replied" ? 
-                            `<div class="admin-reply"><strong>Admin:</strong> (An admin has responded to this request. Please check your email for the full response.)</div>` : 
-                            `<div style="color:#888; font-size:12px; margin-top:5px;">Status: ${status}</div>`}
-                    </div>
-                `;
-            }).join("");
+                // User message (Tutor)
+                chatHtml += `
+                    <div class="chat-bubble tutor">
+                        ${messageText}
+                        <span class="chat-date">${dateDisplay}</span>
+                    </div>`;
+
+                // If admin replied, show it as an admin bubble
+                if(adminReply) {
+                    chatHtml += `
+                        <div class="chat-bubble admin">
+                            ${adminReply}
+                            <span class="chat-date">Response</span>
+                        </div>`;
+                }
+            });
+            chatHtml += `</div>`;
+            messagesContainer.innerHTML = chatHtml;
         } else {
             messagesContainer.innerHTML = "<p>No message history found.</p>";
         }
