@@ -784,14 +784,14 @@ async function loadSupportMessages(token){
         if(data && Array.isArray(data) && data.length > 0){
             let chatHtml = `<div class="chat-container">`;
             data.forEach(m => {
-                const timestamp = m["Date"];
+                // FIX: Check for both "Date" and "Timestamp" headers to avoid "N/A"
+                const rawDate = m["Date"] || m["Timestamp"];
                 const messageText = m["Message"] || "";
                 const sender = (m["Sender"] || "Tutor").toLowerCase(); // "admin" or "tutor"
                 
-                // Enhanced time display
                 let dateDisplay = "Recently";
-                if(timestamp) {
-                    const dateObj = new Date(timestamp);
+                if(rawDate) {
+                    const dateObj = new Date(rawDate);
                     if(!isNaN(dateObj.getTime())) {
                         dateDisplay = dateObj.toLocaleString();
                     }
