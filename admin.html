@@ -469,7 +469,7 @@ z-index:1100;
 <h2>Support Messages</h2>
 <table id="supportTable">
 <thead><tr>
-<th>Date</th><th>Tutor Email</th><th>Message</th><th>Status</th><th>Action</th>
+<th>Date</th><th>Tutor Name</th><th>Message</th><th>Status</th><th>Action</th>
 </tr></thead>
 <tbody></tbody>
 </table>
@@ -714,13 +714,14 @@ function loadSupportMessages(token){
         
         data.forEach(m=>{
             const dateStr = m["Timestamp"] ? new Date(m["Timestamp"]).toLocaleDateString() : "N/A";
-            const tutorEmail = m["Tutor Email"] || "Unknown";
+            const tutorName = m["Tutor Name"] || "Unknown"; 
+            const tutorEmail = m["Tutor Email"] || "";
             const message = m["Message"] || "";
             const status = m["Status"] || "Pending";
             
             tbody.innerHTML+=`<tr>
                 <td data-label="Date">${dateStr}</td>
-                <td data-label="Tutor Email">${tutorEmail}</td>
+                <td data-label="Tutor Name"><div class="scroll-cell" title="${tutorEmail}">${tutorName}</div></td>
                 <td data-label="Message"><div class="scroll-cell">${message}</div></td>
                 <td data-label="Status">${status}</td>
                 <td data-label="Action">${status === "Pending" ? 
