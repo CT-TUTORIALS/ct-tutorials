@@ -579,6 +579,26 @@ const studentsList = document.getElementById("studentsList");
 const supportInput = document.getElementById("supportInput");
 const messagesContainer = document.getElementById("messagesContainer");
 
+let logoutTimer;
+
+function resetLogoutTimer() {
+    clearTimeout(logoutTimer);
+    // 15 minutes = 900,000 milliseconds
+    logoutTimer = setTimeout(() => {
+        if (localStorage.getItem("tutorToken")) {
+            alert("Your session has expired due to 15 minutes of inactivity.");
+            logoutTutor();
+        }
+    }, 900000);
+}
+
+// Activity tracking for timeout
+window.onmousemove = resetLogoutTimer;
+window.onmousedown = resetLogoutTimer;
+window.onclick = resetLogoutTimer;
+window.onscroll = resetLogoutTimer;
+window.onkeypress = resetLogoutTimer;
+
 function openApply(){applyModal.style.display="flex"}
 function openCreate(){createModal.style.display="flex"}
 function openLogin(){loginModal.style.display="flex"}
@@ -590,6 +610,7 @@ window.onclick=e=>{
 }
 
 window.onscroll = function() {
+    resetLogoutTimer();
     const btn = document.getElementById("btnTop");
     if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
         btn.style.display = "flex";
@@ -711,6 +732,7 @@ loginForm.onsubmit=async e=>{
             localStorage.setItem("tutorName", d.name);
             loginModal.style.display = "none";
             updateNav(true);
+            resetLogoutTimer();
             await loadStudents(d.token);
             await loadSupportMessages(d.token);
         }else{
@@ -762,10 +784,18 @@ async function loadSupportMessages(token){
         if(data && Array.isArray(data) && data.length > 0){
             let chatHtml = `<div class="chat-container">`;
             data.forEach(m => {
-                const timestamp = m["Date"] || "Recently";
+                const timestamp = m["Date"];
                 const messageText = m["Message"] || "";
                 const sender = (m["Sender"] || "Tutor").toLowerCase(); // "admin" or "tutor"
-                const dateDisplay = timestamp !== "Recently" ? new Date(timestamp).toLocaleString() : "Recently";
+                
+                // Enhanced time display
+                let dateDisplay = "Recently";
+                if(timestamp) {
+                    const dateObj = new Date(timestamp);
+                    if(!isNaN(dateObj.getTime())) {
+                        dateDisplay = dateObj.toLocaleString();
+                    }
+                }
 
                 chatHtml += `
                     <div class="chat-bubble ${sender}">
@@ -826,6 +856,7 @@ window.onload=()=>{
         loadingModal.style.display="flex";
         document.getElementById('loadingText').innerText = "Resuming Session...";
         updateNav(true);
+        resetLogoutTimer();
         loadStudents(t);
         loadSupportMessages(t);
     } else {
@@ -834,8 +865,10 @@ window.onload=()=>{
 }
 
 function logoutTutor(){
+    clearTimeout(logoutTimer);
     localStorage.clear();
-    window.location.reload(); 
+    // Redirect to the "Tutor Portal" public landing view
+    window.location.href = "tutor-portal.html"; 
 }
 </script>
 </body>
