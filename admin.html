@@ -254,8 +254,9 @@ border-top: none;
 
 #approvedTable th:nth-child(1) { width: 15%; }
 #approvedTable th:nth-child(2) { width: 20%; }
-#approvedTable th:nth-child(3) { width: 15%; }
-#approvedTable th:nth-child(4) { width: 50%; }
+#approvedTable th:nth-child(3) { width: 10%; }
+#approvedTable th:nth-child(4) { width: 30%; }
+#approvedTable th:nth-child(5) { width: 25%; }
 
 #studentsTable th:nth-child(1) { width: 12%; } 
 #studentsTable th:nth-child(2) { width: 15%; } 
@@ -284,6 +285,10 @@ font-weight: bold;
 .reject{ background:#c62828; color:white; width: 85px; }
 .reply-btn { background:#003366; color:white; }
 .match-btn { background:#003366; color:white; padding: 4px 8px; font-size: 12px; }
+
+/* UPLOAD BUTTON STYLING */
+.upload-btn { background: #ff9800; color: white; font-size: 11px; padding: 4px 8px; margin-top: 5px; }
+.file-input-small { font-size: 11px; width: 100%; }
 
 .admin-nav a:hover { text-decoration: underline; }
 
@@ -333,7 +338,7 @@ font-weight: bold;
         white-space: normal;
     }
     
-    .approve, .reject, .reply-btn, .match-btn { 
+    .approve, .reject, .reply-btn, .match-btn, .upload-btn { 
         flex: 1;
         width: auto;
         padding: 12px;
@@ -513,7 +518,7 @@ z-index:1100;
 <h2>Approved Tutors</h2>
 <table id="approvedTable">
 <thead><tr>
-<th>Name</th><th>Email</th><th>Phone</th><th>Subjects</th>
+<th>Name</th><th>Email</th><th>Phone</th><th>Subjects</th><th>Upload Materials</th>
 </tr></thead>
 <tbody></tbody>
 </table>
@@ -704,15 +709,62 @@ const tbody=document.querySelector("#approvedTable tbody")
 tbody.innerHTML=""
 if(!Array.isArray(data)) return
 data.forEach(t=>{
+const safeEmail = t.email.replace(/[@.]/g, '-');
 tbody.innerHTML+=`
 <tr>
 <td data-label="Name"><div class="scroll-cell">${t.name||""}</div></td>
 <td data-label="Email"><div class="scroll-cell"><a href="mailto:${t.email||""}">${t.email||""}</a></div></td>
 <td data-label="Phone"><div class="scroll-cell"><a href="tel:${t.phone||""}">${t.phone||""}</a></div></td>
 <td data-label="Subjects"><div class="scroll-cell">${t.subjects||""}</div></td>
+<td data-label="Upload Materials">
+    <input type="file" id="file-${safeEmail}" class="file-input-small">
+    <button class="upload-btn" onclick="uploadResource('${t.email}')">Upload File</button>
+</td>
 </tr>`
 })
 })
+}
+
+/* ✅ NEW: RESOURCE UPLOAD LOGIC */
+async function uploadResource(tutorEmail) {
+    const safeEmail = tutorEmail.replace(/[@.]/g, '-');
+    const fileInput = document.getElementById(`file-${safeEmail}`);
+    const file = fileInput.files[0];
+    const token = localStorage.getItem("adminToken");
+
+    if (!file) { alert("Please select a file first."); return; }
+
+    document.getElementById("loadingText").innerText = "Uploading to Drive...";
+    loadingModal.style.display = "flex";
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const base64 = e.target.result.split(",")[1];
+        const payload = {
+            type: "uploadTutorResource",
+            token: token,
+            tutorEmail: tutorEmail,
+            fileName: file.name,
+            mimeType: file.type,
+            fileBase64: base64
+        };
+
+        fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            body: JSON.stringify(payload)
+        }).then(() => {
+            setTimeout(() => {
+                loadingModal.style.display = "none";
+                alert("File uploaded successfully to " + tutorEmail + "'s folder.");
+                fileInput.value = "";
+            }, 2000);
+        }).catch(err => {
+            loadingModal.style.display = "none";
+            alert("Upload failed: " + err);
+        });
+    };
+    reader.readAsDataURL(file);
 }
 
 function loadStudents(token){
