@@ -114,17 +114,45 @@ z-index: 1000;
 border-top: none;
 }
 
-/* CHAT INTERFACE STYLING */
+/* SUPPORT CARD & CHAT STYLING */
+.support-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+    padding: 0 10px;
+}
+
+.support-card {
+    background: white;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 450px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-top: 4px solid #003366;
+}
+
+.support-card-header {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.support-card-header h3 { margin: 0; font-size: 16px; color: #003366; }
+.support-card-header small { color: #666; display: block; }
+
 .chat-container {
     background: #e5ddd5;
     padding: 15px;
-    border-radius: 8px;
-    max-height: 300px;
+    height: 300px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    border: 1px solid #ccc;
 }
 
 .chat-bubble {
@@ -155,6 +183,28 @@ border-top: none;
     margin-top: 5px;
     display: block;
     text-align: right;
+}
+
+.chat-input-area {
+    padding: 15px;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 8px;
+}
+
+.chat-input-area input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.close-chat-btn {
+    background: #c62828;
+    color: white;
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 4px;
 }
 
 /* UNIVERSAL CELL CONFINEMENT */
@@ -202,11 +252,6 @@ border-top: none;
 #otherClientsTable th:nth-child(3) { width: 15%; }
 #otherClientsTable th:nth-child(4) { width: 50%; }
 
-/* Support Chat widths */
-#supportTable th:nth-child(1) { width: 20%; }
-#supportTable th:nth-child(2) { width: 65%; }
-#supportTable th:nth-child(3) { width: 15%; }
-
 .unmatched-alert { background-color: #ffe6e6 !important; }
 .text-danger { color: #c62828; font-weight: bold; }
 
@@ -220,7 +265,7 @@ font-weight: bold;
 
 .approve{ background:#2e7d32; color:white; width: 85px; margin-right: 8px; }
 .reject{ background:#c62828; color:white; width: 85px; }
-.reply-btn { background:#003366; color:white; width: 85px; }
+.reply-btn { background:#003366; color:white; }
 .match-btn { background:#003366; color:white; padding: 4px 8px; font-size: 12px; }
 
 .admin-nav a:hover { text-decoration: underline; }
@@ -276,6 +321,8 @@ font-weight: bold;
         width: auto;
         padding: 12px;
     }
+
+    .support-card { max-width: 100%; }
 }
 
 /* LOGIN & MODALS */
@@ -479,12 +526,8 @@ z-index:1100;
 
 <section id="support">
 <h2>Support Chats</h2>
-<table id="supportTable">
-<thead><tr>
-<th>Tutor</th><th>Conversation History</th><th>Action</th>
-</tr></thead>
-<tbody></tbody>
-</table>
+<div id="supportGrid" class="support-grid">
+    </div>
 </section>
 
 </div>
@@ -719,8 +762,8 @@ function loadSupportMessages(token){
     .then(r=>r.json())
     .then(data=>{
         if(handleAuthError(data)) return;
-        const tbody=document.querySelector("#supportTable tbody"); 
-        tbody.innerHTML="";
+        const grid = document.getElementById("supportGrid");
+        grid.innerHTML = "";
         if(!Array.isArray(data)) return;
         
         // Group messages by Tutor Email
@@ -736,41 +779,49 @@ function loadSupportMessages(token){
             groups[email].msgs.push(m);
         });
 
-        // Loop through grouped conversations
+        // Loop through grouped conversations to build cards
         for(let email in groups) {
-            let chatHtml = `<div class="chat-container">`;
-            
-            // Sort messages by date if necessary, then build bubbles
+            let chatBubblesHtml = "";
             groups[email].msgs.forEach(m => {
                 const senderClass = m["Sender"] === "Admin" ? "admin" : "tutor";
                 const dateStr = m["Date"] ? new Date(m["Date"]).toLocaleString() : "N/A";
-                chatHtml += `
+                chatBubblesHtml += `
                     <div class="chat-bubble ${senderClass}">
                         ${m["Message"]}
                         <span class="chat-date">${dateStr}</span>
                     </div>`;
             });
-            chatHtml += `</div>`;
 
-            tbody.innerHTML += `
-                <tr>
-                    <td data-label="Tutor">
-                        <strong>${groups[email].name}</strong><br>
+            const card = document.createElement("div");
+            card.className = "support-card";
+            card.innerHTML = `
+                <div class="support-card-header">
+                    <div>
+                        <h3>${groups[email].name}</h3>
                         <small>${email}</small>
-                    </td>
-                    <td data-label="Conversation History">
-                        ${chatHtml}
-                    </td>
-                    <td data-label="Action">
-                        <button class="reply-btn" onclick="replyMessage('${email}')">Reply</button>
-                    </td>
-                </tr>`;
+                    </div>
+                    <button class="close-chat-btn" onclick="deleteConversation('${email}')">Close Chat</button>
+                </div>
+                <div class="chat-container" id="chat-${email.replace(/[@.]/g, '-')}">
+                    ${chatBubblesHtml}
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" placeholder="Type a reply..." id="input-${email.replace(/[@.]/g, '-')}">
+                    <button class="reply-btn" onclick="directReply('${email}')">Send</button>
+                </div>
+            `;
+            grid.appendChild(card);
+            
+            // Scroll to bottom of chat
+            const chatBox = card.querySelector(".chat-container");
+            chatBox.scrollTop = chatBox.scrollHeight;
         }
     });
 }
 
-function replyMessage(email){
-    const replyText = prompt("Enter your reply to " + email + ":");
+function directReply(email){
+    const inputId = `input-${email.replace(/[@.]/g, '-')}`;
+    const replyText = document.getElementById(inputId).value.trim();
     if(!replyText) return;
     
     const token = localStorage.getItem("adminToken");
@@ -784,7 +835,7 @@ function replyMessage(email){
     })
     .then(() => {
         setTimeout(() => {
-            alert("Reply sent!");
+            document.getElementById(inputId).value = "";
             loadSupportMessages(token);
             loadingModal.style.display="none";
         }, 1500);
@@ -792,6 +843,30 @@ function replyMessage(email){
     .catch(() => {
         loadingModal.style.display="none";
         alert("Error sending reply.");
+    });
+}
+
+function deleteConversation(email) {
+    if(!confirm(`Are you sure you want to close this chat with ${email}? This will remove history from your view.`)) return;
+    
+    const token = localStorage.getItem("adminToken");
+    loadingModal.style.display="flex";
+    document.getElementById("loadingText").innerText = "Closing Chat...";
+
+    fetch(SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        body: JSON.stringify({ type: "deleteSupportChat", token: token, tutorEmail: email })
+    })
+    .then(() => {
+        setTimeout(() => {
+            loadSupportMessages(token);
+            loadingModal.style.display="none";
+        }, 1500);
+    })
+    .catch(() => {
+        loadingModal.style.display="none";
+        alert("Error closing chat.");
     });
 }
 
