@@ -53,7 +53,7 @@ font-size: 14px;
 margin: 0 15px; 
 }
 
-/* 1. Visible separator line between links */
+/* Visible separator line between links */
 .nav-separator {
 border-left: 2px solid white; 
 height: 16px;
@@ -63,7 +63,7 @@ opacity: 0.8;
 }
 
 .main{
-max-width:1000px; /* Standard size for both front page and dashboard */
+max-width:1000px; 
 margin: 20px auto;
 background:white;
 padding:40px;
@@ -113,7 +113,7 @@ display:block;
 
 /* DASHBOARD SPECIFIC STYLING */
 .dashboard-section .service-card {
-    padding: 30px; /* Balanced padding for the 1000px width */
+    padding: 30px; 
     min-height: auto; 
 }
 
@@ -762,29 +762,24 @@ async function loadSupportMessages(token){
         if(data && Array.isArray(data) && data.length > 0){
             let chatHtml = `<div class="chat-container">`;
             data.forEach(m => {
-                const timestamp = m["Timestamp"] || "Recently";
+                const timestamp = m["Date"] || "Recently";
                 const messageText = m["Message"] || "";
-                const adminReply = m["AdminReply"] || ""; 
+                const sender = (m["Sender"] || "Tutor").toLowerCase(); // "admin" or "tutor"
                 const dateDisplay = timestamp !== "Recently" ? new Date(timestamp).toLocaleString() : "Recently";
 
-                // User message (Tutor)
                 chatHtml += `
-                    <div class="chat-bubble tutor">
+                    <div class="chat-bubble ${sender}">
                         ${messageText}
                         <span class="chat-date">${dateDisplay}</span>
                     </div>`;
-
-                // If admin replied, show it as an admin bubble
-                if(adminReply) {
-                    chatHtml += `
-                        <div class="chat-bubble admin">
-                            ${adminReply}
-                            <span class="chat-date">Response</span>
-                        </div>`;
-                }
             });
             chatHtml += `</div>`;
             messagesContainer.innerHTML = chatHtml;
+            // Auto-scroll to bottom of chat
+            setTimeout(() => {
+                const scrollArea = messagesContainer;
+                scrollArea.scrollTop = scrollArea.scrollHeight;
+            }, 100);
         } else {
             messagesContainer.innerHTML = "<p>No message history found.</p>";
         }
