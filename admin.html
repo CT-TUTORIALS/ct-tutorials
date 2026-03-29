@@ -725,7 +725,7 @@ tbody.innerHTML+=`
 })
 }
 
-/* RESOURCE UPLOAD LOGIC - Updated for action-based payload */
+/* UPDATED RESOURCE UPLOAD - Modal overlap fix & Post formatting */
 async function uploadResource(tutorEmail) {
     const safeEmail = tutorEmail.replace(/[@.]/g, '-');
     const fileInput = document.getElementById(`file-${safeEmail}`);
@@ -741,7 +741,7 @@ async function uploadResource(tutorEmail) {
     reader.onload = function(e) {
         const base64 = e.target.result.split(",")[1];
         const payload = {
-            action: "uploadTutorResource", // Matches backend switch case
+            action: "uploadTutorResource",
             token: token,
             tutorEmail: tutorEmail,
             fileName: file.name,
@@ -755,6 +755,7 @@ async function uploadResource(tutorEmail) {
         })
         .then(r => r.json())
         .then(res => {
+            // Immediate closure of loading modal before any alert logic
             loadingModal.style.display = "none";
             if(res.success) {
                 alert("File uploaded successfully.");
@@ -960,10 +961,10 @@ loadingModal.style.display="flex"
 fetch(`${SCRIPT_URL}?action=approveTutor&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`)
 .then(r=>r.json())
 .then(res=>{
+  loadingModal.style.display="none";
   if(res.status === "approved") {
-      Promise.all([loadApplications(token), loadApprovedTutors(token)]).then(() => { loadingModal.style.display="none" });
+      initAdmin(token);
   } else {
-      loadingModal.style.display="none";
       alert("Approval failed: " + (res.error || "Unknown error"));
   }
 });
@@ -976,10 +977,10 @@ loadingModal.style.display="flex"
 fetch(`${SCRIPT_URL}?action=rejectTutor&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`)
 .then(r=>r.json())
 .then(res=>{
+  loadingModal.style.display="none";
   if(res.status === "rejected") {
-      loadApplications(token).then(() => { loadingModal.style.display="none" });
+      loadApplications(token);
   } else {
-      loadingModal.style.display="none";
       alert("Rejection failed: " + (res.error || "Unknown error"));
   }
 });
