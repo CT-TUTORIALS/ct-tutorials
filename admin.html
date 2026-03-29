@@ -577,10 +577,27 @@ const loadingModal = document.getElementById("loadingModal");
 const loginOverlay = document.getElementById("loginOverlay");
 let approvedTutorsList = [];
 let targetStudentEmail = "";
+let logoutTimer;
 
 loginOverlay.addEventListener("click", function() {
     window.location.href = "index.html";
 });
+
+function resetLogoutTimer() {
+    clearTimeout(logoutTimer);
+    // 15 minutes = 15 * 60 * 1000 ms
+    logoutTimer = setTimeout(() => {
+        alert("Session expired due to 15 minutes of inactivity.");
+        logout();
+    }, 900000); 
+}
+
+// Track activity to keep session alive
+window.onmousemove = resetLogoutTimer;
+window.onmousedown = resetLogoutTimer;
+window.onclick = resetLogoutTimer;
+window.onscroll = resetLogoutTimer;
+window.onkeypress = resetLogoutTimer;
 
 function adminLogin(){
 const username=document.getElementById("username").value.trim()
@@ -613,6 +630,7 @@ async function initAdmin(token){
 document.getElementById("loginOverlay").style.display="none"
 document.getElementById("adminContent").style.display="block"
 document.getElementById("adminLinks").style.display="flex"
+resetLogoutTimer();
 
 loadingModal.style.display="flex"
 document.getElementById("loadingText").innerText = "Loading Dashboard...";
@@ -941,11 +959,13 @@ fetch(`${SCRIPT_URL}?action=rejectTutor&email=${encodeURIComponent(email)}&token
 }
 
 function logout(){
+clearTimeout(logoutTimer);
 localStorage.removeItem("adminToken")
 window.location.href = "index.html"
 }
 
 window.onscroll = function() {
+  resetLogoutTimer();
   const btn = document.getElementById("backToTop");
   if (document.body.scrollTop > 250 || document.documentElement.scrollTop > 250) {
     btn.style.display = "block";
