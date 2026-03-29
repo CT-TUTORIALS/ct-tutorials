@@ -622,7 +622,8 @@ function handleHomeClick() {
     if (localStorage.getItem("tutorToken")) {
         logoutTutor();
     } else {
-        window.location.href = "index.html";
+        // Corrected link to main tutor portal page
+        window.location.href = "tutor-portal.html";
     }
 }
 
@@ -864,6 +865,7 @@ window.onload=()=>{
 function logoutTutor(){
     clearTimeout(logoutTimer);
     localStorage.clear();
+    // Corrected link to main tutor portal page
     window.location.href = "tutor-portal.html"; 
 }
 </script>
