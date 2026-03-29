@@ -321,7 +321,6 @@ margin-bottom:15px;
 }
 
 @media screen and (max-width: 768px) {
-    .nav-separator { display: none; }
     .main { padding: 20px; }
     nav a { margin: 5px 10px; }
 }
@@ -784,10 +783,9 @@ async function loadSupportMessages(token){
         if(data && Array.isArray(data) && data.length > 0){
             let chatHtml = `<div class="chat-container">`;
             data.forEach(m => {
-                // FIX: Check for both "Date" and "Timestamp" headers to avoid "N/A"
                 const rawDate = m["Date"] || m["Timestamp"];
                 const messageText = m["Message"] || "";
-                const sender = (m["Sender"] || "Tutor").toLowerCase(); // "admin" or "tutor"
+                const sender = (m["Sender"] || "Tutor").toLowerCase(); 
                 
                 let dateDisplay = "Recently";
                 if(rawDate) {
@@ -805,7 +803,6 @@ async function loadSupportMessages(token){
             });
             chatHtml += `</div>`;
             messagesContainer.innerHTML = chatHtml;
-            // Auto-scroll to bottom of chat
             setTimeout(() => {
                 const scrollArea = messagesContainer;
                 scrollArea.scrollTop = scrollArea.scrollHeight;
@@ -867,7 +864,6 @@ window.onload=()=>{
 function logoutTutor(){
     clearTimeout(logoutTimer);
     localStorage.clear();
-    // Redirect to the "Tutor Portal" public landing view
     window.location.href = "tutor-portal.html"; 
 }
 </script>
