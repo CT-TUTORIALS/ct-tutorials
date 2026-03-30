@@ -330,7 +330,9 @@ margin-bottom:15px;
 <body>
 
 <header>
+<a href="https://ct-tutorials.github.io/ct-tutorials/index.html" style="text-decoration: none; color: inherit;">
 <h1>C&T Tutorials Tutors Portal</h1>
+</a>
 
 <nav id="mainNav">
 <a onclick="handleHomeClick()">Home</a>
@@ -620,11 +622,14 @@ window.onscroll = function() {
     }
 };
 
+// Altered handleHomeClick logic
 function handleHomeClick() {
     if (localStorage.getItem("tutorToken")) {
+        // If logged in, logout and return to the public portal (front page)
         logoutTutor();
     } else {
-        window.location.href = "tutors.html";
+        // If on the front page (not logged in), go to main index page
+        window.location.href = "https://ct-tutorials.github.io/ct-tutorials/index.html";
     }
 }
 
