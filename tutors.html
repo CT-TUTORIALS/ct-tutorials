@@ -812,6 +812,14 @@ loginForm.onsubmit = async e => {
             loginModal.style.display = "none";
             updateNav(true);
             resetLogoutTimer();
+            // Restoring visual transition logic
+            infoSection.style.display="none";
+            contactSection.style.display="none";
+            dashboard.style.display="flex";
+            mainContainer.style.maxWidth = "1000px";
+            dashboardLogout.style.display="block";
+            setTimeout(()=>dashboard.classList.add("show"),50);
+            
             await Promise.all([
                 loadStudents(d.token),
                 loadSupportMessages(d.token),
@@ -882,7 +890,6 @@ async function loadStudents(token){
         }
 
         studentsList.innerHTML = data.length > 0 ? data.map(s=>{
-            // Clean the phone number for the wa.me link (remove +, spaces, dashes, etc.)
             const waNumber = s.phone.replace(/\D/g, ''); 
             return `
             <div class="student-card">
@@ -892,15 +899,8 @@ async function loadStudents(token){
                 Service: ${s.service}
             </div>`;
         }).join("") : "<p>No students assigned yet.</p>";
-
-        infoSection.style.display="none";
-        contactSection.style.display="none";
-        dashboard.style.display="flex";
-        mainContainer.style.maxWidth = "1000px";
-        dashboardLogout.style.display="block";
-        setTimeout(()=>dashboard.classList.add("show"),50);
     } catch(e) {
-        console.log("Error loading dashboard data.");
+        console.log("Error loading student data.");
     }
 }
 
@@ -927,6 +927,15 @@ window.onload=()=>{
         showLoading("Resuming Session...");
         updateNav(true);
         resetLogoutTimer();
+        
+        // Ensure UI displays for existing sessions
+        infoSection.style.display="none";
+        contactSection.style.display="none";
+        dashboard.style.display="flex";
+        mainContainer.style.maxWidth = "1000px";
+        dashboardLogout.style.display="block";
+        setTimeout(()=>dashboard.classList.add("show"),50);
+
         Promise.all([
             loadStudents(t),
             loadSupportMessages(t),
