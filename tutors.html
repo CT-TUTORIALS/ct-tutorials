@@ -232,6 +232,16 @@ border-radius: 5px;
 background: white;
 }
 
+/* Specific styling for WhatsApp links within student cards */
+.whatsapp-link {
+    color: #25D366 !important; 
+    font-weight: bold;
+    text-decoration: none;
+}
+.whatsapp-link:hover {
+    text-decoration: underline;
+}
+
 .resource-item {
     display: flex;
     align-items: center;
@@ -466,7 +476,7 @@ margin-bottom:15px;
 
 <div id="section-home" class="dashboard-section">
 <h2>Tutor Dashboard</h2>
-<p>Welcome back! Below is the current list of students assigned to you.</p>
+<p>Welcome back! Below is the current list of students assigned to you. Click the phone number to start a WhatsApp chat.</p>
 <div class="service-card">
     <div id="studentsList" class="scroll-container">Loading students...</div>
 </div>
@@ -867,13 +877,17 @@ async function loadStudents(token){
             return;
         }
 
-        studentsList.innerHTML = data.length > 0 ? data.map(s=>`
-        <div class="student-card">
-            <strong>${s.name}</strong><br>
-            Email: ${s.email}<br>
-            Phone: ${s.phone}<br>
-            Service: ${s.service}
-        </div>`).join("") : "<p>No students assigned yet.</p>";
+        studentsList.innerHTML = data.length > 0 ? data.map(s=>{
+            // Clean the phone number for the wa.me link (remove +, spaces, dashes, etc.)
+            const waNumber = s.phone.replace(/\D/g, ''); 
+            return `
+            <div class="student-card">
+                <strong>${s.name}</strong><br>
+                Email: ${s.email}<br>
+                Phone: <a href="https://wa.me/${waNumber}" target="_blank" class="whatsapp-link">${s.phone}</a><br>
+                Service: ${s.service}
+            </div>`;
+        }).join("") : "<p>No students assigned yet.</p>";
 
         infoSection.style.display="none";
         contactSection.style.display="none";
