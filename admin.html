@@ -59,10 +59,10 @@ height: 14px;
 margin: 0;
 }
 
-/* NOTIFICATION BADGE */
+/* NOTIFICATION BADGE - UPDATED TO GREEN */
 .badge {
-background: #ffeb3b;
-color: #000;
+background: #2e7d32; /* Green color */
+color: #ffffff;
 font-size: 10px;
 padding: 2px 6px;
 border-radius: 10px;
@@ -495,7 +495,7 @@ z-index:1100;
 <div class="nav-separator"></div>
 <a href="#otherClients">Other Clients</a>
 <div class="nav-separator"></div>
-<a href="#support" onmouseover="markMessagesAsRead()">Support <span id="supportBadge" class="badge">0</span></a>
+<a href="#support" onclick="markMessagesAsRead()">Support <span id="supportBadge" class="badge">0</span></a>
 <div class="nav-separator"></div>
 <a href="#" class="signout" onclick="logout()">Sign Out</a>
 </span>
@@ -592,13 +592,13 @@ function resetLogoutTimer() {
     }, 900000); // 15 Minutes
 }
 
-// Background polling for new messages (Silently refreshes server session)
+// Background polling for new messages
 function startBadgePolling() {
   clearInterval(badgeInterval);
   badgeInterval = setInterval(() => {
     const token = localStorage.getItem("adminToken");
-    if(token) loadSupportMessages(token, true); // Silent update mode
-  }, 60000); // Poll every 60 seconds
+    if(token) loadSupportMessages(token, true); 
+  }, 60000); 
 }
 
 window.onmousemove = resetLogoutTimer;
@@ -667,11 +667,13 @@ return true;
 return false;
 }
 
+// LOGIC: Save the current time as the "read" threshold
 function markMessagesAsRead() {
     const badge = document.getElementById("supportBadge");
     badge.style.display = "none";
     badge.innerText = "0";
-    localStorage.setItem("lastSupportCheck", Date.now().toString());
+    // Mark the current moment as the time we finished reading messages
+    localStorage.setItem("lastSupportRead", Date.now().toString());
 }
 
 function loadApplications(token){
@@ -725,7 +727,6 @@ tbody.innerHTML+=`
 })
 }
 
-/* UPDATED RESOURCE UPLOAD - Fixed POST action and Modal feedback */
 async function uploadResource(tutorEmail) {
     const safeEmail = tutorEmail.replace(/[@.]/g, '-');
     const fileInput = document.getElementById(`file-${safeEmail}`);
@@ -741,7 +742,7 @@ async function uploadResource(tutorEmail) {
     reader.onload = function(e) {
         const base64 = e.target.result.split(",")[1];
         const payload = {
-            action: "uploadTutorResource", // Backend expects this specific action
+            action: "uploadTutorResource", 
             token: token,
             tutorEmail: tutorEmail,
             fileName: file.name,
@@ -857,30 +858,39 @@ function loadSupportMessages(token, silent = false){
         const badge = document.getElementById("supportBadge");
         if(!Array.isArray(data)) return;
         
-        const lastChecked = parseInt(localStorage.getItem("lastSupportCheck") || "0");
-        let unreadConversationCount = 0;
+        // Threshold: only show if message date > lastSupportRead time
+        const lastReadTimestamp = parseInt(localStorage.getItem("lastSupportRead") || "0");
+        let unreadCount = 0;
         const groups = {};
 
         data.forEach(m => {
             const email = m["Tutor Email"] || "unknown@tutor.com";
+            // Ensure we have a valid timestamp from the message
             const msgTime = m["Date"] ? new Date(m["Date"]).getTime() : 0;
+            
             if(!groups[email]) {
                 groups[email] = { name: m["Tutor Name"] || "Unknown Tutor", msgs: [], hasNew: false };
             }
             groups[email].msgs.push(m);
-            if (msgTime > lastChecked && m["Sender"] !== "Admin") groups[email].hasNew = true;
+            
+            // LOGIC: If message is from Tutor AND it's newer than our last 'Read' action
+            if (m["Sender"] !== "Admin" && msgTime > lastReadTimestamp) {
+                groups[email].hasNew = true;
+            }
         });
 
-        for (let key in groups) { if (groups[key].hasNew) unreadConversationCount++; }
+        // Count how many conversations have new messages
+        for (let key in groups) { if (groups[key].hasNew) unreadCount++; }
 
-        if(unreadConversationCount > 0) {
-            badge.innerText = unreadConversationCount;
+        // Update badge visibility
+        if(unreadCount > 0) {
+            badge.innerText = unreadCount;
             badge.style.display = "inline-block";
         } else {
             badge.style.display = "none";
         }
 
-        if(silent) return; // Silent poll successful
+        if(silent) return; 
 
         const grid = document.getElementById("supportGrid");
         grid.innerHTML = "";
