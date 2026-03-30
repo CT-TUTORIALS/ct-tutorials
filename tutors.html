@@ -890,13 +890,14 @@ async function loadStudents(token){
         }
 
         studentsList.innerHTML = data.length > 0 ? data.map(s=>{
-            const waNumber = s.phone.replace(/\D/g, ''); 
+            const phone = s.phone || s.Phone || "";
+            const waNumber = phone.replace(/\D/g, ''); 
             return `
             <div class="student-card">
-                <strong>${s.name}</strong><br>
-                Email: ${s.email}<br>
-                Phone: <a href="https://wa.me/${waNumber}" target="_blank" class="whatsapp-link">${s.phone}</a><br>
-                Service: ${s.service}
+                <strong>${s.name || s.Name || "Unknown"}</strong><br>
+                Email: ${s.email || s.Email || "N/A"}<br>
+                Phone: <a href="https://wa.me/${waNumber}" target="_blank" class="whatsapp-link">${phone}</a><br>
+                Service: ${s.service || s.Service || "Tutor Session"}
             </div>`;
         }).join("") : "<p>No students assigned yet.</p>";
     } catch(e) {
