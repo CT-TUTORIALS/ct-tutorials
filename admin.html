@@ -59,9 +59,9 @@ height: 14px;
 margin: 0;
 }
 
-/* NOTIFICATION BADGE - UPDATED TO GREEN */
+/* NOTIFICATION BADGE - GREEN */
 .badge {
-background: #2e7d32; /* Green color */
+background: #2e7d32; 
 color: #ffffff;
 font-size: 10px;
 padding: 2px 6px;
@@ -147,6 +147,31 @@ border-top: none;
     flex-direction: column;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     border-top: 4px solid #003366;
+    transition: all 0.3s ease;
+}
+
+/* VISUAL HIGHLIGHT FOR NEW MESSAGES */
+.support-card.has-new-messages {
+    border: 2px solid #2e7d32;
+    animation: pulseBorder 2s infinite;
+}
+
+@keyframes pulseBorder {
+    0% { box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    50% { box-shadow: 0 0 12px rgba(46, 125, 50, 0.4); }
+    100% { box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+}
+
+.new-msg-label {
+    background: #2e7d32;
+    color: white;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 8px;
+    text-transform: uppercase;
+    font-weight: bold;
+    display: inline-block;
 }
 
 .support-card-header {
@@ -546,8 +571,7 @@ z-index:1100;
 
 <section id="support">
 <h2>Support Chats</h2>
-<div id="supportGrid" class="support-grid">
-    </div>
+<div id="supportGrid" class="support-grid"></div>
 </section>
 
 </div>
@@ -667,13 +691,19 @@ return true;
 return false;
 }
 
-// LOGIC: Save the current time as the "read" threshold
+// LOGIC: Save the current time and remove visual labels
 function markMessagesAsRead() {
     const badge = document.getElementById("supportBadge");
     badge.style.display = "none";
     badge.innerText = "0";
-    // Mark the current moment as the time we finished reading messages
     localStorage.setItem("lastSupportRead", Date.now().toString());
+
+    // Clear highlights and "New" labels instantly from current UI
+    document.querySelectorAll('.support-card').forEach(card => {
+        card.classList.remove('has-new-messages');
+        const label = card.querySelector('.new-msg-label');
+        if(label) label.remove();
+    });
 }
 
 function loadApplications(token){
@@ -858,14 +888,12 @@ function loadSupportMessages(token, silent = false){
         const badge = document.getElementById("supportBadge");
         if(!Array.isArray(data)) return;
         
-        // Threshold: only show if message date > lastSupportRead time
         const lastReadTimestamp = parseInt(localStorage.getItem("lastSupportRead") || "0");
-        let unreadCount = 0;
+        let unreadConvoCount = 0;
         const groups = {};
 
         data.forEach(m => {
             const email = m["Tutor Email"] || "unknown@tutor.com";
-            // Ensure we have a valid timestamp from the message
             const msgTime = m["Date"] ? new Date(m["Date"]).getTime() : 0;
             
             if(!groups[email]) {
@@ -873,18 +901,15 @@ function loadSupportMessages(token, silent = false){
             }
             groups[email].msgs.push(m);
             
-            // LOGIC: If message is from Tutor AND it's newer than our last 'Read' action
             if (m["Sender"] !== "Admin" && msgTime > lastReadTimestamp) {
                 groups[email].hasNew = true;
             }
         });
 
-        // Count how many conversations have new messages
-        for (let key in groups) { if (groups[key].hasNew) unreadCount++; }
+        for (let key in groups) { if (groups[key].hasNew) unreadConvoCount++; }
 
-        // Update badge visibility
-        if(unreadCount > 0) {
-            badge.innerText = unreadCount;
+        if(unreadConvoCount > 0) {
+            badge.innerText = unreadConvoCount;
             badge.style.display = "inline-block";
         } else {
             badge.style.display = "none";
@@ -907,10 +932,16 @@ function loadSupportMessages(token, silent = false){
 
             const cardId = email.replace(/[@.]/g, '-');
             const card = document.createElement("div");
-            card.className = "support-card";
+            
+            // Highlight Logic
+            card.className = "support-card" + (groups[email].hasNew ? " has-new-messages" : "");
+            
             card.innerHTML = `
                 <div class="support-card-header">
-                    <div><h3>${groups[email].name}</h3><small>${email}</small></div>
+                    <div>
+                        <h3>${groups[email].name}${groups[email].hasNew ? '<span class="new-msg-label">New</span>' : ''}</h3>
+                        <small>${email}</small>
+                    </div>
                     <button class="close-chat-btn" onclick="deleteConversation('${email}')">Close Chat</button>
                 </div>
                 <div class="chat-container" id="chat-${cardId}">${chatBubblesHtml}</div>
