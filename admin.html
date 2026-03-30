@@ -601,22 +601,21 @@ z-index:1100;
 
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbwc1VkCPnVk4-zUnuZLNU9pmEMFGSp_q015ZMLdMklv-yoHSEi0Z5vhAqJrv2dY7K9w/exec";
 const loadingModal = document.getElementById("loadingModal");
+const loadingText = document.getElementById("loadingText");
 const loginOverlay = document.getElementById("loginOverlay");
 let approvedTutorsList = [];
 let targetStudentEmail = "";
 let logoutTimer;
 let badgeInterval;
 
-// SILENT LOGOUT & REFRESH LOGIC
 function resetLogoutTimer() {
     clearTimeout(logoutTimer);
     logoutTimer = setTimeout(() => {
         alert("Session expired due to 15 minutes of inactivity.");
         logout();
-    }, 900000); // 15 Minutes
+    }, 900000); 
 }
 
-// Background polling for new messages
 function startBadgePolling() {
   clearInterval(badgeInterval);
   badgeInterval = setInterval(() => {
@@ -634,6 +633,7 @@ window.onkeypress = resetLogoutTimer;
 function adminLogin(){
 const username=document.getElementById("username").value.trim()
 const password=document.getElementById("password").value.trim()
+loadingText.innerText = "Verifying...";
 loadingModal.style.display="flex"
 
 fetch(SCRIPT_URL+"?action=adminLogin&username="+encodeURIComponent(username)+"&password="+encodeURIComponent(password))
@@ -662,12 +662,11 @@ async function initAdmin(token){
 document.getElementById("loginOverlay").style.display="none"
 document.getElementById("adminContent").style.display="block"
 document.getElementById("adminLinks").style.display="flex"
-
 resetLogoutTimer();
 startBadgePolling();
 
+loadingText.innerText = "Loading Dashboard...";
 loadingModal.style.display="flex"
-document.getElementById("loadingText").innerText = "Loading Dashboard...";
 
 try {
     await Promise.all([
@@ -691,14 +690,11 @@ return true;
 return false;
 }
 
-// LOGIC: Save the current time and remove visual labels
 function markMessagesAsRead() {
     const badge = document.getElementById("supportBadge");
     badge.style.display = "none";
     badge.innerText = "0";
     localStorage.setItem("lastSupportRead", Date.now().toString());
-
-    // Clear highlights and "New" labels instantly from current UI
     document.querySelectorAll('.support-card').forEach(card => {
         card.classList.remove('has-new-messages');
         const label = card.querySelector('.new-msg-label');
@@ -762,10 +758,9 @@ async function uploadResource(tutorEmail) {
     const fileInput = document.getElementById(`file-${safeEmail}`);
     const file = fileInput.files[0];
     const token = localStorage.getItem("adminToken");
-
     if (!file) { alert("Please select a file first."); return; }
 
-    document.getElementById("loadingText").innerText = "Uploading to Drive...";
+    loadingText.innerText = "Uploading to Drive...";
     loadingModal.style.display = "flex";
 
     const reader = new FileReader();
@@ -786,6 +781,7 @@ async function uploadResource(tutorEmail) {
         })
         .then(r => r.json())
         .then(res => {
+            // Dismiss loading before showing result alert
             loadingModal.style.display = "none";
             if(res.success || res.status === "success") {
                 alert("File uploaded successfully.");
@@ -847,6 +843,7 @@ async function submitManualMatch() {
     if(!tutorEmail) { alert("Please select a tutor first."); return; }
     const token = localStorage.getItem("adminToken");
     closeMatchModal();
+    loadingText.innerText = "Assigning Tutor...";
     loadingModal.style.display="flex";
     fetch(SCRIPT_URL, {
         method: "POST",
@@ -854,6 +851,7 @@ async function submitManualMatch() {
     })
     .then(r => r.json())
     .then(res => {
+        // Dismiss loading before showing alerts
         loadingModal.style.display="none";
         if(res.success) loadStudents(token);
         else alert("Match failed: " + res.error);
@@ -933,7 +931,6 @@ function loadSupportMessages(token, silent = false){
             const cardId = email.replace(/[@.]/g, '-');
             const card = document.createElement("div");
             
-            // Highlight Logic
             card.className = "support-card" + (groups[email].hasNew ? " has-new-messages" : "");
             
             card.innerHTML = `
@@ -962,13 +959,17 @@ function directReply(email){
     const replyText = document.getElementById(inputId).value.trim();
     if(!replyText) return;
     const token = localStorage.getItem("adminToken");
+    
+    loadingText.innerText = "Sending...";
     loadingModal.style.display="flex";
+    
     fetch(SCRIPT_URL, {
         method: "POST",
         body: JSON.stringify({ action: "replyToSupport", token: token, tutorEmail: email, reply: replyText })
     })
     .then(r => r.json())
     .then(res => {
+        // Dismiss loading before showing alerts
         loadingModal.style.display="none";
         if(res.success) {
             document.getElementById(inputId).value = "";
@@ -976,31 +977,45 @@ function directReply(email){
         } else {
             alert("Reply failed: " + res.error);
         }
+    })
+    .catch(() => {
+        loadingModal.style.display="none";
+        alert("Network error.");
     });
 }
 
 function deleteConversation(email) {
     if(!confirm("Close this chat?")) return;
     const token = localStorage.getItem("adminToken");
+    
+    loadingText.innerText = "Closing Chat...";
     loadingModal.style.display="flex";
+    
     fetch(SCRIPT_URL, {
         method: "POST",
         body: JSON.stringify({ action: "deleteSupportChat", token: token, tutorEmail: email })
     })
     .then(r => r.json())
     .then(res => {
+        // Dismiss loading
         loadingModal.style.display="none";
         if(res.success) loadSupportMessages(token);
+    })
+    .catch(() => {
+        loadingModal.style.display="none";
+        alert("Network error.");
     });
 }
 
 function approve(email){
 if(!confirm("Approve tutor?")) return;
 const token = localStorage.getItem("adminToken")
+loadingText.innerText = "Approving...";
 loadingModal.style.display="flex"
 fetch(`${SCRIPT_URL}?action=approveTutor&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`)
 .then(r=>r.json())
 .then(res=>{
+  // Dismiss loading before alert
   loadingModal.style.display="none";
   if(res.status === "approved") {
       initAdmin(token);
@@ -1013,10 +1028,12 @@ fetch(`${SCRIPT_URL}?action=approveTutor&email=${encodeURIComponent(email)}&toke
 function reject(email){
 if(!confirm("Reject tutor?")) return;
 const token = localStorage.getItem("adminToken")
+loadingText.innerText = "Rejecting...";
 loadingModal.style.display="flex"
 fetch(`${SCRIPT_URL}?action=rejectTutor&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`)
 .then(r=>r.json())
 .then(res=>{
+  // Dismiss loading before alert
   loadingModal.style.display="none";
   if(res.status === "rejected") {
       loadApplications(token);
