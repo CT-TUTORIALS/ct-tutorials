@@ -711,14 +711,14 @@ applyForm.onsubmit = async e => {
     e.preventDefault();
     showLoading("Submitting Application...");
     
-    const t = await getToken();
-    const data = {
-        type: "tutorApplication",
-        token: t,
-        ...Object.fromEntries(new FormData(applyForm))
-    };
-    
     try {
+        const t = await getToken();
+        const data = {
+            type: "tutorApplication",
+            token: t,
+            ...Object.fromEntries(new FormData(applyForm))
+        };
+        
         await fetch(SCRIPT_URL, {
             method: "POST", 
             mode: "no-cors", 
@@ -742,16 +742,17 @@ createForm.onsubmit = async e => {
         return;
     }
     showLoading("Creating Account...");
-    const t = await getToken();
-    const data = {
-        type: "createTutorAccount",
-        token: t,
-        email: createForm.email.value,
-        accessCode: createForm.code.value,
-        password: createForm.password.value
-    };
     
     try {
+        const t = await getToken();
+        const data = {
+            type: "createTutorAccount",
+            token: t,
+            email: createForm.email.value,
+            accessCode: createForm.code.value,
+            password: createForm.password.value
+        };
+        
         await fetch(SCRIPT_URL, {
             method: "POST", 
             mode: "no-cors", 
@@ -787,10 +788,11 @@ async function submitSupport(){
             body: JSON.stringify(data),
             headers: { "Content-Type": "application/json" }
         });
+        // Reload history before hiding loading
+        await loadSupportMessages(t);
         hideLoading();
-        alert("Message sent! Refreshing history...");
+        alert("Message sent!");
         supportInput.value = "";
-        loadSupportMessages(t);
     } catch(err) {
         hideLoading();
         alert("Could not send message.");
@@ -810,9 +812,11 @@ loginForm.onsubmit = async e => {
             loginModal.style.display = "none";
             updateNav(true);
             resetLogoutTimer();
-            await loadStudents(d.token);
-            await loadSupportMessages(d.token);
-            await loadIndividualResources(d.token);
+            await Promise.all([
+                loadStudents(d.token),
+                loadSupportMessages(d.token),
+                loadIndividualResources(d.token)
+            ]);
             hideLoading();
         }else{
             hideLoading();
