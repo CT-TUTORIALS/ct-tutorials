@@ -256,6 +256,17 @@ font-weight:bold;
 background:#cc0000;
 }
 
+/* Modal specific button styling */
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+.btn-secondary {
+    background: #ccc;
+    color: #333;
+}
+
 .back-to-top {
     position: fixed;
     bottom: 30px;
@@ -501,7 +512,7 @@ margin-bottom:15px;
 </div>
 </div>
 
-<button id="dashboardLogout" class="logout-btn" style="display:none;" onclick="logoutTutor()">Logout</button>
+<button id="dashboardLogout" class="logout-btn" style="display:none;" onclick="handleHomeClick()">Logout</button>
 </div>
 
 </div>
@@ -543,6 +554,17 @@ margin-bottom:15px;
 </form>
 </div>
 
+<div class="modal" id="logoutConfirmModal">
+<div style="background:white; padding:30px; border-radius:8px; width:90%; max-width:400px; text-align:center;">
+    <h3 style="color:#003366; margin-top:0;">Logout Confirmation</h3>
+    <p>Are you sure you want to log out and return to the front page?</p>
+    <div class="modal-actions">
+        <button class="btn-secondary" onclick="document.getElementById('logoutConfirmModal').style.display='none'">Cancel</button>
+        <button onclick="logoutTutor()">Confirm Logout</button>
+    </div>
+</div>
+</div>
+
 <footer>
 <div class="footer-disclaimer">
 <strong>Disclaimer:</strong><br>
@@ -569,6 +591,7 @@ const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxIShwbw27ViNIHCShqkhJ
 const applyModal = document.getElementById("applyModal");
 const createModal = document.getElementById("createModal");
 const loginModal = document.getElementById("loginModal");
+const logoutConfirmModal = document.getElementById("logoutConfirmModal");
 const applyForm = document.getElementById("applyForm");
 const createForm = document.getElementById("createForm");
 const loginForm = document.getElementById("loginForm");
@@ -622,13 +645,13 @@ window.onscroll = function() {
     }
 };
 
-// Altered handleHomeClick logic
+// Updated Logic with Custom Modal
 function handleHomeClick() {
     if (localStorage.getItem("tutorToken")) {
-        // If logged in, logout and return to the public portal (front page)
-        logoutTutor();
+        // Show the custom logout confirmation modal
+        logoutConfirmModal.style.display = "flex";
     } else {
-        // If on the front page (not logged in), go to main index page
+        // Redirect to main index
         window.location.href = "https://ct-tutorials.github.io/ct-tutorials/index.html";
     }
 }
@@ -890,6 +913,8 @@ window.onload=()=>{
 function logoutTutor(){
     clearTimeout(logoutTimer);
     localStorage.clear();
+    // Ensure modal is hidden on refresh/redirect
+    if(logoutConfirmModal) logoutConfirmModal.style.display = "none";
     window.location.href = "tutors.html"; 
 }
 </script>
