@@ -69,7 +69,7 @@ border-radius: 10px;
 position: absolute;
 top: -10px;
 right: -15px;
-display: none; /* Hidden by default */
+display: none; 
 box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
@@ -129,11 +129,11 @@ z-index: 1000;
 border-top: none;
 }
 
-/* SUPPORT CARD & CHAT STYLING */
+/* SUPPORT COLLAPSIBLE STYLING */
 .support-grid {
     display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+    flex-direction: column;
+    gap: 15px;
     margin-top: 20px;
     padding: 0 10px;
 }
@@ -142,47 +142,41 @@ border-top: none;
     background: white;
     border-radius: 8px;
     width: 100%;
-    max-width: 450px;
+    max-width: 800px;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    border-top: 4px solid #003366;
+    border-left: 4px solid #003366;
     transition: all 0.3s ease;
+    overflow: hidden;
 }
 
 .support-card.has-new-messages {
-    border: 2px solid #2e7d32;
-    animation: pulseBorder 2s infinite;
-}
-
-@keyframes pulseBorder {
-    0% { box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    50% { box-shadow: 0 0 12px rgba(46, 125, 50, 0.4); }
-    100% { box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-}
-
-.new-msg-label {
-    background: #2e7d32;
-    color: white;
-    font-size: 10px;
-    padding: 2px 6px;
-    border-radius: 4px;
-    margin-left: 8px;
-    text-transform: uppercase;
-    font-weight: bold;
-    display: inline-block;
+    border-left: 4px solid #2e7d32;
 }
 
 .support-card-header {
     padding: 15px;
-    border-bottom: 1px solid #eee;
+    background: #fff;
+    cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    user-select: none;
 }
 
+.support-card-header:hover { background: #f9f9f9; }
 .support-card-header h3 { margin: 0; font-size: 16px; color: #003366; }
-.support-card-header small { color: #666; display: block; }
+.support-card-header small { color: #666; margin-left: 10px; font-weight: normal; }
+
+.toggle-icon { font-weight: bold; color: #003366; font-size: 18px; margin-left: 15px; }
+
+/* Hidden container */
+.support-content {
+    display: none;
+    border-top: 1px solid #eee;
+}
 
 .chat-container {
     background: #e5ddd5;
@@ -229,6 +223,7 @@ border-top: none;
     border-top: 1px solid #eee;
     display: flex;
     gap: 8px;
+    background: #fff;
 }
 
 .chat-input-area input {
@@ -246,6 +241,17 @@ border-top: none;
     border-radius: 4px;
     border: none;
     cursor: pointer;
+}
+
+.new-msg-label {
+    background: #2e7d32;
+    color: white;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 8px;
+    text-transform: uppercase;
+    font-weight: bold;
 }
 
 /* UNIVERSAL CELL CONFINEMENT */
@@ -309,7 +315,6 @@ font-weight: bold;
 .reply-btn { background:#003366; color:white; }
 .match-btn { background:#003366; color:white; padding: 4px 8px; font-size: 12px; }
 
-/* UPLOAD BUTTON STYLING */
 .upload-btn { background: #003366; color: white; font-size: 11px; padding: 4px 8px; margin-top: 5px; }
 .file-input-small { font-size: 11px; width: 100%; }
 
@@ -620,7 +625,6 @@ function startBadgePolling() {
   badgeInterval = setInterval(() => {
     const token = localStorage.getItem("adminToken");
     if(token) {
-        // Run updates silently
         loadApplications(token);
         loadStudents(token);
         loadOtherClients(token);
@@ -695,7 +699,6 @@ return true;
 return false;
 }
 
-// NEW HELPER: Visually clears badges on link click
 function clearBadge(badgeId) {
     const badge = document.getElementById(badgeId);
     if(badge) {
@@ -722,13 +725,27 @@ function markMessagesAsRead() {
     });
 }
 
+function toggleChat(cardId) {
+    const content = document.getElementById('content-' + cardId);
+    const icon = document.getElementById('icon-' + cardId);
+    const chatBox = document.getElementById('chat-' + cardId);
+    
+    if (content.style.display === "block") {
+        content.style.display = "none";
+        icon.innerText = "[+]";
+    } else {
+        content.style.display = "block";
+        icon.innerText = "[-]";
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+}
+
 function loadApplications(token){
 return fetch(SCRIPT_URL+"?action=getTutorApplications&token="+token)
 .then(r=>r.json())
 .then(data=>{
 if(handleAuthError(data)) return;
 const badge = document.getElementById("appsBadge");
-// Only show badge if NOT currently viewing this section
 if(Array.isArray(data) && data.length > 0 && window.location.hash !== "#applications") {
     badge.innerText = data.length;
     badge.style.display = "inline-block";
@@ -831,7 +848,6 @@ return fetch(SCRIPT_URL+"?action=getAllStudents&token="+token)
 .then(data=>{
 if(handleAuthError(data)) return;
 const badge = document.getElementById("studentsBadge");
-// Only show badge if NOT currently viewing this section
 if(Array.isArray(data) && data.length > 0 && window.location.hash !== "#students") {
     badge.innerText = data.length;
     badge.style.display = "inline-block";
@@ -898,7 +914,6 @@ return fetch(SCRIPT_URL+"?action=getOtherClients&token="+token)
 .then(data=>{
 if(handleAuthError(data)) return;
 const badge = document.getElementById("otherClientsBadge");
-// Only show badge if NOT currently viewing this section
 if(Array.isArray(data) && data.length > 0 && window.location.hash !== "#otherClients") {
     badge.innerText = data.length;
     badge.style.display = "inline-block";
@@ -949,7 +964,6 @@ function loadSupportMessages(token, silent = false){
 
         for (let key in groups) { if (groups[key].hasNew) unreadConvoCount++; }
 
-        // Logic check for Support badge
         if(unreadConvoCount > 0 && window.location.hash !== "#support") {
             badge.innerText = unreadConvoCount;
             badge.style.display = "inline-block";
@@ -976,21 +990,24 @@ function loadSupportMessages(token, silent = false){
             const card = document.createElement("div");
             card.className = "support-card" + (groups[email].hasNew ? " has-new-messages" : "");
             card.innerHTML = `
-                <div class="support-card-header">
+                <div class="support-card-header" onclick="toggleChat('${cardId}')">
                     <div>
                         <h3>${groups[email].name}${groups[email].hasNew ? '<span class="new-msg-label">New</span>' : ''}</h3>
                         <small>${email}</small>
                     </div>
-                    <button class="close-chat-btn" onclick="deleteConversation('${email}')">Close Chat</button>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <button class="close-chat-btn" onclick="event.stopPropagation(); deleteConversation('${email}')">Close Chat</button>
+                        <span class="toggle-icon" id="icon-${cardId}">[+]</span>
+                    </div>
                 </div>
-                <div class="chat-container" id="chat-${cardId}">${chatBubblesHtml}</div>
-                <div class="chat-input-area">
-                    <input type="text" placeholder="Type a reply..." id="input-${cardId}" onkeydown="if(event.key==='Enter') directReply('${email}')">
-                    <button class="reply-btn" onclick="directReply('${email}')">Send</button>
+                <div class="support-content" id="content-${cardId}">
+                    <div class="chat-container" id="chat-${cardId}">${chatBubblesHtml}</div>
+                    <div class="chat-input-area">
+                        <input type="text" placeholder="Type a reply..." id="input-${cardId}" onkeydown="if(event.key==='Enter') directReply('${email}')">
+                        <button class="reply-btn" onclick="directReply('${email}')">Send</button>
+                    </div>
                 </div>`;
             grid.appendChild(card);
-            const chatBox = card.querySelector(".chat-container");
-            chatBox.scrollTop = chatBox.scrollHeight;
         }
     });
 }
