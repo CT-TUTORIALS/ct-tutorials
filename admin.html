@@ -514,7 +514,7 @@ z-index:1100;
 <div class="nav-separator"></div>
 <a href="#applications">Applications <span id="appsBadge" class="badge">0</span></a>
 <div class="nav-separator"></div>
-<a href="#approved">Approved Tutors <span id="approvedBadge" class="badge">0</span></a>
+<a href="#approved">Approved Tutors</a>
 <div class="nav-separator"></div>
 <a href="#students">Students <span id="studentsBadge" class="badge">0</span></a>
 <div class="nav-separator"></div>
@@ -749,13 +749,6 @@ return fetch(SCRIPT_URL+"?action=getApprovedTutors&token="+token)
 .then(data=>{
 if(handleAuthError(data)) return;
 approvedTutorsList = data; 
-const badge = document.getElementById("approvedBadge");
-if(Array.isArray(data) && data.length > 0) {
-    badge.innerText = data.length;
-    badge.style.display = "inline-block";
-} else {
-    badge.style.display = "none";
-}
 const tbody=document.querySelector("#approvedTable tbody")
 tbody.innerHTML=""
 if(!Array.isArray(data)) return
