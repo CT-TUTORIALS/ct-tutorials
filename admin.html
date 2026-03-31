@@ -312,7 +312,7 @@ font-weight: bold;
 .match-btn { background:#003366; color:white; padding: 4px 8px; font-size: 12px; }
 
 /* UPLOAD BUTTON STYLING */
-.upload-btn { background: #ff9800; color: white; font-size: 11px; padding: 4px 8px; margin-top: 5px; }
+.upload-btn { background: #003366; color: white; font-size: 11px; padding: 4px 8px; margin-top: 5px; }
 .file-input-small { font-size: 11px; width: 100%; }
 
 .admin-nav a:hover { text-decoration: underline; }
@@ -512,13 +512,13 @@ z-index:1100;
 <a href="#" onclick="logout()">Home</a>
 <span id="adminLinks">
 <div class="nav-separator"></div>
-<a href="#applications">Applications</a>
+<a href="#applications">Applications <span id="appsBadge" class="badge">0</span></a>
 <div class="nav-separator"></div>
-<a href="#approved">Approved Tutors</a>
+<a href="#approved">Approved Tutors <span id="approvedBadge" class="badge">0</span></a>
 <div class="nav-separator"></div>
-<a href="#students">Students</a>
+<a href="#students">Students <span id="studentsBadge" class="badge">0</span></a>
 <div class="nav-separator"></div>
-<a href="#otherClients">Other Clients</a>
+<a href="#otherClients">Other Clients <span id="otherClientsBadge" class="badge">0</span></a>
 <div class="nav-separator"></div>
 <a href="#support" onclick="markMessagesAsRead()">Support <span id="supportBadge" class="badge">0</span></a>
 <div class="nav-separator"></div>
@@ -607,6 +607,7 @@ let approvedTutorsList = [];
 let targetStudentEmail = "";
 let logoutTimer;
 let badgeInterval;
+let globalSupportData = [];
 
 function resetLogoutTimer() {
     clearTimeout(logoutTimer);
@@ -694,7 +695,15 @@ function markMessagesAsRead() {
     const badge = document.getElementById("supportBadge");
     badge.style.display = "none";
     badge.innerText = "0";
-    localStorage.setItem("lastSupportRead", Date.now().toString());
+    
+    let maxTimestamp = 0;
+    globalSupportData.forEach(m => {
+        const msgTime = m["Date"] ? new Date(m["Date"]).getTime() : 0;
+        if (msgTime > maxTimestamp) maxTimestamp = msgTime;
+    });
+    
+    localStorage.setItem("lastSupportRead", maxTimestamp.toString());
+    
     document.querySelectorAll('.support-card').forEach(card => {
         card.classList.remove('has-new-messages');
         const label = card.querySelector('.new-msg-label');
@@ -707,6 +716,13 @@ return fetch(SCRIPT_URL+"?action=getTutorApplications&token="+token)
 .then(r=>r.json())
 .then(data=>{
 if(handleAuthError(data)) return;
+const badge = document.getElementById("appsBadge");
+if(Array.isArray(data) && data.length > 0) {
+    badge.innerText = data.length;
+    badge.style.display = "inline-block";
+} else {
+    badge.style.display = "none";
+}
 const tbody=document.querySelector("#applicationsTable tbody")
 tbody.innerHTML=""
 if(!Array.isArray(data)) return
@@ -733,6 +749,13 @@ return fetch(SCRIPT_URL+"?action=getApprovedTutors&token="+token)
 .then(data=>{
 if(handleAuthError(data)) return;
 approvedTutorsList = data; 
+const badge = document.getElementById("approvedBadge");
+if(Array.isArray(data) && data.length > 0) {
+    badge.innerText = data.length;
+    badge.style.display = "inline-block";
+} else {
+    badge.style.display = "none";
+}
 const tbody=document.querySelector("#approvedTable tbody")
 tbody.innerHTML=""
 if(!Array.isArray(data)) return
@@ -803,6 +826,13 @@ return fetch(SCRIPT_URL+"?action=getAllStudents&token="+token)
 .then(r=>r.json())
 .then(data=>{
 if(handleAuthError(data)) return;
+const badge = document.getElementById("studentsBadge");
+if(Array.isArray(data) && data.length > 0) {
+    badge.innerText = data.length;
+    badge.style.display = "inline-block";
+} else {
+    badge.style.display = "none";
+}
 const tbody=document.querySelector("#studentsTable tbody")
 tbody.innerHTML=""
 if(!Array.isArray(data)) return
@@ -863,6 +893,13 @@ return fetch(SCRIPT_URL+"?action=getOtherClients&token="+token)
 .then(r=>r.json())
 .then(data=>{
 if(handleAuthError(data)) return;
+const badge = document.getElementById("otherClientsBadge");
+if(Array.isArray(data) && data.length > 0) {
+    badge.innerText = data.length;
+    badge.style.display = "inline-block";
+} else {
+    badge.style.display = "none";
+}
 const tbody=document.querySelector("#otherClientsTable tbody")
 tbody.innerHTML=""
 if(!Array.isArray(data)) return
@@ -883,6 +920,7 @@ function loadSupportMessages(token, silent = false){
     .then(r=>r.json())
     .then(data=>{
         if(handleAuthError(data)) return;
+        globalSupportData = data;
         const badge = document.getElementById("supportBadge");
         if(!Array.isArray(data)) return;
         
