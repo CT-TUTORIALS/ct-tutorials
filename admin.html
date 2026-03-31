@@ -6,13 +6,15 @@
 <title>C&T Tutorials | Admin Panel</title>
 
 <style>
-/* ... Keeping your original CSS exactly as provided ... */
+
 body{
 font-family:"Segoe UI",Arial;
 margin:0;
 background:#f4f4f4;
 padding-bottom:60px;
 }
+
+/* HEADER - Always Centered */
 .admin-header{
 background:#003366;
 color:white;
@@ -23,6 +25,7 @@ z-index:1100;
 display: flex;
 justify-content: center; 
 }
+
 .admin-nav{
 display:flex;
 justify-content:center;
@@ -32,6 +35,7 @@ align-items:center;
 text-align:center;
 max-width: 100%;
 }
+
 .admin-nav a{
 color:white;
 text-decoration:none;
@@ -40,6 +44,7 @@ font-size:14px;
 white-space: nowrap; 
 position: relative;
 }
+
 #adminLinks {
 display:none; 
 align-items: center; 
@@ -47,11 +52,14 @@ justify-content: center;
 gap: 15px;
 flex-wrap: wrap;
 }
+
 .nav-separator {
 border-left: 2px solid rgba(255,255,255,0.5);
 height: 14px;
 margin: 0;
 }
+
+/* NOTIFICATION BADGE - GREEN */
 .badge {
 background: #2e7d32; 
 color: #ffffff;
@@ -64,6 +72,7 @@ right: -15px;
 display: none; 
 box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
+
 .signout{
 background:#c62828;
 padding:6px 12px;
@@ -71,21 +80,27 @@ border-radius:4px;
 cursor:pointer;
 display:inline-block;
 }
+
+/* CONTENT */
 .container{
 max-width: 98%; 
 margin:auto;
 padding:40px 0;
 display:none;
 }
+
 h2{
 color:#003366;
 border-bottom:2px solid #003366;
 padding-bottom:6px;
 margin-left: 10px;
 }
+
 section{
 margin-bottom:70px;
 }
+
+/* TABLES */
 table{
 width:100%;
 border-collapse:separate; 
@@ -94,6 +109,7 @@ background:white;
 margin-top:20px;
 table-layout: fixed; 
 }
+
 th,td{
 padding:12px 10px;
 border:1px solid #ddd;
@@ -103,6 +119,7 @@ vertical-align: top;
 word-wrap: break-word;
 overflow-wrap: break-word;
 }
+
 th{
 background:#003366;
 color:white;
@@ -111,6 +128,8 @@ top: 42px;
 z-index: 1000;
 border-top: none;
 }
+
+/* SUPPORT COLLAPSIBLE STYLING */
 .support-grid {
     display: flex;
     flex-direction: column;
@@ -118,6 +137,7 @@ border-top: none;
     margin-top: 20px;
     padding: 0 10px;
 }
+
 .support-card {
     background: white;
     border-radius: 8px;
@@ -131,9 +151,11 @@ border-top: none;
     transition: all 0.3s ease;
     overflow: hidden;
 }
+
 .support-card.has-new-messages {
     border-left: 4px solid #2e7d32;
 }
+
 .support-card-header {
     padding: 15px;
     background: #fff;
@@ -143,14 +165,19 @@ border-top: none;
     align-items: center;
     user-select: none;
 }
+
 .support-card-header:hover { background: #f9f9f9; }
 .support-card-header h3 { margin: 0; font-size: 16px; color: #003366; }
 .support-card-header small { color: #666; margin-left: 10px; font-weight: normal; }
+
 .toggle-icon { font-weight: bold; color: #003366; font-size: 18px; margin-left: 15px; }
+
+/* Hidden container */
 .support-content {
     display: none;
     border-top: 1px solid #eee;
 }
+
 .chat-container {
     background: #e5ddd5;
     padding: 15px;
@@ -160,6 +187,7 @@ border-top: none;
     flex-direction: column;
     gap: 10px;
 }
+
 .chat-bubble {
     padding: 10px 14px;
     border-radius: 12px;
@@ -169,16 +197,19 @@ border-top: none;
     position: relative;
     box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
+
 .chat-bubble.tutor {
     background: white;
     align-self: flex-start;
     border-bottom-left-radius: 2px;
 }
+
 .chat-bubble.admin {
     background: #dcf8c6;
     align-self: flex-end;
     border-bottom-right-radius: 2px;
 }
+
 .chat-date {
     font-size: 10px;
     color: #888;
@@ -186,6 +217,7 @@ border-top: none;
     display: block;
     text-align: right;
 }
+
 .chat-input-area {
     padding: 15px;
     border-top: 1px solid #eee;
@@ -193,12 +225,14 @@ border-top: none;
     gap: 8px;
     background: #fff;
 }
+
 .chat-input-area input {
     flex: 1;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
 .close-chat-btn {
     background: #c62828;
     color: white;
@@ -208,6 +242,7 @@ border-top: none;
     border: none;
     cursor: pointer;
 }
+
 .new-msg-label {
     background: #2e7d32;
     color: white;
@@ -218,44 +253,55 @@ border-top: none;
     text-transform: uppercase;
     font-weight: bold;
 }
+
+/* UNIVERSAL CELL CONFINEMENT */
 .scroll-cell {
     max-height: 100px;
     overflow-y: auto;
     display: block;
     padding-right: 5px;
 }
+
 .scroll-cell a {
     color: inherit;
     text-decoration: none;
     transition: color 0.2s;
 }
+
 .scroll-cell a:hover {
     color: #0056b3;
     text-decoration: underline;
 }
+
+/* COLUMN WIDTHS (Desktop) */
 #applicationsTable th:nth-child(1) { width: 12%; }
 #applicationsTable th:nth-child(2) { width: 18%; }
 #applicationsTable th:nth-child(3) { width: 10%; }
 #applicationsTable th:nth-child(4) { width: 35%; }
 #applicationsTable th:nth-child(5) { width: 10%; }
 #applicationsTable th:nth-child(6) { width: 15%; }
+
 #approvedTable th:nth-child(1) { width: 15%; }
 #approvedTable th:nth-child(2) { width: 20%; }
 #approvedTable th:nth-child(3) { width: 10%; }
 #approvedTable th:nth-child(4) { width: 30%; }
 #approvedTable th:nth-child(5) { width: 25%; }
+
 #studentsTable th:nth-child(1) { width: 12%; } 
 #studentsTable th:nth-child(2) { width: 15%; } 
 #studentsTable th:nth-child(3) { width: 10%; } 
 #studentsTable th:nth-child(4) { width: 38%; } 
 #studentsTable th:nth-child(5) { width: 15%; } 
 #studentsTable th:nth-child(6) { width: 10%; }
+
 #otherClientsTable th:nth-child(1) { width: 15%; }
 #otherClientsTable th:nth-child(2) { width: 20%; }
 #otherClientsTable th:nth-child(3) { width: 15%; }
 #otherClientsTable th:nth-child(4) { width: 50%; }
+
 .unmatched-alert { background-color: #ffe6e6 !important; }
 .text-danger { color: #c62828; font-weight: bold; }
+
 button{
 border:none;
 padding:6px 10px;
@@ -263,28 +309,37 @@ border-radius:4px;
 cursor:pointer;
 font-weight: bold;
 }
+
 .approve{ background:#2e7d32; color:white; width: 85px; margin-right: 8px; }
 .reject{ background:#c62828; color:white; width: 85px; }
 .reply-btn { background:#003366; color:white; }
 .match-btn { background:#003366; color:white; padding: 4px 8px; font-size: 12px; }
+
 .upload-btn { background: #003366; color: white; font-size: 11px; padding: 4px 8px; margin-top: 5px; }
 .file-input-small { font-size: 11px; width: 100%; }
+
 .admin-nav a:hover { text-decoration: underline; }
+
+/* MOBILE AUTO-ADJUSTMENTS */
 @media screen and (max-width: 768px) {
     .container { max-width: 100%; padding: 20px 5px; }
     .nav-separator { display: none; }
+    
     table, thead, tbody, th, td, tr { 
         display: block; 
         width: 100% !important; 
         box-sizing: border-box;
     }
+    
     thead { display: none; }
+    
     tr { 
         margin-bottom: 20px; 
         border: 2px solid #003366; 
         border-radius: 6px; 
         background: #fff;
     }
+    
     td {
         text-align: left;
         padding: 10px;
@@ -294,6 +349,7 @@ font-weight: bold;
         flex-direction: column;
         gap: 4px;
     }
+    
     td:before { 
         content: attr(data-label);
         font-weight: bold;
@@ -301,19 +357,25 @@ font-weight: bold;
         font-size: 12px;
         text-transform: uppercase;
     }
+
     .scroll-cell { max-height: none; }
+    
     td:last-child {
         display: flex;
         gap: 10px;
         white-space: normal;
     }
+    
     .approve, .reject, .reply-btn, .match-btn, .upload-btn { 
         flex: 1;
         width: auto;
         padding: 12px;
     }
+
     .support-card { max-width: 100%; }
 }
+
+/* LOGIN & MODALS */
 .login-overlay{
 position:fixed;
 top:0;
@@ -326,6 +388,7 @@ justify-content:center;
 align-items:center;
 z-index: 2000;
 }
+
 .login-box{
 background:white;
 padding:30px;
@@ -333,6 +396,7 @@ width:320px;
 border-radius:8px;
 text-align:center;
 }
+
 .login-box input, .modal-box select {
 width:100%;
 padding:10px;
@@ -340,6 +404,7 @@ margin:8px 0;
 border:1px solid #ccc;
 border-radius:4px;
 }
+
 .login-btn{
 background:#003366;
 color:white;
@@ -347,10 +412,12 @@ width:100%;
 padding:10px;
 margin-top:10px;
 }
+
 .error{
 color:red;
 display:none; font-size:13px;
 }
+
 .modal{
 display:none;
 position:fixed;
@@ -363,6 +430,7 @@ justify-content:center;
 align-items:center;
 z-index:3000;
 }
+
 .modal-box {
 background:white;
 padding:25px;
@@ -371,6 +439,7 @@ width:90%;
 max-width:400px;
 text-align:center;
 }
+
 .spinner{
 width:40px;
 height:40px;
@@ -381,9 +450,11 @@ animation:spin 1s linear infinite;
 margin:auto;
 margin-bottom:15px;
 }
+
 @keyframes spin{
 0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);}
 }
+
 .footer{
 position:fixed;
 bottom:0;
@@ -396,6 +467,7 @@ padding:12px 10px;
 font-size:14px;
 z-index:1100;
 }
+
 #backToTop {
     display: none;
     position: fixed;
@@ -414,11 +486,13 @@ z-index:1100;
     transition: all 0.3s ease;
     backdrop-filter: blur(4px); 
 }
+
 #backToTop:hover {
     background: rgba(0, 51, 102, 1); 
     transform: translateY(-3px); 
     box-shadow: 0 6px 12px rgba(0,0,0,0.3);
 }
+
 </style>
 </head>
 
@@ -457,6 +531,7 @@ z-index:1100;
 </div>
 
 <div class="container" id="adminContent">
+
 <section id="applications">
 <h2>Tutor Applications</h2>
 <table id="applicationsTable">
@@ -501,6 +576,7 @@ z-index:1100;
 <h2>Support Chats</h2>
 <div id="supportGrid" class="support-grid"></div>
 </section>
+
 </div>
 
 <div class="footer">
@@ -525,11 +601,11 @@ z-index:1100;
 </div>
 
 <script>
+
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbwc1VkCPnVk4-zUnuZLNU9pmEMFGSp_q015ZMLdMklv-yoHSEi0Z5vhAqJrv2dY7K9w/exec";
 const loadingModal = document.getElementById("loadingModal");
 const loadingText = document.getElementById("loadingText");
 const loginOverlay = document.getElementById("loginOverlay");
-
 let approvedTutorsList = [];
 let targetStudentEmail = "";
 let logoutTimer;
@@ -554,8 +630,9 @@ function updateBaseline(key) {
     
     localStorage.setItem('baseline_' + key, count);
     
-    // UI Cleanup
-    const badge = document.getElementById(key === 'apps' ? 'appsBadge' : key === 'students' ? 'studentsBadge' : 'otherClientsBadge');
+    // Immediate UI reset
+    const badgeId = key === 'apps' ? 'appsBadge' : key === 'students' ? 'studentsBadge' : 'otherClientsBadge';
+    const badge = document.getElementById(badgeId);
     if(badge) {
         badge.style.display = "none";
         badge.innerText = "0";
@@ -575,7 +652,7 @@ function startBadgePolling() {
   badgeInterval = setInterval(() => {
     const token = localStorage.getItem("adminToken");
     if(token) {
-        // Passing 'true' for silent background updates
+        // Differential logic: poll with 'true' for background silent updates
         loadApplications(token, true);
         loadStudents(token, true);
         loadOtherClients(token, true);
@@ -650,7 +727,17 @@ return true;
 return false;
 }
 
+function clearBadge(badgeId) {
+    const badge = document.getElementById(badgeId);
+    if(badge) {
+        badge.style.display = "none";
+        badge.innerText = "0";
+    }
+}
+
 function markMessagesAsRead() {
+    clearBadge("supportBadge");
+    
     let maxTimestamp = 0;
     globalSupportData.forEach(m => {
         const msgTime = m["Date"] ? new Date(m["Date"]).getTime() : 0;
@@ -659,7 +746,6 @@ function markMessagesAsRead() {
     
     localStorage.setItem("lastSupportRead", maxTimestamp.toString());
     
-    document.getElementById("supportBadge").style.display = "none";
     document.querySelectorAll('.support-card').forEach(card => {
         card.classList.remove('has-new-messages');
         const label = card.querySelector('.new-msg-label');
@@ -682,7 +768,6 @@ function toggleChat(cardId) {
     }
 }
 
-// DIFFERENTIAL LOADERS
 function loadApplications(token, silent = false){
 return fetch(SCRIPT_URL+"?action=getTutorApplications&token="+token)
 .then(r=>r.json())
@@ -690,18 +775,19 @@ return fetch(SCRIPT_URL+"?action=getTutorApplications&token="+token)
 if(handleAuthError(data)) return;
 if(!Array.isArray(data)) return;
 
+// UPDATE GLOBAL COUNT
 currentAppsCount = data.length;
 const delta = currentAppsCount - getBaseline('apps');
 const badge = document.getElementById("appsBadge");
 
-if(delta > 0) {
+if(delta > 0 && window.location.hash !== "#applications") {
     badge.innerText = delta;
     badge.style.display = "inline-block";
 } else {
     badge.style.display = "none";
 }
 
-if(silent) return; // Skip re-rendering table if just polling
+if(silent) return; // Differential logic: skip re-draw if polling in background
 
 const tbody=document.querySelector("#applicationsTable tbody")
 tbody.innerHTML=""
@@ -799,11 +885,12 @@ return fetch(SCRIPT_URL+"?action=getAllStudents&token="+token)
 if(handleAuthError(data)) return;
 if(!Array.isArray(data)) return;
 
+// UPDATE GLOBAL COUNT
 currentStudentsCount = data.length;
 const delta = currentStudentsCount - getBaseline('students');
 const badge = document.getElementById("studentsBadge");
 
-if(delta > 0) {
+if(delta > 0 && window.location.hash !== "#students") {
     badge.innerText = delta;
     badge.style.display = "inline-block";
 } else {
@@ -872,11 +959,12 @@ return fetch(SCRIPT_URL+"?action=getOtherClients&token="+token)
 if(handleAuthError(data)) return;
 if(!Array.isArray(data)) return;
 
+// UPDATE GLOBAL COUNT
 currentClientsCount = data.length;
 const delta = currentClientsCount - getBaseline('clients');
 const badge = document.getElementById("otherClientsBadge");
 
-if(delta > 0) {
+if(delta > 0 && window.location.hash !== "#otherClients") {
     badge.innerText = delta;
     badge.style.display = "inline-block";
 } else {
@@ -928,7 +1016,7 @@ function loadSupportMessages(token, silent = false){
 
         for (let key in groups) { if (groups[key].hasNew) unreadConvoCount++; }
 
-        if(unreadConvoCount > 0) {
+        if(unreadConvoCount > 0 && window.location.hash !== "#support") {
             badge.innerText = unreadConvoCount;
             badge.style.display = "inline-block";
         } else {
@@ -1079,5 +1167,6 @@ window.onscroll = function() {
 function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
 </script>
+
 </body>
 </html>
