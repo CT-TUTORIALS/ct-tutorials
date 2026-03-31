@@ -69,7 +69,7 @@ border-radius: 10px;
 position: absolute;
 top: -10px;
 right: -15px;
-display: none;
+display: none; /* Hidden by default */
 box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
@@ -150,7 +150,6 @@ border-top: none;
     transition: all 0.3s ease;
 }
 
-/* VISUAL HIGHLIGHT FOR NEW MESSAGES */
 .support-card.has-new-messages {
     border: 2px solid #2e7d32;
     animation: pulseBorder 2s infinite;
@@ -257,7 +256,6 @@ border-top: none;
     padding-right: 5px;
 }
 
-/* SLEEK CONTACT LINKS */
 .scroll-cell a {
     color: inherit;
     text-decoration: none;
@@ -621,7 +619,12 @@ function startBadgePolling() {
   clearInterval(badgeInterval);
   badgeInterval = setInterval(() => {
     const token = localStorage.getItem("adminToken");
-    if(token) loadSupportMessages(token, true); 
+    if(token) {
+        loadApplications(token);
+        loadStudents(token);
+        loadOtherClients(token);
+        loadSupportMessages(token, true);
+    }
   }, 60000); 
 }
 
@@ -797,7 +800,6 @@ async function uploadResource(tutorEmail) {
         })
         .then(r => r.json())
         .then(res => {
-            // Dismiss loading before showing result alert
             loadingModal.style.display = "none";
             if(res.success || res.status === "success") {
                 alert("File uploaded successfully.");
@@ -874,7 +876,6 @@ async function submitManualMatch() {
     })
     .then(r => r.json())
     .then(res => {
-        // Dismiss loading before showing alerts
         loadingModal.style.display="none";
         if(res.success) loadStudents(token);
         else alert("Match failed: " + res.error);
@@ -961,9 +962,7 @@ function loadSupportMessages(token, silent = false){
 
             const cardId = email.replace(/[@.]/g, '-');
             const card = document.createElement("div");
-            
             card.className = "support-card" + (groups[email].hasNew ? " has-new-messages" : "");
-            
             card.innerHTML = `
                 <div class="support-card-header">
                     <div>
@@ -1000,7 +999,6 @@ function directReply(email){
     })
     .then(r => r.json())
     .then(res => {
-        // Dismiss loading before showing alerts
         loadingModal.style.display="none";
         if(res.success) {
             document.getElementById(inputId).value = "";
@@ -1028,7 +1026,6 @@ function deleteConversation(email) {
     })
     .then(r => r.json())
     .then(res => {
-        // Dismiss loading
         loadingModal.style.display="none";
         if(res.success) loadSupportMessages(token);
     })
@@ -1046,7 +1043,6 @@ loadingModal.style.display="flex"
 fetch(`${SCRIPT_URL}?action=approveTutor&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`)
 .then(r=>r.json())
 .then(res=>{
-  // Dismiss loading before alert
   loadingModal.style.display="none";
   if(res.status === "approved") {
       initAdmin(token);
@@ -1064,7 +1060,6 @@ loadingModal.style.display="flex"
 fetch(`${SCRIPT_URL}?action=rejectTutor&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`)
 .then(r=>r.json())
 .then(res=>{
-  // Dismiss loading before alert
   loadingModal.style.display="none";
   if(res.status === "rejected") {
       loadApplications(token);
