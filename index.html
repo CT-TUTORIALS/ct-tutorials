@@ -901,50 +901,24 @@ function showTutorSubjects() {
     }
 }
 
-tutorSelect.addEventListener("change", function() {
-    const profileLink = document.getElementById("viewTutorProfile");
-    if(this.value && this.value !== "ANY") {
-        profileLink.style.display = "block";
-    } else {
-        profileLink.style.display = "none";
-    }
-    if(this.value === "ANY") {
-        this.innerHTML = '<option value="">Select a tutor</option>';
-        let all = [];
-        for (let key in tutorsData) {
-            if (Array.isArray(tutorsData[key])) all = all.concat(tutorsData[key]);
-        }
-        let uniqueAll = all.filter((t, index, self) => index === self.findIndex((temp) => temp.name === t.name));
-        uniqueAll.forEach(t => {
-            let opt = document.createElement("option");
-            opt.value = t.name; opt.textContent = t.name;
-            this.appendChild(opt);
-        });
-        let allOpt = document.createElement("option");
-        allOpt.value = "ANY"; allOpt.textContent = "-- Refresh Filter --";
-        this.appendChild(allOpt);
-    }
-});
-
-/* ✅ GLOBAL MODAL DISMISS LOGIC */
-window.onclick = function(event) {
-    if (event.target == modal) {
-        closeForm();
-    } else if (event.target == pricingModal) {
-        pricingModal.style.display = "none";
-    } else if (event.target == servicePickerModal) {
-        closeServicePicker();
-    } else if (event.target == document.getElementById('tutorProfileModal')) {
-        document.getElementById('tutorProfileModal').style.display = 'none';
-    }
-};
-
-/* ✅ FINAL UPDATE: SUBMISSION LOGIC */
+/* ✅ DATA SYNTHESIS & SUBMISSION LOGIC */
 document.getElementById("studentRegisterForm").addEventListener("submit", function(e) {
     e.preventDefault();
     loadingModal.style.display = "flex";
+
     const formData = new FormData(this);
     const data = Object.fromEntries(formData.entries());
+    
+    // SYNTHESIS: Combine Service Type and Topic/Subject Specification
+    const displayService = serviceDisplay.value;
+    const specification = specInput.value.trim();
+    
+    if (specification) {
+        data.service = `${displayService}; Topic: ${specification}`;
+    } else {
+        data.service = displayService;
+    }
+
     data.action = "registerStudent";
     data.token = generateToken();
 
@@ -957,10 +931,10 @@ document.getElementById("studentRegisterForm").addEventListener("submit", functi
         loadingModal.style.display = "none";
         if(res.success || res.status === "success") {
             setTimeout(() => {
-                alert("Registration successful! We will contact you soon.");
+                alert("Registration successful! Your tutor will contact you shortly.");
                 closeForm();
                 document.getElementById("studentRegisterForm").reset();
-            }, 10);
+            }, 50);
         } else {
             alert("Registration failed: " + (res.error || "Unknown error"));
         }
@@ -971,17 +945,31 @@ document.getElementById("studentRegisterForm").addEventListener("submit", functi
     });
 });
 
-window.onscroll = function() {
-  const btn = document.getElementById("backToTop");
-  if (btn) {
-    if (document.body.scrollTop > 250 || document.documentElement.scrollTop > 250) btn.style.display = "block";
-    else btn.style.display = "none";
-  }
-};
-
-function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
-
+/* ✅ TUTOR SELECT LOGIC */
+tutorSelect.addEventListener("change", function() {
+    const profileLink = document.getElementById("viewTutorProfile");
+    if(this.value && this.value !== "ANY") {
+        profileLink.style.display = "block";
+    } else {
+        profileLink.style.display = "none";
+    }
+    
+    if(this.value === "ANY") {
+        this.innerHTML = '<option value="">Select a tutor</option>';
+        let all = [];
+        for (let key in tutorsData) {
+            if (Array.isArray(tutorsData[key])) all = all.concat(tutorsData[key]);
+        }
+        let uniqueAll = all.filter((t, index, self) =>
+            index === self.findIndex((temp) => temp.name === t.name)
+        );
+        uniqueAll.forEach(t => {
+            let opt = document.createElement("option");
+            opt.value = t.name; opt.textContent = t.name;
+            this.appendChild(opt);
+        });
+    }
+});
 </script>
-
 </body>
 </html>
