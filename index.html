@@ -956,9 +956,11 @@ document.getElementById("studentRegisterForm").addEventListener("submit", functi
     .then(res => {
         loadingModal.style.display = "none";
         if(res.success || res.status === "success") {
-            alert("Registration successful! We will contact you soon.");
-            closeForm();
-            this.reset();
+            setTimeout(() => {
+                alert("Registration successful! We will contact you soon.");
+                closeForm();
+                document.getElementById("studentRegisterForm").reset();
+            }, 10);
         } else {
             alert("Registration failed: " + (res.error || "Unknown error"));
         }
