@@ -636,8 +636,8 @@ const serviceDisplay = document.getElementById("serviceSelectDisplay");
 const serviceHiddenValue = document.getElementById("serviceSelectValue");
 
 const serviceOptionsData = [
+    { group: "Individual Sessions" },
     { label: "Introduction to Academic Writing", value: "Intro Academic Writing" },
-    { group: "Topic Specific Sessions" },
     { label: "Secondary School Subject", value: "Secondary Subject" },
     { label: "Tertiary Level Module", value: "Tertiary Module" },
     { label: "General Topic Specific Session", value: "Topic Specific" },
@@ -736,15 +736,20 @@ content = `
 if(service==="group"){
 pricingTitle.innerText="Group Learning Sessions";
 content = `
-<div class="pricing-subtopic">A. Academic Writing & Tertiary Level Modules</div>
-<label class="picker-option"><input type="radio" name="priceRadio" value="Group Sessions: 2-5 People" checked> 2 – 5 People – <b>N$200</b></label>
-<label class="picker-option"><input type="radio" name="priceRadio" value="Group Sessions: 6-14 People"> 6 – 14 People – <b>N$450</b></label>
-<label class="picker-option"><input type="radio" name="priceRadio" value="Group Sessions: More than 14 People"> More than 14 People – <b>N$600</b></label>
+<div class="pricing-subtopic">Academic Writing</div>
+<label class="picker-option"><input type="radio" name="priceRadio" data-cat="Academic Writing" value="Group Sessions: 2-5 People" checked> 2 – 5 People – <b>N$200</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" data-cat="Academic Writing" value="Group Sessions: 6-14 People"> 6 – 14 People – <b>N$450</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" data-cat="Academic Writing" value="Group Sessions: More than 14 People"> More than 14 People – <b>N$600</b></label>
 
-<div class="pricing-subtopic">B. Secondary School Subjects</div>
-<label class="picker-option"><input type="radio" name="priceRadio" value="Group Sessions: 2-5 People (Secondary)"> 2 – 5 People – <b>N$150</b></label>
-<label class="picker-option"><input type="radio" name="priceRadio" value="Group Sessions: 6-14 People (Secondary)"> 6 – 14 People – <b>N$250</b></label>
-<label class="picker-option"><input type="radio" name="priceRadio" value="Group Sessions: More than 14 People (Secondary)"> > 14 People – <b>N$350</b></label>`;
+<div class="pricing-subtopic">Tertiary Level Modules</div>
+<label class="picker-option"><input type="radio" name="priceRadio" data-cat="Tertiary Level Modules" value="Group Sessions: 2-5 People"> 2 – 5 People – <b>N$200</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" data-cat="Tertiary Level Modules" value="Group Sessions: 6-14 People"> 6 – 14 People – <b>N$450</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" data-cat="Tertiary Level Modules" value="Group Sessions: More than 14 People"> More than 14 People – <b>N$600</b></label>
+
+<div class="pricing-subtopic">C. Secondary School Subjects</div>
+<label class="picker-option"><input type="radio" name="priceRadio" data-cat="Secondary School Subjects" value="Group Sessions: 2-5 People (Secondary)"> 2 – 5 People – <b>N$150</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" data-cat="Secondary School Subjects" value="Group Sessions: 6-14 People (Secondary)"> 6 – 14 People – <b>N$250</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" data-cat="Secondary School Subjects" value="Group Sessions: More than 14 People (Secondary)"> > 14 People – <b>N$350</b></label>`;
 }
 
 if(service==="assignment"){
@@ -767,11 +772,18 @@ function bookService(){
 const selectedOption = document.querySelector('input[name="priceRadio"]:checked');
 if(!selectedOption) return;
 const bookingValue = selectedOption.value;
+const category = selectedOption.getAttribute("data-cat");
 pricingModal.style.display="none";
 openForm();
 setTimeout(()=>{
 const found = serviceOptionsData.find(d => d.value === bookingValue);
-serviceDisplay.value = found ? found.label : bookingValue;
+let displayLabel = found ? found.label : bookingValue;
+
+if(category) {
+    displayLabel = `${category} (${displayLabel})`;
+}
+
+serviceDisplay.value = displayLabel;
 serviceHiddenValue.value = bookingValue;
 handleServiceChange(bookingValue);
 },100);
@@ -927,49 +939,47 @@ window.onclick = function(event) {
     }
 };
 
-/* ✅ FINAL UPDATED LOGIC: Constructs Service Name (User Specification) */
+/* ✅ FINAL UPDATE: SUBMISSION LOGIC */
 document.getElementById("studentRegisterForm").addEventListener("submit", function(e) {
     e.preventDefault();
     loadingModal.style.display = "flex";
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData.entries());
+    data.action = "registerStudent";
+    data.token = generateToken();
 
-    const baseService = document.getElementById("priceOptionField").value;
-    const userSpec = document.getElementById("specInput").value.trim();
-    
-    // logic: If a specification exists, format it as "Service Name (Specification)"
-    // Otherwise, just use the service name.
-    const formattedService = userSpec ? `${baseService} (${userSpec})` : baseService;
-
-    const formDataObj = {
-        type: "studentRegistration", 
-        name: document.getElementById("name").value,
-        email: document.getElementById("email").value,
-        phone: document.getElementById("phone").value,
-        service: formattedService, // This sends "Group Sessions: 2-5 People (Quadratic Equations)"
-        specification: userSpec,
-        tutor: (tutorSelect.value === "ANY" || tutorSelect.value.includes("No tutors")) ? "" : tutorSelect.value,
-        no_tutor_found: document.getElementById("noTutorFoundFlag").value,
-        token: generateToken()
-    };
-    
-    fetch(SCRIPT_URL, { 
-        method: "POST", 
-        mode: "no-cors",
-        body: JSON.stringify(formDataObj) 
+    fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify(data)
     })
-    .then(() => {
-        setTimeout(() => {
-            loadingModal.style.display = "none";
-            alert("Registration successful! We will contact you shortly.");
+    .then(r => r.json())
+    .then(res => {
+        loadingModal.style.display = "none";
+        if(res.success || res.status === "success") {
+            alert("Registration successful! We will contact you soon.");
             closeForm();
-            document.getElementById("studentRegisterForm").reset();
-        }, 1500);
+            this.reset();
+        } else {
+            alert("Registration failed: " + (res.error || "Unknown error"));
+        }
     })
     .catch(err => {
         loadingModal.style.display = "none";
-        alert("Submission error. Please try again.");
-        console.error(err);
+        alert("Network error. Please try again.");
     });
 });
+
+window.onscroll = function() {
+  const btn = document.getElementById("backToTop");
+  if (btn) {
+    if (document.body.scrollTop > 250 || document.documentElement.scrollTop > 250) btn.style.display = "block";
+    else btn.style.display = "none";
+  }
+};
+
+function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
 </script>
+
 </body>
 </html>
