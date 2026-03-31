@@ -657,7 +657,6 @@ const serviceOptionsData = [
     { label: "Referencing Assistance", value: "Referencing Assistance" }
 ];
 
-/* ✅ COMPREHENSIVE NAMIBIAN ACADEMIC KNOWLEDGE BASE */
 const curriculumKB = {
     "academic writing": ["apa", "referencing", "literature review", "thesis", "dissertation", "citations", "plagiarism", "abstract", "academic integrity", "essay structure", "eap", "writing", "proper nouns", "grammar", "punctuation", "ulep", "lea3419", "lce3419"],
     "language": ["english", "literacy", "linguistics", "khoekhoegowab", "oshikwanyama", "oshindonga", "afrikaans", "otjiherero", "german", "oshivambo", "rukvangali", "setswana", "silozi"],
@@ -909,7 +908,6 @@ document.getElementById("studentRegisterForm").addEventListener("submit", functi
     const formData = new FormData(this);
     const data = Object.fromEntries(formData.entries());
     
-    // SYNTHESIS: Combine Service Type and Topic/Subject Specification
     const displayService = serviceDisplay.value;
     const specification = specInput.value.trim();
     
@@ -968,6 +966,16 @@ tutorSelect.addEventListener("change", function() {
             opt.value = t.name; opt.textContent = t.name;
             this.appendChild(opt);
         });
+    }
+});
+
+/* ✅ MODAL CLICK-OUTSIDE LOGIC */
+window.addEventListener("click", (event) => {
+    if (event.target === modal) closeForm();
+    if (event.target === pricingModal) pricingModal.style.display = "none";
+    if (event.target === servicePickerModal) closeServicePicker();
+    if (event.target === document.getElementById("tutorProfileModal")) {
+        document.getElementById("tutorProfileModal").style.display = "none";
     }
 });
 </script>
