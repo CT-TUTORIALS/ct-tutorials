@@ -510,13 +510,13 @@ z-index:1100;
 <a href="#" onclick="logout()">Home</a>
 <span id="adminLinks">
 <div class="nav-separator"></div>
-<a href="#applications">Applications <span id="appsBadge" class="badge">0</span></a>
+<a href="#applications" onclick="clearBadge('appsBadge')">Applications <span id="appsBadge" class="badge">0</span></a>
 <div class="nav-separator"></div>
 <a href="#approved">Approved Tutors</a>
 <div class="nav-separator"></div>
-<a href="#students">Students <span id="studentsBadge" class="badge">0</span></a>
+<a href="#students" onclick="clearBadge('studentsBadge')">Students <span id="studentsBadge" class="badge">0</span></a>
 <div class="nav-separator"></div>
-<a href="#otherClients">Other Clients <span id="otherClientsBadge" class="badge">0</span></a>
+<a href="#otherClients" onclick="clearBadge('otherClientsBadge')">Other Clients <span id="otherClientsBadge" class="badge">0</span></a>
 <div class="nav-separator"></div>
 <a href="#support" onclick="markMessagesAsRead()">Support <span id="supportBadge" class="badge">0</span></a>
 <div class="nav-separator"></div>
@@ -620,6 +620,7 @@ function startBadgePolling() {
   badgeInterval = setInterval(() => {
     const token = localStorage.getItem("adminToken");
     if(token) {
+        // Run updates silently
         loadApplications(token);
         loadStudents(token);
         loadOtherClients(token);
@@ -694,10 +695,17 @@ return true;
 return false;
 }
 
+// NEW HELPER: Visually clears badges on link click
+function clearBadge(badgeId) {
+    const badge = document.getElementById(badgeId);
+    if(badge) {
+        badge.style.display = "none";
+        badge.innerText = "0";
+    }
+}
+
 function markMessagesAsRead() {
-    const badge = document.getElementById("supportBadge");
-    badge.style.display = "none";
-    badge.innerText = "0";
+    clearBadge("supportBadge");
     
     let maxTimestamp = 0;
     globalSupportData.forEach(m => {
@@ -720,7 +728,8 @@ return fetch(SCRIPT_URL+"?action=getTutorApplications&token="+token)
 .then(data=>{
 if(handleAuthError(data)) return;
 const badge = document.getElementById("appsBadge");
-if(Array.isArray(data) && data.length > 0) {
+// Only show badge if NOT currently viewing this section
+if(Array.isArray(data) && data.length > 0 && window.location.hash !== "#applications") {
     badge.innerText = data.length;
     badge.style.display = "inline-block";
 } else {
@@ -822,7 +831,8 @@ return fetch(SCRIPT_URL+"?action=getAllStudents&token="+token)
 .then(data=>{
 if(handleAuthError(data)) return;
 const badge = document.getElementById("studentsBadge");
-if(Array.isArray(data) && data.length > 0) {
+// Only show badge if NOT currently viewing this section
+if(Array.isArray(data) && data.length > 0 && window.location.hash !== "#students") {
     badge.innerText = data.length;
     badge.style.display = "inline-block";
 } else {
@@ -888,7 +898,8 @@ return fetch(SCRIPT_URL+"?action=getOtherClients&token="+token)
 .then(data=>{
 if(handleAuthError(data)) return;
 const badge = document.getElementById("otherClientsBadge");
-if(Array.isArray(data) && data.length > 0) {
+// Only show badge if NOT currently viewing this section
+if(Array.isArray(data) && data.length > 0 && window.location.hash !== "#otherClients") {
     badge.innerText = data.length;
     badge.style.display = "inline-block";
 } else {
@@ -938,7 +949,8 @@ function loadSupportMessages(token, silent = false){
 
         for (let key in groups) { if (groups[key].hasNew) unreadConvoCount++; }
 
-        if(unreadConvoCount > 0) {
+        // Logic check for Support badge
+        if(unreadConvoCount > 0 && window.location.hash !== "#support") {
             badge.innerText = unreadConvoCount;
             badge.style.display = "inline-block";
         } else {
