@@ -25,6 +25,7 @@ color:#333;
 line-height:1.6;
 }
 
+/* ✅ UPDATED: RESPONSIVE HEADER LOGIC */
 .top-bar{
 position:fixed;
 top:0;
@@ -86,6 +87,7 @@ margin: 0;
 display: block;
 }
 
+/* ✅ UPDATED: CONTENT SPACING */
 .main-content{
 max-width:1100px;
 margin:auto;
@@ -93,6 +95,7 @@ padding:40px;
 margin-top: 250px; 
 }
 
+/* ✅ NEW: LANDSCAPE/ROTATED FIX */
 @media (max-height: 450px) and (orientation: landscape) {
 .top-bar { padding: 8px 15px; min-height: auto; }
 .header-title h1 { font-size: 22px; margin-top: 0; }
@@ -231,6 +234,7 @@ border:1px solid #ccc;
 box-sizing: border-box;
 }
 
+/* DROPDOWN STYLES */
 .custom-select-wrapper {
     position: relative;
     cursor: pointer;
@@ -326,6 +330,16 @@ opacity:0.9;
 .agreement-label input {
     width: auto !important;
     margin-top: 4px;
+}
+
+/* NEW: Tutor Link Styling */
+.view-tutor-link {
+    display: block;
+    margin-top: 10px;
+    font-size: 13px;
+    color: #003366;
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 .pricing-subtopic {
@@ -542,6 +556,7 @@ opacity:0.9;
 <select name="tutor" id="tutorSelect">
 <option value="">Select a tutor</option>
 </select>
+<span id="viewTutorProfile" class="view-tutor-link" style="display:none;" onclick="showTutorSubjects()">View subjects offered by this tutor</span>
 </label>
 
 <input type="hidden" name="token" id="tokenField">
@@ -554,6 +569,16 @@ opacity:0.9;
 
 <button type="submit" class="submit-btn">Submit Registration</button>
 </form>
+</div>
+
+<div id="tutorProfileModal">
+<div id="tutorProfileContent">
+<button class="close" onclick="document.getElementById('tutorProfileModal').style.display='none'">×</button>
+<h3 id="profileTutorName">Tutor Profile</h3>
+<p><strong>Subjects Offered:</strong></p>
+<div id="profileTutorSubjects" style="background:#f9f9f9; padding:15px; border-radius:5px; border:1px solid #ddd;"></div>
+<button class="submit-btn" onclick="document.getElementById('tutorProfileModal').style.display='none'">Back to Form</button>
+</div>
 </div>
 
 <div id="pricingModal">
@@ -684,6 +709,7 @@ function openForm(){
 modal.style.display="flex";
 tutorLabel.style.display="none";
 tutorSelect.innerHTML='<option value="">Select a tutor</option>';
+document.getElementById("viewTutorProfile").style.display = "none";
 serviceDisplay.value="";
 serviceHiddenValue.value="";
 priceOptionField.value="";
@@ -801,6 +827,7 @@ function handleServiceChange(val){
     if(requiresTutor && tutorsData){
         tutorLabel.style.display="block";
         tutorSelect.innerHTML='<option value="">Select a tutor</option>';
+        document.getElementById("viewTutorProfile").style.display = "none";
         
         const userInput = specInput.value.trim();
         const userTokens = getTokens(userInput);
@@ -839,6 +866,9 @@ function handleServiceChange(val){
                 opt.value = t.name; opt.textContent = t.name;
                 tutorSelect.appendChild(opt);
             });
+            let allOpt = document.createElement("option");
+            allOpt.value = "ANY"; allOpt.textContent = "-- See All Available Tutors --";
+            tutorSelect.appendChild(allOpt);
         } else {
             document.getElementById("noTutorFoundFlag").value = userInput ? "true" : "false";
             tutorSelect.innerHTML = `<option value="">No tutors specifically for "${userInput || 'this topic'}"</option>
@@ -848,6 +878,46 @@ function handleServiceChange(val){
         tutorLabel.style.display="none";
     }
 }
+
+function showTutorSubjects() {
+    const selectedName = tutorSelect.value;
+    if(!selectedName || selectedName === "ANY") return;
+    let foundTutor = null;
+    for (let key in tutorsData) {
+        if (Array.isArray(tutorsData[key])) {
+            let match = tutorsData[key].find(t => t.name === selectedName);
+            if(match) { foundTutor = match; break; }
+        }
+    }
+    if(foundTutor) {
+        document.getElementById("profileTutorName").innerText = foundTutor.name;
+        document.getElementById("profileTutorSubjects").innerText = foundTutor.subjects || "No specific subjects listed.";
+        document.getElementById("tutorProfileModal").style.display = "flex";
+    }
+}
+
+tutorSelect.addEventListener("change", function() {
+    if(this.value === "ANY") {
+        this.innerHTML = '<option value="">Select a tutor</option>';
+        let all = [];
+        for (let key in tutorsData) {
+            if (Array.isArray(tutorsData[key])) all = all.concat(tutorsData[key]);
+        }
+        let uniqueAll = all.filter((t, index, self) =>
+            index === self.findIndex((temp) => temp.name === t.name)
+        );
+        uniqueAll.forEach(t => {
+            let opt = document.createElement("option");
+            opt.value = t.name; opt.textContent = t.name;
+            this.appendChild(opt);
+        });
+        document.getElementById("viewTutorProfile").style.display = "none";
+    } else if(this.value) {
+        document.getElementById("viewTutorProfile").style.display = "block";
+    } else {
+        document.getElementById("viewTutorProfile").style.display = "none";
+    }
+});
 
 document.getElementById("studentRegisterForm").addEventListener("submit", function(e) {
     e.preventDefault();
@@ -889,24 +959,6 @@ document.getElementById("studentRegisterForm").addEventListener("submit", functi
         loadingModal.style.display = "none";
         alert("Network error. Please try again.");
     });
-});
-
-tutorSelect.addEventListener("change", function() {
-    if(this.value === "ANY") {
-        this.innerHTML = '<option value="">Select a tutor</option>';
-        let all = [];
-        for (let key in tutorsData) {
-            if (Array.isArray(tutorsData[key])) all = all.concat(tutorsData[key]);
-        }
-        let uniqueAll = all.filter((t, index, self) =>
-            index === self.findIndex((temp) => temp.name === t.name)
-        );
-        uniqueAll.forEach(t => {
-            let opt = document.createElement("option");
-            opt.value = t.name; opt.textContent = t.name;
-            this.appendChild(opt);
-        });
-    }
 });
 
 window.addEventListener("click", (event) => {
