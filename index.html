@@ -919,6 +919,7 @@ tutorSelect.addEventListener("change", function() {
     }
 });
 
+// ✅ CORRECTED SUBMIT LISTENER TO PREVENT DOUBLE REPETITION
 document.getElementById("studentRegisterForm").addEventListener("submit", function(e) {
     e.preventDefault();
     loadingModal.style.display = "flex";
@@ -926,6 +927,7 @@ document.getElementById("studentRegisterForm").addEventListener("submit", functi
     const formData = new FormData(this);
     const data = Object.fromEntries(formData.entries());
     
+    // Using display value only to ensure format: Service Name; Topic: User Input
     const displayService = serviceDisplay.value;
     const specification = specInput.value.trim();
     
