@@ -25,7 +25,7 @@ color:#333;
 line-height:1.6;
 }
 
-/* ✅ UPDATED: RESPONSIVE HEADER LOGIC */
+/* HEADER LOGIC */
 .top-bar{
 position:fixed;
 top:0;
@@ -40,12 +40,12 @@ align-items: center;
 justify-content: center;
 color: white;
 text-align: center;
-padding: 20px 15px;
+padding: 15px;
 box-sizing: border-box;
 }
 
 .header-title h1 {
-margin: 10px 0 0 0;
+margin: 5px 0 0 0;
 font-size: clamp(28px, 6vw, 48px); 
 letter-spacing: normal;
 font-weight: bold;
@@ -53,7 +53,7 @@ text-transform: none;
 }
 
 .header-title p {
-margin: 5px 0 0 0;
+margin: 2px 0 0 0;
 font-family: "Brush Script MT", "Cursive", sans-serif; 
 font-size: clamp(18px, 4vw, 28px); 
 font-weight: normal; 
@@ -66,8 +66,8 @@ flex-wrap:wrap;
 justify-content:center;
 align-items: center;
 gap:15px;
-padding:12px 10px;
-margin-top: 10px; 
+padding:10px;
+margin-top: 5px; 
 width: 100%;
 }
 
@@ -87,31 +87,31 @@ margin: 0;
 display: block;
 }
 
-/* ✅ UPDATED: CONTENT SPACING */
+/* SPACING FIX */
 .main-content{
 max-width:1100px;
 margin:auto;
 padding:40px;
-margin-top: 250px; 
+margin-top: 200px; 
 }
 
-/* ✅ NEW: LANDSCAPE/ROTATED FIX */
+/* LANDSCAPE/ROTATED FIX */
 @media (max-height: 450px) and (orientation: landscape) {
 .top-bar { padding: 8px 15px; min-height: auto; }
 .header-title h1 { font-size: 22px; margin-top: 0; }
 .header-title p { display: none; }
 .top-bar nav { margin-top: 5px; gap: 8px; }
-.main-content { margin-top: 120px !important; }
+.main-content { margin-top: 110px !important; }
 }
 
 @media(max-width:768px){
-.main-content{padding:30px 20px; margin-top: 220px;}
+.main-content{padding:30px 20px; margin-top: 210px;}
 .top-bar nav { gap: 10px; }
 }
 
 section{
 margin-bottom:60px;
-scroll-margin-top:250px; 
+scroll-margin-top:210px; 
 }
 
 h2{
@@ -234,7 +234,6 @@ border:1px solid #ccc;
 box-sizing: border-box;
 }
 
-/* DROPDOWN STYLES */
 .custom-select-wrapper {
     position: relative;
     cursor: pointer;
@@ -332,7 +331,6 @@ opacity:0.9;
     margin-top: 4px;
 }
 
-/* NEW: Tutor Link Styling */
 .view-tutor-link {
     display: block;
     margin-top: 10px;
@@ -637,15 +635,15 @@ const serviceHiddenValue = document.getElementById("serviceSelectValue");
 
 const serviceOptionsData = [
     { group: "Individual Sessions" },
-    { label: "Introduction to Academic Writing", value: "Intro Academic Writing" },
+    { label: "Introduction to Academic Writing (4 Sessions)", value: "Intro Academic Writing" },
     { label: "Secondary School Subject", value: "Secondary Subject" },
     { label: "Tertiary Level Module", value: "Tertiary Module" },
     { label: "General Topic Specific Session", value: "Topic Specific" },
     { label: "Hourly Rate", value: "Hourly Rate" },
     { group: "Group Learning Sessions: Academic & Tertiary" },
-    { label: "Academic Writing (2 – 5 People)", value: "Group Sessions: 2-5 People" },
-    { label: "Academic Writing (6 – 14 People)", value: "Group Sessions: 6-14 People" },
-    { label: "Academic Writing (More than 14 People)", value: "Group Sessions: More than 14 People" },
+    { label: "Academic Writing (2 – 5 People) (4 Sessions)", value: "Group Sessions: 2-5 People" },
+    { label: "Academic Writing (6 – 14 People) (4 Sessions)", value: "Group Sessions: 6-14 People" },
+    { label: "Academic Writing (More than 14 People) (4 Sessions)", value: "Group Sessions: More than 14 People" },
     { label: "Tertiary Level Modules (2 – 5 People)", value: "Group Sessions: 2-5 People" },
     { label: "Tertiary Level Modules (6 – 14 People)", value: "Group Sessions: 6-14 People" },
     { label: "Tertiary Level Modules (More than 14 People)", value: "Group Sessions: More than 14 People" },
@@ -728,7 +726,7 @@ let content = "";
 if(service==="writing"){
 pricingTitle.innerText="Individual Tutorials";
 content = `
-<label class="picker-option"><input type="radio" name="priceRadio" value="Intro Academic Writing" data-label="Introduction to Academic Writing" checked> Introduction to Academic Writing (4 sessions) – <b>N$150</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" value="Intro Academic Writing" data-label="Introduction to Academic Writing (4 Sessions)" checked> Introduction to Academic Writing (4 Sessions) – <b>N$150</b></label>
 <label class="picker-option"><input type="radio" name="priceRadio" value="Secondary Subject" data-label="Secondary School Subject"> Secondary School Subject (Topic Specific) – <b>N$35</b></label>
 <label class="picker-option"><input type="radio" name="priceRadio" value="Tertiary Level Module" data-label="Tertiary Level Module"> Tertiary Level Module (Topic Specific) – <b>N$40</b></label>
 <label class="picker-option"><input type="radio" name="priceRadio" value="Topic Specific" data-label="General Topic Specific Session"> General Topic Specific Session – <b>N$40</b></label>
@@ -738,10 +736,10 @@ content = `
 if(service==="group"){
 pricingTitle.innerText="Group Learning Sessions";
 content = `
-<div class="pricing-subtopic">Introduction to Academic Writing</div>
-<label class="picker-option"><input type="radio" name="priceRadio" data-cat="Academic Writing" value="Group Sessions: 2-5 People" data-label="Academic Writing (2 – 5 People)" checked> 2 – 5 People – <b>N$200</b></label>
-<label class="picker-option"><input type="radio" name="priceRadio" data-cat="Academic Writing" value="Group Sessions: 6-14 People" data-label="Academic Writing (6 – 14 People)"> 6 – 14 People – <b>N$450</b></label>
-<label class="picker-option"><input type="radio" name="priceRadio" data-cat="Academic Writing" value="Group Sessions: More than 14 People" data-label="Academic Writing (More than 14 People)"> More than 14 People – <b>N$600</b></label>
+<div class="pricing-subtopic">Introduction to Academic Writing (4 Sessions)</div>
+<label class="picker-option"><input type="radio" name="priceRadio" data-cat="Academic Writing" value="Group Sessions: 2-5 People" data-label="Academic Writing (2 – 5 People) (4 Sessions)" checked> 2 – 5 People – <b>N$200</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" data-cat="Academic Writing" value="Group Sessions: 6-14 People" data-label="Academic Writing (6 – 14 People) (4 Sessions)"> 6 – 14 People – <b>N$450</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" data-cat="Academic Writing" value="Group Sessions: More than 14 People" data-label="Academic Writing (More than 14 People) (4 Sessions)"> More than 14 People – <b>N$600</b></label>
 
 <div class="pricing-subtopic">Tertiary Level Modules</div>
 <label class="picker-option"><input type="radio" name="priceRadio" data-cat="Tertiary Level Modules" value="Group Sessions: 2-5 People" data-label="Tertiary Level Modules (2 – 5 People)"> 2 – 5 People – <b>N$200</b></label>
