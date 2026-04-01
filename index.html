@@ -643,13 +643,16 @@ const serviceOptionsData = [
     { label: "General Topic Specific Session", value: "Topic Specific" },
     { label: "Hourly Rate", value: "Hourly Rate" },
     { group: "Group Learning Sessions: Academic & Tertiary" },
-    { label: "2 – 5 People", value: "Group Sessions: 2-5 People" },
-    { label: "6 – 14 People", value: "Group Sessions: 6-14 People" },
-    { label: "More than 14 People", value: "Group Sessions: More than 14 People" },
+    { label: "Academic Writing (2 – 5 People)", value: "Group Sessions: 2-5 People" },
+    { label: "Academic Writing (6 – 14 People)", value: "Group Sessions: 6-14 People" },
+    { label: "Academic Writing (More than 14 People)", value: "Group Sessions: More than 14 People" },
+    { label: "Tertiary Level Modules (2 – 5 People)", value: "Group Sessions: 2-5 People" },
+    { label: "Tertiary Level Modules (6 – 14 People)", value: "Group Sessions: 6-14 People" },
+    { label: "Tertiary Level Modules (More than 14 People)", value: "Group Sessions: More than 14 People" },
     { group: "Group Learning Sessions: Secondary Subjects" },
-    { label: "2 – 5 People (Secondary)", value: "Group Sessions: 2-5 People (Secondary)" },
-    { label: "6 – 14 People (Secondary)", value: "Group Sessions: 6-14 People (Secondary)" },
-    { label: "More than 14 People (Secondary)", value: "Group Sessions: More than 14 People (Secondary)" },
+    { label: "Secondary School Subjects (2 – 5 People)", value: "Group Sessions: 2-5 People (Secondary)" },
+    { label: "Secondary School Subjects (6 – 14 People)", value: "Group Sessions: 6-14 People (Secondary)" },
+    { label: "Secondary School Subjects (More than 14 People)", value: "Group Sessions: More than 14 People (Secondary)" },
     { group: "Other Services" },
     { label: "Public Speaking Support", value: "Public Speaking Support" },
     { label: "Draft Editing", value: "Draft Editing" },
@@ -725,43 +728,43 @@ let content = "";
 if(service==="writing"){
 pricingTitle.innerText="Individual Tutorials";
 content = `
-<label class="picker-option"><input type="radio" name="priceRadio" value="Intro Academic Writing" checked> Introduction to Academic Writing (4 sessions) – <b>N$150</b></label>
-<label class="picker-option"><input type="radio" name="priceRadio" value="Secondary Subject"> Secondary School Subject (Topic Specific) – <b>N$35</b></label>
-<label class="picker-option"><input type="radio" name="priceRadio" value="Tertiary Level Module"> Tertiary Level Module (Topic Specific) – <b>N$40</b></label>
-<label class="picker-option"><input type="radio" name="priceRadio" value="Topic Specific"> General Topic Specific Session – <b>N$40</b></label>
-<label class="picker-option"><input type="radio" name="priceRadio" value="Hourly Rate"> Hourly Rate – <b>N$40</b></label>`;
+<label class="picker-option"><input type="radio" name="priceRadio" value="Intro Academic Writing" data-label="Introduction to Academic Writing" checked> Introduction to Academic Writing (4 sessions) – <b>N$150</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" value="Secondary Subject" data-label="Secondary School Subject"> Secondary School Subject (Topic Specific) – <b>N$35</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" value="Tertiary Level Module" data-label="Tertiary Level Module"> Tertiary Level Module (Topic Specific) – <b>N$40</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" value="Topic Specific" data-label="General Topic Specific Session"> General Topic Specific Session – <b>N$40</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" value="Hourly Rate" data-label="Hourly Rate"> Hourly Rate – <b>N$40</b></label>`;
 }
 
 if(service==="group"){
 pricingTitle.innerText="Group Learning Sessions";
 content = `
 <div class="pricing-subtopic">Academic Writing</div>
-<label class="picker-option"><input type="radio" name="priceRadio" data-cat="Academic Writing" value="Group Sessions: 2-5 People" checked> 2 – 5 People – <b>N$200</b></label>
-<label class="picker-option"><input type="radio" name="priceRadio" data-cat="Academic Writing" value="Group Sessions: 6-14 People"> 6 – 14 People – <b>N$450</b></label>
-<label class="picker-option"><input type="radio" name="priceRadio" data-cat="Academic Writing" value="Group Sessions: More than 14 People"> More than 14 People – <b>N$600</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" data-cat="Academic Writing" value="Group Sessions: 2-5 People" data-label="Academic Writing (2 – 5 People)" checked> 2 – 5 People – <b>N$200</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" data-cat="Academic Writing" value="Group Sessions: 6-14 People" data-label="Academic Writing (6 – 14 People)"> 6 – 14 People – <b>N$450</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" data-cat="Academic Writing" value="Group Sessions: More than 14 People" data-label="Academic Writing (More than 14 People)"> More than 14 People – <b>N$600</b></label>
 
 <div class="pricing-subtopic">Tertiary Level Modules</div>
-<label class="picker-option"><input type="radio" name="priceRadio" data-cat="Tertiary Level Modules" value="Group Sessions: 2-5 People"> 2 – 5 People – <b>N$200</b></label>
-<label class="picker-option"><input type="radio" name="priceRadio" data-cat="Tertiary Level Modules" value="Group Sessions: 6-14 People"> 6 – 14 People – <b>N$450</b></label>
-<label class="picker-option"><input type="radio" name="priceRadio" data-cat="Tertiary Level Modules" value="Group Sessions: More than 14 People"> More than 14 People – <b>N$600</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" data-cat="Tertiary Level Modules" value="Group Sessions: 2-5 People" data-label="Tertiary Level Modules (2 – 5 People)"> 2 – 5 People – <b>N$200</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" data-cat="Tertiary Level Modules" value="Group Sessions: 6-14 People" data-label="Tertiary Level Modules (6 – 14 People)"> 6 – 14 People – <b>N$450</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" data-cat="Tertiary Level Modules" value="Group Sessions: More than 14 People" data-label="Tertiary Level Modules (More than 14 People)"> More than 14 People – <b>N$600</b></label>
 
 <div class="pricing-subtopic">C. Secondary School Subjects</div>
-<label class="picker-option"><input type="radio" name="priceRadio" data-cat="Secondary School Subjects" value="Group Sessions: 2-5 People (Secondary)"> 2 – 5 People – <b>N$150</b></label>
-<label class="picker-option"><input type="radio" name="priceRadio" data-cat="Secondary School Subjects" value="Group Sessions: 6-14 People (Secondary)"> 6 – 14 People – <b>N$250</b></label>
-<label class="picker-option"><input type="radio" name="priceRadio" data-cat="Secondary School Subjects" value="Group Sessions: More than 14 People (Secondary)"> > 14 People – <b>N$350</b></label>`;
+<label class="picker-option"><input type="radio" name="priceRadio" data-cat="Secondary School Subjects" value="Group Sessions: 2-5 People (Secondary)" data-label="Secondary School Subjects (2 – 5 People)"> 2 – 5 People – <b>N$150</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" data-cat="Secondary School Subjects" value="Group Sessions: 6-14 People (Secondary)" data-label="Secondary School Subjects (6 – 14 People)"> 6 – 14 People – <b>N$250</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" data-cat="Secondary School Subjects" value="Group Sessions: More than 14 People (Secondary)" data-label="Secondary School Subjects (More than 14 People)"> > 14 People – <b>N$350</b></label>`;
 }
 
 if(service==="assignment"){
 pricingTitle.innerText="Assignment Support";
 content = `
-<label class="picker-option"><input type="radio" name="priceRadio" value="Draft Editing" checked> Draft Editing – <b>N$15 per page</b></label>
-<label class="picker-option"><input type="radio" name="priceRadio" value="Proofreading"> Proofreading – <b>N$10 per page</b></label>
-<label class="picker-option"><input type="radio" name="priceRadio" value="Referencing Assistance"> Referencing Assistance – <b>N$20</b></label>`;
+<label class="picker-option"><input type="radio" name="priceRadio" value="Draft Editing" data-label="Draft Editing" checked> Draft Editing – <b>N$15 per page</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" value="Proofreading" data-label="Proofreading"> Proofreading – <b>N$10 per page</b></label>
+<label class="picker-option"><input type="radio" name="priceRadio" value="Referencing Assistance" data-label="Referencing Assistance"> Referencing Assistance – <b>N$20</b></label>`;
 }
 
 if(service==="speaking"){
 pricingTitle.innerText="Public Speaking Support";
-content = `<label class="picker-option"><input type="radio" name="priceRadio" value="Public Speaking Support" checked> Coaching Session – <b>N$40</b></label>`;
+content = `<label class="picker-option"><input type="radio" name="priceRadio" value="Public Speaking Support" data-label="Public Speaking Support" checked> Coaching Session – <b>N$40</b></label>`;
 }
 
 pricingDetails.innerHTML = content;
@@ -771,17 +774,10 @@ function bookService(){
 const selectedOption = document.querySelector('input[name="priceRadio"]:checked');
 if(!selectedOption) return;
 const bookingValue = selectedOption.value;
-const category = selectedOption.getAttribute("data-cat");
+const displayLabel = selectedOption.getAttribute("data-label");
 pricingModal.style.display="none";
 openForm();
 setTimeout(()=>{
-const found = serviceOptionsData.find(d => d.value === bookingValue);
-let displayLabel = found ? found.label : bookingValue;
-
-if(category) {
-    displayLabel = `${category} (${displayLabel})`;
-}
-
 serviceDisplay.value = displayLabel;
 serviceHiddenValue.value = bookingValue;
 handleServiceChange(bookingValue);
@@ -900,7 +896,6 @@ function showTutorSubjects() {
     }
 }
 
-/* ✅ DATA SYNTHESIS & SUBMISSION LOGIC */
 document.getElementById("studentRegisterForm").addEventListener("submit", function(e) {
     e.preventDefault();
     loadingModal.style.display = "flex";
@@ -943,7 +938,6 @@ document.getElementById("studentRegisterForm").addEventListener("submit", functi
     });
 });
 
-/* ✅ TUTOR SELECT LOGIC */
 tutorSelect.addEventListener("change", function() {
     const profileLink = document.getElementById("viewTutorProfile");
     if(this.value && this.value !== "ANY") {
@@ -969,7 +963,6 @@ tutorSelect.addEventListener("change", function() {
     }
 });
 
-/* ✅ MODAL CLICK-OUTSIDE LOGIC */
 window.addEventListener("click", (event) => {
     if (event.target === modal) closeForm();
     if (event.target === pricingModal) pricingModal.style.display = "none";
