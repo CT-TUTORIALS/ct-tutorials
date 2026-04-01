@@ -738,7 +738,7 @@ content = `
 if(service==="group"){
 pricingTitle.innerText="Group Learning Sessions";
 content = `
-<div class="pricing-subtopic">Academic Writing</div>
+<div class="pricing-subtopic">Introduction to Academic Writing</div>
 <label class="picker-option"><input type="radio" name="priceRadio" data-cat="Academic Writing" value="Group Sessions: 2-5 People" data-label="Academic Writing (2 – 5 People)" checked> 2 – 5 People – <b>N$200</b></label>
 <label class="picker-option"><input type="radio" name="priceRadio" data-cat="Academic Writing" value="Group Sessions: 6-14 People" data-label="Academic Writing (6 – 14 People)"> 6 – 14 People – <b>N$450</b></label>
 <label class="picker-option"><input type="radio" name="priceRadio" data-cat="Academic Writing" value="Group Sessions: More than 14 People" data-label="Academic Writing (More than 14 People)"> More than 14 People – <b>N$600</b></label>
@@ -919,7 +919,6 @@ tutorSelect.addEventListener("change", function() {
     }
 });
 
-// ✅ CORRECTED SUBMIT LISTENER TO PREVENT DOUBLE REPETITION
 document.getElementById("studentRegisterForm").addEventListener("submit", function(e) {
     e.preventDefault();
     loadingModal.style.display = "flex";
@@ -927,7 +926,6 @@ document.getElementById("studentRegisterForm").addEventListener("submit", functi
     const formData = new FormData(this);
     const data = Object.fromEntries(formData.entries());
     
-    // Using display value only to ensure format: Service Name; Topic: User Input
     const displayService = serviceDisplay.value;
     const specification = specInput.value.trim();
     
