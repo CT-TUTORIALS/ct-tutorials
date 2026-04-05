@@ -500,7 +500,7 @@ z-index:1100;
 
 <button id="backToTop" onclick="scrollToTop()">↑</button>
 
-<div class="login-overlay" id="loginOverlay">
+<div class="login-overlay" id="loginOverlay" onclick="logout()">
 <div class="login-box" onclick="event.stopPropagation()">
 <h2>Admin Login</h2>
 <input id="username" placeholder="Username" onkeydown="if(event.key==='Enter') adminLogin()">
@@ -1169,4 +1169,4 @@ function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
 </script>
 
 </body>
-</html>
+    </html>
