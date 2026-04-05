@@ -652,7 +652,6 @@ function startBadgePolling() {
   badgeInterval = setInterval(() => {
     const token = localStorage.getItem("adminToken");
     if(token) {
-        // Differential logic: poll with 'true' for background silent updates
         loadApplications(token, true);
         loadStudents(token, true);
         loadOtherClients(token, true);
@@ -706,6 +705,7 @@ loadingText.innerText = "Loading Dashboard...";
 loadingModal.style.display="flex"
 
 try {
+    // Initial fetch sets the baseline so badges don't show old data
     await Promise.all([
         loadApplications(token),
         loadApprovedTutors(token),
@@ -713,6 +713,12 @@ try {
         loadOtherClients(token),
         loadSupportMessages(token)
     ]);
+    
+    // Fix: Synchronize baseline on first load so badges only show *new* activity since login
+    localStorage.setItem('baseline_apps', currentAppsCount);
+    localStorage.setItem('baseline_students', currentStudentsCount);
+    localStorage.setItem('baseline_clients', currentClientsCount);
+    
 } finally {
     loadingModal.style.display="none"
 }
@@ -775,7 +781,6 @@ return fetch(SCRIPT_URL+"?action=getTutorApplications&token="+token)
 if(handleAuthError(data)) return;
 if(!Array.isArray(data)) return;
 
-// UPDATE GLOBAL COUNT
 currentAppsCount = data.length;
 const delta = currentAppsCount - getBaseline('apps');
 const badge = document.getElementById("appsBadge");
@@ -787,7 +792,7 @@ if(delta > 0 && window.location.hash !== "#applications") {
     badge.style.display = "none";
 }
 
-if(silent) return; // Differential logic: skip re-draw if polling in background
+if(silent) return;
 
 const tbody=document.querySelector("#applicationsTable tbody")
 tbody.innerHTML=""
@@ -885,7 +890,6 @@ return fetch(SCRIPT_URL+"?action=getAllStudents&token="+token)
 if(handleAuthError(data)) return;
 if(!Array.isArray(data)) return;
 
-// UPDATE GLOBAL COUNT
 currentStudentsCount = data.length;
 const delta = currentStudentsCount - getBaseline('students');
 const badge = document.getElementById("studentsBadge");
@@ -959,7 +963,6 @@ return fetch(SCRIPT_URL+"?action=getOtherClients&token="+token)
 if(handleAuthError(data)) return;
 if(!Array.isArray(data)) return;
 
-// UPDATE GLOBAL COUNT
 currentClientsCount = data.length;
 const delta = currentClientsCount - getBaseline('clients');
 const badge = document.getElementById("otherClientsBadge");
@@ -1169,4 +1172,4 @@ function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
 </script>
 
 </body>
-    </html>
+</html>
