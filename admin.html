@@ -1169,7 +1169,7 @@ function directReply(email){
     
     fetch(SCRIPT_URL, {
         method: "POST",
-        body: JSON.stringify({ action: "replyToSupport", token: token, tutorEmail: email, reply: replyText })
+        body: JSON.stringify({ action: "replySupport", token: token, tutorEmail: email, message: replyText })
     })
     .then(r => r.json())
     .then(res => {
@@ -1177,10 +1177,16 @@ function directReply(email){
         if(res.success) {
             document.getElementById(inputId).value = "";
             loadSupportMessages(token);
+            setTimeout(() => {
+                const content = document.getElementById('content-' + cardId);
+                const chatBox = document.getElementById('chat-' + cardId);
+                content.style.display = "block";
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 500);
         } else {
             alert("Reply failed: " + res.error);
         }
-    })
+    });
     .catch(() => {
         loadingModal.style.display="none";
         alert("Network error.");
