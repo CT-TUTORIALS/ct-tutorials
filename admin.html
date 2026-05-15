@@ -427,28 +427,6 @@ border-radius:4px;
 box-sizing: border-box;
 }
 
-/* show/hide password icon */
-.password-wrap{
-position:relative;
-}
-.password-wrap input{
-padding-right:46px;
-}
-.password-toggle{
-position:absolute;
-right:8px;
-top:50%;
-transform:translateY(-50%);
-background:transparent;
-border:none;
-font-size:18px;
-cursor:pointer;
-line-height:1;
-z-index:5;
-width:auto;
-padding:0;
-}
-
 .login-btn{
 background:#003366;
 color:white;
@@ -548,10 +526,7 @@ z-index:1100;
 <div class="login-box" onclick="event.stopPropagation()">
 <h2>Admin Login</h2>
 <input id="username" placeholder="Username" onkeydown="if(event.key==='Enter') adminLogin()">
-<div class="password-wrap">
 <input id="password" type="password" placeholder="Password" onkeydown="if(event.key==='Enter') adminLogin()">
-<button type="button" class="password-toggle" onclick="toggleAdminPassword()" aria-label="Show or hide password">👁️</button>
-</div>
 <button class="login-btn" onclick="adminLogin()">Login</button>
 <p id="error" class="error">Invalid credentials</p>
 </div>
@@ -571,8 +546,6 @@ z-index:1100;
 <a href="#otherClients" onclick="updateBaseline('clients')">Other Clients <span id="otherClientsBadge" class="badge">0</span></a>
 <div class="nav-separator"></div>
 <a href="#support" onclick="markMessagesAsRead()">Support <span id="supportBadge" class="badge">0</span></a>
-<div class="nav-separator"></div>
-<a href="#marketing">Marketing</a>
 <div class="nav-separator"></div>
 <a href="#settings">Settings</a>
 <div class="nav-separator"></div>
@@ -626,50 +599,6 @@ z-index:1100;
 <section id="support">
 <h2>Support Chats</h2>
 <div id="supportGrid" class="support-grid"></div>
-</section>
-
-<!-- KEEP marketing section and add full controls here -->
-<section id="marketing">
-<h2>Marketing Promotions</h2>
-<div class="settings-card">
-  <div class="settings-group">
-    <label>Promotion Name</label>
-    <input id="promoName" placeholder="e.g. Winter Revision Week">
-  </div>
-  <div class="settings-group">
-    <label>Promotion Type</label>
-    <select id="promoType" onchange="togglePromoInputs()">
-      <option value="fixed">Fixed Price Reduction (N$)</option>
-      <option value="percent">Percentage Reduction (%)</option>
-      <option value="code">Code-Based Promotion</option>
-    </select>
-  </div>
-  <div class="settings-group" id="promoValueGroup">
-    <label>Reduction Value</label>
-    <input id="promoValue" type="number" min="0" step="0.01" placeholder="Enter amount or percent">
-  </div>
-  <div class="settings-group" id="promoCodeGroup" style="display:none;">
-    <label>Promo Code</label>
-    <div style="display:flex; gap:8px;">
-      <input id="generatedCode" readonly placeholder="Click generate">
-      <button class="update-btn" onclick="generatePromotionCode()">Generate Code</button>
-    </div>
-  </div>
-  <div class="settings-group">
-    <label>Target Categories</label>
-    <div id="promoCategoryTargets" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;">
-      <label><input type="checkbox" value="Intro Academic Writing"> Intro Academic Writing</label>
-      <label><input type="checkbox" value="Secondary Subject"> Secondary Subject</label>
-      <label><input type="checkbox" value="Tertiary Level Module"> Tertiary Level Module</label>
-      <label><input type="checkbox" value="Group Sessions"> Group Sessions</label>
-      <label><input type="checkbox" value="Draft Editing"> Draft Editing</label>
-      <label><input type="checkbox" value="Proofreading"> Proofreading</label>
-      <label><input type="checkbox" value="Referencing Assistance"> Referencing Assistance</label>
-      <label><input type="checkbox" value="Public Speaking Support"> Public Speaking Support</label>
-    </div>
-  </div>
-  <button class="update-btn" onclick="savePromotion()">Save Promotion</button>
-</div>
 </section>
 
 <section id="settings">
@@ -781,6 +710,7 @@ window.onclick = resetLogoutTimer;
 window.onscroll = resetLogoutTimer;
 window.onkeypress = resetLogoutTimer;
 
+// PROMOTION SETTINGS FUNCTIONS
 function updatePromoStatus() {
     const status = document.getElementById("promoToggle").value;
     const token = localStorage.getItem("adminToken");
@@ -828,46 +758,6 @@ function addCarouselImage() {
     });
 }
 
-/* promotion + password controls */
-function togglePromoInputs(){
-  const t=document.getElementById("promoType").value;
-  document.getElementById("promoValueGroup").style.display=t==="code"?"none":"block";
-  document.getElementById("promoCodeGroup").style.display=t==="code"?"block":"none";
-}
-function toggleAdminPassword(){
-  const p=document.getElementById("password");
-  p.type = p.type === "password" ? "text" : "password";
-}
-function generatePromotionCode(){
-  const token=localStorage.getItem("adminToken");
-  fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify({action:"generatePromotionCode",token})})
-  .then(r=>r.json()).then(res=>{
-    if(res.success) document.getElementById("generatedCode").value=res.code;
-    else alert("Code generation failed: "+(res.error||"Unknown error"));
-  }).catch(()=>alert("Network error."));
-}
-function savePromotion(){
-  const token=localStorage.getItem("adminToken");
-  const type=document.getElementById("promoType").value;
-  const targets=[...document.querySelectorAll('#promoCategoryTargets input:checked')].map(x=>x.value);
-  if(!targets.length){ alert("Select at least one target category."); return; }
-  const payload={
-    action:"savePromotion", token,
-    promotion:{
-      name:document.getElementById("promoName").value.trim(),
-      type,
-      value:type==="code"?null:Number(document.getElementById("promoValue").value||0),
-      code:type==="code"?document.getElementById("generatedCode").value.trim():"",
-      targets
-    }
-  };
-  fetch(SCRIPT_URL,{method:"POST",body:JSON.stringify(payload)})
-  .then(r=>r.json()).then(res=>{
-    if(res.success) alert("Promotion saved.");
-    else alert("Failed to save promotion: "+(res.error||"Unknown error"));
-  }).catch(()=>alert("Network error."));
-}
-
 function adminLogin(){
 const username=document.getElementById("username").value.trim()
 const password=document.getElementById("password").value.trim()
@@ -896,8 +786,478 @@ const token=localStorage.getItem("adminToken")
 if(token){ initAdmin(token); }
 }
 
-/* ---- keep the remainder of your existing JS as-is below ---- */
-/* (all your loadApplications/loadStudents/support/approve/reject etc. stays unchanged) */
+async function initAdmin(token){
+document.getElementById("loginOverlay").style.display="none"
+document.getElementById("adminContent").style.display="block"
+document.getElementById("adminLinks").style.display="flex"
+resetLogoutTimer();
+startBadgePolling();
+
+loadingText.innerText = "Loading Dashboard...";
+loadingModal.style.display="flex"
+
+try {
+    await Promise.all([
+        loadApplications(token),
+        loadApprovedTutors(token),
+        loadStudents(token),
+        loadOtherClients(token),
+        loadSupportMessages(token)
+    ]);
+    
+    localStorage.setItem('baseline_apps', currentAppsCount);
+    localStorage.setItem('baseline_students', currentStudentsCount);
+    localStorage.setItem('baseline_clients', currentClientsCount);
+    
+} finally {
+    loadingModal.style.display="none"
+}
+}
+
+function handleAuthError(data){
+if(data && data.error==="Unauthorized"){
+alert("Session expired. Please login again.");
+logout();
+return true;
+}
+return false;
+}
+
+function clearBadge(badgeId) {
+    const badge = document.getElementById(badgeId);
+    if(badge) {
+        badge.style.display = "none";
+        badge.innerText = "0";
+    }
+}
+
+function markMessagesAsRead() {
+    clearBadge("supportBadge");
+    
+    let maxTimestamp = 0;
+    globalSupportData.forEach(m => {
+        const msgTime = m["Date"] ? new Date(m["Date"]).getTime() : 0;
+        if (msgTime > maxTimestamp) maxTimestamp = msgTime;
+    });
+    
+    localStorage.setItem("lastSupportRead", maxTimestamp.toString());
+    
+    document.querySelectorAll('.support-card').forEach(card => {
+        card.classList.remove('has-new-messages');
+        const label = card.querySelector('.new-msg-label');
+        if(label) label.remove();
+    });
+}
+
+function toggleChat(cardId) {
+    const content = document.getElementById('content-' + cardId);
+    const icon = document.getElementById('icon-' + cardId);
+    const chatBox = document.getElementById('chat-' + cardId);
+    
+    if (content.style.display === "block") {
+        content.style.display = "none";
+        icon.innerText = "[+]";
+    } else {
+        content.style.display = "block";
+        icon.innerText = "[-]";
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+}
+
+function loadApplications(token, silent = false){
+return fetch(SCRIPT_URL+"?action=getTutorApplications&token="+token)
+.then(r=>r.json())
+.then(data=>{
+if(handleAuthError(data)) return;
+if(!Array.isArray(data)) return;
+
+currentAppsCount = data.length;
+const delta = currentAppsCount - getBaseline('apps');
+const badge = document.getElementById("appsBadge");
+
+if(delta > 0 && window.location.hash !== "#applications") {
+    badge.innerText = delta;
+    badge.style.display = "inline-block";
+} else {
+    badge.style.display = "none";
+}
+
+if(silent) return;
+
+const tbody=document.querySelector("#applicationsTable tbody")
+tbody.innerHTML=""
+data.forEach(app=>{
+tbody.innerHTML+=`
+<tr>
+<td data-label="Name"><div class="scroll-cell">${app.name||""}</div></td>
+<td data-label="Email"><div class="scroll-cell"><a href="mailto:${app.email||""}">${app.email||""}</a></div></td>
+<td data-label="Phone"><div class="scroll-cell"><a href="tel:${app.phone||""}">${app.phone||""}</a></div></td>
+<td data-label="Subjects"><div class="scroll-cell">${app.subjects||""}</div></td>
+<td data-label="Status"><div class="scroll-cell">${app.status||"Pending"}</div></td>
+<td data-label="Action">
+<button class="approve" onclick="approve('${app.email}')">Approve</button>
+<button class="reject" onclick="reject('${app.email}')">Reject</button>
+</td>
+</tr>`
+})
+})
+}
+
+function loadApprovedTutors(token){
+return fetch(SCRIPT_URL+"?action=getApprovedTutors&token="+token)
+.then(r=>r.json())
+.then(data=>{
+if(handleAuthError(data)) return;
+approvedTutorsList = data; 
+const tbody=document.querySelector("#approvedTable tbody")
+tbody.innerHTML=""
+if(!Array.isArray(data)) return
+data.forEach(t=>{
+const safeEmail = t.email.replace(/[@.]/g, '-');
+tbody.innerHTML+=`
+<tr>
+<td data-label="Name"><div class="scroll-cell">${t.name||""}</div></td>
+<td data-label="Email"><div class="scroll-cell"><a href="mailto:${t.email||""}">${t.email||""}</a></div></td>
+<td data-label="Phone"><div class="scroll-cell"><a href="tel:${t.phone||""}">${t.phone||""}</a></div></td>
+<td data-label="Subjects"><div class="scroll-cell">${t.subjects||""}</div></td>
+<td data-label="Upload Materials">
+    <input type="file" id="file-${safeEmail}" class="file-input-small">
+    <button class="upload-btn" onclick="uploadResource('${t.email}')">Upload File</button>
+</td>
+</tr>`
+})
+})
+}
+
+async function uploadResource(tutorEmail) {
+    const safeEmail = tutorEmail.replace(/[@.]/g, '-');
+    const fileInput = document.getElementById(`file-${safeEmail}`);
+    const file = fileInput.files[0];
+    const token = localStorage.getItem("adminToken");
+    if (!file) { alert("Please select a file first."); return; }
+
+    loadingText.innerText = "Uploading to Drive...";
+    loadingModal.style.display = "flex";
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const base64 = e.target.result.split(",")[1];
+        const payload = {
+            action: "uploadTutorResource", 
+            token: token,
+            tutorEmail: tutorEmail,
+            fileName: file.name,
+            mimeType: file.type,
+            fileBase64: base64
+        };
+
+        fetch(SCRIPT_URL, {
+            method: "POST",
+            body: JSON.stringify(payload)
+        })
+        .then(r => r.json())
+        .then(res => {
+            loadingModal.style.display = "none";
+            if(res.success || res.status === "success") {
+                alert("File uploaded successfully.");
+                fileInput.value = "";
+            } else {
+                alert("Upload failed: " + (res.error || "Unknown error"));
+            }
+        })
+        .catch(err => {
+            loadingModal.style.display = "none";
+            alert("Network error: " + err);
+        });
+    };
+    reader.readAsDataURL(file);
+}
+
+function loadStudents(token, silent = false){
+return fetch(SCRIPT_URL+"?action=getAllStudents&token="+token)
+.then(r=>r.json())
+.then(data=>{
+if(handleAuthError(data)) return;
+if(!Array.isArray(data)) return;
+
+currentStudentsCount = data.length;
+const delta = currentStudentsCount - getBaseline('students');
+const badge = document.getElementById("studentsBadge");
+
+if(delta > 0 && window.location.hash !== "#students") {
+    badge.innerText = delta;
+    badge.style.display = "inline-block";
+} else {
+    badge.style.display = "none";
+}
+
+if(silent) return;
+
+const tbody=document.querySelector("#studentsTable tbody")
+tbody.innerHTML=""
+data.forEach(s=>{
+const isUnmatched = s.tutorFound === "No Match";
+tbody.innerHTML+=`
+<tr class="${isUnmatched ? 'unmatched-alert' : ''}">
+<td data-label="Name"><div class="scroll-cell">${s.name||""}</div></td>
+<td data-label="Email"><div class="scroll-cell"><a href="mailto:${s.email||""}">${s.email||""}</a></div></td>
+<td data-label="Phone"><div class="scroll-cell"><a href="tel:${s.phone||""}">${s.phone||""}</a></div></td>
+<td data-label="Service Requested"><div class="scroll-cell">${s.service||""}</div></td>
+<td data-label="Tutor"><div class="scroll-cell">${s.tutor||"Pending"}</div></td>
+<td data-label="Match Status" class="${isUnmatched ? 'text-danger' : ''}">
+    ${isUnmatched ? `<button class="match-btn" onclick="openMatchModal('${s.email}', '${s.name}')">Assign Tutor</button>` : (s.tutorFound||"Match Found")}
+</td>
+</tr>`
+})
+})
+}
+
+function openMatchModal(email, name) {
+    targetStudentEmail = email;
+    document.getElementById("matchStudentInfo").innerText = "Matching for: " + name + " (" + email + ")";
+    const dropdown = document.getElementById("tutorDropdown");
+    dropdown.innerHTML = '<option value="">-- Select a Tutor --</option>';
+    approvedTutorsList.forEach(t => {
+        dropdown.innerHTML += `<option value="${t.email}">${t.name} (${t.subjects})</option>`;
+    });
+    document.getElementById("matchModal").style.display = "flex";
+}
+
+function closeMatchModal() {
+    document.getElementById("matchModal").style.display = "none";
+}
+
+async function submitManualMatch() {
+    const tutorEmail = document.getElementById("tutorDropdown").value;
+    if(!tutorEmail) { alert("Please select a tutor first."); return; }
+    const token = localStorage.getItem("adminToken");
+    closeMatchModal();
+    loadingText.innerText = "Assigning Tutor...";
+    loadingModal.style.display="flex";
+    fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({ action: "manualMatch", token: token, studentEmail: targetStudentEmail, tutorEmail: tutorEmail })
+    })
+    .then(r => r.json())
+    .then(res => {
+        loadingModal.style.display="none";
+        if(res.success) loadStudents(token);
+        else alert("Match failed: " + res.error);
+    });
+}
+
+function loadOtherClients(token, silent = false){
+return fetch(SCRIPT_URL+"?action=getOtherClients&token="+token)
+.then(r=>r.json())
+.then(data=>{
+if(handleAuthError(data)) return;
+if(!Array.isArray(data)) return;
+
+currentClientsCount = data.length;
+const delta = currentClientsCount - getBaseline('clients');
+const badge = document.getElementById("otherClientsBadge");
+
+if(delta > 0 && window.location.hash !== "#otherClients") {
+    badge.innerText = delta;
+    badge.style.display = "inline-block";
+} else {
+    badge.style.display = "none";
+}
+
+if(silent) return;
+
+const tbody=document.querySelector("#otherClientsTable tbody")
+tbody.innerHTML=""
+data.forEach(s=>{
+tbody.innerHTML+=`
+<tr>
+<td data-label="Name"><div class="scroll-cell">${s.name||""}</div></td>
+<td data-label="Email"><div class="scroll-cell"><a href="mailto:${s.email||""}">${s.email||""}</a></div></td>
+<td data-label="Phone"><div class="scroll-cell"><a href="tel:${s.phone||""}">${s.phone||""}</a></div></td>
+<td data-label="Service Requested"><div class="scroll-cell">${s.service||""}</div></td>
+</tr>`
+})
+})
+}
+
+function loadSupportMessages(token, silent = false){
+    return fetch(SCRIPT_URL+"?action=getSupportMessages&token="+token)
+    .then(r=>r.json())
+    .then(data=>{
+        if(handleAuthError(data)) return;
+        globalSupportData = data;
+        const badge = document.getElementById("supportBadge");
+        if(!Array.isArray(data)) return;
+        
+        const lastReadTimestamp = parseInt(localStorage.getItem("lastSupportRead") || "0");
+        let unreadConvoCount = 0;
+        const groups = {};
+
+        data.forEach(m => {
+            const email = m["Tutor Email"] || "unknown@tutor.com";
+            const msgTime = m["Date"] ? new Date(m["Date"]).getTime() : 0;
+            
+            if(!groups[email]) {
+                groups[email] = { name: m["Tutor Name"] || "Unknown Tutor", msgs: [], hasNew: false };
+            }
+            groups[email].msgs.push(m);
+            
+            if (m["Sender"] !== "Admin" && msgTime > lastReadTimestamp) {
+                groups[email].hasNew = true;
+            }
+        });
+
+        for (let key in groups) { if (groups[key].hasNew) unreadConvoCount++; }
+
+        if(unreadConvoCount > 0 && window.location.hash !== "#support") {
+            badge.innerText = unreadConvoCount;
+            badge.style.display = "inline-block";
+        } else {
+            badge.style.display = "none";
+        }
+
+        if(silent) return; 
+
+        const grid = document.getElementById("supportGrid");
+        grid.innerHTML = "";
+        for(let email in groups) {
+            let chatBubblesHtml = "";
+            groups[email].msgs.forEach(m => {
+                const senderClass = m["Sender"] === "Admin" ? "admin" : "tutor";
+                chatBubblesHtml += `
+                    <div class="chat-bubble ${senderClass}">
+                        ${m["Message"]}
+                        <span class="chat-date">${m["Date"] ? new Date(m["Date"]).toLocaleString() : "N/A"}</span>
+                    </div>`;
+            });
+
+            const cardId = email.replace(/[@.]/g, '-');
+            const card = document.createElement("div");
+            card.className = "support-card" + (groups[email].hasNew ? " has-new-messages" : "");
+            card.innerHTML = `
+                <div class="support-card-header" onclick="toggleChat('${cardId}')">
+                    <div>
+                        <h3>${groups[email].name}${groups[email].hasNew ? '<span class="new-msg-label">New</span>' : ''}</h3>
+                        <small>${email}</small>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <button class="close-chat-btn" onclick="event.stopPropagation(); deleteConversation('${email}')">Close Chat</button>
+                        <span class="toggle-icon" id="icon-${cardId}">[+]</span>
+                    </div>
+                </div>
+                <div class="support-content" id="content-${cardId}">
+                    <div class="chat-container" id="chat-${cardId}">${chatBubblesHtml}</div>
+                    <div class="chat-input-area">
+                        <input type="text" placeholder="Type a reply..." id="input-${cardId}" onkeydown="if(event.key==='Enter') directReply('${email}')">
+                        <button class="reply-btn" onclick="directReply('${email}')">Send</button>
+                    </div>
+                </div>`;
+            grid.appendChild(card);
+        }
+    });
+}
+
+function directReply(email){
+    const cardId = email.replace(/[@.]/g, '-');
+    const inputId = `input-${cardId}`;
+    const replyText = document.getElementById(inputId).value.trim();
+    if(!replyText) return;
+    const token = localStorage.getItem("adminToken");
+    
+    loadingText.innerText = "Sending...";
+    loadingModal.style.display="flex";
+    
+    fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({ action: "replyToSupport", token: token, tutorEmail: email, reply: replyText })
+    })
+    .then(r => r.json())
+    .then(res => {
+        loadingModal.style.display="none";
+        if(res.success) {
+            document.getElementById(inputId).value = "";
+            loadSupportMessages(token);
+        } else {
+            alert("Reply failed: " + res.error);
+        }
+    })
+    .catch(() => {
+        loadingModal.style.display="none";
+        alert("Network error.");
+    });
+}
+
+function deleteConversation(email) {
+    if(!confirm("Close this chat?")) return;
+    const token = localStorage.getItem("adminToken");
+    
+    loadingText.innerText = "Closing Chat...";
+    loadingModal.style.display="flex";
+    
+    fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({ action: "deleteSupportChat", token: token, tutorEmail: email })
+    })
+    .then(r => r.json())
+    .then(res => {
+        loadingModal.style.display="none";
+        if(res.success) loadSupportMessages(token);
+    })
+    .catch(() => {
+        loadingModal.style.display="none";
+        alert("Network error.");
+    });
+}
+
+function approve(email){
+if(!confirm("Approve tutor?")) return;
+const token = localStorage.getItem("adminToken")
+loadingText.innerText = "Approving...";
+loadingModal.style.display="flex"
+fetch(`${SCRIPT_URL}?action=approveTutor&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`)
+.then(r=>r.json())
+.then(res=>{
+  loadingModal.style.display="none";
+  if(res.status === "approved") {
+      initAdmin(token);
+  } else {
+      alert("Approval failed: " + (res.error || "Unknown error"));
+  }
+});
+}
+
+function reject(email){
+if(!confirm("Reject tutor?")) return;
+const token = localStorage.getItem("adminToken")
+loadingText.innerText = "Rejecting...";
+loadingModal.style.display="flex"
+fetch(`${SCRIPT_URL}?action=rejectTutor&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`)
+.then(r=>r.json())
+.then(res=>{
+  loadingModal.style.display="none";
+  if(res.status === "rejected") {
+      loadApplications(token);
+  } else {
+      alert("Rejection failed: " + (res.error || "Unknown error"));
+  }
+});
+}
+
+function logout(){
+clearTimeout(logoutTimer);
+clearInterval(badgeInterval);
+localStorage.removeItem("adminToken")
+window.location.href = "index.html"
+}
+
+window.onscroll = function() {
+  resetLogoutTimer();
+  const btn = document.getElementById("backToTop");
+  if (document.body.scrollTop > 250 || document.documentElement.scrollTop > 250) btn.style.display = "block";
+  else btn.style.display = "none";
+};
+
+function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
 </script>
 
