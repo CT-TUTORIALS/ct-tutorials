@@ -300,6 +300,7 @@ box-sizing: border-box;
     cursor: pointer;
     margin-top: 5px;
 }
+
 #serviceSelectDisplay {
     width: 100%;
     padding: 10px;
@@ -308,6 +309,7 @@ box-sizing: border-box;
     background: #fff;
     cursor: pointer;
 }
+
 .custom-arrow {
     position: absolute;
     right: 15px;
@@ -429,6 +431,11 @@ opacity:0.9;
 <a href="#faq" onclick="closeMobileNav()">FAQ</a>
 <div class="nav-separator"></div>
 <a href="#resources" onclick="closeMobileNav()">Resources</a>
+
+<!-- NEW: ENGLISH SECOND LANGUAGE PAGE LINK -->
+<div class="nav-separator"></div>
+<a href="English-grade_10-11_second language.html">English Second Language</a>
+
 <div class="nav-separator"></div>
 <a href="#contact" onclick="closeMobileNav()">Contact</a>
 <div class="nav-separator"></div>
@@ -541,6 +548,14 @@ opacity:0.9;
 <a href="documents/Student-form-for-offline-application[1].pdf" target="_blank" class="service-card">
 <h3>Offline Application Form</h3>
 <p>Download and complete the form for offline registration.</p>
+</a>
+
+<!-- NEW: ENGLISH SECOND LANGUAGE RESOURCE -->
+<a href="English-grade_10-11_second language.html" class="service-card">
+<h3>📚 English Second Language</h3>
+<p>ICT-integrated English Second Language learning resource on writing formal and informal emails.</p>
+<p><strong>Topic:</strong> Writing Skills — Email</p>
+<span class="service-link">Open English Second Language Lesson</span>
 </a>
 
 </div>
@@ -998,6 +1013,7 @@ document.getElementById("studentRegisterForm").addEventListener("submit", functi
     loadingModal.style.display = "flex";
 
     const formData = new FormData(this);
+    
     const data = Object.fromEntries(formData.entries());
     
     const displayService = serviceDisplay.value;
