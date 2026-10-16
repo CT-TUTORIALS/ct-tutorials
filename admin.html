@@ -395,6 +395,17 @@ font-weight: bold;
 .upload-btn { background: #003366; color: white; font-size: 11px; padding: 4px 8px; margin-top: 5px; }
 .file-input-small { font-size: 11px; width: 100%; }
 
+/* Price input / actions in settings */
+.price-input {
+    width: 120px;
+    padding:6px 8px;
+    border:1px solid #ccc;
+    border-radius:4px;
+    box-sizing:border-box;
+}
+.service-save-btn { background:#2e7d32;color:white;padding:6px 10px;border-radius:4px;border:none;cursor:pointer;font-weight:bold; }
+.service-edit-btn { background:#003366;color:white;padding:6px 10px;border-radius:4px;border:none;cursor:pointer;font-weight:bold; }
+
 .admin-nav a:hover { text-decoration: underline; }
 
 /* MOBILE AUTO-ADJUSTMENTS */
@@ -529,7 +540,7 @@ margin-bottom:15px;
 }
 
 @keyframes spin{
-0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);}
+0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);} 
 }
 
 .footer{
@@ -678,6 +689,28 @@ z-index:1100;
         <label>Current Carousel Images</label>
         <div id="carouselList" class="carousel-list">Loading carousel images...</div>
     </div>
+
+    <!-- SERVICES & PRICING: Admins can edit service prices here -->
+    <hr>
+    <div class="settings-group">
+        <label>Services & Pricing</label>
+        <p class="settings-help">Edit the price for each service and click Save.</p>
+        <div id="servicesContainer" style="max-width:600px;margin:10px 0;">
+            <table id="servicesTable" style="width:100%; border-collapse:collapse;">
+                <thead>
+                    <tr style="background:#f2f2f2;">
+                        <th style="text-align:left;padding:8px;border:1px solid #e6e6e6;">Service</th>
+                        <th style="text-align:left;padding:8px;border:1px solid #e6e6e6;width:160px;">Price</th>
+                        <th style="text-align:left;padding:8px;border:1px solid #e6e6e6;width:110px;">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="servicesTableBody">
+                    <tr><td colspan="3" style="padding:12px;color:#666;">Loading services...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 </div>
 </section>
 
@@ -934,6 +967,123 @@ function removeCarouselImage(imageUrl) {
     });
 }
 
+// --- SERVICES & PRICING MANAGEMENT ---
+function getServicePriceValueCell(service) {
+    // returns HTML for the price cell (display mode)
+    const price = typeof service.price === 'number' ? service.price.toFixed(2) : (service.price || '');
+    return `
+        <span class="price-display">$${escapeAttribute(price)}</span>
+        <input class="price-input" type="number" step="0.01" min="0" value="${escapeAttribute(price)}" style="display:none;">
+    `;
+}
+
+function renderServicePrices(services = []) {
+    const tbody = document.getElementById("servicesTableBody");
+    if(!tbody) return;
+    if(!Array.isArray(services) || services.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" style="padding:12px;color:#666;">No services found.</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = services.map(s => {
+        const safeName = escapeAttribute(s.name || s.id || 'Unnamed service');
+        const priceCell = getServicePriceValueCell(s);
+        const serviceId = escapeAttribute(s.id || s.name || '');
+        return `
+            <tr data-service-id="${serviceId}">
+                <td style="padding:8px;border:1px solid #e6e6e6;">${safeName}</td>
+                <td style="padding:8px;border:1px solid #e6e6e6;">${priceCell}</td>
+                <td style="padding:8px;border:1px solid #e6e6e6;">
+                    <button class="service-edit-btn" onclick="toggleEditService('${serviceId}', this)">Edit</button>
+                    <button class="service-save-btn" onclick="saveServicePrice('${serviceId}', this)" style="display:none;margin-left:8px;">Save</button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+function loadServicePrices(token = getAdminTokenOrLogout()) {
+    if(!token) return Promise.resolve();
+    // expected backend action: getServicePrices -> returns [{id,name,price}, ...]
+    return fetch(SCRIPT_URL + "?action=getServicePrices&token=" + encodeURIComponent(token))
+        .then(r => r.json())
+        .then(res => {
+            if(handleAuthError(res)) return;
+            // assume response is array or { services: [...] }
+            const services = Array.isArray(res) ? res : (res.services || []);
+            renderServicePrices(services);
+        })
+        .catch(err => {
+            const tbody = document.getElementById("servicesTableBody");
+            if(tbody) tbody.innerHTML = '<tr><td colspan="3" style="padding:12px;color:#c62828;">Could not load services.</td></tr>';
+            console.error("Failed to load services:", err);
+        });
+}
+
+function toggleEditService(serviceId, btn) {
+    const row = btn && btn.closest('tr');
+    if(!row) return;
+    const priceInput = row.querySelector('.price-input');
+    const priceDisplay = row.querySelector('.price-display');
+    const saveBtn = row.querySelector('.service-save-btn');
+
+    const editing = priceInput.style.display === 'none' || priceInput.style.display === '';
+    if(editing) {
+        // show edit controls
+        priceInput.style.display = 'inline-block';
+        priceDisplay.style.display = 'none';
+        btn.style.display = 'none';
+        if(saveBtn) saveBtn.style.display = 'inline-block';
+        priceInput.focus();
+    } else {
+        priceInput.style.display = 'none';
+        priceDisplay.style.display = 'inline';
+        btn.style.display = 'inline-block';
+        if(saveBtn) saveBtn.style.display = 'none';
+    }
+}
+
+function saveServicePrice(serviceId, btn) {
+    const row = btn && btn.closest('tr');
+    if(!row) return;
+    const input = row.querySelector('.price-input');
+    const priceValue = input ? input.value.trim() : '';
+    if(priceValue === '') { alert('Please enter a price.'); return; }
+    const priceNumber = parseFloat(priceValue);
+    if(isNaN(priceNumber) || priceNumber < 0) { alert('Please enter a valid non-negative price.'); return; }
+
+    const token = getAdminTokenOrLogout();
+    if(!token) return;
+
+    loadingText.innerText = "Saving price...";
+    loadingModal.style.display = "flex";
+
+    // expected backend action: setServicePrice { serviceId, price }
+    postAdminAction({ action: "setServicePrice", token: token, serviceId: serviceId, price: priceNumber })
+        .then(res => {
+            loadingModal.style.display = "none";
+            if(!res) return;
+            // update UI: show new value and hide input
+            const priceDisplay = row.querySelector('.price-display');
+            const priceInput = row.querySelector('.price-input');
+            const editBtn = row.querySelector('.service-edit-btn');
+            const saveBtn = row.querySelector('.service-save-btn');
+
+            if(priceDisplay) priceDisplay.innerText = '$' + priceNumber.toFixed(2);
+            if(priceInput) priceInput.value = priceNumber.toFixed(2);
+            if(priceInput) priceInput.style.display = 'none';
+            if(priceDisplay) priceDisplay.style.display = 'inline';
+            if(editBtn) editBtn.style.display = 'inline-block';
+            if(saveBtn) saveBtn.style.display = 'none';
+
+            alert('Price updated.');
+        })
+        .catch(err => {
+            loadingModal.style.display = "none";
+            alert('Failed to update price: ' + err.message);
+        });
+}
+
 function adminLogin(){
 const username=document.getElementById("username").value.trim()
 const password=document.getElementById("password").value.trim()
@@ -979,7 +1129,8 @@ try {
         loadStudents(token),
         loadOtherClients(token),
         loadSupportMessages(token),
-        loadSiteSettings(token)
+        loadSiteSettings(token),
+        loadServicePrices(token)    // <-- load prices as part of dashboard init
     ]);
 
     localStorage.setItem('baseline_apps', currentAppsCount);
